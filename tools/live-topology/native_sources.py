@@ -5,13 +5,26 @@ import json
 from pathlib import Path
 import subprocess
 
-MODULES = ('Hexalith.Tenants', 'Hexalith.Parties')
+MODULES = ('Hexalith.Tenants', 'Hexalith.Parties', 'Hexalith.Projects')
+HOST_PROJECTS = {
+    'Hexalith.Tenants': 'src/Hexalith.Tenants/Hexalith.Tenants.csproj',
+    'Hexalith.Parties': 'src/Hexalith.Parties/Hexalith.Parties.csproj',
+    'Hexalith.Projects': 'src/Hexalith.Projects.Server/Hexalith.Projects.Server.csproj',
+}
+
+
+def host_project(module: str) -> str:
+    try:
+        return HOST_PROJECTS[module]
+    except KeyError as error:
+        raise ValueError('The native fixture has no launched host project: ' + module) from error
 
 
 def files(checkout: Path) -> dict:
     paths = subprocess.check_output(['git', 'ls-files', '-z'], cwd=checkout, timeout=10).decode().split('\0')
     regular = [checkout / path for path in paths if path and (checkout / path).is_file()]
-    for project in ('Hexalith.Tenants', 'Hexalith.Parties', 'Hexalith.Parties.EventStoreExtensions'):
+    for project in ('Hexalith.Tenants', 'Hexalith.Parties', 'Hexalith.Parties.EventStoreExtensions',
+                    'Hexalith.Projects.Server'):
         directory = checkout / 'src' / project
         regular.extend(path for path in (directory / 'bin/Release').rglob('*') if path.is_file())
         assets = directory / 'obj/project.assets.json'
@@ -29,8 +42,17 @@ def create(root: Path, destination: Path, selection: dict, evidence: Path, bound
     for module in MODULES:
         commit = selection['sources'][module]['commit']
         checkout = destination / module
-        bounded(['git', 'clone', '--shared', '--no-checkout', '--no-recurse-submodules', str(root / 'references' / module), str(checkout)],
-                120, evidence / (module + '-fixture-clone'))
+        local = root / 'references' / module
+        if (local / '.git').exists():
+            bounded(['git', 'clone', '--shared', '--no-checkout', '--no-recurse-submodules', str(local), str(checkout)],
+                    120, evidence / (module + '-fixture-clone'))
+        else:
+            checkout.mkdir()
+            bounded(['git', 'init', '--quiet'], 30, evidence / (module + '-fixture-init'), cwd=checkout)
+            bounded(['git', 'remote', 'add', 'origin', f'https://github.com/Hexalith/{module}.git'],
+                    10, evidence / (module + '-fixture-remote'), cwd=checkout)
+            bounded(['git', 'fetch', '--no-recurse-submodules', '--depth=1', 'origin', commit],
+                    120, evidence / (module + '-fixture-fetch'), cwd=checkout)
         bounded(['git', 'checkout', '--no-recurse-submodules', '--detach', commit], 30,
                 evidence / (module + '-fixture-checkout'), cwd=checkout)
         result['selection'][module] = commit

@@ -2,6 +2,7 @@ using System.Security.Cryptography;
 using System.Text.Json;
 
 using Hexalith.EventStore.Contracts.Routing;
+using Hexalith.McpCli.AppHost;
 using Hexalith.McpCli.Integration.Tests;
 
 namespace Hexalith.McpCli.Manifest.Tests;
@@ -10,7 +11,7 @@ namespace Hexalith.McpCli.Manifest.Tests;
 public sealed class NativeCatalogEvidenceTests : IDisposable
 {
     private readonly string _root = Path.Combine(Path.GetTempPath(), "mcpcli-native-readback-" + Guid.NewGuid().ToString("N"));
-    private readonly string[] _hosts = ["eventstore", "parties", "tenants"];
+    private readonly string[] _hosts = TopologyConfiguration.NativeCatalogHosts;
 
     /// <summary>Creates a synthetic immutable backup and actual SDK-schema coordination documents for verifier controls only.</summary>
     public NativeCatalogEvidenceTests()

@@ -13,13 +13,13 @@ namespace Hexalith.McpCli.AppHost;
 internal static class NativeSourceFixtures
 {
     /// <summary>The approved native lane always consumes already built resource outputs.</summary>
-    internal static bool Enabled => string.Equals(Environment.GetEnvironmentVariable("McpCliCurrentNativeProfile"), "true", StringComparison.OrdinalIgnoreCase);
+    internal static bool Enabled => TopologyConfiguration.NativeLaneEnabled;
 
     /// <summary>Requires a sealed private copy of the exact qualified domain source before selecting its project.</summary>
     internal static string ModuleRoot(string repositoryRoot, string module)
     {
         if (!Enabled) return Path.Combine(repositoryRoot, "references", module);
-        if (module is not ("Hexalith.Tenants" or "Hexalith.Parties"))
+        if (module is not ("Hexalith.Tenants" or "Hexalith.Parties" or "Hexalith.Projects"))
             throw new InvalidDataException("Only the qualified domain source fixtures may use the private path contract.");
         string receipt = Environment.GetEnvironmentVariable("MCPCLI_NATIVE_SOURCE_FIXTURES")
             ?? throw new InvalidDataException("The native lane requires its private source fixture receipt.");
@@ -86,7 +86,10 @@ internal static class NativeSourceFixtures
         return child.ExitCode == 0 ? actual : throw new InvalidDataException("Cannot verify the private source fixture Git identity.");
     }
 
-    internal static string Project(string module) => Path.Combine(ModuleRoot(RepositoryProjectPaths.GetRepositoryRoot(), module), "src", module, module + ".csproj");
+    internal static string Project(string module) => module == "Hexalith.Projects"
+        ? Path.Combine(ModuleRoot(RepositoryProjectPaths.GetRepositoryRoot(), module), "src", "Hexalith.Projects.Server",
+            "Hexalith.Projects.Server.csproj")
+        : Path.Combine(ModuleRoot(RepositoryProjectPaths.GetRepositoryRoot(), module), "src", module, module + ".csproj");
 }
 
 /// <summary>Uses the already built package Gateway from the main module build.</summary>
@@ -107,5 +110,12 @@ internal sealed class PreparedTenantsProject : IProjectMetadata
 internal sealed class PreparedPartiesProject : IProjectMetadata
 {
     public string ProjectPath => NativeSourceFixtures.Project("Hexalith.Parties");
+    public bool SuppressBuild => true;
+}
+
+/// <summary>Uses only the separately built, sealed Projects fixture.</summary>
+internal sealed class PreparedProjectsProject : IProjectMetadata
+{
+    public string ProjectPath => NativeSourceFixtures.Project("Hexalith.Projects");
     public bool SuppressBuild => true;
 }

@@ -15,16 +15,18 @@ namespace Hexalith.McpCli.AppHost;
 internal sealed class NativeCatalogRuntime : IAsyncDisposable
 {
     private readonly IAsyncDisposable _tenants;
+    private readonly IAsyncDisposable? _projects;
     private readonly IAsyncDisposable _catalog;
     private readonly string _reader;
     private readonly string _owner;
     private readonly string _custody;
 
     /// <summary>Retains SDK metadata/composition ownership until every independent cleanup has been attempted.</summary>
-    internal NativeCatalogRuntime(IAsyncDisposable tenants, IAsyncDisposable catalog,
+    internal NativeCatalogRuntime(IAsyncDisposable tenants, IAsyncDisposable? projects, IAsyncDisposable catalog,
         string reader, string owner, string custody)
     {
         _tenants = tenants;
+        _projects = projects;
         _catalog = catalog;
         _reader = reader;
         _owner = owner;
@@ -34,7 +36,7 @@ internal sealed class NativeCatalogRuntime : IAsyncDisposable
     /// <summary>Uses real host metadata, the existing separate-artifact Platform reader and SDK activation.</summary>
     internal static async Task<NativeCatalogRuntime> CreateAsync(IDistributedApplicationBuilder builder,
         IResourceBuilder<ProjectResource> gateway, IResourceBuilder<ProjectResource> tenants,
-        IResourceBuilder<ProjectResource> parties, string stateComponent)
+        IResourceBuilder<ProjectResource> parties, IResourceBuilder<ProjectResource>? projects, string stateComponent)
     {
         string backup = Environment.GetEnvironmentVariable("MCPCLI_ISOLATED_REDIS_BACKUP_RECEIPT")
             ?? throw new InvalidOperationException("Native catalog startup requires the wrapper's pre-application Redis backup.");
@@ -44,10 +46,11 @@ internal sealed class NativeCatalogRuntime : IAsyncDisposable
         string owner = Guid.NewGuid().ToString("N");
         string custodyDirectory = Path.Combine(Path.GetDirectoryName(backup)!, "native-catalog-custody");
         DevelopmentRouteCatalogPreparedOwner? tenantOwner = null;
+        DevelopmentRouteCatalogPreparedOwner? projectsOwner = null;
         DevelopmentRouteCatalogComposition? catalog = null;
         try
         {
-            using var deadline = new CancellationTokenSource(TimeSpan.FromMinutes(4));
+            using var deadline = new CancellationTokenSource(TimeSpan.FromMinutes(projects is null ? 4 : 8));
             IResourceBuilder<ProjectResource> catalogSource = PreparationSource(builder, tenants);
             tenantOwner = await catalogSource.PrepareEventStoreDevelopmentOwnerAsync("Hexalith.Tenants.Contracts.dll",
                 "Hexalith.Tenants.Server.dll", TimeSpan.FromMinutes(3), deadline.Token).ConfigureAwait(false);
@@ -93,33 +96,58 @@ internal sealed class NativeCatalogRuntime : IAsyncDisposable
                 .GetProperty("Operational")!.GetValue(null)!;
             DevelopmentRouteCatalogInvocation[] domainCalls = operational.Cast<object>()
                 .Select(route => new DevelopmentRouteCatalogInvocation(gateway, (string)route.GetType().GetProperty("Route")!.GetValue(route)!, ["POST"])).ToArray();
-            catalog = builder.AddEventStoreDevelopmentRouteCatalog(gateway,
-                [tenantCatalog, new(parties, declarationAssembly, adapterAssembly)],
-                [new(gateway, [new(tenants, "/api/v1/commands/bound/workload", ["POST"]),
-                    new(tenants, "/api/v1/streams/read/workload", ["POST"]), new(tenants, "/api/v1/queries", ["POST"]),
-                    new(parties, "/api/v1/queries", ["POST"])]) { TechnicalHttp = true },
-                 new(tenants, domainCalls), new(parties, domainCalls)], stateComponent, custody);
+            List<DevelopmentRouteCatalogOwner> owners = [tenantCatalog, new(parties, declarationAssembly, adapterAssembly)];
+            List<DevelopmentRouteCatalogInvocation> gatewayCalls =
+            [
+                new(tenants, "/api/v1/commands/bound/workload", ["POST"]),
+                new(tenants, "/api/v1/streams/read/workload", ["POST"]),
+                new(tenants, "/api/v1/queries", ["POST"]),
+                new(parties, "/api/v1/queries", ["POST"]),
+            ];
+            List<DevelopmentRouteCatalogReceiver> receivers =
+            [
+                new(gateway, gatewayCalls) { TechnicalHttp = true },
+                new(tenants, domainCalls),
+                new(parties, domainCalls),
+            ];
+            if (projects is not null)
+            {
+                IResourceBuilder<ProjectResource> projectsSource = PreparationSource(builder, projects);
+                projectsOwner = await projectsSource.PrepareEventStoreDevelopmentOwnerAsync(
+                    "Hexalith.Projects.Contracts.dll", "Hexalith.Projects.Server.dll",
+                    TimeSpan.FromMinutes(3), deadline.Token).ConfigureAwait(false);
+                owners.Add(BindOwner(projectsOwner.Owner, projects));
+                gatewayCalls.Add(new(projects, "/api/v1/queries", ["POST"]));
+                receivers[0] = new(gateway, gatewayCalls) { TechnicalHttp = true };
+                receivers.Add(new(projects, domainCalls));
+            }
+            catalog = builder.AddEventStoreDevelopmentRouteCatalog(gateway, owners, receivers, stateComponent, custody);
             tenants.WithEnvironment("Tenants__BootstrapBoundWorkloadEnabled", "true")
                 .WithEnvironment("Tenants__BootstrapBoundWorkloadReceiptPath", Path.Combine(catalog.Directory, "tenants.bootstrap.json"));
             gateway.WithEnvironment("Authentication__BoundCommand__AllowedDomains__tenants", "global-administrators");
+            string[] hosts = projects is null
+                ? ["eventstore", "parties", "tenants"]
+                : TopologyConfiguration.NativeCatalogHosts;
             // This private coordinate file contains no digest keys or activation authority.
             await File.WriteAllTextAsync(Path.Combine(Path.GetDirectoryName(backup)!, "native-catalog-coordinates.json"),
                 JsonSerializer.Serialize(new { directory = catalog.Directory, rootDigest = catalog.RootDigest,
-                    hosts = new[] { "eventstore", "parties", "tenants" },
+                    hosts,
                     inputs = new
                     {
                         sourceSelectionSha256 = Digest(File.ReadAllBytes(Path.Combine(root, "tools", "live-topology", "native-runtime-current.json"))),
                         preparations = NativeCatalogPreparationEvidence.Capture(Path.Combine(tenantOwner.Directory, "preparation.json"),
-                            Path.Combine(directory, "reader", "preparation.json")),
+                            Path.Combine(directory, "reader", "preparation.json"),
+                            projectsOwner is null ? null : Path.Combine(projectsOwner.Directory, "preparation.json")),
                         partyArtifacts,
                     } }), deadline.Token).ConfigureAwait(false);
-            return new(tenantOwner, catalog, directory, owner, custodyDirectory);
+            return new(tenantOwner, projectsOwner, catalog, directory, owner, custodyDirectory);
         }
         catch (Exception failure)
         {
             await NativeCatalogCleanup.RunAsync(failure,
                 () => catalog?.DisposeAsync() ?? ValueTask.CompletedTask,
                 () => tenantOwner?.DisposeAsync() ?? ValueTask.CompletedTask,
+                () => projectsOwner?.DisposeAsync() ?? ValueTask.CompletedTask,
                 () =>
                 {
                     if (!failure.Data.Contains("CatalogOwnedProcessStillRunning")) NativeCatalogTool.DeleteOwnedDirectory(directory, owner);
@@ -150,6 +178,7 @@ internal sealed class NativeCatalogRuntime : IAsyncDisposable
         await NativeCatalogCleanup.RunAsync(null,
             () => DisposeSdkAsync(_catalog),
             () => DisposeSdkAsync(_tenants),
+            () => _projects is null ? ValueTask.CompletedTask : DisposeSdkAsync(_projects),
             () => { if (!unconfirmed) NativeCatalogTool.DeleteOwnedDirectory(_reader, _owner); return ValueTask.CompletedTask; },
             () => { if (!unconfirmed) NativeCatalogTool.DeleteOwnedDirectory(_custody, _owner); return ValueTask.CompletedTask; }).ConfigureAwait(false);
     }

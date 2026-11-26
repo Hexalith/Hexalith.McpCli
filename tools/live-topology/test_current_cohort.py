@@ -69,6 +69,15 @@ class CurrentCohortTests(unittest.TestCase):
         current = native_cohort.manifest(ROOT / 'tools/live-topology/native-runtime-current.json')
         self.assertEqual('4.1.0', old['eventStoreVersion'])
         self.assertEqual('5.5.2', current['eventStoreVersion'])
+        self.assertNotIn('Hexalith.Projects', old['sources'])
+        self.assertIn('Hexalith.Projects', current['sources'])
+        missing = copy.deepcopy(current)
+        del missing['sources']['Hexalith.Projects']
+        with tempfile.TemporaryDirectory() as directory:
+            path = Path(directory) / 'missing-projects.json'
+            path.write_text(json.dumps(missing))
+            with self.assertRaisesRegex(ValueError, 'complete exact public cohort'):
+                native_cohort.manifest(path)
         for version, replace_packages in [('4.1.0', False), ('4.2.0', False), ('4.3.0', False), ('5.1.0-local', False),
                                           ('4.3.0', True), ('4.2.0', True), ('5.2.0', True)]:
             crossed = copy.deepcopy(current)

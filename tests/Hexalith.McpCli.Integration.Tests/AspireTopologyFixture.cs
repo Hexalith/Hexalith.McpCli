@@ -10,7 +10,7 @@ using Hexalith.McpCli.AppHost;
 
 namespace Hexalith.McpCli.Integration.Tests;
 
-/// <summary>Uses the platform lifecycle and prerequisite handling for the three-service test topology.</summary>
+/// <summary>Uses the platform lifecycle and prerequisite handling for the live native test topology.</summary>
 public sealed class AspireTopologyFixture : IsolatedTopologyLifecycle<Projects.Hexalith_McpCli_AppHost>, IAsyncLifetime
 {
     /// <summary>The test-owned identity bootstrapped by the server inside private state.</summary>
@@ -19,12 +19,21 @@ public sealed class AspireTopologyFixture : IsolatedTopologyLifecycle<Projects.H
     private readonly string _signingKey = Convert.ToBase64String(RandomNumberGenerator.GetBytes(32));
 
     /// <inheritdoc/>
-    protected override IReadOnlyList<AspireResource> Resources =>
-    [
-        new("eventstore", "http", TimeSpan.FromSeconds(30), TimeSpan.FromMinutes(2), true, TimeSpan.FromMinutes(2)),
-        new("tenants", "http", TimeSpan.FromSeconds(30), TimeSpan.FromMinutes(2), true, TimeSpan.FromMinutes(2)),
-        new("parties", "http", TimeSpan.FromSeconds(30), TimeSpan.FromMinutes(2), true, TimeSpan.FromMinutes(2)),
-    ];
+    protected override IReadOnlyList<AspireResource> Resources
+    {
+        get
+        {
+            AspireResource[] hosts =
+            [
+                new("eventstore", "http", TimeSpan.FromSeconds(30), TimeSpan.FromMinutes(2), true, TimeSpan.FromMinutes(2)),
+                new("tenants", "http", TimeSpan.FromSeconds(30), TimeSpan.FromMinutes(2), true, TimeSpan.FromMinutes(2)),
+                new("parties", "http", TimeSpan.FromSeconds(30), TimeSpan.FromMinutes(2), true, TimeSpan.FromMinutes(2)),
+            ];
+            return TopologyConfiguration.NativeLaneEnabled
+                ? [.. hosts, new("projects", "http", TimeSpan.FromSeconds(30), TimeSpan.FromMinutes(2), true, TimeSpan.FromMinutes(2))]
+                : hosts;
+        }
+    }
 
     /// <inheritdoc/>
     protected override IReadOnlyList<string> ExtraAppArgs =>

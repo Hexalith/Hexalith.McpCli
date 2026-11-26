@@ -109,12 +109,21 @@ IResourceBuilder<ProjectResource> parties = (NativeSourceFixtures.Enabled
     : builder.AddHexalithPartiesServer(topology, access,
         daprPlacementHostAddress: placement, daprSchedulerHostAddress: scheduler))
     .WithGeneratedEventStoreAppChannelToken();
+IResourceBuilder<ProjectResource>? projects = NativeSourceFixtures.Enabled
+    ? builder.AddProject<PreparedProjectsProject>("projects").AddEventStoreDomainModule(topology, "projects", access,
+        daprPlacementHostAddress: placement, daprSchedulerHostAddress: scheduler)
+        .WithGeneratedEventStoreAppChannelToken()
+        .WithEnvironment("Projects__IsolatedLiveFixtures__Enabled", "true")
+    : null;
+IResourceBuilder<ProjectResource>[] launched = projects is null
+    ? [gateway, tenants, parties]
+    : [gateway, tenants, parties, projects];
 
 // Current qualification uses one managed runtime for metadata and its isolated resource processes.
 // Refuse roll-forward so every current net11 resource uses the sealed runtime image.
 if (string.Equals(Environment.GetEnvironmentVariable("McpCliCurrentNativeProfile"), "true", StringComparison.OrdinalIgnoreCase))
 {
-    foreach (IResourceBuilder<ProjectResource> resource in new[] { gateway, tenants, parties })
+    foreach (IResourceBuilder<ProjectResource> resource in launched)
         resource.WithEnvironment("DOTNET_ROLL_FORWARD", "Disable");
 }
 
@@ -132,7 +141,7 @@ if (usePackagedGateway)
         .WithEnvironment("Authentication__DaprInternal__AllowedCallers__0", "tenants");
 }
 
-foreach (IResourceBuilder<ProjectResource> resource in new[] { gateway, tenants, parties })
+foreach (IResourceBuilder<ProjectResource> resource in launched)
 {
     DaprSidecarAnnotation sidecar = resource.Resource.Annotations.OfType<DaprSidecarAnnotation>().Single();
     DaprSidecarOptionsAnnotation settings = sidecar.Sidecar.Annotations.OfType<DaprSidecarOptionsAnnotation>().Last();
@@ -172,7 +181,7 @@ parties.WithEnvironment("HexalithTenantsVersion", "5.11.2").WithEnvironment("Hex
 if (inspectComposition)
 {
     var snapshots = new List<object>();
-    foreach (IResourceBuilder<ProjectResource> resource in new[] { gateway, tenants, parties })
+    foreach (IResourceBuilder<ProjectResource> resource in launched)
     {
         DaprSidecarAnnotation sidecar = resource.Resource.Annotations.OfType<DaprSidecarAnnotation>().Single();
         DaprSidecarOptions options = sidecar.Sidecar.Annotations.OfType<DaprSidecarOptionsAnnotation>().Last().Options;
@@ -250,7 +259,8 @@ if (inspectComposition)
 }
 
 await using NativeCatalogRuntime? catalog = usePackagedGateway
-    ? await NativeCatalogRuntime.CreateAsync(builder, gateway, tenants, parties, Path.Combine(components, "statestore.yaml")).ConfigureAwait(false)
+    ? await NativeCatalogRuntime.CreateAsync(builder, gateway, tenants, parties, projects,
+        Path.Combine(components, "statestore.yaml")).ConfigureAwait(false)
     : null;
 await using DistributedApplication application = builder.Build();
 await application.RunAsync().ConfigureAwait(false);

@@ -20,13 +20,18 @@ internal static class TopologyConfiguration
             "eventstore" => 3511,
             "tenants" => 3512,
             "parties" => 3513,
+            "projects" => 3514,
             _ => throw new ArgumentOutOfRangeException(nameof(name)),
         };
+
+    /// <summary>True when the isolated live lane launches the sealed native source fixtures.</summary>
+    internal static bool NativeLaneEnabled =>
+        string.Equals(Environment.GetEnvironmentVariable("McpCliCurrentNativeProfile"), "true", StringComparison.OrdinalIgnoreCase);
 
     /// <summary>Requires current fixture JSON to come from the trusted .NET 11 shared runtime.</summary>
     internal static void RequireCurrentManagedRuntime()
     {
-        if (!string.Equals(Environment.GetEnvironmentVariable("McpCliCurrentNativeProfile"), "true", StringComparison.OrdinalIgnoreCase)) return;
+        if (!NativeLaneEnabled) return;
         Version jsonVersion = typeof(JsonElement).Assembly.GetName().Version!;
         string corePath = typeof(object).Assembly.Location;
         string jsonPath = typeof(JsonElement).Assembly.Location;
@@ -70,7 +75,10 @@ internal static class TopologyConfiguration
     }
 
     /// <summary>The Dapr applications owned by this topology.</summary>
-    internal static readonly string[] ApplicationIds = ["eventstore", "tenants", "parties"];
+    internal static readonly string[] ApplicationIds = ["eventstore", "tenants", "parties", "projects"];
+
+    /// <summary>SDK catalog participants in ordinal order, including the Projects query host.</summary>
+    internal static readonly string[] NativeCatalogHosts = ["eventstore", "parties", "projects", "tenants"];
 
     /// <summary>The root source checkouts required by the published helpers.</summary>
     internal static readonly string[] Modules = ["Hexalith.EventStore", "Hexalith.Tenants", "Hexalith.Parties"];
@@ -227,7 +235,7 @@ internal static class TopologyConfiguration
             throw new InvalidOperationException("Dapr:GatewayHttpPort must be between 1024 and 65535.");
         }
 
-        if (port is >= 3511 and <= 3513)
+        if (port is >= 3511 and <= 3514)
         {
             throw new InvalidOperationException("Dapr:GatewayHttpPort conflicts with a reserved test sidecar port.");
         }

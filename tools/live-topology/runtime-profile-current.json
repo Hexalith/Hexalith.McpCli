@@ -38,7 +38,8 @@
       "resources": [
         "eventstore",
         "tenants",
-        "parties"
+        "parties",
+        "projects"
       ]
     }
   }

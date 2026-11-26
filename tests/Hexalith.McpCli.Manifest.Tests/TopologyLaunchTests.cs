@@ -418,6 +418,7 @@ public sealed class TopologyLaunchTests : IDisposable
                     ("system|tenants|v1", "system", "tenants", "tenants"),
                     ("system|global-administrators|v1", "system", "global-administrators", "tenants"),
                     ("*|party|v1", "*", "party", "parties"),
+                    ("*|projects|v1", "*", "projects", "projects"),
                 })
                 {
                     foreach ((string field, string value) in new[] { ("TenantId", tenant), ("Domain", domain), ("Version", "v1"), ("AppId", app), ("MethodName", "process") })

@@ -78,7 +78,7 @@ def current_runtime_profile() -> dict:
     if value.get('managedTestHosts') != {'runtime': '11.0.0', 'targetFramework': 'net11.0',
             'projects': ['Hexalith.McpCli.AppHost', 'Hexalith.McpCli.Integration.Tests'],
             'resourceLaunch': {'rollForward': 'Disable', 'highestInstalledRuntime': '11.0.0',
-                               'resources': ['eventstore', 'tenants', 'parties']}}:
+                               'resources': ['eventstore', 'tenants', 'parties', 'projects']}}:
         raise ValueError('The exact current owned managed test-host runtime is required.')
     for name, version in expected.items():
         item = value['tools'][name]
@@ -306,9 +306,9 @@ def gateway_package_provenance(source_root: Path | None = None) -> dict:
     gateway = restored_cohort(ROOT / PACKAGE_GATEWAY, 'Hexalith.EventStore.Gateway', apphost_required=True)
     identity = 'Hexalith.EventStore.Gateway/' + EVENTSTORE_COHORT
     package = gateway['packages'][identity]
-    domains = {module: restored_cohort(source_root / module / 'src' / module / (module + '.csproj'),
+    domains = {module: restored_cohort(source_root / module / native_sources.host_project(module),
                                       'Hexalith.EventStore.DomainService')
-               for module in ('Hexalith.Tenants', 'Hexalith.Parties')}
+               for module in native_sources.MODULES}
     adapter = restored_cohort(source_root / 'Hexalith.Parties/src/Hexalith.Parties.EventStoreExtensions/Hexalith.Parties.EventStoreExtensions.csproj',
                               'Hexalith.EventStore.DomainService', deployed_required=True)
     tenant = native_cohort.TENANT_COHORTS[EVENTSTORE_COHORT]
@@ -348,8 +348,8 @@ def gateway_package_provenance(source_root: Path | None = None) -> dict:
     paths = [manifest, *(host / relative for relative in expected_files), deployed,
              ROOT / 'tests/Hexalith.McpCli.AppHost/appsettings.json']
     paths.extend(sorted((ROOT / 'tests/Hexalith.McpCli.AppHost/DaprComponents').glob('*.yaml')))
-    for module in ('Hexalith.Tenants', 'Hexalith.Parties'):
-        directory = source_root / module / 'src' / module
+    for module in native_sources.MODULES:
+        directory = (source_root / module / native_sources.host_project(module)).parent
         paths.extend(sorted(directory.glob('appsettings*.json')))
         paths.extend(sorted((directory / 'bin/Release/net11.0').glob('appsettings*.json')))
     configuration = {str(path.relative_to(ROOT)) if path.is_relative_to(ROOT) else 'source-fixtures/' + str(path.relative_to(source_root)):
@@ -422,7 +422,8 @@ def reader_audit_provenance(prepared: dict | None = None) -> dict:
     projects = [PACKAGE_GATEWAY, 'tests/Hexalith.McpCli.AppHost/Hexalith.McpCli.AppHost.csproj',
                 'tests/Hexalith.McpCli.ConformanceHost/Hexalith.McpCli.ConformanceHost.csproj',
                 *(f'references/Hexalith.{name}/src/Hexalith.{name}/Hexalith.{name}.csproj' for name in ('Tenants', 'Parties')),
-                'references/Hexalith.Parties/src/Hexalith.Parties.EventStoreExtensions/Hexalith.Parties.EventStoreExtensions.csproj']
+                'references/Hexalith.Parties/src/Hexalith.Parties.EventStoreExtensions/Hexalith.Parties.EventStoreExtensions.csproj',
+                'references/Hexalith.Projects/src/Hexalith.Projects.Server/Hexalith.Projects.Server.csproj']
     if prepared is not None:
         projects = [*MODULE_AUDIT_PROJECTS, *projects[3:]]
     packages, archives, sources = {}, {}, {}
@@ -568,6 +569,11 @@ def require_prepared_provenance(prepared: dict) -> dict:
             if hashlib.sha256(path.read_bytes()).hexdigest() != page['sha256']:
                 raise ValueError('The native source fixture advisory proof changed after preparation.')
     for source in prepared['sources']:
+        if source.get('gitlinkOnly'):
+            gitlink = subprocess.check_output(['git', 'ls-tree', 'HEAD', source['path']], cwd=ROOT, timeout=10, text=True).split()
+            if len(gitlink) < 3 or gitlink[0] != '160000' or gitlink[1] != 'commit' or gitlink[2] != source['selectedCommit']:
+                raise ValueError('The prepared gitlink identity changed before execution.')
+            continue
         checkout = ROOT / source['path']
         commit = subprocess.check_output(['git', 'rev-parse', 'HEAD'], cwd=checkout, timeout=10, text=True).strip()
         status = subprocess.check_output(['git', 'status', '--porcelain', '--untracked-files=normal', '--ignore-submodules=all'], cwd=checkout, timeout=10, text=True).strip()
@@ -827,6 +833,12 @@ def prepare(evidence: Path) -> None:
         ET.SubElement(parties_properties, 'DefineConstants').text = (
             '$(DefineConstants);HEXALITH_EVENTSTORE_CATALOG_API;HEXALITH_EVENTSTORE_CATALOG_HOSTS;'
             'HEXALITH_EVENTSTORE_QUERY_SELECTOR_BINDINGS;HES_CANCELLABLE_PROJECTIONS')
+        projects_projects = ("'$(MSBuildProjectName)' == 'Hexalith.Projects' or "
+                             "$(MSBuildProjectName.StartsWith('Hexalith.Projects.'))")
+        projects_properties = ET.SubElement(after_xml, 'PropertyGroup', {'Condition': projects_projects})
+        ET.SubElement(projects_properties, 'DefineConstants').text = (
+            '$(DefineConstants);HEXALITH_EVENTSTORE_CATALOG_API;HEXALITH_EVENTSTORE_CATALOG_HOSTS;'
+            'HEXALITH_EVENTSTORE_QUERY_SELECTOR_BINDINGS;HES_CANCELLABLE_PROJECTIONS')
         ET.SubElement(after_xml, 'Target', {'Name': 'ValidateCatalogSdkSelection'})
         ET.SubElement(after_xml, 'Target', {'Name': 'ValidateCanonicalBoundaryPackageCohort'})
         ET.ElementTree(after_xml).write(after_directory, encoding='utf-8', xml_declaration=True)
@@ -865,9 +877,9 @@ def prepare(evidence: Path) -> None:
                           '-p:UseHexalithProjectReferences=false', '-p:UseNuGetDeps=true',
                           '-p:HexalithEventStoreFromSource=false', '-p:HexalithEventStoreVersion=' + EVENTSTORE_COHORT,
                           '-p:HexalithMcpCliVersion=' + mcpcli[0]]
-            if module in ('Hexalith.Tenants', 'Hexalith.Parties'):
+            if module in native_sources.MODULES:
                 properties.append('-p:HexalithBuildPackageVersions1=' + str(overlay))
-                # Parties Directory.Packages.props imports Hexalith3BuildPackageProps
+                # Owner Directory.Packages.props imports Hexalith3BuildPackageProps
                 # without Exists(); the isolated fixture has no nested Builds checkout.
                 properties.append('-p:Hexalith1BuildPackageProps=' + str(overlay))
                 properties.append('-p:Hexalith2BuildPackageProps=' + str(overlay))
@@ -883,7 +895,7 @@ def prepare(evidence: Path) -> None:
                 continue
             properties = source_properties(module)
             working = fixture_root / module
-            project = f'src/{module}/{module}.csproj'
+            project = native_sources.host_project(module)
             bounded(['dotnet', 'restore', project, '--configfile', str(source_restore_config),
                      '-p:Configuration=Release', '-warnaserror', *properties],
                     300, evidence / (module + '-restore'), cwd=working, environment=source_environment,
@@ -901,7 +913,7 @@ def prepare(evidence: Path) -> None:
                 continue
             properties = source_properties(module)
             working = fixture_root / module
-            project = f'src/{module}/{module}.csproj'
+            project = native_sources.host_project(module)
             source['HexalithEventStoreVersion'] = bounded(
                 ['dotnet', 'msbuild', project, '-restore:false', '-getProperty:HexalithEventStoreVersion', *properties],
                 30, evidence / (module + '-eventstore-version'), cwd=working, environment=source_environment)

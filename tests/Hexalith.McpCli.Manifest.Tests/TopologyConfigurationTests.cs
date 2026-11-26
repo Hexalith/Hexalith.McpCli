@@ -175,6 +175,7 @@ public sealed class TopologyConfigurationTests : IDisposable
     [InlineData("eventstore")]
     [InlineData("tenants")]
     [InlineData("parties")]
+    [InlineData("projects")]
     public void ExistingRequestedApplicationFails(string appId)
         => Assert.Equal($"Conflicting Dapr application IDs: {appId}. The requested test topology cannot start alongside these applications.",
             Assert.Throws<InvalidOperationException>(() => TopologyConfiguration.ValidateRunningApplications("[{\"appId\":\"" + appId + "\"}]")).Message);

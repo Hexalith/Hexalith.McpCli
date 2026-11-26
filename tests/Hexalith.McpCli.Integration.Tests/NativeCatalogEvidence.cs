@@ -30,7 +30,7 @@ internal static class NativeCatalogEvidence
         string directory = coordinates.RootElement.GetProperty("directory").GetString()!;
         string root = coordinates.RootElement.GetProperty("rootDigest").GetString()!;
         string[] hosts = coordinates.RootElement.GetProperty("hosts").EnumerateArray().Select(value => value.GetString()!).ToArray();
-        if (!hosts.SequenceEqual(new[] { "eventstore", "parties", "tenants" }, StringComparer.Ordinal))
+        if (!hosts.SequenceEqual(TopologyConfiguration.NativeCatalogHosts, StringComparer.Ordinal))
             throw new InvalidDataException("The native catalog participant inventory is incomplete.");
         var readbacks = new List<RouteCatalogGenerationReadback>();
         foreach (string host in hosts)

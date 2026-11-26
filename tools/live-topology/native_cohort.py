@@ -13,7 +13,10 @@ from zipfile import ZipFile
 COHORT = '5.5.2'
 # Historical and current tuples are closed independently; crossed cohorts refuse.
 TENANT_COHORTS = {'4.1.0': '7.0.5', '4.2.0': '7.0.7', '5.1.0': '8.0.0', '5.4.0': '8.0.2', '5.5.1': '8.0.2', '5.5.2': '8.0.2'}
-MODULES = ('Hexalith.EventStore', 'Hexalith.Tenants', 'Hexalith.Parties', 'Hexalith.Platform')
+MODULES = ('Hexalith.EventStore', 'Hexalith.Tenants', 'Hexalith.Parties', 'Hexalith.Projects', 'Hexalith.Platform')
+# Hexalith.CiCd does not initialize Projects; CI clones the gitlink object into the private fixture.
+GITLINK_ONLY = frozenset({'Hexalith.Projects'})
+BASELINE_MODULES = tuple(module for module in MODULES if module not in GITLINK_ONLY)
 REPOSITORIES = {name: f'https://github.com/Hexalith/{name}.git' for name in MODULES}
 
 
@@ -22,7 +25,9 @@ def manifest(path: Path) -> dict:
     value = json.loads(path.read_text())
     cohort = value.get('eventStoreVersion')
     tenant = TENANT_COHORTS.get(cohort)
-    if tenant is None or set(value.get('sources', {})) != set(MODULES):
+    sources = set(value.get('sources', {}))
+    if tenant is None or not set(BASELINE_MODULES) <= sources or sources - set(MODULES) \
+            or cohort == COHORT and GITLINK_ONLY - sources:
         raise ValueError('The native runtime requires the complete exact public cohort and qualified source set.')
     for module, source in value['sources'].items():
         if source.get('repository') != REPOSITORIES[module] or not re.fullmatch('[0-9a-f]{40}', source.get('commit', '')):
@@ -83,8 +88,19 @@ def select_sources(root: Path, selection: dict, evidence: Path, bounded) -> list
         checkout = root / relative
         project = checkout / 'src' / (module + '.CatalogBuilder' if module == 'Hexalith.Platform' else module)
         project_file = project / (project.name + '.csproj')
-        if relative not in paths or checkout.is_symlink() or not (checkout / '.git').exists() or not project_file.is_file():
+        selected = selection['sources'][module]['commit']
+        if relative not in paths or checkout.is_symlink():
             raise ValueError(f'Missing declared direct root source prerequisite: {project_file}')
+        if not (checkout / '.git').exists() or not project_file.is_file():
+            if module not in GITLINK_ONLY:
+                raise ValueError(f'Missing declared direct root source prerequisite: {project_file}')
+            gitlink = bounded(['git', 'ls-tree', 'HEAD', relative], 10, evidence / (module + '-gitlink'), cwd=root)
+            fields = gitlink.split()
+            if len(fields) < 3 or fields[0] != '160000' or fields[1] != 'commit' or fields[2] != selected:
+                raise ValueError(f'Qualified gitlink identity differs from the native selection: {module}.')
+            sources.append(dict(module=module, path=relative, commit=selected, status='',
+                                repository=REPOSITORIES[module], selectedCommit=selected, gitlinkOnly=True))
+            continue
         actual = bounded(['git', 'rev-parse', '--show-toplevel'], 10, evidence / (module + '-root'), cwd=checkout)
         if Path(actual).resolve() != checkout.resolve():
             raise ValueError(f'{checkout} is not its own Git working tree.')
@@ -97,12 +113,14 @@ def select_sources(root: Path, selection: dict, evidence: Path, bounded) -> list
             raise ValueError(f'Qualified runtime source has dirty owned files: {module}.')
         commit = bounded(['git', 'rev-parse', 'HEAD'], 10, evidence / (module + '-commit'), cwd=checkout)
         sources.append(dict(module=module, path=relative, commit=commit, status=status, repository=remote,
-                            selectedCommit=selection['sources'][module]['commit']))
+                            selectedCommit=selected, gitlinkOnly=False))
     disposable = os.environ.get('GITHUB_ACTIONS') == 'true' and os.environ.get('RUNNER_ENVIRONMENT') == 'github-hosted'
     if any(source['commit'] != source['selectedCommit'] for source in sources) and not disposable:
         raise ValueError('Source revision selection is permitted only in disposable GitHub-hosted CI; local checkouts were left unchanged.')
     # Resolve every immutable source object before changing any working tree.
     for source in sources:
+        if source['gitlinkOnly']:
+            continue
         checkout = root / source['path']
         if source['commit'] != source['selectedCommit']:
             bounded(['git', 'fetch', '--no-recurse-submodules', '--depth=1', 'origin', source['selectedCommit']],
@@ -112,6 +130,8 @@ def select_sources(root: Path, selection: dict, evidence: Path, bounded) -> list
         if resolved != source['selectedCommit']:
             raise ValueError('A qualified immutable source commit is missing or mismatched; no working tree was selected.')
     for source in sources:
+        if source['gitlinkOnly']:
+            continue
         checkout = root / source['path']
         if source['commit'] != source['selectedCommit']:
             bounded(['git', 'checkout', '--no-recurse-submodules', '--detach', source['selectedCommit']], 30,

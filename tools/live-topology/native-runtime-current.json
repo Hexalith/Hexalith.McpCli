@@ -13,6 +13,10 @@
       "repository": "https://github.com/Hexalith/Hexalith.Parties.git",
       "commit": "7639a5d20c36ce3e2ec5139685f3b08dbf2ab1f9"
     },
+    "Hexalith.Projects": {
+      "repository": "https://github.com/Hexalith/Hexalith.Projects.git",
+      "commit": "b4a2818340a6cb9f54911f65e49f04d10124f280"
+    },
     "Hexalith.Platform": {
       "repository": "https://github.com/Hexalith/Hexalith.Platform.git",
       "commit": "54d90be3b661591048640d3585a8eab4aea0e534"

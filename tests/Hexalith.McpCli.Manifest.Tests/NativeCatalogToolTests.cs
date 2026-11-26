@@ -431,11 +431,12 @@ public sealed class NativeCatalogToolTests : IDisposable
         int disposed = 0;
         var catalog = new NativeCatalogTestDisposable(() => { disposed++; throw first; });
         var tenant = new NativeCatalogTestDisposable(() => { disposed++; throw new IOException("metadata disposal failed"); });
+        var projects = new NativeCatalogTestDisposable(() => { disposed++; throw new IOException("projects disposal failed"); });
         string reader = Owned("reader", "owner"), custody = Owned("custody", "owner");
-        var runtime = new NativeCatalogRuntime(tenant, catalog, reader, "owner", custody);
+        var runtime = new NativeCatalogRuntime(tenant, projects, catalog, reader, "owner", custody);
         Exception actual = await Assert.ThrowsAsync<InvalidOperationException>(async () => await runtime.DisposeAsync());
         Assert.Same(first, actual);
-        Assert.Equal(2, disposed);
+        Assert.Equal(3, disposed);
         Assert.False(Directory.Exists(reader));
         Assert.False(Directory.Exists(custody));
     }
@@ -450,7 +451,7 @@ public sealed class NativeCatalogToolTests : IDisposable
         var catalog = new NativeCatalogTestDisposable(() => throw original);
         var tenant = new NativeCatalogTestDisposable(() => { otherDisposed++; return ValueTask.CompletedTask; });
         string reader = Owned("unconfirmed-reader", "owner"), custody = Owned("unconfirmed-custody", "owner");
-        var runtime = new NativeCatalogRuntime(tenant, catalog, reader, "owner", custody);
+        var runtime = new NativeCatalogRuntime(tenant, null, catalog, reader, "owner", custody);
         Exception actual = await Assert.ThrowsAsync<InvalidOperationException>(async () => await runtime.DisposeAsync());
         Assert.Same(original, actual);
         Assert.Equal(1, otherDisposed);

@@ -87,6 +87,21 @@
               "action": "allow"
             }
           ]
+        },
+        {
+          "appId": "projects",
+          "defaultAction": "deny",
+          "trustDomain": "public",
+          "namespace": "default",
+          "operations": [
+            {
+              "name": "/api/v1/queries",
+              "httpVerb": [
+                "POST"
+              ],
+              "action": "allow"
+            }
+          ]
         }
       ]
     },

@@ -190,9 +190,26 @@ elif name == 'git':
         for path in pathlib.Path.cwd().rglob('*'):
             if path.is_file() and path.name != '.git':sys.stdout.write(str(path.relative_to(pathlib.Path.cwd()))+'\0')
     elif args[0] == 'config':
-        for module in ('EventStore', 'Tenants', 'Parties', 'Platform'):
+        for module in ('EventStore', 'Tenants', 'Parties', 'Projects', 'Platform'):
             if mode != 'undeclared-source' or module != 'Parties':
                 print('submodule.' + module + '.path references/Hexalith.' + module)
+    elif args[:2] == ['ls-tree', 'HEAD']:
+        print('160000 commit ' + 'a' * 40 + '\t' + args[-1])
+    elif args[0] == 'init':
+        (pathlib.Path.cwd() / '.git').mkdir(exist_ok=True)
+    elif args[:2] == ['remote', 'add']:
+        pass
+    elif args[0] == 'fetch':
+        pass
+    elif args[0] == 'checkout':
+        cwd = pathlib.Path.cwd()
+        if cwd.name == 'Hexalith.Projects':
+            import shutil
+            source = root / 'references/Hexalith.Projects/src/Hexalith.Projects.Server'
+            destination = cwd / 'src/Hexalith.Projects.Server'
+            if source.is_dir() and not destination.exists():
+                shutil.copytree(source, destination)
+            (cwd / '.git').mkdir(exist_ok=True)
     elif args == ['rev-parse', '--show-toplevel']:
         print(root if mode == 'copied-source' else pathlib.Path.cwd())
     elif args == ['rev-parse', 'HEAD:references/Hexalith.Builds']:
@@ -448,6 +465,9 @@ pathlib.Path(sys.argv[sys.argv.index('--output') + 1]).write_text(json.dumps({'r
             project.parent.mkdir(parents=True)
             project.touch()
             (checkout / '.git').touch()
+        projects_host = self.root / 'references/Hexalith.Projects/src/Hexalith.Projects.Server'
+        projects_host.mkdir(parents=True)
+        (projects_host / 'Hexalith.Projects.Server.csproj').touch()
         tests = self.root / 'tests/Hexalith.McpCli.Integration.Tests/bin/Release/net11.0/Hexalith.McpCli.Integration.Tests.dll'
         tests.parent.mkdir(parents=True)
         tests.touch()
@@ -477,6 +497,7 @@ pathlib.Path(sys.argv[sys.argv.index('--output') + 1]).write_text(json.dumps({'r
         adapter.mkdir()
         (adapter / 'Hexalith.Parties.EventStoreExtensions.csproj').touch()
         projects.append(adapter)
+        projects.append(projects_host)
         for project in projects:
             (project / 'obj').mkdir(exist_ok=True)
             output = project / 'bin/Release/net11.0'
@@ -505,7 +526,7 @@ pathlib.Path(sys.argv[sys.argv.index('--output') + 1]).write_text(json.dumps({'r
             archive.writestr('Hexalith.Tenants.Contracts.nuspec', '<package><metadata><id>Hexalith.Tenants.Contracts</id><version>8.0.2</version><repository url="https://github.com/Hexalith/Hexalith.Tenants.git" commit="' + 'a' * 40 + '" /></metadata></package>')
         selection = {'eventStoreVersion': '5.5.2', 'sources': {
             'Hexalith.' + module: {'repository': 'https://github.com/Hexalith/Hexalith.' + module + '.git', 'commit': 'a' * 40}
-            for module in ('EventStore', 'Tenants', 'Parties', 'Platform')}, 'packages': []}
+            for module in ('EventStore', 'Tenants', 'Parties', 'Projects', 'Platform')}, 'packages': []}
         for archive in cache.rglob('*.nupkg'):
             parts = archive.relative_to(cache).parts
             package_id = 'Hexalith.Tenants.Contracts' if parts[0] == 'hexalith.tenants.contracts' else next(
@@ -671,8 +692,9 @@ pathlib.Path(sys.argv[sys.argv.index('--output') + 1]).write_text(json.dumps({'r
     def test_preparation_order_bounds_source_flags_and_nonsecret_exports(self):
         prepared = self.prepare()
         calls = self.calls()
-        source_builds = [call for call in calls if call[0] == 'dotnet' and call[2] == 'build' and call[3] in ('tests/Hexalith.McpCli.EventStoreGateway.TestHost/Hexalith.McpCli.EventStoreGateway.TestHost.csproj', 'src/Hexalith.Tenants/Hexalith.Tenants.csproj', 'src/Hexalith.Parties/Hexalith.Parties.csproj')]
-        self.assertEqual(['src/Hexalith.Tenants/Hexalith.Tenants.csproj', 'src/Hexalith.Parties/Hexalith.Parties.csproj'],
+        source_builds = [call for call in calls if call[0] == 'dotnet' and call[2] == 'build' and call[3] in ('tests/Hexalith.McpCli.EventStoreGateway.TestHost/Hexalith.McpCli.EventStoreGateway.TestHost.csproj', 'src/Hexalith.Tenants/Hexalith.Tenants.csproj', 'src/Hexalith.Parties/Hexalith.Parties.csproj', 'src/Hexalith.Projects.Server/Hexalith.Projects.Server.csproj')]
+        self.assertEqual(['src/Hexalith.Tenants/Hexalith.Tenants.csproj', 'src/Hexalith.Parties/Hexalith.Parties.csproj',
+                          'src/Hexalith.Projects.Server/Hexalith.Projects.Server.csproj'],
                          [call[3] for call in source_builds])
         self.assertEqual(str(Path(prepared['sourceFixtureRoot']) / 'Hexalith.Tenants'), source_builds[0][1])
         for call in source_builds:
@@ -702,6 +724,7 @@ pathlib.Path(sys.argv[sys.argv.index('--output') + 1]).write_text(json.dumps({'r
             'source-fixtures/Hexalith.Tenants/src/Hexalith.Tenants/Hexalith.Tenants.csproj',
             'source-fixtures/Hexalith.Parties/src/Hexalith.Parties/Hexalith.Parties.csproj',
             'source-fixtures/Hexalith.Parties/src/Hexalith.Parties.EventStoreExtensions/Hexalith.Parties.EventStoreExtensions.csproj',
+            'source-fixtures/Hexalith.Projects/src/Hexalith.Projects.Server/Hexalith.Projects.Server.csproj',
             *(f'module-audit-{index}/audit.csproj' for index in range(4)),
         ], restore_projects)
         overlay = Path(prepared['privateDirectory']) / 'source-runtime-packages.props'
@@ -747,6 +770,10 @@ pathlib.Path(sys.argv[sys.argv.index('--output') + 1]).write_text(json.dumps({'r
                              if 'Parties' in (row.get('Condition') or '')]
         self.assertEqual(1, len(parties_constants))
         self.assertIn('HEXALITH_EVENTSTORE_CATALOG_API', parties_constants[0])
+        projects_constants = [row.find('DefineConstants').text for row in after_xml.findall('./PropertyGroup')
+                              if 'Projects' in (row.get('Condition') or '')]
+        self.assertEqual(1, len(projects_constants))
+        self.assertIn('HEXALITH_EVENTSTORE_CATALOG_API', projects_constants[0])
         self.assertEqual(['ValidateCatalogSdkSelection', 'ValidateCanonicalBoundaryPackageCohort'],
                          [row.get('Name') for row in after_xml.findall('./Target')])
         for call in source_builds:
@@ -761,12 +788,19 @@ pathlib.Path(sys.argv[sys.argv.index('--output') + 1]).write_text(json.dumps({'r
         for call in source_builds:
             self.assertFalse(any(argument.startswith(('-p:HexalithMemoriesVersion=', '-p:HexalithTenantsVersion=')) for argument in call))
         deadlines = [call[4] for call in calls if call[0] == 'timeout' and call[5:7] == ['dotnet', 'build']]
-        self.assertEqual(['300'] * 3, deadlines)
+        self.assertEqual(['300'] * 4, deadlines)
         self.assertLess(next(index for index, call in enumerate(calls) if call[0] == 'unshare'), calls.index(source_builds[0]))
-        self.assertEqual(4, len(prepared['sources']))
+        self.assertEqual(5, len(prepared['sources']))
         checkouts = [self.root / 'references' / module for module in
                      ('Hexalith.EventStore', 'Hexalith.Tenants', 'Hexalith.Parties', 'Hexalith.Platform')]
-        for source, checkout in zip(prepared['sources'], checkouts):
+        owned = [source for source in prepared['sources'] if not source.get('gitlinkOnly')]
+        self.assertEqual(['Hexalith.Projects'], [source['module'] for source in prepared['sources'] if source.get('gitlinkOnly')])
+        self.assertFalse(any(call[0] == 'git' and call[2] == 'clone' and any('Hexalith.Projects' in str(value) for value in call)
+                             for call in calls))
+        projects_fetch = [call for call in calls if call[0] == 'git' and call[2] == 'fetch' and str(call[1]).endswith('Hexalith.Projects')]
+        self.assertEqual(1, len(projects_fetch))
+        self.assertIn('--no-recurse-submodules', projects_fetch[0])
+        for source, checkout in zip(owned, checkouts):
             self.assertEqual(checkout.name, source['module'])
             self.assertEqual(str(checkout.relative_to(self.root)), source['path'])
             self.assertEqual('a' * 40, source['commit'])
@@ -790,13 +824,14 @@ pathlib.Path(sys.argv[sys.argv.index('--output') + 1]).write_text(json.dumps({'r
         for relative in ('dcp/dcp', 'dashboard/Aspire.Dashboard'):
             self.assertEqual(str(self.fixture_home / '.aspire/bundle' / relative), tools[relative]['path'])
             self.assertEqual(bundle_hashes[relative], tools[relative]['sha256'])
-        self.assertEqual(['5.5.2'] * 2,
-                         [source['HexalithEventStoreVersion'] for source in prepared['sources'] if source['module'] in ('Hexalith.Tenants', 'Hexalith.Parties')])
+        self.assertEqual(['5.5.2'] * 3,
+                         [source['HexalithEventStoreVersion'] for source in prepared['sources']
+                          if source['module'] in ('Hexalith.Tenants', 'Hexalith.Parties', 'Hexalith.Projects')])
         self.assertEqual({'profile': 'published', 'version': '5.5.2', 'sourceCommit': 'a' * 40},
                          {key: prepared['gateway'][key] for key in ('profile', 'version', 'sourceCommit')})
-        self.assertEqual({'Hexalith.Tenants', 'Hexalith.Parties'}, set(prepared['gateway']['domainHosts']))
+        self.assertEqual({'Hexalith.Tenants', 'Hexalith.Parties', 'Hexalith.Projects'}, set(prepared['gateway']['domainHosts']))
         property_calls = [call for call in calls if call[0] == 'dotnet' and call[2] == 'msbuild']
-        self.assertEqual(2, len(property_calls))
+        self.assertEqual(3, len(property_calls))
         provenance = self.root / 'references/Hexalith.Builds/Props/ContainerProvenance.targets'
         for call in property_calls:
             self.assertIn('-getProperty:HexalithEventStoreVersion', call)
@@ -873,7 +908,7 @@ pathlib.Path(sys.argv[sys.argv.index('--output') + 1]).write_text(json.dumps({'r
         self.assertNotEqual(self.env['NUGET_PACKAGES'], str(cache))
         calls = [json.loads(line) for line in (self.root / 'dotnet-package-caches.jsonl').read_text().splitlines()]
         builds = [call for call in calls if call['args'][0] in ('build', 'msbuild')]
-        self.assertEqual(5, len(builds))
+        self.assertEqual(7, len(builds))
         self.assertEqual({str(cache)}, {call['cache'] for call in builds})
         self.assertEqual(0, self.invoke('run-ci.sh').returncode)
 
@@ -1082,6 +1117,10 @@ pathlib.Path(sys.argv[sys.argv.index('--output') + 1]).write_text(json.dumps({'r
                        and call[3] == 'src/Hexalith.Parties/Hexalith.Parties.csproj')
         self.assertLess(curl, tenants)
         self.assertLess(curl, parties)
+        projects = next(index for index, call in enumerate(self.calls())
+                        if call[0] == 'dotnet' and call[2] == 'build'
+                        and call[3] == 'src/Hexalith.Projects.Server/Hexalith.Projects.Server.csproj')
+        self.assertLess(curl, projects)
         self.assertTrue(all(source['policy']['warnings']['allWarningsAsErrors'] for source in document['sources'].values()))
         tenants = 'references/Hexalith.Tenants/src/Hexalith.Tenants/Hexalith.Tenants.csproj'
         self.assertEqual([], document['sources'][tenants]['policy']['warnings']['warnNotAsError'])
@@ -1267,6 +1306,7 @@ pathlib.Path(sys.argv[sys.argv.index('--output') + 1]).write_text(json.dumps({'r
             ('references/Hexalith.Parties/src/Hexalith.Parties.Contracts', 'net11.0', True),
             ('references/Hexalith.Parties/src/Hexalith.Parties.Security', 'net11.0', True),
             ('references/Hexalith.Parties/src/Hexalith.Parties.EventStoreExtensions', 'net11.0', True),
+            ('references/Hexalith.Projects/src/Hexalith.Projects.Server', 'net11.0', True),
             ('src/Hexalith.McpCli', 'net11.0', False),
             ('tests/Hexalith.McpCli.ConformanceHost', 'net11.0', False),
             ('tests/Hexalith.McpCli.AppHost', 'net11.0', False),

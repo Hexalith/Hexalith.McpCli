@@ -5,6 +5,7 @@ import hashlib
 import json
 import os
 from pathlib import Path
+import shutil
 import tempfile
 import unittest
 from unittest.mock import patch
@@ -157,6 +158,41 @@ class NativeCohortTests(unittest.TestCase):
             native.verify_archive(archive, package)
         with self.assertRaisesRegex(ValueError, 'no authenticated public archive'):
             native.require_restored_archive(archive, self.selection, 'Hexalith.EventStore.Contracts/4.1.0')
+
+    def test_gitlink_only_source_skips_owned_checkout_when_local_tree_is_absent(self):
+        checkout = self.root / 'references/Hexalith.Projects'
+        shutil.rmtree(checkout)
+        checkout.mkdir()
+        original = self.bounded
+
+        def bounded(command, seconds, output, *, cwd=None):
+            if command[1:3] == ['ls-tree', 'HEAD'] and command[-1] == 'references/Hexalith.Projects':
+                self.calls.append((command, cwd))
+                return '160000 commit ' + 'a' * 40 + '\treferences/Hexalith.Projects'
+            return original(command, seconds, output, cwd=cwd)
+
+        with patch.dict(os.environ, {'GITHUB_ACTIONS': '', 'RUNNER_ENVIRONMENT': ''}):
+            sources = native.select_sources(self.root, self.selection, self.root, bounded)
+        projects = next(source for source in sources if source['module'] == 'Hexalith.Projects')
+        self.assertTrue(projects['gitlinkOnly'])
+        self.assertEqual('a' * 40, projects['selectedCommit'])
+        self.assertFalse(any(command[1] in ('checkout', 'fetch') for command, _ in self.calls))
+
+    def test_gitlink_only_source_refuses_a_mismatched_qualified_object(self):
+        checkout = self.root / 'references/Hexalith.Projects'
+        shutil.rmtree(checkout)
+        checkout.mkdir()
+        original = self.bounded
+
+        def bounded(command, seconds, output, *, cwd=None):
+            if command[1:3] == ['ls-tree', 'HEAD'] and command[-1] == 'references/Hexalith.Projects':
+                self.calls.append((command, cwd))
+                return '160000 commit ' + 'b' * 40 + '\treferences/Hexalith.Projects'
+            return original(command, seconds, output, cwd=cwd)
+
+        with self.assertRaisesRegex(ValueError, 'gitlink identity differs'):
+            native.select_sources(self.root, self.selection, self.root, bounded)
+        self.assertFalse(any(command[1] in ('checkout', 'fetch') for command, _ in self.calls))
 
 
 if __name__ == '__main__':

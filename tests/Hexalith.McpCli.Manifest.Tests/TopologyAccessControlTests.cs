@@ -26,7 +26,7 @@ public sealed class TopologyAccessControlTests
         Assert.Equal("public", access.GetProperty("trustDomain").GetString());
         Dictionary<string, JsonElement> policies = access.GetProperty("policies").EnumerateArray()
             .ToDictionary(policy => policy.GetProperty("appId").GetString()!, StringComparer.Ordinal);
-        Assert.Equal(new[] { "eventstore", "parties", "tenants" }, policies.Keys.Order(StringComparer.Ordinal));
+        Assert.Equal(new[] { "eventstore", "parties", "projects", "tenants" }, policies.Keys.Order(StringComparer.Ordinal));
         foreach ((string caller, JsonElement policy) in policies)
         {
             Assert.Equal(new[] { "appId", "defaultAction", "namespace", "operations", "trustDomain" },
@@ -38,7 +38,8 @@ public sealed class TopologyAccessControlTests
             string[] allowedPaths = caller == "eventstore"
                 ? ["/admin/operational-index-metadata", "/process", "/project", "/project/v2", "/query"]
                 : caller == "tenants" ? published ? ["/api/v1/commands", "/api/v1/queries", "/api/v1/streams/read/workload"]
-                    : ["/api/v1/commands", "/api/v1/queries"] : ["/api/v1/queries"];
+                    : ["/api/v1/commands", "/api/v1/queries"]
+                : ["/api/v1/queries"];
             Assert.Equal(allowedPaths, operations.Select(operation => operation.GetProperty("name").GetString()).Order(StringComparer.Ordinal));
             Assert.All(operations, operation =>
             {

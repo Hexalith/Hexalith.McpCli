@@ -7,10 +7,30 @@ namespace Hexalith.McpCli.AppHost;
 internal static class NativeCatalogPreparationEvidence
 {
     /// <summary>Copies the existing SDK schema's identity and digest fields, never raw environment or custody.</summary>
-    internal static JsonObject Capture(string tenantReceipt, string partyReceipt)
+    internal static JsonObject Capture(string tenantReceipt, string partyReceipt, string? projectsReceipt = null)
     {
         JsonObject tenant = JsonNode.Parse(File.ReadAllBytes(tenantReceipt))!.AsObject();
         JsonObject party = JsonNode.Parse(File.ReadAllBytes(partyReceipt))!.AsObject();
+        JsonObject safeTenant = OwnerInventory(tenant);
+        var captured = new JsonObject
+        {
+            ["tenantPreparationSha256"] = Digest(tenantReceipt),
+            ["partyPreparationSha256"] = Digest(partyReceipt),
+            ["tenantPreparation"] = safeTenant,
+            ["partyPreparation"] = Select(party, "instanceId", "gatewayAppId", "sdkVersion", "templateSource", "templateHash",
+                "templateProjectSha256", "readerProjectSha256", "templateProgramSha256", "readerProgramSha256",
+                "templateCohortSha256", "readerCohortSha256", "buildsCatalogSha256", "globalJsonSha256", "bindingsSha256", "inputHashes", "auditReceiptSha256", "auditedPackageGraph"),
+        };
+        if (projectsReceipt is not null)
+        {
+            captured["projectsPreparationSha256"] = Digest(projectsReceipt);
+            captured["projectsPreparation"] = OwnerInventory(JsonNode.Parse(File.ReadAllBytes(projectsReceipt))!.AsObject());
+        }
+        return captured;
+    }
+
+    private static JsonObject OwnerInventory(JsonObject tenant)
+    {
         JsonObject safeTenant = Select(tenant, "project", "projectPath", "projectSha256", "configuration", "targetFramework", "sdk",
             "buildEnvironmentDigest", "targetSha256", "assembly", "moduleVersionId", "declarations");
         safeTenant["operations"] = Inventory(tenant, "operations", "RouteId", "Digest");
@@ -22,15 +42,7 @@ internal static class NativeCatalogPreparationEvidence
                 ["declarations"] = Select(artifacts["declarations"]!.AsObject(), "fileName", "assembly", "moduleVersionId", "sha256"),
                 ["adapters"] = Select(artifacts["adapters"]!.AsObject(), "fileName", "assembly", "moduleVersionId", "sha256"),
             };
-        return new JsonObject
-        {
-            ["tenantPreparationSha256"] = Digest(tenantReceipt),
-            ["partyPreparationSha256"] = Digest(partyReceipt),
-            ["tenantPreparation"] = safeTenant,
-            ["partyPreparation"] = Select(party, "instanceId", "gatewayAppId", "sdkVersion", "templateSource", "templateHash",
-                "templateProjectSha256", "readerProjectSha256", "templateProgramSha256", "readerProgramSha256",
-                "templateCohortSha256", "readerCohortSha256", "buildsCatalogSha256", "globalJsonSha256", "bindingsSha256", "inputHashes", "auditReceiptSha256", "auditedPackageGraph"),
-        };
+        return safeTenant;
     }
 
     private static JsonObject Select(JsonObject source, params string[] names)

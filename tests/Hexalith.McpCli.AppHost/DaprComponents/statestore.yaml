@@ -28,7 +28,8 @@
   },
   "scopes": [
     "eventstore",
-    "tenants",
-    "parties"
+    "parties",
+    "projects",
+    "tenants"
   ]
 }

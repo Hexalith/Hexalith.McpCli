@@ -2,6 +2,7 @@
 import hashlib
 import json
 from pathlib import Path
+import shutil
 import subprocess
 import tempfile
 import unittest
@@ -78,6 +79,42 @@ class NativeSourceTests(unittest.TestCase):
         nested.write_text('<Project/>')
         with self.assertRaises(ValueError):
             native_sources.seal(proof)
+
+    def test_missing_local_checkout_fetches_origin_without_nested_submodules(self):
+        module = 'Hexalith.Projects'
+        shutil.rmtree(self.root / 'references' / module)
+        (self.root / 'references' / module).mkdir()
+        commit = self.selection['sources'][module]['commit']
+        calls = []
+
+        def bounded(command, _seconds, _output, *, cwd=None, **_kwargs):
+            calls.append(command)
+            if command[1] == 'clone' and str(command[-2]).endswith('Hexalith.Projects'):
+                raise AssertionError('An uninitialized gitlink must not clone the empty local path.')
+            if command[1] == 'clone':
+                subprocess.run(command, check=True, capture_output=True)
+                return ''
+            if command[:2] == ['git', 'init']:
+                subprocess.run(['git', 'init', '--quiet'], cwd=cwd, check=True)
+                return ''
+            if command[:3] == ['git', 'remote', 'add']:
+                subprocess.run(command, cwd=cwd, check=True, capture_output=True)
+                return ''
+            if command[1] == 'fetch':
+                self.assertIn('--no-recurse-submodules', command)
+                return ''
+            if command[1] == 'checkout':
+                self.assertIn('--no-recurse-submodules', command)
+                return ''
+            subprocess.run(command, cwd=cwd, check=True, capture_output=True)
+            return ''
+
+        proof = native_sources.create(self.root, self.root.parent / 'private-gitlink', self.selection,
+                                      self.root.parent, bounded)
+        self.assertEqual(commit, proof['modules'][module]['commit'])
+        self.assertEqual([commit], [command[-1] for command in calls if command[1] == 'fetch'])
+        self.assertTrue(any(command[1] == 'init' for command in calls))
+        self.assertFalse(any(command[1] == 'clone' and str(command[-2]).endswith(module) for command in calls))
 
 
 if __name__ == '__main__':
