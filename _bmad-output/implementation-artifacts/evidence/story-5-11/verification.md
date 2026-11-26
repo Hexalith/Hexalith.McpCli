@@ -356,3 +356,44 @@ requirement remains open under AC3.
 The shared secret scanner cleared the changed evidence. The tracked packet
 scan repeated the published `redaction-required` findings in the two
 hash-bound deferral audit files.
+
+### Post-delivery review rerun
+
+All 65 focused tests passed in one run. All nine follow-up patches replayed
+against their recorded revisions and hashes. The eight patches for owners
+other than EventStore also applied cleanly to their local `origin/main`
+snapshots in scratch. The default verifier exited 0 and confirmed approved
+integration. `--approved-completion` exited 1 with empty stdout and
+`FAIL: AC3 generated release notes remain deferred by the owner`. Both modes
+reported EventStore PRD drift on stderr. Story 5.11 remains in review.
+
+- **CiCd / Builds** owns AC3. The generated GitHub release notes must end with
+  the migration status committed at the tagged release source. Completion
+  requires the published release and generation evidence, a resolved ledger
+  entry and an explicit release-owner decision bound to that entry.
+  [Live deferral `77748cf5a6cb9421`](../../deferred-work.md#deferred-from-code-review-of-spec-5-11-reconcile-product-claims-and-the-migration-planmd-2026-11-19)
+- **ChatBot** owns the confidential UI guidance for approval and execution.
+  The live PRD fails the published-guidance check. **Works** owns generic
+  discovery guidance. With only the projected ChatBot correction supplied,
+  the live Works experience spine fails the next check. Both corrections need
+  owner approval and integration into `main`.
+  [Prepared ChatBot and Works patches](owner-doc-follow-up/README.md)
+- **EventStore, Folders, FrontComposer, Memories, Parties, Projects and
+  Tenants** own the remaining status-neutral documentation corrections in
+  their repositories. EventStore also owns the reported PRD drift. The
+  patches remain pending owner approval and integration.
+  [Owner revisions and patch hashes](owner-doc-follow-up/README.md)
+- **McpCli product and maintenance owners**, with **CI redaction**, **Parties
+  and EventStore Gateway**, and **Commons and Builds** maintainers for their
+  respective rows, must record separate owner-approved resolutions for the
+  22 audited ledger changes. The live gate refuses first on
+  `1c8ef2a87fc429cc`. Reassess SM-3 on the eventual completion date.
+  [Approved audit and recorded owners](deferral-dispositions.md)
+
+| Audited owner | Changed ledger entries awaiting resolution evidence |
+| --- | --- |
+| McpCli product/architecture owner, proposed in the audit | `1c8ef2a87fc429cc` |
+| Parties and EventStore Gateway maintainers | `cb256bc9ea051e97` |
+| McpCli and CI redaction maintainers | `cb5fc897454fbeac`, `52e621923be2365a`, `97ff87a26c46ec8b`, `e237a31da32a3ab2`, `ed8b36e5612e24e5`, `4fdf5ec4cd690c8d`, `2825bc0195c0d54d`, `ad73be0f7f31edc3`, `bcf011d9603aebe0`, `db3f193610c6db23`, `79dda498e65f04a7`, `7ea2341374f1a5cb` |
+| McpCli product/architecture and maintenance roles | `cb83b6da301fa987`, `c92a970254e1caba`, `260eb8ddd9199993`, `345a3ead37540792`, `7394777debdb0693`, `84668e94b642bd73`, `a03161fe049a33d2` |
+| McpCli, Commons and Builds maintainers | `ddfd98571de3514a` |

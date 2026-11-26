@@ -92,7 +92,7 @@
     ]
   },
   "blockers": [
-    "AC3 generated release notes: CiCd/Builds must append the committed migration status; deferred by owner on 2026-11-19 (deferred-work.md:1265).",
+    "AC3 generated release notes: CiCd/Builds must append the committed migration status. The owner deferred this in ledger entry 77748cf5a6cb9421 on 2026-11-19.",
     "The ChatBot and Works owner documentation follow-up awaits fresh approval and integration into owner main.",
     "22 of the 65 approved audit entries still have changed ledger statuses after restoring ea9d3ee950934c10. The first refusal is 1c8ef2a87fc429cc. No separate owner-approved resolutions are recorded."
   ],
