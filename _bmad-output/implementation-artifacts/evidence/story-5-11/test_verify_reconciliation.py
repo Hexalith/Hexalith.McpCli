@@ -421,7 +421,7 @@ class CompletionBindingTests(unittest.TestCase):
 
     def run_binding(self, mutate=None, git_mutation=None, plan_mutation=None, *,
                     resolved=True, default=False, full=False, file_mutation=None,
-                    owner_conflict=None, hosted_mutation=None):
+                    owner_conflict=None, hosted_mutation=None, current_documents=None):
         receipt = data('approval.json')
         manifest = data('upstream/manifest.json')
         integration = data('integration.json')
@@ -539,6 +539,8 @@ class CompletionBindingTests(unittest.TestCase):
                 if owner == 'aitools':
                     owner = 'ai-tools'
                 path = args[1].removeprefix('origin/main:')
+                if current_documents and (owner,path) in current_documents:
+                    return current_documents[owner,path]
                 revision = delivered.get((owner,path))
                 if checking_owner_conflicts:
                     for suffix,(prior,replacement) in owner_text.items():
@@ -649,9 +651,40 @@ class CompletionBindingTests(unittest.TestCase):
             self.refusal('completion requires published '+owner+' migration guidance: _bmad-output/planning-artifacts/'+path,
                          owner_conflict=owner)
 
+    def test_default_and_completion_check_replayed_owner_main_documents(self):
+        documents = replay_follow_up()
+        for row in data('labels.json')['rows']:
+            if row['id'] in {'PS03','PS14'}:
+                lines = documents[row['repository'],'README.md'].splitlines()
+                self.assertEqual(lines.count(row['label']['text'].encode()),1,row['id'])
+        planning = '_bmad-output/planning-artifacts/'
+        drift = (
+            ('eventstore',planning+'prd.md'),
+            ('frontcomposer','README.md'),
+            ('frontcomposer',planning+'prd.md'),
+            ('frontcomposer',planning+'architecture.md'),
+            ('frontcomposer',planning+'architecture/architecture-gov-1-2026-07-19/ARCHITECTURE-SPINE.md'),
+            ('frontcomposer',planning+'ux-designs/ux-frontcomposer-2026-09-09/EXPERIENCE.md'),
+            ('chatbot',planning+'prds/prd-Hexalith.ChatBot-2026-05-28/prd.md'),
+            ('projects','README.md'),
+            ('projects',planning+'epics.md'),
+            ('projects',planning+'prds/prd-Hexalith.Projects-2026-05-24/prd.md'),
+            ('tenants',planning+'architecture.md'),
+        )
+        reported = ''.join(f'reported: {owner}: current main migration text drift: {path}\n' for owner,path in drift)
+        for default in (True,False):
+            with self.subTest(default=default):
+                self.assertEqual(self.run_binding(default=default,full=True,current_documents=documents),
+                                 (0,VERIFIED,reported))
+
     def test_owner_guidance_requires_visible_correction_and_refuses_each_stale_claim(self):
         documents = replay_follow_up()
         self.assertIsNone(self.check_guidance(documents))
+        chatbot_prd = '_bmad-output/planning-artifacts/prds/prd-Hexalith.ChatBot-2026-05-28/prd.md'
+        [stdio_client] = [line for line in documents['chatbot',chatbot_prd].splitlines()
+                          if line.startswith(b'| `mcpcli-stdio-client` |')]
+        self.assertIn(b'configured Gateway credential and session actor (`--actor`)',stdio_client)
+        self.assertIn(b'The session runs until the stdio process exits.',stdio_client)
         for (owner,path),raw in documents.items():
             with self.subTest(owner=owner,path=path):
                 self.assertNotIn(b'Current McpCli disposition (Story 5.11 candidate)',raw)
@@ -665,7 +698,9 @@ class CompletionBindingTests(unittest.TestCase):
         targets = (
             ('chatbot','prds/prd-Hexalith.ChatBot-2026-05-28/prd.md',
              b'approved execution and confirmation-required behavior route to the confidential ChatBot UI.',
-             [b'user-delegated via OAuth device flow',b'UI/API, CLI, and MCP association/status/audit parity']),
+             [b'user-delegated via OAuth device flow',b'UI/API, CLI, and MCP association/status/audit parity',
+              b'current authenticated human',b'delegation expiry for audit',
+              b'1 hour maximum; terminates on logout, revocation, or lost presence']),
             ('chatbot','ux-designs/ux-Hexalith.ChatBot-2026-05-28/EXPERIENCE.md',
              b'Both McpCli heads refuse those operations.',
              [b'explicitly exposed on UI, CLI, and/or MCP']),
@@ -954,6 +989,30 @@ class CompletionBindingTests(unittest.TestCase):
                 return b''
         self.assertEqual(self.run_binding(git_mutation=deleted,default=True,full=True),
                          (0,VERIFIED,'reported: eventstore: current main migration text drift: '+path+'\n'))
+
+    def test_current_main_reports_a_removed_passage_reintroduced_alongside_the_correction(self):
+        repo = ROOT.parent/'memories'
+        removed = b'## CLI (preview)'
+        revision = next(row['commit'] for row in data('integration.json')['ownerIntegrations']
+                        if row['name']=='memories')
+        parent = recorded_git(repo,'show',revision+'^:README.md')
+        delivered = recorded_git(repo,'show',revision+':README.md')
+        self.assertIn(removed,parent.splitlines())
+        self.assertNotIn(removed,delivered.splitlines())
+        self.assertEqual(self.run_binding(default=True,full=True,
+                         current_documents={('memories','README.md'):delivered+b'\n'+removed+b'\n'}),
+                         (0,VERIFIED,'reported: memories: current main migration text drift: README.md\n'))
+
+    def test_unreadable_current_planning_document_fails_when_main_lists_the_path(self):
+        path = '_bmad-output/planning-artifacts/prd.md'
+        eventstore = ROOT.parent/'eventstore'
+        message = 'cannot read current Git object'
+        def unreadable(checkout,args,git):
+            if checkout == eventstore and args == ('show','origin/main:'+path):
+                raise ValueError(message)
+            if checkout == eventstore and args == ('ls-tree','--name-only','origin/main','--',path):
+                return (path+'\n').encode()
+        self.refusal(message,git_mutation=unreadable,default=True,full=True)
 
     def test_final_plan_requires_authority_and_capability_outcomes(self):
         cases = [

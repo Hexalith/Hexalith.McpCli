@@ -132,6 +132,42 @@ class OfflineCliTests(unittest.TestCase):
                                     f'and five generic stdio tools. Evidence in {published}\n')
                         self.assertEqual((status, stdout.getvalue(), stderr.getvalue()), (0, expected, ''))
 
+    def test_nonobject_discovery_payloads_retain_failed_run_evidence(self):
+        cases = (
+            ('modules', 'modules', [1, 2], 'modules must be an array of JSON objects'),
+            ('modules', 'modules', None, 'modules must be an array of JSON objects'),
+            ('modules', 'modules', [{'name': [], 'description': 'fixture'}]*2, 'expected published cohort required'),
+            ('tenants', 'operations', [None]*14, 'operations must be an array of JSON objects'),
+            ('tenants', 'operations', [{'name': {}, 'description': 'fixture'}]*14,
+             'expected operation names/kinds/descriptions required'),
+            ('parties', 'operations', {}, 'operations must be an array of JSON objects'),
+            ('describe', 'schema', [], 'schema, schema properties and envelope must be JSON objects'),
+            ('describe', 'schema', {'properties': []}, 'schema, schema properties and envelope must be JSON objects'),
+            ('describe', 'envelope', [], 'schema, schema properties and envelope must be JSON objects'),
+        )
+        for name, field, value, message in cases:
+            with self.subTest(name=name, field=field, value=value), tempfile.TemporaryDirectory() as directory:
+                output = Path(directory)
+                capture = f'offline-{name}.stdout.txt'
+                document = json.loads((C.E/capture).read_bytes())
+                document[field] = value
+                invalid = json.dumps(document).encode()
+                preceding = ['modules', 'tenants', 'parties', 'describe']
+                results = [subprocess.CompletedProcess([], 0, (C.E/f'offline-{probe}.stdout.txt').read_bytes(), b'')
+                           for probe in preceding[:preceding.index(name)]]
+                results.append(subprocess.CompletedProcess([], 0, invalid, b''))
+                stdout, stderr = io.StringIO(), io.StringIO()
+                with mock.patch.object(C, 'install_tool'), mock.patch.object(subprocess, 'run', side_effect=results), \
+                        contextlib.redirect_stdout(stdout), contextlib.redirect_stderr(stderr):
+                    status = C.main(['--output', str(output)])
+                [failed] = output.iterdir()
+                self.assertTrue(failed.name.startswith('failed-'))
+                self.assertEqual((status, stdout.getvalue(), stderr.getvalue()),
+                                 (1, '', f'FAIL: {name}: {message}. Retained evidence in {failed}\n'))
+                self.assertEqual((failed/capture).read_bytes(), C.retained(invalid))
+                self.assertEqual((failed/f'offline-{name}.stderr.txt').read_bytes(), b'')
+                self.assertFalse((failed/'offline-cli.json').exists())
+
     def test_successful_stdio_binds_raw_and_retained_stdout_separately(self):
         sensitive = 'Bear' + 'er ' + 'x' * 40
         responses = {

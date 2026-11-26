@@ -220,7 +220,7 @@ been regenerated for the pending packet, and final full verification/scan is
 left to the parent reviewer. Approval, prerequisite delivery, CiCd configuration,
 Git authorization, inventory publication and upstream integration stay blocked.
 
-## Parent verification after review fixes
+## Parent verification after review fixes on 16 November 2026 (historical)
 
 All fourteen review patch groups are resolved. `final-checks/checks.json` and
 its exact streams record the final reviewed tree: 24 reconciliation tests plus three offline-probe tests; two Python
@@ -238,7 +238,7 @@ completes and before requesting final exact-byte approval. No commit or push was
 created. The approved intent's separate-authorization and completion requirements
 prevent the generic workflow's terminal commit/done step at this point.
 
-## Shared-guidance correction and authorized delivery continuation
+## Shared-guidance correction and authorized delivery continuation on 16 November 2026 (historical)
 
 The user subsequently requested “push all changes” and “fix”. Upstream AI.Tools
 main cfd1ebea92587cdea41b9aa2cff47358bf2f32f6 already scopes check.py to adopted
@@ -357,7 +357,7 @@ The shared secret scanner cleared the changed evidence. The tracked packet
 scan repeated the published `redaction-required` findings in the two
 hash-bound deferral audit files.
 
-### Post-delivery review rerun
+### Post-delivery review rerun before pass-3 fixes
 
 All 65 focused tests passed in one run. All nine follow-up patches replayed
 against their recorded revisions and hashes. The eight patches for owners
@@ -366,6 +366,40 @@ snapshots in scratch. The default verifier exited 0 and confirmed approved
 integration. `--approved-completion` exited 1 with empty stdout and
 `FAIL: AC3 generated release notes remain deferred by the owner`. Both modes
 reported EventStore PRD drift on stderr. Story 5.11 remains in review.
+
+### Pass-3 verification on 26 November 2026
+
+All 69 tests passed in a single discovery run. The replay applied all nine
+follow-ups at their recorded owner revisions. The default
+and completion fixtures both reported the expected ten drift lines and
+accepted the unchanged PS03 and PS14 labels. Separate cases exercised a
+reintroduced passage, a listed but unreadable document, and retained offline
+probe evidence from malformed discovery responses. Removing either drift
+guard in isolation made its regression test fail.
+[Test stderr](review-pass-3-20261126/tests.stderr.txt) ·
+[Test stdout](review-pass-3-20261126/tests.stdout.txt)
+
+```bash
+run-with-temp env PYTHONDONTWRITEBYTECODE=1 python3 -m unittest discover -v \
+  -s _bmad-output/implementation-artifacts/evidence/story-5-11
+```
+
+All nine patches also passed `git apply --check --whitespace=error` against
+the locally available owner `origin/main` snapshots. The affected Memories
+architecture documentation test passed using the existing Release assembly
+against the patched owner files in scratch. The published 2.0.1 offline probe
+passed, and the built 3.0.0 CLI help confirmed `--transport stdio` and `--actor`.
+[Patch check](review-pass-3-20261126/owner-main.stdout.txt) ·
+[Memories test](review-pass-3-20261126/memories-docs.stdout.txt)
+
+`verify_reconciliation.py` exited 0 and reported EventStore PRD drift.
+`verify_reconciliation.py --approved-completion` exited 1 with empty stdout
+and the existing AC3 refusal after the EventStore drift report. The adopted
+AD-23 verifier, `scripts/check-agent-instructions-sync.sh` and `git diff --check`
+exited 0. The Node notes command exited 1 because the test file is absent.
+The fresh scan covers the changed story evidence, spec and retained check
+streams. [Check streams](review-pass-3-20261126) ·
+[Secret scan receipt](review-pass-3-20261126/secret-scan.json)
 
 - **CiCd / Builds** owns AC3. The generated GitHub release notes must end with
   the migration status committed at the tagged release source. Completion

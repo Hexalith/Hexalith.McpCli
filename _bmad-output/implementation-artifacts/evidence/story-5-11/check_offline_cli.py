@@ -43,13 +43,30 @@ def validate_probe(name,result):
         require(isinstance(document,dict) and 'error' not in document,name+': discovery result required')
         if name == 'modules':
             modules=document.get('modules',[])
-            require(len(modules)==2 and {m.get('name'):m.get('operationCount') for m in modules}=={'parties':7,'tenants':14} and all(m.get('description') for m in modules),'modules: expected published cohort required')
+            require(isinstance(modules,list) and all(isinstance(module,dict) for module in modules),
+                    'modules: modules must be an array of JSON objects')
+            require(len(modules)==2 and
+                    all(isinstance(m.get('name'),str) and m.get('description') for m in modules) and
+                    {m['name']:m.get('operationCount') for m in modules}=={'parties':7,'tenants':14},
+                    'modules: expected published cohort required')
         elif name in OPERATIONS:
             operations=document.get('operations',[])
+            require(isinstance(operations,list) and all(isinstance(operation,dict) for operation in operations),
+                    name+': operations must be an array of JSON objects')
             expected={name+'.'+op:kind for op,kind in OPERATIONS[name].items()}
-            require(document.get('module')==name and len(operations)==len(expected) and {r.get('name'):r.get('kind') for r in operations}==expected and all(r.get('description') for r in operations),name+': expected operation names/kinds/descriptions required')
+            require(document.get('module')==name and len(operations)==len(expected) and
+                    all(isinstance(r.get('name'),str) and r.get('description') for r in operations) and
+                    {r['name']:r.get('kind') for r in operations}==expected,
+                    name+': expected operation names/kinds/descriptions required')
         else:
-            require(document.get('name')=='tenants.list-tenants' and document.get('kind')=='read' and document.get('description') and isinstance(document.get('schema'),dict) and document['schema'].get('properties',{}).keys()=={'Cursor','PageSize'} and document.get('envelope',{}).get('platformScope')=='platform:tenants' and document.get('submittable') is False and document.get('reason')=='configuration_invalid','describe: expected typed offline discovery required')
+            schema = document.get('schema')
+            envelope = document.get('envelope')
+            require(isinstance(schema,dict) and isinstance(schema.get('properties'),dict) and isinstance(envelope,dict),
+                    'describe: schema, schema properties and envelope must be JSON objects')
+            require(document.get('name')=='tenants.list-tenants' and document.get('kind')=='read' and
+                    document.get('description') and schema['properties'].keys()=={'Cursor','PageSize'} and
+                    envelope.get('platformScope')=='platform:tenants' and document.get('submittable') is False and
+                    document.get('reason')=='configuration_invalid','describe: expected typed offline discovery required')
     else:
         require(result.stdout and result.stderr == b'' and b'error' not in result.stdout[:20].lower(),name+': help output required')
 

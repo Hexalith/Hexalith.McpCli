@@ -1,0 +1,2 @@
+PASS: eight inventory histories; preserved AD-23/predecessors; fourteen labels; nine owner patch sets; scoped deferral accounting
+PASS: decision: approved; approved integration verified
