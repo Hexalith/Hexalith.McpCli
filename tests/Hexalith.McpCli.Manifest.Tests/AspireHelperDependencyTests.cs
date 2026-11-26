@@ -1,6 +1,8 @@
 using System.Diagnostics;
 using System.Xml.Linq;
 
+using Hexalith.McpCli.AppHost;
+
 namespace Hexalith.McpCli.Manifest.Tests;
 
 /// <summary>Executes missing-helper and forbidden-helper admission failures without a live topology.</summary>
@@ -122,12 +124,14 @@ public sealed class AspireHelperDependencyTests
             new XDocument(new XElement("configuration", new XElement("packageSources", new XElement("clear"),
                 new XElement("add", new XAttribute("key", "empty"), new XAttribute("value", Path.Combine(root, "empty"))))))
                 .Save(Path.Combine(root, "NuGet.Config"));
+            string packages = Path.Combine(root, "packages");
             var start = new ProcessStartInfo("dotnet")
             {
-                WorkingDirectory = root, RedirectStandardOutput = true, RedirectStandardError = true,
+                WorkingDirectory = root, RedirectStandardOutput = true, RedirectStandardError = true, UseShellExecute = false,
             };
-            foreach (string argument in new[] { "restore", "Missing.csproj", "--configfile", "NuGet.Config", "--packages", Path.Combine(root, "packages"), "-p:RestoreFallbackFolders=" })
+            foreach (string argument in new[] { "restore", "Missing.csproj", "--configfile", "NuGet.Config", "--packages", packages }.Concat(NativeCatalogTool.IsolatedRestoreProperties))
                 start.ArgumentList.Add(argument);
+            NativeCatalogTool.IsolateFromWorkspaceRestore(start, packages);
             start.Environment["DOTNET_CLI_UI_LANGUAGE"] = "en";
             using Process process = Process.Start(start)!;
             using var timeout = CancellationTokenSource.CreateLinkedTokenSource(TestContext.Current.CancellationToken);
@@ -144,6 +148,26 @@ public sealed class AspireHelperDependencyTests
         {
             Directory.Delete(root, recursive: true);
         }
+    }
+
+    /// <summary>Workspace restore isolation drops MSBuild server reuse and central package management paths.</summary>
+    [Fact]
+    public void IsolatedRestoreCannotInheritCentralVersionsOrMsBuildServer()
+    {
+        var start = new ProcessStartInfo("dotnet") { UseShellExecute = false };
+        start.Environment["DirectoryPackagesPropsPath"] = "/workspace/Directory.Packages.props";
+        start.Environment["DirectoryBuildPropsPath"] = "/workspace/Directory.Build.props";
+        start.Environment["DirectoryBuildTargetsPath"] = "/workspace/Directory.Build.targets";
+        NativeCatalogTool.IsolateFromWorkspaceRestore(start, "/isolated/packages");
+        Assert.Equal("1", start.Environment["DOTNET_CLI_DO_NOT_USE_MSBUILD_SERVER"]);
+        Assert.Equal("1", start.Environment["MSBUILDDISABLENODEREUSE"]);
+        Assert.False(start.Environment.ContainsKey("DirectoryPackagesPropsPath"));
+        Assert.False(start.Environment.ContainsKey("DirectoryBuildPropsPath"));
+        Assert.False(start.Environment.ContainsKey("DirectoryBuildTargetsPath"));
+        Assert.Equal("/isolated/packages", start.Environment["NUGET_PACKAGES"]);
+        Assert.Equal(string.Empty, start.Environment["NUGET_FALLBACK_PACKAGES"]);
+        Assert.Contains("-p:ManagePackageVersionsCentrally=false", NativeCatalogTool.IsolatedRestoreProperties);
+        Assert.Contains("-p:ImportDirectoryPackagesProps=false", NativeCatalogTool.IsolatedRestoreProperties);
     }
 
     private static (DependencyPolicy Policy, RestoredDependencyGraph Graph) Candidate()

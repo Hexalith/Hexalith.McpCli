@@ -225,6 +225,38 @@ internal static class NativeCatalogTool
         File.Copy(Path.Combine(repositoryRoot, "global.json"), Path.Combine(build, "global.json"));
     }
 
+    /// <summary>Stops a child restore from inheriting MSBuild server state, Directory.*.props, or package fallbacks.</summary>
+    internal static void IsolateFromWorkspaceRestore(ProcessStartInfo start, string? packagesDirectory = null)
+    {
+        ArgumentNullException.ThrowIfNull(start);
+        start.Environment["DOTNET_CLI_DO_NOT_USE_MSBUILD_SERVER"] = "1";
+        start.Environment["MSBUILDDISABLENODEREUSE"] = "1";
+        foreach (string name in start.Environment.Keys.Where(key =>
+            key.Equals("DirectoryBuildPropsPath", StringComparison.OrdinalIgnoreCase)
+            || key.Equals("DirectoryBuildTargetsPath", StringComparison.OrdinalIgnoreCase)
+            || key.Equals("DirectoryPackagesPropsPath", StringComparison.OrdinalIgnoreCase)).ToArray())
+        {
+            start.Environment.Remove(name);
+        }
+
+        if (packagesDirectory is null)
+        {
+            return;
+        }
+
+        start.Environment["NUGET_PACKAGES"] = packagesDirectory;
+        start.Environment["NUGET_FALLBACK_PACKAGES"] = string.Empty;
+        start.Environment["NUGET_HTTP_CACHE_PATH"] = Path.Combine(packagesDirectory, "http-cache");
+    }
+
+    /// <summary>Restore properties that keep an isolated project off the workspace central catalog and fallback folders.</summary>
+    internal static string[] IsolatedRestoreProperties { get; } =
+    [
+        "-p:RestoreAdditionalProjectSources=", "-p:RestoreFallbackFolders=", "-p:RestoreAdditionalProjectFallbackFolders=",
+        "-p:ImportDirectoryBuildProps=false", "-p:ImportDirectoryBuildTargets=false", "-p:ImportDirectoryPackagesProps=false",
+        "-p:ManagePackageVersionsCentrally=false", "--no-cache", "-tl:off",
+    ];
+
     /// <summary>Creates a private run-owned directory without broadening existing permissions.</summary>
     internal static void CreatePrivateDirectory(string path)
     {
@@ -320,6 +352,7 @@ internal static class NativeCatalogTool
             WorkingDirectory = directory, RedirectStandardOutput = true, RedirectStandardError = true, UseShellExecute = false,
         };
         foreach (string argument in arguments) start.ArgumentList.Add(argument);
+        IsolateFromWorkspaceRestore(start);
         token.ThrowIfCancellationRequested();
         using Process process = Process.Start(start) ?? throw new InvalidOperationException("The actual catalog executable did not start.");
         using var capture = CancellationTokenSource.CreateLinkedTokenSource(token);
