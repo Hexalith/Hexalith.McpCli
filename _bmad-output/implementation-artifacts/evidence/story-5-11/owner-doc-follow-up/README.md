@@ -6,25 +6,27 @@ the earlier work. This follow-up awaits owner approval and integration.
 
 ChatBot’s PRD and experience spine now direct association decisions, AI-action
 approval and approved execution to the confidential UI. Both generic McpCli
-heads refuse those actions. Works’ design and experience spine describe future
-access through enrolled and authorized Works Contracts on the shared McpCli
-heads. The other edits remove provisional headings from delivered guidance.
+heads refuse those actions. The CLI guidance describes configured Gateway
+credentials and enrollment. The parity checks cover eligible operations. Works’
+design and experience spine describe future access through enrolled and
+authorized Works Contracts on the shared McpCli heads. The other edits remove
+provisional headings from delivered guidance.
 
 Each patch applied with `git apply --whitespace=error` in a disposable Git
 repository containing the listed revision’s target files. The resulting files
 matched the prepared bytes, including the original line endings.
 
-| Patch | Owner main revision | Files |
-| --- | --- | ---: |
-| [ChatBot](chatbot.patch) | `794753deb77b636f59f0f94e64ad4fbccdbf13da` | 5 |
-| [EventStore](eventstore.patch) | `9d24e05d81d04329f17a4f31e74da60f128f4a7e` | 4 |
-| [Folders](folders.patch) | `2499dd3a63c6aa14bead7062a58d7d092e658f02` | 3 |
-| [FrontComposer](frontcomposer.patch) | `78337195930bc6ffc849c4389dd233e37085a945` | 5 |
-| [Memories](memories.patch) | `1f68406be7a61064044963139941c9ba2c117947` | 5 |
-| [Parties](parties.patch) | `c2af56d09ae5c638775dfb18066db2db91473286` | 1 |
-| [Projects](projects.patch) | `29a2adc9a7def4fd339ea9f986a87d5df9aeb7e2` | 3 |
-| [Tenants](tenants.patch) | `ce3aadd8f2f7c96c67544d4bdc422f6e923a69d0` | 1 |
-| [Works](works.patch) | `e6e4d1928c09bbde2f8f05c6a6a0211ddce89035` | 3 |
+| Patch | Owner main revision | Files | Patch SHA-256 |
+| --- | --- | ---: | --- |
+| [ChatBot](chatbot.patch) | `794753deb77b636f59f0f94e64ad4fbccdbf13da` | 5 | `756ae9c8948ab7b2d2e75a8730f950aec6bcebb32bccb47c94c8e4bb79fd542f` |
+| [EventStore](eventstore.patch) | `7a42a0f01cfc6cafe6aa2d3e5ef05cbc370b22cb` | 4 | `0d1173c15a08ce6cb9d0d671e83db9a1009c1f86c700ce5fa2fb8be7fc55e90d` |
+| [Folders](folders.patch) | `20b7a0a82d1056030088e7e94cadcc2d416d4f73` | 3 | `14f81f29ce1b47e5dee36e3c4e19bdf52002d0b5070d35c72cdaf426a1099da2` |
+| [FrontComposer](frontcomposer.patch) | `ac145de3bfe5aaf1614cecf0feed7c7b732847ee` | 5 | `39082d5c73b8d3561fc001427fc5ad30f149909548570e6b1e558e3cdc60c6a1` |
+| [Memories](memories.patch) | `1f68406be7a61064044963139941c9ba2c117947` | 5 | `29bf572381be14e1146926680359d997326ef8fcd25ebe961a231015fa231e94` |
+| [Parties](parties.patch) | `c2af56d09ae5c638775dfb18066db2db91473286` | 1 | `d065b2f7fbba3789edd262bdb67ebf47451ee574877e9eaad05ca0cd8f5d3f2e` |
+| [Projects](projects.patch) | `4d740a889787bb095b16303ed749ec7f165e5683` | 3 | `816e13ab12c636738ba9a3a27e7da409a104706d9aee4ffb2c68bdc717ccf1f5` |
+| [Tenants](tenants.patch) | `ce3aadd8f2f7c96c67544d4bdc422f6e923a69d0` | 1 | `894dca079bcb7d7e74c5e26d54d92ce34c082a9d3fe2ee3bd19e701cae9827f1` |
+| [Works](works.patch) | `8b78dd916fbafc6b27bfba4bd59ff89b4c0b04f0` | 3 | `66e2bef6c589c4c6c86eaea04244c0a20d293d6b72b6cc249768db288c6d1e3f` |
 
 ## Active flow audit
 

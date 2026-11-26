@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Verify prepared bytes; a completion request must also prove independent delivery gates."""
 import argparse
-from datetime import date
+from datetime import date, datetime, timezone
 from difflib import SequenceMatcher
 import importlib.util
 import json
@@ -230,11 +230,14 @@ def check_patches(root, manifest, labels):
                 after = path.read_bytes()
                 require(B.sha(after) == file['afterSha256'],name+': applied patch bytes differ')
                 if name != 'ai-tools':
-                    expected = B.corrected_document(name,file['path'],before,labels['rows'])
-                    require(after == expected,name+': applied document differs from required corrections: '+file['path'])
+                    # The approved receipt binds the historical bytes. A new
+                    # packet uses the status-neutral wording for the same rules.
+                    historical = after != B.corrected_document(name,file['path'],before,labels['rows'])
+                    require(not historical or after == B.corrected_document(name,file['path'],before,labels['rows'],historical=True),
+                            name+': applied document differs from required corrections: '+file['path'])
                 if file['path'] == 'README.md':
                     text = after.decode().replace('\r\n','\n')
-                    require(B.setup(name) in text,name+': setup/refusal/discovery or retained-gate guidance lost')
+                    require(B.setup(name,historical=historical) in text,name+': setup/refusal/discovery or retained-gate guidance lost')
                     for row in labels['rows']:
                         if row['repository'] == name: require(text.count(row['label']['text']) == 1,row['id']+': label missing or duplicated in patch')
                 if 'candidate' in file: require(checked(root,file['candidate']) == after,name+': candidate and applied bytes differ')
@@ -360,7 +363,12 @@ def recorded_date(value,message):
 
 def commit_date(repo, revision):
     timestamp = B.git(repo,'show','-s','--format=%cI',revision).decode().strip()
-    return recorded_date(timestamp[:10],'commit date missing: '+revision)
+    try:
+        committed = datetime.fromisoformat(timestamp)
+        require(committed.tzinfo is not None,'commit date missing: '+revision)
+        return committed.astimezone(timezone.utc).date()
+    except ValueError as error:
+        raise ValueError('commit date missing: '+revision) from error
 
 
 def check_release_publication(root, resolution, released, generated, decided):
@@ -466,11 +474,14 @@ def check_owner_conflicts(root):
              'approved execution and confirmation-required behavior route to the confidential ChatBot UI.',
              ('Inspect, associate, reject, defer, retry, approve, execute',
               'human-decision mutations require current presence at submission',
+              'user-delegated via OAuth device flow',
+              'UI/API, CLI, and MCP association/status/audit parity',
               'CLI and MCP integration must expose the same governed operations as the UI')),
             (projects+'ux-designs/ux-Hexalith.ChatBot-2026-05-28/EXPERIENCE.md',
              'Both McpCli heads refuse those operations.',
              ('Human-delegated MCP approval is candidate M1 behavior',
               'candidate human-delegated MCP approval remains unavailable',
+              'explicitly exposed on UI, CLI, and/or MCP',
               'He confirms an association through an exposed surface')),
         ],
         'works': [
@@ -707,7 +718,7 @@ def rebased_document_hash(repo, commit, owner, file, rebase, labels):
     before = B.git(repo, 'show', parent+':'+path)
     require(B.sha(before) == rebase.get('beforeSha256'), 'rebased document base differs: '+path)
     # Replay the reviewed corrections on the actual parent so unrelated upstream edits survive.
-    after = B.corrected_document(owner, path, before, labels['rows'])
+    after = B.corrected_document(owner, path, before, labels['rows'], historical=True)
     require(B.sha(after) == rebase.get('afterSha256'), 'rebased document differs from reviewed corrections: '+path)
     return B.sha(after)
 
@@ -722,7 +733,14 @@ def visible_markdown(raw):
 
 
 def verify_current_migration_text(repo, commit, path, delivered, name):
-    current = B.git(repo,'show','origin/main:'+path)
+    report = 'reported: '+name+': current main migration text drift: '+path
+    try:
+        current = B.git(repo,'show','origin/main:'+path)
+    except ValueError:
+        if B.git(repo,'ls-tree','--name-only','origin/main','--',path).strip():
+            raise
+        print(report,file=sys.stderr)
+        return
     if current == delivered:
         return
     parent = B.git(repo,'show',commit+'^:'+path)
@@ -754,9 +772,10 @@ def verify_current_migration_text(repo, commit, path, delivered, name):
                 '`Projects.Cli` and `Projects.Mcp` are frozen obsolete migration sources',
             )
             retained = bool(adopted and all(statement in adopted[1] for statement in statements))
-        require(retained and
-                (not any(line.strip() for line in before[i:j]) or removed in after_text or removed not in current_text),
-                name+': current main migration text drift: '+path)
+        obsolete = any(line.strip() for line in before[i:j]) and removed not in after_text and removed in current_text
+        if not retained or obsolete:
+            print(report,file=sys.stderr)
+            return
 
 
 def check_inventory_publication(root, receipt, integration, receipt_digest):

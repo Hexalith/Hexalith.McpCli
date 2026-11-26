@@ -87,7 +87,7 @@
  | `ai-action-mediator-client` | M0 | per-tenant + per-AI-actor; bound to requester, Project, proposal, approval, and one allowlisted command | submits exactly one approved `Project.AppendConversationMessage`; AI actor never authenticates directly | short-lived delegated grant; expires on use, revocation, or 5 minutes |
 -| `cli-automation-client` | M1 | per-tenant; configured per CLI installation; user-delegated via OAuth device flow | the MVP parity set (per §Cross-surface parity outcomes) | 7 days, refresh required |
 -| `mcp-human-delegated-client` | M1 | per-tenant + current authenticated human; records source user, user presence, `actorType=human`, scope, and delegation expiry | the actor-authorized MVP parity set; human-decision mutations require current presence at submission | 1 hour maximum; terminates on logout, revocation, or lost presence |
-+| `cli-automation-client` | M1 | per-tenant; configured per CLI installation; user-delegated via OAuth device flow | Only enrolled, actor-authorized CLI operations in the shared agent-eligible set | 7 days, refresh required |
++| `cli-automation-client` | M1 | Gateway credential configured in McpCli; the Gateway authorizes actor, tenant and operation | Only enrolled, actor-authorized CLI operations in the shared agent-eligible set | Credential expiry and renewal follow the issuer |
 +| `mcp-human-delegated-client` | M1 | per-tenant + current authenticated human; record source user, presence, actor type, scope and delegation expiry for audit | Only enrolled, actor-authorized MCP operations in the shared agent-eligible set. Approval and approved execution require the confidential UI. | 1 hour maximum; terminates on logout, revocation, or lost presence |
  | `mcp-tool-client` | M1 | per-tenant + per-AI/tool actor; MCP-tool-scoped grants | only actor-visible status/evidence queries plus `ProposeAIAction` and eligible `ExecuteLowRiskAssistance`; explicitly excludes association decisions, approval/revision decisions, approved execution, outbound, policy, permission, and admin mutations | 24 hours maximum; refresh required |
 @@ -813,3 +813,3 @@
@@ -100,6 +100,11 @@
 -CLI and MCP must expose only the same governed MVP operations available through approved application services. They must not bypass tenant isolation, role checks, audit logging, association confidence rules, validation, or human-review requirements.
 +Both McpCli heads share the approved agent-eligible operation set and enforce tenant isolation, role checks, audit, association confidence and validation. Refuse confirmation-required operations and direct the caller to the confidential ChatBot UI.
  
+@@ -996,3 +996,3 @@
+ | FR64-FR80 - Reliability and operations | Retryable/terminal failures, queue ownership, claim concurrency, duplicate suppression, degraded/stale states, notification routing, policy limits, safe message codes, filtering/pagination, long-running status, isolation, and audit. |
+-| FR81-FR89 - Cross-surface parity and state model | UI/API, CLI, and MCP association/status/audit parity; invalid transition rejection; equivalent redaction and error codes; command-surface attribution; long-running status retrieval; and replay of the same scenario across at least one machine surface. This depends on A3. |
++| FR81-FR89 - Cross-surface parity and state model | Confidential UI evidence for association decisions, approvals and approved execution; safe refusal on both McpCli heads; authorized status and audit parity for enrolled operations; invalid transition rejection; equivalent redaction and error codes; command-surface attribution; long-running status retrieval; and replay of an eligible scenario on a machine surface after enrollment. This depends on A3. |
+ | FR90-FR96 - Idempotency, correction, evaluation, replay | Stable operation/decision identities, semantic conflicts, expected revisions, correction propagation, dataset isolation, replay-safe composition, egress denial, production invariance, evidence freshness, and M2 stop-ship behavior. |
 --- a/_bmad-output/planning-artifacts/ux-designs/ux-Hexalith.ChatBot-2026-05-28/EXPERIENCE.md
 +++ b/_bmad-output/planning-artifacts/ux-designs/ux-Hexalith.ChatBot-2026-05-28/EXPERIENCE.md
 @@ -28,3 +28,3 @@
@@ -107,9 +112,11 @@
 -> **Current McpCli disposition (Story 5.11 candidate):** The module CLI and stdio MCP adapter are retained compatibility sources. ChatBot has no operation enrolled in the current shipped McpCli cohort. Eligible reads/proposals need decorated Contracts, handler/admission and enrollment proof first. Association decisions, AI-action approval, execution and confirmation-required behavior stay on confidential UI; human-delegated MCP, presence, actorType or confirm claims never grant public-agent authority.
 +> **Current McpCli disposition:** The module CLI and stdio MCP adapter are retained compatibility sources. ChatBot has no operation enrolled in the current shipped McpCli cohort. Eligible reads/proposals need decorated Contracts, handler/admission and enrollment proof first. Association decisions, AI-action approval, execution and confirmation-required behavior stay on confidential UI; human-delegated MCP, presence, actorType or confirm claims never grant public-agent authority.
  
-@@ -332,3 +332,3 @@
- | Surface exposure | It is explicitly exposed on UI, CLI, and/or MCP for this actor class. |
+@@ -331,4 +331,4 @@
+ | Product operation catalog | This exact normalized operation is supported in this increment. |
+-| Surface exposure | It is explicitly exposed on UI, CLI, and/or MCP for this actor class. |
 -| MCP tool tag | The typed tool declares the exact operation and effect profile. |
++| Surface exposure | The confidential UI handles human decisions and approved execution. A generic McpCli head exposes only enrolled operations eligible and authorized for this actor class. |
 +| McpCli Catalog entry | The exact operation is enrolled and explicitly eligible on both generic heads. |
  | AI allowlist | AI-originated proposal eligibility and all applicable six-effect classes are explicit. |
 @@ -336,3 +336,3 @@

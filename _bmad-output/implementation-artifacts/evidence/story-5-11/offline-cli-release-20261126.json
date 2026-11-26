@@ -1,0 +1,106 @@
+{
+  "source": "3.0.0+ad7f963182bfff8492793ead400295c7e39d9015",
+  "binarySha256": "f13d5838c53d86732bb8dd0c4468d71910e63d6aa8739f4b732d1b34358343f7",
+  "scope": "Existing local Release executable. Offline discovery and help only. No Gateway calls or operation invocations.",
+  "records": {
+    "version": {
+      "command": [
+        "dotnet",
+        "src/Hexalith.McpCli/bin/Release/net11.0/Hexalith.McpCli.dll",
+        "--version"
+      ],
+      "exitCode": 0,
+      "stdout": "3.0.0+ad7f963182bfff8492793ead400295c7e39d9015\n",
+      "stderr": ""
+    },
+    "modules": {
+      "command": [
+        "dotnet",
+        "src/Hexalith.McpCli/bin/Release/net11.0/Hexalith.McpCli.dll",
+        "modules"
+      ],
+      "exitCode": 0,
+      "stdout": "{\n  \"modules\": [\n    {\n      \"name\": \"parties\",\n      \"description\": \"Manage people and organizations, their contact channels, identifiers and active status.\",\n      \"operationCount\": 7\n    },\n    {\n      \"name\": \"projects\",\n      \"description\": \"Read authorized Project inventory, detail, reference health and advisory resolution traces. Reads grant no mutation or diagnostic export authority.\",\n      \"operationCount\": 4\n    },\n    {\n      \"name\": \"tenants\",\n      \"description\": \"Manage tenant lifecycle, memberships, roles, configuration and audit. Commands and cross-tenant reads use their declared platform scope; single-tenant reads require an explicit canonical tenant. A global administrator may manage every tenant.\",\n      \"operationCount\": 15\n    }\n  ]\n}\n",
+      "stderr": ""
+    },
+    "projects": {
+      "command": [
+        "dotnet",
+        "src/Hexalith.McpCli/bin/Release/net11.0/Hexalith.McpCli.dll",
+        "operations",
+        "projects"
+      ],
+      "exitCode": 0,
+      "stdout": "{\n  \"module\": \"projects\",\n  \"operations\": [\n    {\n      \"name\": \"projects.describe\",\n      \"kind\": \"read\",\n      \"description\": \"Read Project detail, lifecycle and reference health. Supply the Project identifier through --aggregate-id. Safe metadata is the default; descriptive metadata requires separate permission and a durable audit.\"\n    },\n    {\n      \"name\": \"projects.list\",\n      \"kind\": \"read\",\n      \"description\": \"List authorized Projects with one snapshot. Use payload paging: default 50, maximum 200; continue with the opaque cursor and unchanged filters and authority. Descriptive metadata requires a separate permission and durable audit.\"\n    },\n    {\n      \"name\": \"projects.trace-attachments\",\n      \"kind\": \"read\",\n      \"description\": \"Trace unselected advisory Project candidates from at most 32 opaque owner references, counted before deduplication. File mapping is unsupported. Coverage and freshness never grant selection or confirmation authority.\"\n    },\n    {\n      \"name\": \"projects.trace-conversation\",\n      \"kind\": \"read\",\n      \"description\": \"Trace unselected advisory Project candidates from an authorized committed Conversation. Coverage and freshness are explicit; suggestions never authorize selection, context or confirmation.\"\n    }\n  ]\n}\n",
+      "stderr": ""
+    },
+    "describe": {
+      "command": [
+        "dotnet",
+        "src/Hexalith.McpCli/bin/Release/net11.0/Hexalith.McpCli.dll",
+        "describe",
+        "tenants.list-tenants"
+      ],
+      "exitCode": 0,
+      "stdout": "{\n  \"name\": \"tenants.list-tenants\",\n  \"kind\": \"read\",\n  \"description\": \"List the tenants visible to the caller, ordered by tenant identifier: every tenant for a global administrator, otherwise only the tenants the caller is a member of. Each item gives the tenant identifier, name and status (Active or Disabled). Results are paged: pageSize takes 1 to 100 (default 20, larger values are reduced to 100); to read the next page, pass the returned next-page cursor as the cursor argument: it is the result document's cursor, also reported as paging.nextCursor when a paging argument was sent. offset is not supported.\",\n  \"schema\": {\n    \"type\": [\n      \"object\",\n      \"null\"\n    ],\n    \"properties\": {\n      \"Cursor\": {\n        \"type\": [\n          \"string\",\n          \"null\"\n        ],\n        \"description\": \"Has no effect: use the pageSize and cursor call arguments instead.\"\n      },\n      \"PageSize\": {\n        \"type\": \"integer\",\n        \"description\": \"Has no effect: use the pageSize and cursor call arguments instead.\"\n      }\n    },\n    \"additionalProperties\": false\n  },\n  \"example\": {},\n  \"envelope\": {\n    \"aggregateIdRequired\": false,\n    \"idempotencyKeyRequired\": false,\n    \"arguments\": [\n      \"aggregateId\",\n      \"entityId\",\n      \"pageSize\",\n      \"offset\",\n      \"cursor\"\n    ],\n    \"identifierKind\": \"string\",\n    \"platformScope\": \"platform:tenants\"\n  },\n  \"lintFindings\": [\n    {\n      \"code\": \"payload_paging_member\",\n      \"severity\": \"warning\",\n      \"message\": \"Move paging member Cursor to the query envelope argument.\",\n      \"property\": \"/properties/Cursor\"\n    },\n    {\n      \"code\": \"payload_paging_member\",\n      \"severity\": \"warning\",\n      \"message\": \"Move paging member PageSize to the query envelope argument.\",\n      \"property\": \"/properties/PageSize\"\n    }\n  ],\n  \"submittable\": false,\n  \"reason\": \"configuration_invalid\"\n}\n",
+      "stderr": ""
+    },
+    "unknown": {
+      "command": [
+        "dotnet",
+        "src/Hexalith.McpCli/bin/Release/net11.0/Hexalith.McpCli.dll",
+        "describe",
+        "chatbot.unavailable"
+      ],
+      "exitCode": 2,
+      "stdout": "{\n  \"error\": {\n    \"code\": \"unknown_operation\",\n    \"operation\": \"chatbot.unavailable\",\n    \"suggestions\": [\n      \"parties.update-party\",\n      \"projects.describe\",\n      \"parties.create-party\"\n    ]\n  }\n}\n",
+      "stderr": ""
+    },
+    "mcp-help": {
+      "command": [
+        "dotnet",
+        "src/Hexalith.McpCli/bin/Release/net11.0/Hexalith.McpCli.dll",
+        "mcp",
+        "--help"
+      ],
+      "exitCode": 0,
+      "stdout": "Description:\n  Serve the generic MCP tools over stdio. Explicit --format table and --output are rejected.\n\nUsage:\n  hexalith mcp [options]\n\nOptions:\n  --transport <transport>  stdio (default). HTTP transport is planned for the next release.\n  -?, -h, --help           Show help and usage information\n  --url <url>              Gateway URL (EVENTSTORE_URL). With a token, use the same source for both.\n  --token <token>          Gateway Bearer [REDACTED] (EVENTSTORE_TOKEN)\n  --tenant <tenant>        Session tenant (EVENTSTORE_TENANT)\n  --actor <actor>          Trusted operator actor (EVENTSTORE_ACTOR)\n  --allow-tenant-override  Allow MCP per-call tenant overrides (EVENTSTORE_ALLOW_TENANT_OVERRIDE). Defaults to true when supplied. Use --allow-tenant-override false to disable.\n  --profile <profile>      Connection profile (EVENTSTORE_PROFILE). Profile management uses its own arguments.\n  --format <format>        Result format, json or table (EVENTSTORE_FORMAT)\n  --output <output>        Write the result to a file (flag only)\n  --read-only              Disable command submission (EVENTSTORE_READ_ONLY). Defaults to true when supplied. Use --read-only false to disable.\n  --strict                 Reject any Catalog diagnostic (EVENTSTORE_STRICT). Defaults to true when supplied. Use --strict false to disable.\n\n",
+      "stderr": ""
+    },
+    "config-help": {
+      "command": [
+        "dotnet",
+        "src/Hexalith.McpCli/bin/Release/net11.0/Hexalith.McpCli.dll",
+        "config",
+        "--help"
+      ],
+      "exitCode": 0,
+      "stdout": "Description:\n  Inspect and manage mcpcli profile settings\n\nUsage:\n  hexalith config [command] [options]\n\nOptions:\n  -?, -h, --help           Show help and usage information\n  --url <url>              Gateway URL (EVENTSTORE_URL). With a token, use the same source for both.\n  --token <token>          Gateway Bearer [REDACTED] (EVENTSTORE_TOKEN)\n  --tenant <tenant>        Session tenant (EVENTSTORE_TENANT)\n  --actor <actor>          Trusted operator actor (EVENTSTORE_ACTOR)\n  --allow-tenant-override  Allow MCP per-call tenant overrides (EVENTSTORE_ALLOW_TENANT_OVERRIDE). Defaults to true when supplied. Use --allow-tenant-override false to disable.\n  --profile <profile>      Connection profile (EVENTSTORE_PROFILE). Profile management uses its own arguments.\n  --format <format>        Result format, json or table (EVENTSTORE_FORMAT)\n  --output <output>        Write the result to a file (flag only)\n  --read-only              Disable command submission (EVENTSTORE_READ_ONLY). Defaults to true when supplied. Use --read-only false to disable.\n  --strict                 Reject any Catalog diagnostic (EVENTSTORE_STRICT). Defaults to true when supplied. Use --strict false to disable.\n\nCommands:\n  current                        Show resolved settings and sources\n  profile                        Manage named connection profiles\n  use <name>                     Select or clear the active profile\n  set <profile> <field> <value>  Set tenant, actor, allowTenantOverride, or allowedExtensions\n\n",
+      "stderr": ""
+    },
+    "stdio-discovery": {
+      "name": "stdio-discovery",
+      "command": [
+        "dotnet",
+        "src/Hexalith.McpCli/bin/Release/net11.0/Hexalith.McpCli.dll",
+        "mcp",
+        "--transport",
+        "stdio"
+      ],
+      "exitCode": 0,
+      "tools": [
+        "list_modules",
+        "list_operations",
+        "describe_operation",
+        "send_command",
+        "run_query"
+      ],
+      "rawStdoutSha256": "f649b04d4fd6c8ba8b1e75cb94ead4e2f3998c6f57df8d62f897ee5de5244192",
+      "stdoutSha256": "f649b04d4fd6c8ba8b1e75cb94ead4e2f3998c6f57df8d62f897ee5de5244192",
+      "stderrSha256": "e1bddb559b0c2d56aeea3a89803f4ba30c517226e1ec2f26f2c6c6145913d01f",
+      "stderrLevels": [
+        "info"
+      ]
+    }
+  }
+}

@@ -1,5 +1,7 @@
+import contextlib
 import hashlib
 import importlib.util
+import io
 import json
 import os
 import tempfile
@@ -75,6 +77,60 @@ class OfflineCliTests(unittest.TestCase):
             retained_stdout = (evidence/'offline-stdio.stdout.txt').read_bytes()
             self.assertEqual(retained_stdout, C.retained(stdout))
             self.assertNotIn(sensitive, retained_stdout)
+
+    def test_nonobject_stdio_payloads_retain_failed_run_evidence(self):
+        initialization = {'protocolVersion': '2025-06-18', 'serverInfo': {'name': 'hexalith'}}
+        valid_tools = [{'name': name, 'inputSchema': {}} for name in sorted(C.TOOLS)]
+        cases = [
+            ([], {'tools': valid_tools}, 'initialize result must be a JSON object'),
+            (initialization, [], 'tools/list result must be a JSON object'),
+            (initialization, {'tools': [*valid_tools[:-1], []]}, 'tools/list tools must be an array of JSON objects'),
+        ]
+        for initialize, tools, message in cases:
+            with self.subTest(message=message), tempfile.TemporaryDirectory() as directory:
+                root = Path(directory)
+                responses = {request_id: {'id': request_id, 'jsonrpc': '2.0', 'result': result}
+                             for request_id, result in ((1, initialize), (2, tools))}
+                child = (
+                    'import json, sys\n'
+                    f'responses = {responses!r}\n'
+                    'print("probe diagnostic", file=sys.stderr, flush=True)\n'
+                    'for line in sys.stdin:\n'
+                    '    request_id = json.loads(line).get("id")\n'
+                    '    if request_id in responses:\n'
+                    '        print(json.dumps(responses[request_id]), flush=True)\n'
+                )
+                def collect(staging):
+                    C.discover_stdio([sys.executable, '-c', child], None, root, staging)
+                with mock.patch.object(C, 'collect', side_effect=collect):
+                    with self.assertRaisesRegex(ValueError, f'^stdio: {message}\\. Retained evidence in '):
+                        C.run_probe(root/'runs')
+                [failed] = (root/'runs').iterdir()
+                self.assertTrue(failed.name.startswith('failed-'))
+                self.assertFalse((failed/'offline-cli.json').exists())
+                seen = [1] if initialize == [] else [1, 2]
+                expected = ''.join(json.dumps(responses[request_id])+'\n' for request_id in seen)
+                self.assertEqual((failed/'offline-stdio.stdout.txt').read_text(), expected)
+                self.assertEqual((failed/'offline-stdio.stderr.txt').read_text(), 'probe diagnostic\n')
+
+    def test_main_reports_success_and_failure_to_the_correct_streams(self):
+        with tempfile.TemporaryDirectory() as directory:
+            output = Path(directory)
+            for error in (None, ValueError('offline verification failed'), OSError('output unavailable')):
+                with self.subTest(error=error):
+                    status, stdout, stderr = 0, io.StringIO(), io.StringIO()
+                    published = output/'run-fixture'
+                    with mock.patch.object(C, 'run_probe', return_value=published, side_effect=error) as run, \
+                            contextlib.redirect_stdout(stdout), contextlib.redirect_stderr(stderr):
+                        status = C.main(['--output', str(output)])
+                    run.assert_called_once_with(output)
+                    if error:
+                        self.assertEqual((status, stdout.getvalue(), stderr.getvalue()),
+                                         (1, '', f'FAIL: {error}\n'))
+                    else:
+                        expected = ('PASS: published 2.0.1 offline discovery/help, safe unknown-operation refusal '
+                                    f'and five generic stdio tools. Evidence in {published}\n')
+                        self.assertEqual((status, stdout.getvalue(), stderr.getvalue()), (0, expected, ''))
 
     def test_successful_stdio_binds_raw_and_retained_stdout_separately(self):
         sensitive = 'Bear' + 'er ' + 'x' * 40

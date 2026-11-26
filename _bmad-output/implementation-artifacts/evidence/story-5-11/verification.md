@@ -57,7 +57,7 @@ invented. `integration.json` records the exact missing bindings. The authoritati
 AI.Tools plan remains **1.2.0**. The prepared **1.3.0** file explicitly says
 `inventory_revision: null` / `candidate-not-publishable`.
 
-## Prepared changes
+### Prepared changes on 16 November 2026
 
 - Admin 1.0.3 and technical 1.0.4 correct their predecessors' frozen pending
   self-description by pointing to their own receipt decision. Story 5.7 approval
@@ -90,7 +90,7 @@ AI.Tools plan remains **1.2.0**. The prepared **1.3.0** file explicitly says
   owners and gates remain. The ledger has one audit pointer, no duplicate
   reconfirmation entry. Explicit owner acceptance of the audit is still pending.
 
-## Checks and evidence
+### Checks and evidence on 16 November 2026
 
 All disposable test/probe workspaces use `run-with-temp`; retained results stay
 in this evidence directory. The following commands and their results are
@@ -150,7 +150,7 @@ The shared `secret-scan-final-reviewed.json` is the authoritative final scan res
 every regular evidence file except itself; `checks.json` records sync/diff exits.
 No successful scan is implied if that receipt is absent or non-clean.
 
-## Completion gates retained
+### Completion gates assessed on 16 November 2026
 
 Fresh exact-byte owner approval is still required for the prepared successor/
 label/audit packet, covering every named role. Git delivery needs separate
@@ -275,9 +275,10 @@ same command with `--approved-completion` exited 1 with
 instruction-sync checks passed. The explicit completion path also requires
 published ChatBot and Works follow-up guidance.
 
-The existing Release executable at `3.0.0+ad7f963182bfff8492793ead400295c7e39d9015`
-passed offline module and Projects operation discovery, Tenants description,
-ChatBot unknown-operation refusal, MCP help and the five generic stdio tools.
+The 25 November workstation check of the Release executable
+`3.0.0+ad7f963182bfff8492793ead400295c7e39d9015` has no retained capture. The
+recorded package probe covers the published 2.0.1 tool and its Parties/Tenants
+cohort, unknown Folders operation refusal and five generic stdio tools.
 The eight offline probe tests passed. A failed rerun retains both sanitized
 streams in a separate failure directory. Each successful run publishes its
 manifest and streams in one directory under the optional `--output` parent.
@@ -296,3 +297,62 @@ The current shared secret scanner cleared the changed evidence. It reports
 `deferral-dispositions.md`, including when scanned directly from published
 revision `c6a40c10fd6db19cfce4cb0592f3b82bbb853729`. Those two files remain
 bound to the owner’s approval.
+
+## 26 November 2026 review follow-up
+
+The default verifier replays the published inventory and approved delivery
+bytes. It reports current-main documentation drift on stderr. Published
+ChatBot and Works corrections are still required for completion, and the
+current-main checks still require every approved README label. The nine
+follow-up patches replay at the documented owner revisions and await fresh
+owner approval and integration. [Owner follow-up](owner-doc-follow-up/README.md)
+
+In the local replay, both verifier modes reported EventStore PRD drift at
+`_bmad-output/planning-artifacts/prd.md` on EventStore main
+`7a42a0f01cfc6cafe6aa2d3e5ef05cbc370b22cb`. The default mode exited 0 and
+verified approved integration. The completion mode exited 1 with empty
+stdout and `FAIL: AC3 generated release notes remain deferred by the owner`
+after the drift report.
+
+The second review identified 23 status changes in the approved 65-entry
+audit. Restoring `ea9d3ee950934c10` retained the source-spec acceptance gate
+and recorded Story 5.18 as the canonicalizer successor. The live ledger
+still differs on 22 audited statuses. Replaying the retained-gate check
+independently refuses first at `1c8ef2a87fc429cc`. The completion record
+has no separate owner-approved resolutions for those entries. CiCd/Builds
+still owns the generated-release-notes requirement in AC3.
+[Integration blockers](integration.json)
+
+A separate recorded check of the existing Release executable
+`3.0.0+ad7f963182bfff8492793ead400295c7e39d9015` passed three-module offline
+discovery, all four Projects reads, the Tenants description, full ChatBot
+unknown-operation refusal with exit 2 and empty stderr, MCP and configuration
+help, and the five generic stdio tools. The published 2.0.1 probe remains the
+evidence for its own installed cohort. [26 November offline evidence](offline-cli-release-20261126.json)
+
+The Parties documentation fitness test returned exit 1 both before and after
+the follow-up patch in a disposable export of the documented owner revision.
+Both runs passed eight tests and failed the same two. The project inventory
+test could not find `AttachedLifecycleQualification.Tests` at the base, and
+the technology-table test threw `NullReferenceException` before reading the
+README.
+
+The focused run covered 64 tests and found one generator mismatch in the
+EventStore literal patch. The literal recipe now uses the same status-neutral
+banner as the document generator. Seven tests passed after the correction,
+including the failed regeneration case, the frozen patch replay, and a new
+control for approval of the exact published inventory digest. Across the two
+runs, all 65 distinct tests passed on the implementation or its targeted
+correction. [Focused run](follow-up-tests-20261126.stderr.txt) ·
+[Generator and receipt retest](follow-up-generator-tests-20261126.stderr.txt)
+
+The AD-23 verifier confirmed adoption. Instruction sync and `git diff --check`
+passed. The Builds checkout and the committed CiCd pin both resolved to
+`62876129eaa035e78bd0324419231f07d43a07b8`.
+`run-with-temp node --test scripts/tests/migration-release-notes.test.mjs`
+exited 1 because the test file was removed by `aad8894e`. The generated-notes
+requirement remains open under AC3.
+
+The shared secret scanner cleared the changed evidence. The tracked packet
+scan repeated the published `redaction-required` findings in the two
+hash-bound deferral audit files.

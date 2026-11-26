@@ -159,20 +159,40 @@ PATHS = {
 }
 NOTES = {
     'eventstore': 'Remote Admin A1–A4 are confidential-UI-only under adopted AD-23; local Admin A5–A8 are withdrawn from the public migration target. No generic Admin contract or transport is required or admitted. EventStore and platform/operator maintainers retain Admin G1–G6, G4 route/scope, token/URL safety fixes, human authorization, bounded behavior, audit and persisted-effect proof before removal.',
-    'frontcomposer': 'Generated command tools, projection/skill resources and lifecycle subscriptions below are historical migration sources. Eligible business data requires an owner-decorated Gateway Query; K07 documentation and K08 synthetic lifecycle are withdrawn. The K13 inspect/migrate compiler is retained local tooling under merged AI.Tools plan 1.2.0, never retired or migrated to generic diagnostics. FK01–FK04 and G4 still couple host and Projects plug-in retirement.',
+    'frontcomposer': 'Generated command tools, projection/skill resources and lifecycle subscriptions below are historical migration sources. Eligible business data requires an owner-decorated Gateway Query; K07 documentation and K08 synthetic lifecycle are withdrawn. The K13 inspect/migrate compiler is retained local tooling under the approved AI.Tools migration plan, never retired or migrated to generic diagnostics. FK01–FK04 and G4 still couple host and Projects plug-in retirement.',
     'memories': 'The proprietary CLI/MCP phases, ingress topology and installation commands below describe retained compatibility. There is no promised generic migration or diagnostics surface. No Memories operation is enrolled in the current shipped McpCli cohort. Forwarded per-user HTTP authority is necessary but insufficient for retirement; tenant/user/administrative authorization, semantics, release and rollback evidence remain. PS14 stays owner-held local tooling in all four modes, never counted retired.',
     'chatbot': 'The module CLI and stdio MCP adapter are retained compatibility sources. ChatBot has no operation enrolled in the current shipped McpCli cohort. Eligible reads/proposals need decorated Contracts, handler/admission and enrollment proof first. Association decisions, AI-action approval, execution and confirmation-required behavior stay on confidential UI; human-delegated MCP, presence, actorType or confirm claims never grant public-agent authority.',
     'folders': 'C13 remains the adopted four-surface accounting denominator, not evidence that every operation is public-agent eligible. The separate owner-approved K12 successor must resolve restricted and mixed operation classifications and C13 cells before any enrollment or retirement claim; existing 1.1.0 approval does not waive it. Current shipped McpCli has no Folders enrollment. Legacy adapters below remain retained compatibility; no resource/stream fallback is admitted.',
-    'projects': 'Current McpCli source enrolls published Projects.Contracts 2.0.0 and discovers four reads: projects.list, projects.describe, projects.trace-conversation and projects.trace-attachments. The published McpCli 2.0.1 tool predates Projects enrollment. Independent Gateway authorization, native live qualification and release evidence remain required. Readiness/setup/task-control and audit operations must not be inferred from those reads. Preserve 6.7 cutover, K12 confidential UI and Payload paging versus AD-20 gates. Tenant selection is envelope-owned; actor attribution and independent Gateway authorization remain separate.',
-    'tenants': 'The FrontComposer inspect/migrate compiler is retained K13 local tooling under merged AI.Tools plan 1.2.0. It requires no generic McpCli migration/diagnostic transport and is never counted retired.',
+    'projects': 'Current McpCli source enrolls published Projects.Contracts 2.0.0 and discovers four reads: projects.list, projects.describe, projects.trace-conversation and projects.trace-attachments. An installed tool discovers them only from a published McpCli release that enrolls Projects.Contracts 2.0.0. Independent Gateway authorization, native live qualification and release evidence remain required. Readiness/setup/task-control and audit operations must not be inferred from those reads. Preserve 6.7 cutover, K12 confidential UI and Payload paging versus AD-20 gates. Tenant selection is envelope-owned; actor attribution and independent Gateway authorization remain separate.',
+    'tenants': 'The FrontComposer inspect/migrate compiler is retained K13 local tooling under the approved AI.Tools migration plan. It requires no generic McpCli migration/diagnostic transport and is never counted retired.',
     'parties': 'The five-tool parties-mcp host is retained compatibility. Current McpCli source enrolls published Parties Contracts 4.0.0; the earlier local-candidate descriptions are historical development context. The published McpCli 2.0.1 tool discovers seven Parties operations; source-selected package versions and released tool contents must be assessed separately. Retirement remains blocked by G01–G06 and the separate destructive-classification/exposure conflict, requiring an exact-byte owner successor and both-head direct/chained denial with zero unauthorized effects. This documentation does not change existing exposure or owner tests.',
 }
 
 
-def setup(name):
-    return f'''## Shared McpCli access (reconciliation candidate)
+def migration_note(name, historical):
+    note = NOTES[name]
+    if historical:
+        # The original wording is required to replay the published packet.
+        note = note.replace('under the approved AI.Tools migration plan','under merged AI.Tools plan 1.2.0')
+        note = note.replace('An installed tool discovers them only from a published McpCli release that enrolls Projects.Contracts 2.0.0.',
+                            'The published McpCli 2.0.1 tool predates Projects enrollment.')
+    return note
 
-{NOTES[name]}
+
+def migration_banner(name, *, historical=False):
+    heading = 'Current McpCli disposition'
+    if historical:
+        heading += ' (Story 5.11 candidate)'
+    return f'\n> **{heading}:** {migration_note(name,historical)}\n\n'
+
+
+def setup(name, *, historical=False):
+    heading = '## Shared McpCli access'
+    if historical:
+        heading += ' (reconciliation candidate)'
+    return f'''{heading}
+
+{migration_note(name,historical)}
 
 For the verified 2.0.1 examples, install `dotnet tool install --global Hexalith.McpCli --version 2.0.1`.
 Run `hexalith modules`, `hexalith operations tenants` or
@@ -189,7 +209,7 @@ an alternative module endpoint. No Gateway call is needed for this setup check.
 '''
 
 
-def correct(name, text):
+def correct(name, text, *, historical=False):
     # Correct active claims in place; frozen decisions and completed stories are outside PATHS.
     if name == 'eventstore':
         text = text.replace('and admin operations only through Admin Server over the public AD-21 edge, in both cases', 'while Admin remains confidential UI under adopted McpCli AD-23, always')
@@ -203,7 +223,9 @@ def correct(name, text):
         text = text.replace('Ravi hosts the MCP server behind host authentication', 'For the historical compatibility flow, Ravi hosts the MCP server behind host authentication')
         text = text.replace('These resource capabilities require an approved generic `Hexalith.McpCli` representation or owner-approved withdrawal before the legacy host retires', 'Adopted AD-23 withdraws K07 documentation and K08 synthetic lifecycle; eligible business-state reads require decorated Queries and owner evidence before the legacy host retires')
         text = text.replace('`Hexalith.FrontComposer.Cli` is an obsolete compatibility tool.', '`Hexalith.FrontComposer.Cli` is retained K13 local compiler tooling.')
-        text = re.sub(r'`inspect` and `migrate` need a generic .*?before the old tool is retired\.', '`inspect` and `migrate` remain local under the merged AI.Tools 1.2.0 exemption, require no generic diagnostics migration and never count as retired.', text)
+        exemption = 'the merged AI.Tools 1.2.0 exemption' if historical else 'the approved AI.Tools migration plan'
+        text = re.sub(r'`inspect` and `migrate` need a generic .*?before the old tool is retired\.',
+                      f'`inspect` and `migrate` remain local under {exemption}, require no generic diagnostics migration and never count as retired.',text)
         text = text.replace('A generic `Hexalith.McpCli` diagnostics contract must preserve approved behavior before the old CLI retires.', 'The retained K13 compiler exemption preserves these local safety obligations; no McpCli transport or retirement is implied.')
         text = text.replace('and `.Mcp`, including inspect/migrate, resources, skill corpus, and lifecycle calls, are obsolete migration sources.', 'is retained K13 local compiler tooling; `.Mcp`, including resources, skill corpus and lifecycle calls, remains a historical migration source.')
         text = text.replace('Their replacement or approved withdrawal needs a generic McpCli contract and owner-approved parity evidence before package removal.', 'AD-23 disposition and independent owner evidence govern MCP package removal; the compiler stays exempt locally.')
@@ -235,7 +257,9 @@ def correct(name, text):
     if name == 'projects':
         text = text.replace('Tenant and actor come from the credential, and the Gateway authorizes the call.', 'Tenant comes from the envelope: exact PlatformScope first, else exact FixedTenant, else canonical public session/per-call tenant under AD-22 override rules. Payload grants no authority. The Gateway independently authorizes credential, scope, actor, surface and operation.')
     if name == 'tenants':
-        text = text.replace('is an obsolete compatibility **inspect/migrate** tool; `Hexalith.McpCli` is the target Hexalith-owned CLI after generic migration/diagnostic contracts are approved,', 'is retained K13 local compiler **inspect/migrate** tooling under merged AI.Tools plan 1.2.0; no generic migration/diagnostic transport or retirement is implied,')
+        plan = 'merged AI.Tools plan 1.2.0' if historical else 'the approved AI.Tools migration plan'
+        text = text.replace('is an obsolete compatibility **inspect/migrate** tool; `Hexalith.McpCli` is the target Hexalith-owned CLI after generic migration/diagnostic contracts are approved,',
+                            f'is retained K13 local compiler **inspect/migrate** tooling under {plan}; no generic migration/diagnostic transport or retirement is implied,')
     if name == 'parties':
         text = text.replace('# Separate parties-mcp host over the typed client', '# Retained compatibility parties-mcp host over the typed client')
         text = text.replace('### Generic McpCli command declarations (local migration increment)', '### Generic McpCli command declarations (historical local increment; now enrolled)')
@@ -246,10 +270,10 @@ def correct(name, text):
     return text
 
 
-def corrected_document(name, file, prepared, label_rows):
+def corrected_document(name, file, prepared, label_rows, *, historical=False):
     newline = '\r\n' if b'\r\n' in prepared else '\n'
     text = prepared.decode('utf-8-sig').replace('\r\n','\n')
-    after = correct(name,text)
+    after = correct(name,text,historical=historical)
     if file == 'README.md':
         for row in label_rows:
             if row['repository'] != name: continue
@@ -258,12 +282,12 @@ def corrected_document(name, file, prepared, label_rows):
             pattern = r'^- `'+re.escape(original)+r'`.*$'
             after,n = re.subn(pattern,lambda _:row['label']['text'],after,flags=re.M)
             if n != 1: raise ValueError(name+': missing/duplicate README label '+row['id'])
-        after += '\n'+setup(name)
+        after += '\n'+setup(name,historical=historical)
     else:
         # An active-topic notice makes retained topology blocks explicitly historical.
         lines = after.splitlines(keepends=True)
         index = next((i+1 for i,line in enumerate(lines) if line.startswith('# ')),0)
-        lines[index:index] = ['\n> **Current McpCli disposition (Story 5.11 candidate):** '+NOTES[name]+'\n\n']
+        lines[index:index] = [migration_banner(name,historical=historical)]
         after = ''.join(lines)
     encoding = 'utf-8-sig' if prepared.startswith(b'\xef\xbb\xbf') else 'utf-8'
     return after.replace('\n',newline).encode(encoding)
@@ -422,7 +446,7 @@ def main():
                 newline = '\r\n' if b'\r\n' in prepared else '\n'
                 text = prepared.decode().replace('\r\n', '\n')
                 title = next(line for line in text.splitlines() if line.startswith('# '))+'\n'
-                edits.append((title,title+'\n> **Current McpCli disposition (Story 5.11 candidate):** '+NOTES[name]+'\n\n'))
+                edits.append((title,title+migration_banner(name)))
                 recipe = []
                 applied = prepared.decode()
                 for old,new in edits:

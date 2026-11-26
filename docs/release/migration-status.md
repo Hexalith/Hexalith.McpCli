@@ -8,13 +8,14 @@ and executor retries are outside this increment. No ecosystem completion or
 legacy retirement is evidenced by this release status.
 
 As assessed on 2026-11-22, **no PS01–PS14 surface has an evidenced retirement**.
-The [approved inventory index](https://github.com/Hexalith/Hexalith.McpCli/blob/c6a40c10fd6db19cfce4cb0592f3b82bbb853729/_bmad-output/implementation-artifacts/evidence/story-5-11/inputs.json)
-records inventory authority. The separate [delivery record](https://github.com/Hexalith/Hexalith.McpCli/blob/efc7f815937bbe116d410b59ecf15b4b4fb951cc/_bmad-output/implementation-artifacts/evidence/story-5-11/integration.json)
-records publication and owner integration. The approved
-[migration plan 1.3.0](https://github.com/Hexalith/Hexalith.AI.Tools/blob/01e64857ab73bde74be137c675a8376c4da8cbee/hexalith-mcpcli-migration-instructions.md)
-binds the published inventory revision `c6a40c10fd6db19cfce4cb0592f3b82bbb853729`
-and is integrated in the root-declared AI.Tools pin. Story 5.10 delivered its
-approved inventories and the five ChatBot/Memories labels.
+The approved migration plan 1.3.0 indexes each inventory and its approval
+authority at published McpCli revision `c6a40c10fd6db19cfce4cb0592f3b82bbb853729`.
+The owner receipt binds approval of Admin 1.0.3 and technical tools 1.0.4.
+The delivery record binds owner integration and the containing AI.Tools pin.
+Story 5.10 delivered its approved inventories and the five ChatBot/Memories
+labels. [Approved migration plan 1.3.0](https://github.com/Hexalith/Hexalith.AI.Tools/blob/2e591bddc6c951ee8a2018c2bac05755f2f5af00/hexalith-mcpcli-migration-instructions.md) ·
+[Owner approval receipt](https://github.com/Hexalith/Hexalith.McpCli/blob/c6a40c10fd6db19cfce4cb0592f3b82bbb853729/_bmad-output/implementation-artifacts/evidence/story-5-11/approval.json) ·
+[Delivery record](https://github.com/Hexalith/Hexalith.McpCli/blob/efc7f815937bbe116d410b59ecf15b4b4fb951cc/_bmad-output/implementation-artifacts/evidence/story-5-11/integration.json)
 
 | ID | Remaining binary or surface | State and removal gate |
 | --- | --- | --- |

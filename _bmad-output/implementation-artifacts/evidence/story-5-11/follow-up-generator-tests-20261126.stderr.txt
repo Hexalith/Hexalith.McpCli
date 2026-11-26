@@ -1,0 +1,12 @@
+test_failed_regeneration_does_not_mutate_existing_packet (test_verify_reconciliation.ReconciliationTests.test_failed_regeneration_does_not_mutate_existing_packet) ... ok
+test_builder_refuses_approved_packet_without_writing (test_verify_reconciliation.ReconciliationTests.test_builder_refuses_approved_packet_without_writing) ... ok
+test_fresh_packet_can_replay_status_neutral_setup_with_original_install_example (test_verify_reconciliation.ReconciliationTests.test_fresh_packet_can_replay_status_neutral_setup_with_original_install_example) ... ok
+test_nested_tempdir_applies_patches_locally (test_verify_reconciliation.ReconciliationTests.test_nested_tempdir_applies_patches_locally) ... ok
+test_notice_with_missing_in_place_edit_refuses_even_when_rehashed (test_verify_reconciliation.ReconciliationTests.test_notice_with_missing_in_place_edit_refuses_even_when_rehashed) ... ok
+test_literal_patch_preserves_source_and_refuses_missing_or_duplicate_targets (test_verify_reconciliation.ReconciliationTests.test_literal_patch_preserves_source_and_refuses_missing_or_duplicate_targets) ... ok
+test_published_inventory_receipt_must_approve_the_exact_indexed_digest (test_verify_reconciliation.CompletionBindingTests.test_published_inventory_receipt_must_approve_the_exact_indexed_digest) ... ok
+
+----------------------------------------------------------------------
+Ran 7 tests in 4.093s
+
+OK

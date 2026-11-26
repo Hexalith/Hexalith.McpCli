@@ -55,8 +55,14 @@ def validate_probe(name,result):
 
 
 def validate_tools(response):
-    tools=response.get('result',{}).get('tools',[])
-    require(response.get('id')==2 and response.get('jsonrpc')=='2.0' and len(tools)==5 and {t.get('name') for t in tools}==TOOLS and all(isinstance(t.get('inputSchema'),dict) for t in tools),'stdio: exact generic tool names and schemas required')
+    result = response.get('result')
+    require(isinstance(result,dict),'stdio: tools/list result must be a JSON object')
+    tools = result.get('tools')
+    require(isinstance(tools,list) and all(isinstance(tool,dict) for tool in tools),
+            'stdio: tools/list tools must be an array of JSON objects')
+    require(response.get('id')==2 and response.get('jsonrpc')=='2.0' and len(tools)==5 and
+            all(isinstance(tool.get('name'),str) and isinstance(tool.get('inputSchema'),dict) for tool in tools) and
+            {tool['name'] for tool in tools}==TOOLS,'stdio: exact generic tool names and schemas required')
     return tools
 
 
@@ -115,7 +121,11 @@ def discover_stdio(command, environment, scratch, evidence):
                     if 'id' not in request: continue
                     response=responses.receive(request['id'])
                     if request['id']==1:
-                        require(response.get('result',{}).get('protocolVersion')=='2025-06-18' and response['result'].get('serverInfo',{}).get('name')=='hexalith','stdio: valid initialization required')
+                        result = response.get('result')
+                        require(isinstance(result,dict),'stdio: initialize result must be a JSON object')
+                        server = result.get('serverInfo')
+                        require(result.get('protocolVersion')=='2025-06-18' and isinstance(server,dict) and
+                                server.get('name')=='hexalith','stdio: valid initialization required')
                     else:tools=validate_tools(response)
             finally:
                 stop_process(process)
