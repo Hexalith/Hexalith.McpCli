@@ -9,7 +9,7 @@ import platform
 import subprocess
 import sys
 from xml.etree import ElementTree
-from product_packages import failure_detail, digest, git, module, write_new
+from product_packages import failure_detail, digest, git, write_new
 
 WINDOWS_REQUIRED = [
     'Hexalith.McpCli.Core.Tests.ProfileStoreTests.WindowsProfileFilesHavePrivateAcls',

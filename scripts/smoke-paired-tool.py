@@ -11,7 +11,7 @@ import subprocess
 import sys
 import threading
 import time
-from product_packages import failure_detail, check_prepared, digest, module, packages, write_new
+from product_packages import failure_detail, check_prepared, digest, packages, write_new
 
 
 def require(condition, message):

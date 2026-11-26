@@ -14,7 +14,7 @@ import tempfile
 
 from product_process import run as run_owned
 from evidence_redaction import require_evidence_credentials
-from product_packages import read_json, check_prepared, digest, failure_detail, git, module, packages, validate_version, write_new
+from product_packages import read_json, check_prepared, digest, failure_detail, git, packages, validate_version, write_new
 
 ROOT = Path(__file__).resolve().parents[1]
 
@@ -123,8 +123,7 @@ def package_checks(*, platform_checks=False, expected_os=None) -> None:
         compare_linux_discovery(receipt_path, evidence / 'installed-tool/discovery')
     else:
         bind_linux_discovery(receipt_path, evidence / 'installed-tool/discovery')
-    os.environ['MCPCLI_PRODUCT_PYTHON'] = sys.executable
-    execute(['bash', ROOT / 'scripts/smoke-bootstrap-consumer.sh', receipt['version'], staging, evidence / 'consumer'])
+    execute([sys.executable, ROOT / 'scripts/smoke_bootstrap_consumer.py', receipt['version'], staging, evidence / 'consumer'])
     if platform_checks:
         execute([sys.executable, ROOT / 'scripts/run-paired-platform-tests.py', '--prepared', receipt_path, '--output', evidence / 'suites'], timeout=1800)
     check_prepared(staging, receipt_path)
@@ -160,7 +159,6 @@ def main() -> int:
             import importlib.metadata
             if importlib.metadata.version('jsonschema') != '4.26.0':
                 raise ValueError('Linux product checks require prepared jsonschema 4.26.0.')
-            os.environ['PATH'] = str(Path(prepared_python).parent) + os.pathsep + os.environ['PATH']
         if arguments.phase == 'stage': stage_packages()
         elif arguments.phase == 'linux': linux_checks()
         else: package_checks(platform_checks=True, expected_os=arguments.expected_os)

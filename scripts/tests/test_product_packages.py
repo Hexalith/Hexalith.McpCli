@@ -12,9 +12,10 @@ import sys
 import tempfile
 import unittest
 import warnings
-from unittest.mock import patch
 from zipfile import ZipFile
 
+sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
+import product_packages
 
 ROOT = Path(__file__).resolve().parents[2]
 PACKAGE = "Hexalith.McpCli.Abstractions.1.0.0.nupkg"
@@ -98,6 +99,7 @@ if "Bootstrap.Consumer.Contracts.csproj" in args[1]:
         diagnostic = "MissingDescriptionQuery.cs(2,1): warning MCPCLI001: fixture"
         print({"missing-diagnostic": "    1 Warning(s)",
                "wrong-file": "CreateItemCommand.cs(2,1): warning MCPCLI001: fixture\\n    1 Warning(s)",
+               "split-diagnostic": "MissingDescriptionQuery.cs(2,\\n1): warning MCPCLI001: fixture\\n    1 Warning(s)",
                "extra-warning": diagnostic + "\\n    2 Warning(s)",
                "load-failure": "warning CS8032: fixture\\n    1 Warning(s)",
                "newer-analyzer": "warning CS9057: fixture\\n    1 Warning(s)"}
@@ -266,6 +268,7 @@ if args[:2] == ["nuget", "push"]:
     def test_analyzer_diagnostic_rejections_propagate_from_the_product_consumer(self):
         for output, message in (("missing-diagnostic", "did not report MCPCLI001 on MissingDescriptionQuery.cs"),
                                 ("wrong-file", "did not report MCPCLI001 on MissingDescriptionQuery.cs"),
+                                ("split-diagnostic", "did not report MCPCLI001 on MissingDescriptionQuery.cs"),
                                 ("extra-warning", "must report exactly one warning"),
                                 ("load-failure", "packaged analyzer could not load"),
                                 ("newer-analyzer", "packaged analyzer could not load")):
@@ -283,31 +286,24 @@ if args[:2] == ["nuget", "push"]:
         self.assert_no_push()
 
     def test_product_receipt_rejects_package_mutation_during_consumer_build_and_symlink_receipts(self):
-        import importlib.util
-        spec = importlib.util.spec_from_file_location('product_fixture', ROOT / 'scripts/product_packages.py')
-        helper = importlib.util.module_from_spec(spec)
-        with patch.dict(sys.modules, {}):
-            sys.path.insert(0, str(ROOT / 'scripts'))
-            try: spec.loader.exec_module(helper)
-            finally: sys.path.pop(0)
         path = self.staged()
         self.paired_tool()
         receipt = self.root / 'prepared.json'
         document = {'schema': 'mcpcli-product-packages/v1', 'source_sha': SHA, 'version': '1.0.0',
-                    'packages': helper.packages(path.parent, '1.0.0')}
+                    'packages': product_packages.packages(path.parent, '1.0.0')}
         receipt.write_text(json.dumps(document))
-        helper.check_prepared(path.parent, receipt)
+        product_packages.check_prepared(path.parent, receipt)
         self.env['SMOKE_MUTATE_PACKAGE'] = '1'
         result = self.run_script('smoke-bootstrap-consumer.sh', '1.0.0', str(path.parent), 'consumer')
         self.assertEqual(0, result.returncode, result.stderr)
         with self.assertRaisesRegex(ValueError, 'does not bind'):
-            helper.check_prepared(path.parent, receipt)
+            product_packages.check_prepared(path.parent, receipt)
         self.staged()
         actual = receipt.with_name('actual.json')
         receipt.rename(actual)
         receipt.symlink_to(actual)
         with self.assertRaisesRegex(ValueError, 'regular file'):
-            helper.check_prepared(path.parent, receipt)
+            product_packages.check_prepared(path.parent, receipt)
         self.assert_no_push()
 
     def test_paired_validation_rejects_unsafe_archive_members(self):

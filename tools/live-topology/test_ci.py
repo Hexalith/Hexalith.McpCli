@@ -3005,9 +3005,7 @@ ci.bounded([sys.executable,sys.argv[2],sys.argv[1],sys.argv[3]],120,pathlib.Path
 
 class IndependentCaseTests(unittest.TestCase):
     def test_case_identity_counts_skips_errors_and_budgets_are_enforced(self):
-        spec = importlib.util.spec_from_file_location('ci_independent', HERE / 'ci.py')
-        module = importlib.util.module_from_spec(spec)
-        spec.loader.exec_module(module)
+        import ci as module
         budget = module.RUN_TIMEOUT_SECONDS - len(module.INDEPENDENT_CASES) * module.INDEPENDENT_CASE_TIMEOUT - module.CLEANUP_HEADROOM_SECONDS
         self.assertGreater(budget, 0)
         self.assertEqual(module.RUN_TIMEOUT_SECONDS, budget + len(module.INDEPENDENT_CASES) * module.INDEPENDENT_CASE_TIMEOUT + module.CLEANUP_HEADROOM_SECONDS)

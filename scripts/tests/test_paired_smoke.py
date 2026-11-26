@@ -1,5 +1,6 @@
 """Exercise installed-smoke assertions and retained failure diagnostics without hosted services."""
 
+import importlib
 import json
 import os
 from pathlib import Path
@@ -11,7 +12,6 @@ import unittest
 from unittest.mock import patch
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
-from product_packages import module
 
 
 class PairedSmokeTests(unittest.TestCase):
@@ -19,7 +19,7 @@ class PairedSmokeTests(unittest.TestCase):
         self.temporary = tempfile.TemporaryDirectory()
         self.addCleanup(self.temporary.cleanup)
         self.root = Path(self.temporary.name)
-        self.smoke = module('smoke-paired-tool')
+        self.smoke = importlib.import_module('smoke-paired-tool')
 
     def test_protocol_requires_response_or_notification_envelopes(self):
         valid = [

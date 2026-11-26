@@ -1,6 +1,6 @@
 """Non-live refusal and extraction checks for the maintained runtime tools."""
 import hashlib
-import importlib.util
+import importlib
 import json
 import os
 from pathlib import Path
@@ -13,15 +13,8 @@ import unittest
 from unittest.mock import patch
 
 
-def load(name):
-    spec = importlib.util.spec_from_file_location(name, Path(__file__).with_name(name + '.py'))
-    module = importlib.util.module_from_spec(spec)
-    spec.loader.exec_module(module)
-    return module
-
-
-bootstrap = load('bootstrap-runtime')
-wrapper = load('run-isolated')
+bootstrap = importlib.import_module('bootstrap-runtime')
+wrapper = importlib.import_module('run-isolated')
 
 
 class RuntimeTests(unittest.TestCase):

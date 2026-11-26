@@ -1,6 +1,6 @@
 """Exercise the controller's real child CLI parsers, package custody and OS/discovery contracts."""
 import contextlib
-import importlib.util
+import importlib
 import io
 import json
 import os
@@ -191,7 +191,7 @@ class ProductPlatformTests(unittest.TestCase):
     def setUp(self):
         self.temporary = tempfile.TemporaryDirectory(); self.addCleanup(self.temporary.cleanup)
         self.root = Path(self.temporary.name)
-        self.runner = product_packages.module('run-paired-platform-tests')
+        self.runner = importlib.import_module('run-paired-platform-tests')
         self.prepared_path = self.root / 'prepared.json'
         self.prepared_path.write_text(json.dumps({'source_sha': SHA, 'version': '1.0.0', 'packages': {}}))
 
@@ -238,12 +238,12 @@ class ProductPlatformTests(unittest.TestCase):
             with self.assertRaises(ValueError): self.runner.inspect_xml(path)
 
     def test_native_or_malformed_managed_payload_is_rejected(self):
-        validator = product_packages.module('validate-release-packages')
+        validator = importlib.import_module('validate-release-packages')
         for data in (b'', b'MZnative', bytes(512)):
             with self.assertRaises(ValueError): validator.validate_managed(data)
 
     def test_effective_properties_reject_unportable_or_mismatched_packages(self):
-        validator = product_packages.module('validate-release-packages')
+        validator = importlib.import_module('validate-release-packages')
         tool = {'id': 'Hexalith.McpCli', 'project': 'src/Hexalith.McpCli/Hexalith.McpCli.csproj'}
         valid = {'TargetFramework': 'net11.0', 'TargetFrameworks': '', 'PackAsTool': 'true', 'ToolCommandName': 'hexalith',
                  'UseAppHost': 'false', 'PublishTrimmed': '', 'PublishAot': '', 'PublishReadyToRun': '', 'SelfContained': '',

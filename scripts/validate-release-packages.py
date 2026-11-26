@@ -4,9 +4,8 @@
 import argparse
 import json
 import re
-import importlib.util
 import struct
-from product_packages import digest, run, write_new
+from product_packages import bootstrap_target_framework, digest, run, write_new
 from pathlib import Path
 from xml.etree import ElementTree
 from zipfile import ZipFile
@@ -241,18 +240,6 @@ def validate_managed(payload):
             raise ValueError('The tool payload must contain portable managed IL, without mixed/native or precompiled code.')
     except (struct.error, IndexError):
         raise ValueError('The tool payload is not a managed PE assembly.') from None
-
-
-def bootstrap_target_framework(version):
-    """Bind non-publishing preparation and fixed recovery to the checked-out source."""
-    project = 'src/Hexalith.McpCli.Abstractions/Hexalith.McpCli.Abstractions.csproj'
-    result = run(['dotnet', 'msbuild', project, '-nologo', '-tl:off', '-p:Configuration=Release',
-                  f'-p:Version={version}', '-getProperty:TargetFramework,TargetFrameworks'], text=True)
-    properties = json.loads(result.stdout)['Properties']
-    framework = properties['TargetFramework']
-    if framework not in ('net10.0', 'net11.0') or properties['TargetFrameworks']:
-        raise ValueError('Bootstrap source must target only net10.0 or net11.0.')
-    return framework
 
 
 def validate_effective_properties(packages, version):

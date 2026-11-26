@@ -1,5 +1,5 @@
 """A skipped, empty, stale or failed isolated process cannot grant full acceptance."""
-import importlib.util
+import importlib
 import hashlib
 import io
 import json
@@ -11,9 +11,7 @@ from contextlib import redirect_stderr, redirect_stdout
 
 from live_plans import VectorError, BINDING_KEYS, selection_binding
 
-spec = importlib.util.spec_from_file_location('run_vectors', Path(__file__).with_name('run-vectors.py'))
-lane = importlib.util.module_from_spec(spec)
-spec.loader.exec_module(lane)
+lane = importlib.import_module('run-vectors')
 
 
 class LaneTests(unittest.TestCase):

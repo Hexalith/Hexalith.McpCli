@@ -1,7 +1,6 @@
 """Product-only package byte checks and isolated-consumer primitives."""
 
 import hashlib
-import importlib.util
 import json
 from pathlib import Path
 import re
@@ -11,13 +10,6 @@ from evidence_redaction import sanitized
 
 ROOT = Path(__file__).resolve().parents[1]
 PAIR = ["Hexalith.McpCli.Abstractions", "Hexalith.McpCli"]
-
-
-def module(filename):
-    spec = importlib.util.spec_from_file_location(filename.replace('-', '_'), Path(__file__).with_name(filename + '.py'))
-    result = importlib.util.module_from_spec(spec)
-    spec.loader.exec_module(result)
-    return result
 
 
 def run(arguments, **kwargs):
@@ -85,6 +77,17 @@ def validate_version(version: str) -> None:
            for component in version.split('-', 1)[0].split('.')):
         raise ValueError(f"Invalid release version: {version}; numeric components exceed the NuGet limit")
 
+
+def bootstrap_target_framework(version):
+    """Bind bootstrap package and consumer checks to the checked-out source."""
+    project = 'src/Hexalith.McpCli.Abstractions/Hexalith.McpCli.Abstractions.csproj'
+    result = run(['dotnet', 'msbuild', project, '-nologo', '-tl:off', '-p:Configuration=Release',
+                  f'-p:Version={version}', '-getProperty:TargetFramework,TargetFrameworks'], text=True)
+    properties = json.loads(result.stdout)['Properties']
+    framework = properties['TargetFramework']
+    if framework not in ('net10.0', 'net11.0') or properties['TargetFrameworks']:
+        raise ValueError('Bootstrap source must target only net10.0 or net11.0.')
+    return framework
 
 
 def failure_detail(error):

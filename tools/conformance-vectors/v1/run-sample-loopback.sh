@@ -16,18 +16,7 @@ dotnet pack tests/Hexalith.McpCli.Sample.Contracts/Hexalith.McpCli.Sample.Contra
 # Compile only this distinct sample-mode fixture. Its copied sources, outputs
 # and package cache cannot change the shared production host or its assets.
 fixture_root="$task_dir/sample"
-python3 - "$repo_root" "$fixture_root" <<'PYTHON'
-from pathlib import Path
-import shutil, sys
-repo, target = map(Path, sys.argv[1:])
-for name in ('src', 'tests/Hexalith.McpCli.ConformanceHost', 'tests/Hexalith.McpCli.Core.Tests'):
-    shutil.copytree(repo / name, target / name, ignore=shutil.ignore_patterns('bin', 'obj', '.git', '__pycache__'))
-for name in ('Directory.Build.props', 'Directory.Build.targets', 'Directory.Packages.props', 'global.json', '.editorconfig'):
-    if (repo / name).exists(): shutil.copy2(repo / name, target / name)
-sys.path.insert(0, str(repo / 'tools/conformance-vectors/v1'))
-from verify_artifact import resolve_builds_props
-shutil.copytree(resolve_builds_props(repo), target.parent / 'Hexalith.Builds/Props')
-PYTHON
+python3 tools/conformance-vectors/v1/prepare_sample_fixture.py "$repo_root" "$fixture_root"
 host_project="$fixture_root/tests/Hexalith.McpCli.ConformanceHost/Hexalith.McpCli.ConformanceHost.csproj"
 NUGET_PACKAGES="$task_dir/packages" NUGET_HTTP_CACHE_PATH="$task_dir/http-cache" dotnet restore "$host_project" \
     -p:ConformanceProduction=false -p:RestoreAdditionalProjectSources="$artifact_dir"
