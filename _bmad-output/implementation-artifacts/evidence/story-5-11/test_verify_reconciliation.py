@@ -10,6 +10,7 @@ import io
 import json
 from pathlib import Path
 import re
+import subprocess
 import sys
 import unittest
 from unittest import mock
@@ -67,13 +68,34 @@ class GuardRefusalTests(unittest.TestCase):
             action(*args)
         self.assertEqual(str(refused.exception),message)
 
+    def test_builder_reports_git_failure_and_refuses_invalid_inventory_rows(self):
+        with mock.patch.object(subprocess,'run',return_value=subprocess.CompletedProcess(
+                ['git'],128,b'',b'object is missing\n')):
+            self.refuses('git show absent: object is missing',B.git,ROOT,'show','absent')
+        self.refuses('duplicate inventory row PS01',B.rows,
+                     '| ID | Surface |\n| PS01 | CLI |\n| PS01 | MCP |\n')
+        self.refuses('malformed row PS01',B.rows,'| ID | Surface |\n| PS01 |\n')
+
+    def test_builder_refuses_missing_or_duplicate_readme_labels(self):
+        label = next(row for row in data('labels.json')['rows'] if row['id'] == 'PS01')
+        line = b'- `Hexalith.EventStore.Admin.Cli`: Previous guidance.\n'
+        for count in (0,2):
+            with self.subTest(label_count=count):
+                self.refuses('eventstore: missing/duplicate README label PS01',B.corrected_document,
+                             'eventstore','README.md',b'# EventStore\n\n'+line*count,[label])
+
     def test_artifact_binding_rejects_missing_and_escaping_paths(self):
         self.refuses('artifact binding lacks path',V.checked,ROOT,{})
+        self.refuses('artifact binding lacks path',V.checked,ROOT,None)
         self.refuses('artifact path escapes repository',V.checked,ROOT,{'path':'../foreign.json'})
+        receipt = ROOT/E/'approval.json'
+        self.refuses('artifact path escapes repository',V.checked,ROOT,{'path':str(receipt),
+                     'sha256':B.sha(receipt.read_bytes())})
 
     def test_approval_requires_valid_schema_roles_state_and_attribution(self):
         for field,value,message in (
             ('schemaVersion','0','approval schema/baseline mismatch'),
+            ('baselineCommit','0'*40,'approval schema/baseline mismatch'),
             ('requiredApprovalRoles',[],'approval required-role policy mismatch'),
             ('decision','draft','unknown approval decision'),
             ('approver','','approval lacks identity, words, source or date'),
@@ -82,6 +104,12 @@ class GuardRefusalTests(unittest.TestCase):
                 receipt = approved()
                 self.refuses(message,V.check_approval,dict(receipt,**{field:value}),
                              receipt['artifacts'],receipt['requiredApprovalRoles'])
+        receipt = approved()
+        roles = receipt['rolesCovered']
+        for covered in (dict.fromkeys(roles),[*roles,roles[0]]):
+            with self.subTest(covered=type(covered)):
+                self.refuses('approval lacks explicitly covered roles',V.check_approval,
+                             dict(receipt,rolesCovered=covered),receipt['artifacts'],receipt['requiredApprovalRoles'])
         receipt = pending()
         self.refuses('completion requires fresh exact-byte successor approval',V.check_approval,
                      receipt,receipt['artifacts'],receipt['requiredApprovalRoles'],True)
@@ -314,6 +342,16 @@ class ReconciliationTests(unittest.TestCase):
         overrides = {str(E/'approval.json'):pending()}
         self.assertEqual(self.main(overrides,replay_patches=True),(0,PASS+'PASS: decision: pending; candidate only; approval, publication and upstream integration remain gates\n',''))
         self.refusal(overrides,'completion requires fresh exact-byte successor approval',True)
+        for field,value in [('inventoryRevision','1'*40),('deliveryAuthorization',{'decision':'authorized'})]:
+            with self.subTest(premature_claim=field):
+                labels = dict(data('labels.json'),**{field:value})
+                self.refusal(dict(overrides,**{str(E/'labels.json'):labels}),
+                             'candidate must not claim delivered publication or labels')
+        manifest = data('upstream/manifest.json')
+        manifest['owners'][0]['integration'] = {'commit':'1'*40}
+        with mock.patch.object(V,'check_patches'):
+            self.refusal(dict(overrides,**{str(E/'upstream/manifest.json'):manifest}),
+                         'candidate must not claim delivered publication or labels')
 
     def test_approved_inventory_is_distinct_from_incomplete_delivery(self):
         self.assertEqual(self.main({str(E/'approval.json'):approved()}),
@@ -591,7 +629,9 @@ class ReconciliationTests(unittest.TestCase):
         changes = [
             ('labels binding',lambda bound:bound['labels'].update(sha256='0'*64)),
             ('approval binding',lambda bound:bound['approval'].update(sha256='0'*64)),
+            ('delivery binding',lambda bound:bound.update(state='pending')),
             ('delivery binding',lambda bound:bound.update(inventoryRevision='0'*40)),
+            ('delivery binding',lambda bound:bound.update(ownerIntegrations={})),
         ]
         for message,change in changes:
             with self.subTest(binding=message):
@@ -643,7 +683,7 @@ class CompletionBindingTests(unittest.TestCase):
     def run_binding(self, mutate=None, git_mutation=None, plan_mutation=None, *,
                     resolved=True, default=False, full=False, file_mutation=None,
                     owner_conflict=None, hosted_mutation=None, current_documents=None,
-                    release_ledger_change=None):
+                    release_ledger_change=None, assessments_only=False):
         receipt = data('approval.json')
         manifest = data('upstream/manifest.json')
         integration = data('integration.json')
@@ -668,7 +708,8 @@ class CompletionBindingTests(unittest.TestCase):
             audit = data('deferral-dispositions.json')
             entry = next(row for row in audit['entries'] if row['id'] == V.RELEASE_NOTES_ENTRY)
             ledger = git(ROOT,'show',V.INVENTORY_PUBLICATION+':'+str(V.LEDGER)).decode()
-            start = ledger.index('  summary: '+entry['summary'])
+            summary = ledger.index('  summary: '+entry['summary'])
+            start = ledger.rindex('- source_spec:',0,summary)
             end = len(ledger.rstrip())
             update = ledger[start:end].replace('  status: open;','  status: resolved;',1)
             update += '\n  resolution: The release owner verified the generated notes.\n'
@@ -784,8 +825,11 @@ class CompletionBindingTests(unittest.TestCase):
             return git(repo,*args)
 
         def run(*args):
-            check = V.check_delivery if default else V.check_completion
-            check(ROOT,receipt,data('labels.json'),manifest,integration)
+            if assessments_only:
+                V.check_assessments(ROOT,integration)
+            else:
+                check = V.check_delivery if default else V.check_completion
+                check(ROOT,receipt,data('labels.json'),manifest,integration)
             return 'approved', True
 
         with contextlib.ExitStack() as stack:
@@ -801,6 +845,9 @@ class CompletionBindingTests(unittest.TestCase):
 
     def refusal(self, message, *args, **kwargs):
         self.assertEqual(self.run_binding(*args,**kwargs),(1,'','FAIL: '+message+'\n'))
+
+    def assessment_refusal(self, message, *args, **kwargs):
+        self.refusal(message,*args,assessments_only=True,**kwargs)
 
     def test_actual_delivery_and_later_ac3_resolution_run_through_default_entry_point(self):
         expected = (0,VERIFIED,'')
@@ -834,6 +881,12 @@ class CompletionBindingTests(unittest.TestCase):
 
         cases = [
             ('AC3 resolution lacks an explicit owner decision bound to the approved entry',
+             lambda r,files,b:r.update(decision='pending')),
+            ('AC3 resolution lacks an explicit owner decision bound to the approved entry',
+             lambda r,files,b:r.update(entryId='0'*16)),
+            ('AC3 resolution lacks an explicit owner decision bound to the approved entry',
+             lambda r,files,b:r.update(auditedEntrySha256='0'*64)),
+            ('AC3 resolution lacks an explicit owner decision bound to the approved entry',
              lambda r,files,b:r.update(exactWords='I do not approve closing AC3')),
             ('AC3 resolution lacks an explicit owner decision bound to the approved entry',
              lambda r,files,b:r.update(owner='Unrelated maintainer')),
@@ -841,12 +894,22 @@ class CompletionBindingTests(unittest.TestCase):
              lambda r,files,b:r.update(source='')),
             ('AC3 resolution must bind the resolved release ledger entry',
              lambda r,files,b:files.pop(ROOT/V.LEDGER)),
+            ('AC3 resolution must bind the resolved release ledger entry',
+             lambda r,files,b:r.update(resolvedEntrySha256='0'*64)),
             ('AC3 generated notes omit the committed migration status',
              lambda r,files,b:r.update(generatedNotes=b('fixture-notes.md',b'Notes without migration status.'))),
             ('AC3 generated notes omit the committed migration status',
              lambda r,files,b:r.update(generatedNotes=b('fixture-notes.md',files[ROOT/'fixture-notes.md']+b'\nAll surfaces retired.'))),
             ('AC3 requires committed release and generation-run evidence for the tag',
              lambda r,files,b:r.pop('releaseRunId')),
+            ('AC3 requires committed release and generation-run evidence for the tag',
+             lambda r,files,b:r.update(releaseTag='latest')),
+            ('AC3 requires committed release and generation-run evidence for the tag',
+             lambda r,files,b:r.update(releaseRunId=0)),
+            ('AC3 requires committed release and generation-run evidence for the tag',
+             lambda r,files,b:r.update(evidenceRevision='bad')),
+            ('AC3 requires committed release and generation-run evidence for the tag',
+             lambda r,files,b:r.update(evidenceRevision=r['releaseRevision'])),
             ('AC3 resolution requires the full release source revision',
              lambda r,files,b:r.update(releaseRevision=r['releaseRevision'][:8])),
             ('AC3 owner decision date missing',
@@ -858,7 +921,7 @@ class CompletionBindingTests(unittest.TestCase):
         ]
         for message,update in cases:
             with self.subTest(message=message):
-                self.refusal(message,file_mutation=change_resolution(update))
+                self.assessment_refusal(message,file_mutation=change_resolution(update))
 
     def test_release_ledger_requires_its_owner_and_closed_disposition(self):
         changes = [
@@ -868,24 +931,36 @@ class CompletionBindingTests(unittest.TestCase):
         ]
         for change in changes:
             with self.subTest(change=change):
-                self.refusal('AC3 resolution must bind the resolved release ledger entry',release_ledger_change=change)
+                self.assessment_refusal('AC3 resolution must bind the resolved release ledger entry',release_ledger_change=change)
         self.assertEqual(self.run_binding(release_ledger_change=lambda text:
                          text.replace('status: resolved;','status: done;')),(0,VERIFIED,''))
+        for change in (
+            lambda text: text+'\n'+text,
+            lambda text: re.sub(r'^- source_spec: .+', '- source_spec: spec-5-unrelated.md',text),
+        ):
+            with self.subTest(change=change):
+                self.assessment_refusal('AC3 resolution must bind the resolved release ledger entry',release_ledger_change=change)
 
     def test_release_requires_exact_source_workflow_and_committed_published_notes(self):
-        self.refusal('AC3 release tag does not identify the approved source revision',
+        self.assessment_refusal('AC3 release tag does not identify the approved source revision',
                      git_mutation=lambda r,a,g:('0'*40).encode() if a == ('rev-parse','refs/tags/v2.0.2^{commit}') else None)
-        self.refusal('AC3 release generation run does not bind the tagged source',
-                     hosted_mutation=lambda records:records['releaseRun'].update(head_sha='0'*40))
-        self.refusal('AC3 approved generated notes do not match the published release body',
+        for field,value in (('head_sha','0'*40),('conclusion','failure'),('id',124),
+                            ('path','.github/workflows/ci.yml'),
+                            ('html_url',V.ROOT_REPOSITORY+'/actions/runs/124')):
+            with self.subTest(run=field):
+                self.assessment_refusal('AC3 release generation run does not bind the tagged source',
+                             hosted_mutation=lambda records:records['releaseRun'].update({field:value}))
+        self.assessment_refusal('AC3 approved generated notes do not match the published release body',
                      hosted_mutation=lambda records:records['publishedRelease'].update(body='Different notes.'))
-        self.refusal('AC3 release evidence differs from the committed record: releaseRun',
+        self.assessment_refusal('AC3 release evidence differs from the committed record: releaseRun',
                      git_mutation=lambda r,a,g:b'other' if a == ('show',V.FINAL_INTEGRATION_RECORD+':fixture-releaseRun.json') else None)
+        self.assessment_refusal('AC3 release evidence differs from the committed record: generatedNotes',
+                     git_mutation=lambda r,a,g:b'other' if a == ('show',V.FINAL_INTEGRATION_RECORD+':fixture-notes.md') else None)
 
     def test_release_requires_published_identity_and_ordered_evidence(self):
         for key,value in [('draft',True),('tag_name','v0.0.0'),('id','456'),('html_url','https://example.invalid/release')]:
             with self.subTest(field=key):
-                self.refusal('AC3 requires a published McpCli release record for the tag',
+                self.assessment_refusal('AC3 requires a published McpCli release record for the tag',
                              hosted_mutation=lambda hosted:hosted['publishedRelease'].update({key:value}))
         def commit_time(revision, timestamp):
             return lambda repo,args,git: timestamp.encode() if args == ('show','-s','--format=%cI',revision) else None
@@ -895,7 +970,7 @@ class CompletionBindingTests(unittest.TestCase):
             {'git_mutation':commit_time(V.FINAL_INTEGRATION_RECORD,'2026-11-22T23:30:00-02:00')},
         ):
             with self.subTest(mutation=mutation):
-                self.refusal('AC3 owner approval predates the committed release evidence',**mutation)
+                self.assessment_refusal('AC3 owner approval predates the committed release evidence',**mutation)
         self.assertEqual(self.run_binding(git_mutation=commit_time(RELEASE_REVISION,'2026-11-23T00:30:00+02:00')),
                          (0,VERIFIED,''))
 
@@ -906,7 +981,7 @@ class CompletionBindingTests(unittest.TestCase):
                                     (release,evidence),(evidence,'origin/main')):
             with self.subTest(ancestor=ancestor,descendant=descendant):
                 message,git_mutation = missing_ancestry(ROOT,ancestor,descendant)
-                self.refusal(message,git_mutation=git_mutation)
+                self.assessment_refusal(message,git_mutation=git_mutation)
 
     def test_completion_requires_both_owner_conflicts_to_be_closed(self):
         for owner,path in [
@@ -1143,24 +1218,35 @@ class CompletionBindingTests(unittest.TestCase):
             ('McpCli publication checks or scoped Builds exception differ from recorded evidence',lambda i,f:i['inventoryPublication'].pop('exception')),
             ('completion requires every owner integration binding',lambda i,f:i.update(ownerIntegrations=[])),
             ('eventstore: upstream integration missing',lambda i,f:i['ownerIntegrations'][0].update(commit=None)),
+            ('eventstore: upstream integration missing',lambda i,f:i['ownerIntegrations'][0].update(
+                commit=i['ownerIntegrations'][0]['commit'][:12])),
             ('eventstore: mandatory commitlint/Builds checks missing',lambda i,f:i['ownerIntegrations'][0]['checks'].update(builds='blocked')),
+            ('eventstore: mandatory commitlint/Builds checks missing',lambda i,f:i['ownerIntegrations'][0]['checks'].update(commitlint='failed')),
             ('completion requires full AI.Tools integration revision',lambda i,f:i.update(aiToolsCommit=None)),
             ('AI.Tools revision differs from actual owner integration',lambda i,f:i.update(aiToolsCommit='0'*40)),
             ('committed root integration revision missing',lambda i,f:i.update(rootIntegrationRevision='bad')),
             ('containing AI.Tools gitlink missing',lambda i,f:i.update(aiToolsGitlink=None)),
             ('ai-tools: integrated documentation bytes mismatch',lambda i,f:i.update(planSha256=None)),
             ('final plan exact-byte approval/hash/revision binding missing',lambda i,f:f.update(decision='pending')),
+            ('final plan exact-byte approval/hash/revision binding missing',lambda i,f:i.update(planVersion='1.2.0')),
+            ('final plan exact-byte approval/hash/revision binding missing',lambda i,f:f.update(planSha256='0'*64)),
+            ('final plan exact-byte approval/hash/revision binding missing',lambda i,f:f.update(inventoryRevision='0'*40)),
             ('final plan approval lacks covered roles',lambda i,f:f.update(rolesCovered=[])),
             ('passing instruction synchronization binding missing',lambda i,f:i.update(instructionSync=None)),
             ('AI.Tools final approval must bind the merged review and its exact head',lambda i,f:i['finalPlanReview'].update(state='open')),
+            ('AI.Tools final approval must bind the merged review and its exact head',
+             lambda i,f:i['finalPlanReview'].update(mergeCommit='0'*40)),
             ('AI.Tools final approval must bind the merged review and its exact head',lambda i,f:f.update(reviewCommit='0'*40)),
+            ('AI.Tools final approval must bind the merged review and its exact head',
+             lambda i,f:f.update(pullRequest='https://github.com/Hexalith/Hexalith.AI.Tools/pull/99999')),
             ('AI.Tools hosted checks do not bind the approved review head',lambda i,f:i['ownerIntegrations'][-1]['checks'].update(testedHead='0'*40)),
             ('AI.Tools hosted checks differ from the immutable final integration record',lambda i,f:i['ownerIntegrations'][-1]['checks'].update(run='https://github.com/Hexalith/Hexalith.AI.Tools/actions/runs/1')),
+            ('AI.Tools hosted checks differ from the immutable final integration record',lambda i,f:i['finalPlanReview'].update(extra='unrecorded')),
             ('completion requires explicit structured deferral owner decision',lambda i,f:i.update(deferralOwnerDecision=None)),
             ('deferral decision must bind exact audit bytes',lambda i,f:i['deferralOwnerDecision'].update(auditSha256='0'*64)),
+            ('deferral decision must bind exact audit bytes',lambda i,f:i['deferralOwnerDecision'].update(auditMarkdownSha256='0'*64)),
             ('deferral decision must bind the reviewed packet and owner instruction',lambda i,f:i['deferralOwnerDecision'].update(exactWords='deny')),
             ('deferral decision must bind the reviewed packet and owner instruction',lambda i,f:i['deferralOwnerDecision'].update(reviewedReceiptSha256='0'*64)),
-            ('deferral decision must preserve every unresolved owner/gate',lambda i,f:i['deferralOwnerDecision'].update(retainedUnresolvedEntryIds=[])),
             ('recorded completion date missing or invalid',lambda i,f:i.update(completedOn=None)),
             ('recorded completion date missing or invalid',lambda i,f:i.update(completedOn='20261122')),
             ('recorded completion date is in the future',lambda i,f:i.update(completedOn='9999-12-31')),
@@ -1170,11 +1256,41 @@ class CompletionBindingTests(unittest.TestCase):
             ('structured SM-3 assessment missing',lambda i,f:i.update(sm3Assessment=None)),
             ('SM-3 assessment must bind recorded completion date',lambda i,f:i['sm3Assessment'].update(assessedOn='2026-01-01')),
             ('SM-3 outcome/retirement accounting missing',lambda i,f:i['sm3Assessment'].update(outcome='unexpected')),
+            ('SM-3 outcome/retirement accounting missing',lambda i,f:i['sm3Assessment'].update(retirements={})),
             ('SM-3 met requires evidenced retirement',lambda i,f:i['sm3Assessment'].update(outcome='met')),
         ]
         for message,mutate in cases:
             with self.subTest(message=message):
                 self.refusal(message,mutate)
+        def duplicate_delivery(integration, final):
+            deliveries = integration['ownerIntegrations']
+            deliveries.append(deliveries[0])
+        self.refusal('completion requires every owner integration binding',duplicate_delivery)
+        self.refusal('completion requires every owner integration binding',
+                     lambda i,f:i['ownerIntegrations'][0].update(name='wrong-owner'))
+        for field,value in (('decision','pending'),('owner',''),('source','')):
+            with self.subTest(deferral_decision=field):
+                self.refusal('completion requires explicit structured deferral owner decision',
+                             lambda i,f:i['deferralOwnerDecision'].update({field:value}))
+        self.refusal('deferral decision must preserve every unresolved owner/gate',
+                     lambda i,f:i['deferralOwnerDecision'].update(preserveUnresolvedGates=False))
+        def retained_as_tuple(integration, final):
+            decision = integration['deferralOwnerDecision']
+            decision['retainedUnresolvedEntryIds'] = tuple(decision['retainedUnresolvedEntryIds'])
+        self.refusal('deferral decision must preserve every unresolved owner/gate',retained_as_tuple)
+        def change_retained(change):
+            return lambda i,f:change(i['deferralOwnerDecision']['retainedUnresolvedEntryIds'])
+        self.refusal('deferral decision must preserve every unresolved owner/gate',
+                     change_retained(lambda ids:ids.append(ids[0])))
+        self.refusal('deferral decision must preserve every unresolved owner/gate',
+                     change_retained(lambda ids:ids.__setitem__(0,'0'*16)))
+        run = subprocess.run
+        def failed_sync(command,*args,**kwargs):
+            if command == ['bash','scripts/check-agent-instructions-sync.sh']:
+                return subprocess.CompletedProcess(command,1,b'',b'instructions differ\n')
+            return run(command,*args,**kwargs)
+        with mock.patch.object(subprocess,'run',side_effect=failed_sync):
+            self.refusal('passing instruction synchronization binding missing',default=True)
         for field,value in [('exactApprovalInstruction','I do not approve'),('approvalSource','')]:
             for default in (True,False):
                 with self.subTest(field=field,default=default):
@@ -1300,10 +1416,13 @@ class CompletionBindingTests(unittest.TestCase):
 
     def test_recorded_projects_rebase_is_verified_by_the_delivery_caller(self):
         self.assertEqual(self.run_binding()[0],0)
-        def corrupt(i,f):
-            projects = next(d for d in i['ownerIntegrations'] if d['name']=='projects')
-            projects['rebasedFiles'][0]['patchSha256'] = '0'*64
-        self.refusal('rebased document approval or patch binding differs: _bmad-output/planning-artifacts/epics.md',corrupt)
+        for field,value in (('base','0'*40),('publicationInstruction',''),
+                            ('reviewedAfterSha256','0'*64),('patchSha256','0'*64)):
+            def corrupt(i,f):
+                projects = next(d for d in i['ownerIntegrations'] if d['name']=='projects')
+                projects['rebasedFiles'][0][field] = value
+            with self.subTest(rebase=field):
+                self.refusal('rebased document approval or patch binding differs: _bmad-output/planning-artifacts/epics.md',corrupt)
         def change_base(i,f):
             projects = next(d for d in i['ownerIntegrations'] if d['name']=='projects')
             projects['rebasedFiles'][0]['beforeSha256'] = '0'*64
@@ -1316,6 +1435,14 @@ class CompletionBindingTests(unittest.TestCase):
             projects = next(d for d in i['ownerIntegrations'] if d['name']=='projects')
             projects['rebasedFiles'].append(dict(projects['rebasedFiles'][0],path='unapproved.md'))
         self.refusal('projects: invalid owner rebase footprint',extra_rebase)
+        def duplicate_rebase(i,f):
+            projects = next(d for d in i['ownerIntegrations'] if d['name']=='projects')
+            projects['rebasedFiles'].append(projects['rebasedFiles'][0])
+        self.refusal('projects: invalid owner rebase footprint',duplicate_rebase)
+        def ai_tools_rebase(i,f):
+            ai_delivery = next(d for d in i['ownerIntegrations'] if d['name']=='ai-tools')
+            ai_delivery['rebasedFiles'] = [{'path':V.PLAN_PATH}]
+        self.refusal('ai-tools: invalid owner rebase footprint',ai_tools_rebase)
 
     def test_git_authorization_date_and_ai_tools_link_count_are_independent_of_immutable_record(self):
         predates_approval = '2026-11-21'
@@ -1478,16 +1605,18 @@ class CompletionBindingTests(unittest.TestCase):
             @classmethod
             def today(cls):
                 return cls(2028,1,1)
-        def overdue(i,f):
-            i['completedOn'] = '2027-02-06'
-            i['sm3Assessment']['assessedOn'] = '2027-02-06'
+        def overdue(outcome, reason):
+            def change(integration, final):
+                integration['completedOn'] = '2027-02-06'
+                integration['sm3Assessment'].update(
+                    assessedOn='2027-02-06',outcome=outcome,ownerReason=reason)
+            return change
         with mock.patch.object(V,'date',Later):
             self.assertEqual(self.run_binding()[0],0)
-            self.refusal('overdue SM-3 requires explicit owner slip reason',overdue)
-            def slip(i,f):
-                overdue(i,f)
-                i['sm3Assessment'].update(outcome='slip',ownerReason='Successor is scheduled and gates remain open.')
-            self.assertEqual(self.run_binding(slip)[0],0)
+            reason = 'Successor is scheduled and gates remain open.'
+            self.assessment_refusal('overdue SM-3 requires explicit owner slip reason',overdue('slip',''))
+            self.assessment_refusal('overdue SM-3 requires explicit owner slip reason',overdue('pending-not-met',reason))
+            self.assertEqual(self.run_binding(overdue('slip',reason)),(0,VERIFIED,''))
 
     def test_sm3_requires_the_parties_gates_verdict_and_proof_of_owner_removal(self):
         label = next(row for row in data('labels.json')['rows'] if row['id']=='PS05')
@@ -1544,35 +1673,39 @@ class CompletionBindingTests(unittest.TestCase):
                 integration['sm3Assessment'].update(outcome='met',retirements=[retirement]*retirement_count)
             return mutate
         for exempt in ('Hexalith.FrontComposer.Cli','tools/MigrateEmbeddingVectors','Hexalith.ChatBot.Cli'):
-            self.refusal('SM-3 requires an inventoried Legacy Server',file_mutation=claim(exempt))
+            self.assessment_refusal('SM-3 requires an inventoried Legacy Server',file_mutation=claim(exempt))
         gates = dict.fromkeys([label['gate'],*(f'G{number:02}' for number in range(1,7))],{})
-        self.refusal('SM-3 retirement does not bind every independent removal gate for '+surface,
+        self.assessment_refusal('SM-3 retirement does not bind every independent removal gate for '+surface,
                      file_mutation=claim(surface,gates))
         gates['restricted/destructive exposure conflict'] = {}
+        self.assessment_refusal('SM-3 retirement does not bind every independent removal gate for '+surface,
+                     file_mutation=claim(surface,list(gates)))
         project = 'src/Hexalith.Parties.Mcp/Hexalith.Parties.Mcp.csproj'
-        self.refusal('SM-3 retirement lacks explicit owning-maintainer approval',
+        self.assessment_refusal('SM-3 retirement lacks explicit owning-maintainer approval',
                      file_mutation=claim(surface,gates,words='I do not approve retiring Parties.'))
+        self.assessment_refusal('SM-3 retirement lacks explicit owning-maintainer approval',
+                     file_mutation=claim(surface,gates,receipt_changes={'ownerRole':'Unrelated maintainer'}))
         for field,value in [('state','planned'),('owner',''),('source','')]:
             with self.subTest(retirement_field=field):
-                self.refusal('SM-3 retirement receipt lacks retired state or authority',
+                self.assessment_refusal('SM-3 retirement receipt lacks retired state or authority',
                              file_mutation=claim(surface,gates,receipt_changes={field:value}))
-        self.refusal('SM-3 duplicate retirement receipts',file_mutation=claim(surface,gates,retirement_count=2))
-        self.refusal('SM-3 retirement lacks owning repository removal revision',
+        self.assessment_refusal('SM-3 duplicate retirement receipts',file_mutation=claim(surface,gates,retirement_count=2))
+        self.assessment_refusal('SM-3 retirement lacks owning repository removal revision',
                      file_mutation=claim(surface,gates,receipt_changes={'removalRevision':removal_revision[:8]}))
-        self.refusal('SM-3 retirement must occur by its deadline and assessment',
+        self.assessment_refusal('SM-3 retirement must occur by its deadline and assessment',
                      file_mutation=claim(surface,gates,receipt_changes={'retiredOn':'2026-11-23'}))
         def after_deadline(integration,final):
             integration['completedOn'] = integration['sm3Assessment']['assessedOn'] = '2027-02-07'
         with mock.patch.object(V,'date',wraps=V.date) as clock:
             clock.today.return_value = V.date.fromisoformat('2027-02-08')
-            self.refusal('SM-3 retirement must occur by its deadline and assessment',after_deadline,
+            self.assessment_refusal('SM-3 retirement must occur by its deadline and assessment',after_deadline,
                          file_mutation=claim(surface,gates,receipt_changes={'retiredOn':'2027-02-06'}))
         def future_removal(repo,args,git):
             if repo == parties and args == ('show','-s','--format=%cI',removal_revision):
                 return b'2026-11-23T00:00:00+00:00'
-        self.refusal('SM-3 removal revision postdates the retirement',
+        self.assessment_refusal('SM-3 removal revision postdates the retirement',
                      git_mutation=future_removal,file_mutation=claim(surface,gates))
-        self.refusal('SM-3 retirement lacks owner removal of '+project,
+        self.assessment_refusal('SM-3 retirement lacks owner removal of '+project,
                      file_mutation=claim(surface,gates))
         def removed(repo,args,git):
             if repo == ROOT.parent/'parties':
@@ -1586,14 +1719,30 @@ class CompletionBindingTests(unittest.TestCase):
             if repo == ROOT.parent/'parties' and args[:3] == ('diff','--name-status','--find-renames'):
                 return b'R100\0'+project.encode()+b'\0moved.csproj\0'
             return removed(repo,args,git)
-        self.refusal('SM-3 owner revision renames or retains the retired project: '+project,
+        self.assessment_refusal('SM-3 owner revision renames or retains the retired project: '+project,
                      git_mutation=renamed,file_mutation=claim(surface,gates))
-        self.refusal('SM-3 Parties retirement lacks the successor Story 5.4 owner verdict',
+        for revision,presence in ((removal_revision+'^',b''),(removal_revision,project.encode()),
+                                  ('origin/main',project.encode())):
+            def tree_entry(repo,args,git):
+                if repo == parties and args == ('ls-tree','--name-only',revision,'--',project):
+                    return presence
+                return removed(repo,args,git)
+            with self.subTest(project_at=revision):
+                self.assessment_refusal('SM-3 retirement lacks owner removal of '+project,
+                             git_mutation=tree_entry,file_mutation=claim(surface,gates))
+        def same_named_project(repo,args,git):
+            if repo == parties and args == ('ls-tree','-r','--name-only','origin/main'):
+                return ('moved/'+Path(project).name+'\n').encode()
+            return removed(repo,args,git)
+        self.assessment_refusal('SM-3 owner revision renames or retains the retired project: '+project,
+                     git_mutation=same_named_project,file_mutation=claim(surface,gates))
+        self.assessment_refusal('SM-3 Parties retirement lacks the successor Story 5.4 owner verdict',
                      git_mutation=removed,file_mutation=claim(surface,gates))
-        self.refusal('SM-3 Parties verdict must approve a new evidence snapshot',
+        self.assessment_refusal('SM-3 Parties verdict must approve a new evidence snapshot',
                      git_mutation=removed,file_mutation=claim(surface,gates,with_verdict='empty'))
         def complete_fixture(tamper=False, verdict_changes=None, gate_changes=None, scan_changes=None,
-                             outcome='met', manifest_changes=None, gate_result=None, git_mutation=None):
+                             outcome='met', manifest_changes=None, gate_result=None, git_mutation=None,
+                             scan_ref_changes=None, scan_digest=None):
             evidence = {}
             def write_fixture(integration,files,binding):
                 claim(surface,gates,with_verdict=True,tamper_result=tamper)(integration,files,binding)
@@ -1610,7 +1759,7 @@ class CompletionBindingTests(unittest.TestCase):
                     if gate_result is not None:
                         proof['resultEvidence'] = binding('fixture-gate-result-0.txt',gate_result)
                     retirement['gateEvidence'][first_gate] = binding('fixture-gate-proof-0.json',B.serialized(proof))
-                if scan_changes or manifest_changes:
+                if scan_changes or manifest_changes or scan_ref_changes or scan_digest is not None:
                     scan = json.loads(files[ROOT/'fixture-scanReceipt.json'])
                     if manifest_changes:
                         manifest = json.loads(files[ROOT/'fixture-manifest.json'])
@@ -1620,9 +1769,11 @@ class CompletionBindingTests(unittest.TestCase):
                         scan['files'] = [manifest_ref]
                     if scan_changes:
                         scan_changes(scan)
-                    scan['manifestSha256'] = B.sha(json.dumps(scan['files'],sort_keys=True,separators=(',',':')).encode())
+                    scan['manifestSha256'] = (scan_digest if scan_digest is not None else
+                        B.sha(json.dumps(scan['files'],sort_keys=True,separators=(',',':')).encode()))
                     scan_ref = binding('fixture-scanReceipt.json',B.serialized(scan))
                     scan_ref.update(inputFileCount=1,manifestSha256=scan['manifestSha256'])
+                    scan_ref.update(scan_ref_changes or {})
                     verdict['approvedSnapshot']['scanReceipt'] = scan_ref
                 retirement['story54Verdict'] = binding('fixture-parties-verdict.json',B.serialized(verdict))
                 assessment['retirements'] = [binding('fixture-retirement.json',B.serialized(retirement))]
@@ -1639,7 +1790,7 @@ class CompletionBindingTests(unittest.TestCase):
                         return evidence[path]
                 return removed(repo,args,git)
             return {'git_mutation':git_fixture,'file_mutation':write_fixture}
-        self.refusal('artifact hash mismatch: fixture-gate-result-0.txt',
+        self.assessment_refusal('artifact hash mismatch: fixture-gate-result-0.txt',
                      **complete_fixture(tamper=True))
         self.assertEqual(self.run_binding(**complete_fixture())[0],0)
         historical_verdict = 'story-5-4-owner-approval/owner-approval.json'
@@ -1650,68 +1801,91 @@ class CompletionBindingTests(unittest.TestCase):
                                              (ROOT,snapshot_revision,'origin/main')):
             with self.subTest(ancestor=ancestor,descendant=descendant):
                 message,git_mutation = missing_ancestry(checkout,ancestor,descendant)
-                self.refusal(message,**complete_fixture(git_mutation=git_mutation))
-        for field,value in [('approval','denied'),('verdict','retirement-blocked')]:
+                self.assessment_refusal(message,**complete_fixture(git_mutation=git_mutation))
+        for field,value in [('approval','denied'),('verdict','retirement-blocked'),('retainedBlockingGapIds',['G01'])]:
             with self.subTest(verdict=field):
-                self.refusal('SM-3 Parties retirement requires the successor retirement-ready owner verdict',
+                self.assessment_refusal('SM-3 Parties retirement requires the successor retirement-ready owner verdict',
                              **complete_fixture(verdict_changes=lambda verdict:verdict['decision'].update({field:value})))
+        self.assessment_refusal('SM-3 Parties retirement requires the successor retirement-ready owner verdict',
+                     **complete_fixture(verdict_changes=lambda verdict:verdict.update(schema='unrelated/v1')))
+        for field,value in [('role','Unrelated maintainer'),('source',''),('responseVerbatim','deny')]:
+            with self.subTest(authority=field):
+                self.assessment_refusal('SM-3 Parties retirement requires the successor retirement-ready owner verdict',
+                             **complete_fixture(verdict_changes=lambda verdict:verdict['authority'].update({field:value})))
         for change in (lambda verdict:verdict['gapDispositions'][0].update(workStatus='open'),
                        lambda verdict:verdict['gapDispositions'][0].update(owner='Unrelated maintainer'),
-                       lambda verdict:verdict['gapDispositions'].pop()):
-            self.refusal('SM-3 Parties verdict lacks resolved G01–G06 with their recorded owners',
+                       lambda verdict:verdict['gapDispositions'].pop(),
+                       lambda verdict:verdict['gapDispositions'].append(verdict['gapDispositions'][0])):
+            self.assessment_refusal('SM-3 Parties verdict lacks resolved G01–G06 with their recorded owners',
                          **complete_fixture(verdict_changes=change))
-        self.refusal('SM-3 Parties clean scan does not bind the approved successor manifest',
+        self.assessment_refusal('SM-3 Parties clean scan does not bind the approved successor manifest',
                      **complete_fixture(scan_changes=lambda scan:scan['files'][0].update(path='unrelated-manifest.json')))
         for field in ('fullLiveAccepted','fullV1Accepted'):
             with self.subTest(acceptance=field):
-                self.refusal('SM-3 Parties successor manifest or clean scan is missing',
+                self.assessment_refusal('SM-3 Parties successor manifest or clean scan is missing',
                              **complete_fixture(manifest_changes=lambda manifest:manifest['acceptanceEvidence'].update({field:False})))
-        self.refusal('SM-3 Parties successor manifest or clean scan is missing',
+        self.assessment_refusal('SM-3 Parties successor manifest or clean scan is missing',
                      **complete_fixture(scan_changes=lambda scan:scan.update(findings=[{'path':'fixture-manifest.json'}])))
-        for change in (lambda manifest:manifest['ownerCheckpoint'].update(proposal='retirement-blocked'),
+        for change in (lambda manifest:manifest.update(schema='unrelated/v1'),
+                       lambda manifest:manifest['ownerCheckpoint'].update(proposal='retirement-blocked'),
                        lambda manifest:manifest['candidate'].update(headCommit='0'*40)):
-            self.refusal('SM-3 Parties successor manifest or clean scan is missing',
+            self.assessment_refusal('SM-3 Parties successor manifest or clean scan is missing',
                          **complete_fixture(manifest_changes=change))
-        for field,value in [('exitCode',1),('errors',['Fixture scan error'])]:
+        for field,value in [('schema','unrelated/v1'),('result','findings'),
+                            ('exitCode',1),('errors',['Fixture scan error'])]:
             with self.subTest(scan=field):
-                self.refusal('SM-3 Parties successor manifest or clean scan is missing',
+                self.assessment_refusal('SM-3 Parties successor manifest or clean scan is missing',
                              **complete_fixture(scan_changes=lambda scan:scan.update({field:value})))
-        self.refusal('SM-3 Parties verdict must approve a new evidence snapshot',
+        for case in (
+            {'scan_changes':lambda scan:scan.update(fileCount=2)},
+            {'scan_ref_changes':{'inputFileCount':2}},
+            {'scan_ref_changes':{'manifestSha256':'0'*64}},
+            {'scan_digest':'0'*64},
+        ):
+            with self.subTest(scan=case):
+                self.assessment_refusal('SM-3 Parties clean scan does not bind the approved successor manifest',
+                             **complete_fixture(**case))
+        self.assessment_refusal('SM-3 Parties verdict must approve a new evidence snapshot',
                      **complete_fixture(verdict_changes=lambda verdict:verdict['approvedSnapshot'].update(commit=previous_snapshot)))
+        for field,value in [('commit','short'),('candidateHeadCommit','short'),
+                            ('candidateHeadCommit',previous['approvedSnapshot']['candidateHeadCommit'])]:
+            with self.subTest(snapshot_field=field,value=value):
+                self.assessment_refusal('SM-3 Parties verdict must approve a new evidence snapshot',
+                             **complete_fixture(verdict_changes=lambda verdict:verdict['approvedSnapshot'].update({field:value})))
         for scope in ('Review the exact successor as retirement-ready.', 'Approve the exact successor.'):
             with self.subTest(scope=scope):
-                self.refusal('SM-3 Parties owner did not expressly approve the committed successor as retirement-ready',
+                self.assessment_refusal('SM-3 Parties owner did not expressly approve the committed successor as retirement-ready',
                              **complete_fixture(verdict_changes=lambda verdict:verdict.update(approvalScope=scope)))
-        self.refusal('SM-3 Parties owner did not expressly approve the committed successor as retirement-ready',
+        self.assessment_refusal('SM-3 Parties owner did not expressly approve the committed successor as retirement-ready',
                      **complete_fixture(verdict_changes=lambda verdict:verdict.update(
                          approvalScope='Approve a retirement-ready review with a retirement-blocked result.')))
-        self.refusal('SM-3 Parties verdict postdates retirement',
+        self.assessment_refusal('SM-3 Parties verdict postdates retirement',
                      **complete_fixture(verdict_changes=lambda verdict:verdict.update(recordedAtUtc='2026-11-23T00:00:00Z')))
         def late_snapshot(repo,args,git):
             if repo == ROOT and args == ('show','-s','--format=%cI',snapshot_revision):
                 return b'2026-11-23T00:00:00+00:00'
-        self.refusal('SM-3 Parties owner did not expressly approve the committed successor as retirement-ready',
+        self.assessment_refusal('SM-3 Parties owner did not expressly approve the committed successor as retirement-ready',
                      **complete_fixture(git_mutation=late_snapshot))
         historical_date = previous['recordedAtUtc'][:10]
-        self.refusal('SM-3 Parties owner did not expressly approve the committed successor as retirement-ready',
+        self.assessment_refusal('SM-3 Parties owner did not expressly approve the committed successor as retirement-ready',
                      **complete_fixture(verdict_changes=lambda verdict:verdict.update(recordedAtUtc=historical_date),
                                         git_mutation=lambda repo,args,git: (historical_date+'T00:00:00+00:00').encode()
                                         if repo == ROOT and args == ('show','-s','--format=%cI',snapshot_revision) else None))
         for path in ('fixture-manifest.json','fixture-scanReceipt.json'):
             with self.subTest(snapshot=path):
-                self.refusal('SM-3 Parties snapshot bytes differ from the committed evidence: '+path,
+                self.assessment_refusal('SM-3 Parties snapshot bytes differ from the committed evidence: '+path,
                              **complete_fixture(git_mutation=lambda repo,args,git:
                                  b'{}' if repo == ROOT and args == ('show',snapshot_revision+':'+path) else None))
         for field,value in [('surface','An unrelated server'),('gate','An unrelated gate'),
                             ('result','failed'),('removalRevision','0'*40),('owner',''),
                             ('source',''),('verifiedOn','2026-11-23')]:
             with self.subTest(gate_proof=field):
-                self.refusal('SM-3 removal evidence does not prove '+next(iter(gates))+' for '+surface,
+                self.assessment_refusal('SM-3 removal evidence does not prove '+next(iter(gates))+' for '+surface,
                              **complete_fixture(gate_changes={field:value}))
-        self.refusal('SM-3 gate result evidence is empty: '+next(iter(gates)),**complete_fixture(gate_result=b''))
+        self.assessment_refusal('SM-3 gate result evidence is empty: '+next(iter(gates)),**complete_fixture(gate_result=b''))
         for outcome in ('pending-not-met','slip'):
-            self.refusal('SM-3 pending/slip must not claim retirement',**complete_fixture(outcome=outcome))
-        self.refusal('pre-deadline unmet SM-3 remains pending',
+            self.assessment_refusal('SM-3 pending/slip must not claim retirement',**complete_fixture(outcome=outcome))
+        self.assessment_refusal('pre-deadline unmet SM-3 remains pending',
                      lambda i,f:i['sm3Assessment'].update(outcome='slip',ownerReason='Premature slip.'))
 
     def test_sm3_admin_gates_are_independent_and_pair_is_required_from_both_owners(self):

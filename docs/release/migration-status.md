@@ -23,12 +23,12 @@ labels. [Approved migration plan 1.3.0](https://github.com/Hexalith/Hexalith.AI.
 | PS02 | `Hexalith.EventStore.Admin.Mcp` | Retained compatibility, same independent Admin gates as PS01. |
 | PS03 | `Hexalith.FrontComposer.Cli` / `frontcomposer` | Retained K13 local compiler exemption (`inspect`, `migrate`); never counted retired. Preserve freshness, path/hash, partial-write and privacy obligations. |
 | PS04 | `Hexalith.FrontComposer.Mcp` | Retained host. G4 couples removal to the Projects plug-in after FK01–FK04 and every host consumer are accounted for. |
-| PS05 | `Hexalith.Parties.Mcp` / `parties-mcp` | Retirement blocked by G01–G06 and the separate destructive-classification/exposure conflict. Parties and McpCli owners must approve the exact successor and evidence for both heads, including direct and chained denials with zero unauthorized effects. |
+| PS05 | `Hexalith.Parties.Mcp` / `parties-mcp` | Retirement blocked by G01–G06 and the separate destructive-classification/exposure conflict. Parties and McpCli owners must approve the exact successor and evidence for both heads, including direct and chained denials with zero unauthorized effects. An approved inventory and enrolled operations do not close either gate. |
 | PS06 | `Hexalith.Memories.Cli` / `memories` | Retained compatibility. Memories inventory gates; forwarded per-user HTTP identity is necessary but insufficient. Tenant/user/administrative authorization, semantics, release and rollback proof remain. |
 | PS07 | `Hexalith.Memories.Mcp` / `memories-mcp` | Retained compatibility, same independent Memories gates as PS06. |
 | PS08 | `Hexalith.Projects.Cli` | Retained compatibility. Projects inventory, publication/cutover, authorization and behavior gates remain. Projects owners retain the successor decision on the Payload paging conflict with AD-20. |
 | PS09 | `Hexalith.Projects.Mcp` | Retained plug-in. G4 couples removal to the FrontComposer host; Projects gates remain independent. |
-| PS10 | `Hexalith.Folders.Cli` / `folders` | Retained compatibility. Folders 1.1.0 inventory gates and separate K12 restricted/mixed-operation successor; no blanket public-agent eligibility. |
+| PS10 | `Hexalith.Folders.Cli` / `folders` | Retained compatibility. The Folders 1.1.0 inventory gates remain open. Folders owners retain the K12 restricted/mixed-operation successor and C13 hold. Public-agent eligibility remains operation-specific. |
 | PS11 | `Hexalith.Folders.Mcp` / `folders-mcp` | Retained compatibility, same independent Folders gates as PS10. |
 | PS12 | `Hexalith.ChatBot.Cli` | Retained compatibility. ChatBot 1.1.0 inventory and labels delivered. Governed workflow, identity, approval, authorization and behavior gates remain open. Confidential human decisions stay in the UI. |
 | PS13 | `Hexalith.ChatBot.Mcp` | Retained compatibility, same independent ChatBot gates as PS12. |

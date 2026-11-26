@@ -206,7 +206,7 @@ away the prerequisite. No frozen Story 5.10 file changed.
 
 Offline probes now require the complete unknown-operation stdout document and
 empty stderr, expected cohort/operation/typed discovery JSON and exact generic
-tool names/schemas. Stdio reads chunks under one absolute response deadline;
+tool names and object input schemas. Stdio reads chunks under one absolute response deadline;
 a partial-line child fixture verifies timeout and bounded cleanup. The new
 `scripts/tests/test_migration_release_notes.py` adapter runs Node notes tests
 under normal Python discovery and propagates exact failures in direct mode.
@@ -453,8 +453,10 @@ with its first refusal at `1c8ef2a87fc429cc`.
   [Prepared ChatBot and Works patches](owner-doc-follow-up/README.md)
 - **EventStore, Folders, FrontComposer, Memories, Parties, Projects and
   Tenants** own the remaining status-neutral documentation corrections in
-  their repositories. EventStore also owns the reported PRD drift. The
-  patches remain pending owner approval and integration.
+  their repositories. The patches remain pending owner approval and integration.
+  The EventStore PRD drift report reflects the owner's DW-549 addition to
+  FR26-C4, which preserves the delivered McpCli correction verbatim. That
+  report requires no EventStore action.
   [Owner revisions and patch hashes](owner-doc-follow-up/README.md)
 - **McpCli product and maintenance owners**, with **CI redaction**, **Parties
   and EventStore Gateway**, and **Commons and Builds** maintainers for their
@@ -535,3 +537,38 @@ Completion also awaits approval and integration of the nine owner follow-ups,
 22 separate owner resolutions and reassessment of SM-3 on the completion date.
 [Current blockers](integration.json) ·
 [Changed evidence scan](review-pass-6-20261126/secret-scan.json)
+
+### Pass-7 delivery and documentation checks on 26 November 2026
+
+All nine owner follow-ups applied at the revisions in the patch index and
+reversed to the original Git blob bytes. The four recorded ChatBot,
+FrontComposer and Memories documentation tests passed in disposable exports
+with the follow-ups applied, using existing Release assemblies from the
+standalone owner checkouts. [Patch index](owner-doc-follow-up/README.md) ·
+[Owner test commands](review-pass-4-20261126/owner-doc-tests.json)
+
+The built Release CLI listed Parties, Projects and Tenants. It passed the
+Tenants and Parties operation listings, typed description, help, unknown
+operation refusal and discovery of all five stdio tools. The published 2.0.1
+capture passed the discovery replay and stream hash checks. The probes used a
+temporary profile location for offline discovery.
+[Published 2.0.1 capture](offline-runs/run-g777xqtd/offline-cli.json)
+
+The delivery verifier exited 0 and reported the EventStore PRD extension. The
+explicit completion check exited 1 with empty stdout and
+`FAIL: AC3 generated release notes remain deferred by the owner` on stderr after
+the drift report. The adopted AD-23 and instruction synchronization checks
+passed. `node --test scripts/tests/migration-release-notes.test.mjs` exited 1
+because the local test file was removed in `aad8894e`. The AC3 owner must
+supply release-generation evidence. [Current blockers](integration.json)
+
+All 98 focused tests passed the sweep baseline and ran for every one of the
+517 removals. The tests detected 455 removals. The other 62 are individual
+AND operands with a separate refusal or an approved byte binding. The full
+run exited 1 while one disposition was still missing. After recording it,
+`--reuse` verified the unchanged source, test, runner and execution hashes
+and exited 0 with zero missing or stale dispositions. The result includes
+all 517 test counts and the first failure for each detected removal.
+[Runner](review-pass-7-20261126/sweep_guards.py) ·
+[Sweep result](review-pass-7-20261126/guard-removal-result.json) ·
+[Final disposition check](review-pass-7-20261126/guard-account.stdout.txt)

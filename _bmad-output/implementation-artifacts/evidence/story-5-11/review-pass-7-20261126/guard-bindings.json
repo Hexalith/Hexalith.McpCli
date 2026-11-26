@@ -1,0 +1,250 @@
+{
+  "verify_reconciliation.py:79:4:and1": {
+    "expression": "isinstance(histories, dict)",
+    "binding": "The remaining set equality requires all family names, and histories[family] at line 81 requires name-based lookup. An array of family names can satisfy the set comparison but fails the following lookup."
+  },
+  "verify_reconciliation.py:82:8:and1": {
+    "expression": "isinstance(chain, list)",
+    "binding": "The remaining length comparison and the item.get('version') check at line 84 reject malformed JSON containers. A JSON object iterates property names rather than inventory records, and JSON has no tuple type."
+  },
+  "verify_reconciliation.py:84:12:and2": {
+    "expression": "item.get('path') == str(B.A / path)",
+    "binding": "For approved delivery, the exact inventory path is covered by the inputs.json digest at lines 993 and 865–866. Historical inventory bytes are independently fetched at the record's path from the frozen baseline in line 104."
+  },
+  "verify_reconciliation.py:88:12:and2": {
+    "expression": "re.fullmatch('[0-9a-f]{40}', source_revision)",
+    "binding": "The inventory's source_revision line still has to match. The actual recorded source revision is also part of inputs.json, which lines 993 and 865–866 bind to the approved, published artifact."
+  },
+  "verify_reconciliation.py:88:12:and3": {
+    "expression": "re.search('^source_revision:\\\\s*[\\'\\\\\"]?' + source_revision + '[\\'\\\\\"]?\\\\s*$', data.decode(), re.M)",
+    "binding": "The recorded revision is included in the inputs.json hash bound at lines 993 and 865–866. A changed historical file cannot match the baseline bytes at line 104, and a changed successor cannot match the approved publication bytes at line 866."
+  },
+  "verify_reconciliation.py:89:12:and1": {
+    "expression": "isinstance(item.get('sourceRepository'), str)",
+    "binding": "The remaining repository membership comparison searches the decoded inventory text. A non-string JSON value cannot be the substring operand."
+  },
+  "verify_reconciliation.py:135:4:and1": {
+    "expression": "len(rows) == 14",
+    "binding": "The same requirement still demands the complete set of label IDs. Repeating an otherwise valid label changes labels.json; its approved and published bytes are checked at lines 993 and 865–867."
+  },
+  "verify_reconciliation.py:135:4:and2": {
+    "expression": "{r.get('id') for r in rows} == set(expected)",
+    "binding": "Each row's ID is looked up directly in the predecessor map at line 139, so unknown labels fail there. Replacing an expected row with a duplicate changes the approved labels.json checked at lines 993 and 865–867."
+  },
+  "verify_reconciliation.py:151:4:and1": {
+    "expression": "set(labels.get('repositories', [])) == {row['repository'] for row in rows}",
+    "binding": "The row-owner comparisons against each predecessor at line 140 still establish the seven owners independently. Replacing a repository index entry changes the approved labels.json binding at lines 993 and 865–867."
+  },
+  "verify_reconciliation.py:151:4:and2": {
+    "expression": "len(labels['repositories']) == 7",
+    "binding": "The same guard still checks the repository set against the predecessor-verified row owners. Any duplicated index entry changes the approved labels.json binding at lines 993 and 865–867."
+  },
+  "verify_reconciliation.py:142:8:and2": {
+    "expression": "'technical-tools inventory 1.0.4' in text",
+    "binding": "The same requirement still verifies the approved successor inventory digest in the label. Editing the citation changes labels.json, which lines 993 and 865–867 bind to the exact approved publication."
+  },
+  "verify_reconciliation.py:142:8:and3": {
+    "expression": "inventory[str(B.A / 'technical-tools-migration-inventory-v1.0.4.md')] in text",
+    "binding": "The approved register bytes pin both the label text and inventory digest. Rewriting the label and rehashing its text changes labels.json and fails the binding at lines 993 and 865–867."
+  },
+  "verify_reconciliation.py:173:4:and1": {
+    "expression": "recipe.get('schemaVersion') == '1.0.0'",
+    "binding": "This literal replacement recipe is included as a manifest patch artifact, independently checked at lines 215 and 994–997 and matched to its published SHA-256 at line 866."
+  },
+  "verify_reconciliation.py:176:8:and1": {
+    "expression": "nonblank(edit.get('old'))",
+    "binding": "The remaining guard requires exactly one occurrence of the old text. A blank-string target has multiple occurrences in the nonempty approved document. Changing an exact old-text operand to a whitespace-only target also changes the approved literal recipe SHA-256 checked at lines 215 and 866."
+  },
+  "verify_reconciliation.py:183:4:and1": {
+    "expression": "len(owners) == 9",
+    "binding": "The remaining set equality still requires all active owners. Adding a duplicate owner changes the approved manifest whose exact digest is bound at lines 993 and 865–867."
+  },
+  "verify_reconciliation.py:183:4:and2": {
+    "expression": "{o.get('name') for o in owners} == set(B.PATHS) | {'ai-tools'}",
+    "binding": "Unknown owners fail later in owner-specific path lookup and the published-owner checks. Duplicating one valid owner instead of another changes the approved manifest bound at lines 993 and 865–867."
+  },
+  "verify_reconciliation.py:184:4:and1": {
+    "expression": "len(manifest.get('noChange', [])) == 8",
+    "binding": "The exact inspected-owner set is still checked and each entry is replayed. Duplicating an entry changes the approved manifest checked at lines 993 and 865–867."
+  },
+  "verify_reconciliation.py:184:4:and2": {
+    "expression": "{o.get('name') for o in manifest['noChange']} == {'platform', 'agents', 'conversations', 'timesheets', 'works', 'builds', 'commons', 'polymorphicserializations'}",
+    "binding": "The per-owner lookup in B.NO_CHANGE at line 193 still rejects unknown owner IDs. Repeating a valid inspection in place of another changes the manifest whose approved bytes lines 993 and 865–867 bind."
+  },
+  "verify_reconciliation.py:187:8:and1": {
+    "expression": "isinstance(revision, str)",
+    "binding": "The remaining regex requires a string or bytes, so a non-string JSON revision fails before a Git command is attempted."
+  },
+  "verify_reconciliation.py:199:8:and1": {
+    "expression": "re.fullmatch('[0-9a-f]{40}', owner.get('baseRevision', '')) is not None",
+    "binding": "The owner base still has to equal the recorded observed-origin-main value and resolve in Git during source replay. Replacing both with a different spelling changes the exact approved manifest checked at lines 993 and 865–867."
+  },
+  "verify_reconciliation.py:201:8:and1": {
+    "expression": "len(owner.get('files', [])) == len(expected_paths)",
+    "binding": "The exact target path set is still checked. Repeating a path changes the approved manifest bound at lines 993 and 865–867 as well as the verified file count in the delivered owner record."
+  },
+  "verify_reconciliation.py:201:8:and2": {
+    "expression": "{f.get('path') for f in owner['files']} == expected_paths",
+    "binding": "Each target and its expected source/output hashes are part of the manifest and patch approvals at lines 993–999 and 865–867. Substituting a same-count file changes those bytes."
+  },
+  "verify_reconciliation.py:216:16:and1": {
+    "expression": "patch",
+    "binding": "An empty literal recipe cannot be parsed and an empty unified patch cannot satisfy the exact path requirement at line 222. It also cannot match the approved patch SHA-256 checked at line 215."
+  },
+  "verify_reconciliation.py:222:20:and1": {
+    "expression": "stats.returncode == 0",
+    "binding": "The same guard still requires the one exact target in Git's output. The verifier also reruns git apply --check at lines 225–226 and applies it at lines 227–228 before comparing the resulting bytes."
+  },
+  "verify_reconciliation.py:222:20:and3": {
+    "expression": "not re.search(b'^(?:rename|copy) (?:from|to) ', patch, re.M)",
+    "binding": "Only the approved patch bytes pass lines 215 and 866. Those immutable patches have a single verified target path and contain no rename or copy directives."
+  },
+  "verify_reconciliation.py:260:4:and1": {
+    "expression": "\"plan_version: '1.3.0'\" in plan",
+    "binding": "The actual plan version is independently checked on the published plan. A changed prepared-plan version changes the candidate hash bound to the approved manifest and release bytes at lines 237, 994–999 and 865–867."
+  },
+  "verify_reconciliation.py:260:4:and3": {
+    "expression": "'status: candidate-not-publishable' in plan",
+    "binding": "A changed prepared state alters the actual candidate file, whose bytes must equal the applied patch at line 237 and whose digest is bound by lines 994–999 and 865–867."
+  },
+  "verify_reconciliation.py:263:12:and1": {
+    "expression": "item['path'] in plan",
+    "binding": "The candidate plan and its index inputs are both approved artifacts under lines 994–999 and 865–867. The exact path is then independently required in its published table row at lines 722–725."
+  },
+  "verify_reconciliation.py:263:12:and3": {
+    "expression": "item['version'] in plan",
+    "binding": "The candidate plan is hash-bound by lines 994–999 and 865–867. The published index independently uses the expected inventory version to select a unique row at lines 719–720."
+  },
+  "verify_reconciliation.py:316:8:and1": {
+    "expression": "len(repositories) == 2",
+    "binding": "verify binds the Story 5.10 labels file digest to prerequisites.story510.labels in the approved inputs.json. check_delivery independently compares that inputs.json digest and the exact approving receipt to their bytes published at INVENTORY_PUBLICATION. Adding a duplicate owner changes those Story 5.10 label bytes."
+  },
+  "verify_reconciliation.py:316:8:and2": {
+    "expression": "{r.get('name') for r in repositories} == {'chatbot', 'memories'}",
+    "binding": "The approved inputs.json binds the exact Story 5.10 label register hash through prerequisites.story510.labels. check_delivery rechecks approved artifact and receipt bytes at INVENTORY_PUBLICATION. Replacing ChatBot or Memories changes the bound register, and replay also looks up every repository in the two derived Story 5.10 owner records."
+  },
+  "verify_reconciliation.py:368:4:and1": {
+    "expression": "isinstance(tag, str)",
+    "binding": "The immediately following re.fullmatch for releaseTag accepts only a string from the JSON data model. Removing isinstance still refuses every non-string tag, since the main verifier catches TypeError."
+  },
+  "verify_reconciliation.py:368:4:and5": {
+    "expression": "isinstance(revision, str)",
+    "binding": "The immediately following re.fullmatch for evidenceRevision accepts only a string from the JSON data model. Removing isinstance still refuses every non-string revision, since the main verifier catches TypeError."
+  },
+  "verify_reconciliation.py:398:4:and2": {
+    "expression": "isinstance(body, str)",
+    "binding": "The next operand calls body.encode() and compares its bytes to the checked generated text. JSON values other than strings have no encode method and cannot pass."
+  },
+  "verify_reconciliation.py:423:4:and1": {
+    "expression": "bool(migration_status)",
+    "binding": "If the committed status is empty after strip(), the surviving generated.rstrip().endswith(b'\\n\\n'+migration_status) would require two trailing newlines after rstrip had removed them. The next operand therefore independently refuses empty status."
+  },
+  "verify_reconciliation.py:720:12:and1": {
+    "expression": "len(entries) == 1",
+    "binding": "Without the count check, a missing row still fails at entries[0]. Duplicating a row changes the final plan bytes whose SHA-256 is independently checked against the immutable final-plan approval."
+  },
+  "verify_reconciliation.py:720:12:and2": {
+    "expression": "entries[0][3].strip() == f'`{digest}`'",
+    "binding": "The published inventory blob still must match its exact digest at lines 701–702. Changing the displayed digest also changes the final plan bytes bound to immutable final-plan approval."
+  },
+  "verify_reconciliation.py:803:4:and2": {
+    "expression": "type(checks.get('storyTestsPassed')) is int",
+    "binding": "check_inventory_publication independently compares the complete inventoryPublication object with its immutable PUBLICATION_RECORD value. A non-integer storyTestsPassed cannot match the recorded count; bool values cannot equal its recorded multi-test count."
+  },
+  "verify_reconciliation.py:803:4:and3": {
+    "expression": "checks['storyTestsPassed'] > 0",
+    "binding": "check_inventory_publication independently compares the complete inventoryPublication object with its immutable PUBLICATION_RECORD value, which records a positive storyTestsPassed count. A zero or negative count changes that binding."
+  },
+  "verify_reconciliation.py:812:4:and1": {
+    "expression": "re.fullmatch('[0-9a-f]{40}', reviewed) is not None",
+    "binding": "The approval reviewCommit must equal review.reviewCommit in this same guard. check_ai_review then requires the full finalPlanReview object from FINAL_INTEGRATION_RECORD, whose reviewCommit is a full hexadecimal Git ID."
+  },
+  "verify_reconciliation.py:812:4:and2": {
+    "expression": "re.fullmatch('https://github\\\\.com/Hexalith/Hexalith\\\\.AI\\\\.Tools/pull/[0-9]+', pull_request) is not None",
+    "binding": "The approval pullRequest must equal review.pullRequest in this same guard. check_ai_review then requires the full finalPlanReview object from FINAL_INTEGRATION_RECORD, whose pullRequest is the exact canonical AI.Tools PR URL."
+  },
+  "verify_reconciliation.py:819:4:and1": {
+    "expression": "checks.get('builds') == 'passed'",
+    "binding": "check_delivery already requires passing mandatory owner checks. The adopting AI.Tools repository cannot use the non-adoption exception, and check_ai_review independently checks the whole checks object against the immutable approved record."
+  },
+  "verify_reconciliation.py:819:4:and3": {
+    "expression": "checks.get('buildsSource') == 'GitHub Actions PR build and tests'",
+    "binding": "The equality check below compares the full checks object with AI.Tools checks in FINAL_INTEGRATION_RECORD, including the exact buildsSource for the reviewed PR."
+  },
+  "verify_reconciliation.py:819:4:and4": {
+    "expression": "re.fullmatch('https://github\\\\.com/Hexalith/Hexalith\\\\.AI\\\\.Tools/actions/runs/[0-9]+', run) is not None",
+    "binding": "The equality check below compares the full checks object with AI.Tools checks in FINAL_INTEGRATION_RECORD, including the pinned canonical Actions run URL."
+  },
+  "verify_reconciliation.py:844:4:and1": {
+    "expression": "isinstance(authorization, dict)",
+    "binding": "The remaining authorization.get checks require a JSON object. check_delivery separately matches the whole authorization record to the immutable inventory publication's deliveryAuthorization bytes."
+  },
+  "verify_reconciliation.py:903:4:and2": {
+    "expression": "re.fullmatch('[0-9a-f]{40}', ai)",
+    "binding": "check_delivery independently compares aiToolsCommit with the AI.Tools owner integration commit. Each owner, including AI.Tools, already passed re.fullmatch on the complete 40-character commit."
+  },
+  "verify_reconciliation.py:905:4:and1": {
+    "expression": "isinstance(ai_delivery, dict)",
+    "binding": "The required delivery owner set already includes AI.Tools and the owner loop validates its entry as an object with a full revision. The following ai_delivery.get('commit') access also requires a JSON object."
+  },
+  "verify_reconciliation.py:907:4:and1": {
+    "expression": "isinstance(containing, str)",
+    "binding": "The next operand applies re.fullmatch directly to the containing revision. It cannot accept a non-string JSON value and main reports its TypeError as a failure."
+  },
+  "verify_reconciliation.py:911:4:and1": {
+    "expression": "len(tree) == 4",
+    "binding": "Git ls-tree is run on exactly one path. Once the surviving operands require a 160000 commit, a full Git ID, and that exact single path token, Git's canonical single-path record supplies exactly four fields."
+  },
+  "verify_reconciliation.py:911:4:and3": {
+    "expression": "tree[3] == AI_TOOLS_GITLINK",
+    "binding": "The git ls-tree call selects only AI_TOOLS_GITLINK. The surrounding mode, field count and commit checks still require a valid result, and the exact commit must match the recorded containing gitlink."
+  },
+  "verify_reconciliation.py:911:4:and4": {
+    "expression": "re.fullmatch('[0-9a-f]{40}', tree[2])",
+    "binding": "The real git ls-tree output supplies the canonical Git object ID. The next check compares it with the recorded gitlink and requires the approved AI.Tools revision to be its ancestor before comparing plan and rule bytes."
+  },
+  "verify_reconciliation.py:921:4:and1": {
+    "expression": "len(frontmatter) == 3",
+    "binding": "The final plan is read by Git from the AI.Tools integration, whose merge revision is fixed by FINAL_INTEGRATION_RECORD. The plan digest must also match the final owner approval and the committed gitlink blob. Removing a frontmatter delimiter would alter those fixed bytes."
+  },
+  "verify_reconciliation.py:921:4:and3": {
+    "expression": "B.sha(plan) == integration.get('planSha256')",
+    "binding": "The owner integration loop already hashes the same merged plan blob against integration.planSha256. The final owner receipt then binds that plan's digest again."
+  },
+  "verify_reconciliation.py:926:4:and2": {
+    "expression": "[line for line in metadata if line.startswith('inventory_repository:')] == [f\"inventory_repository: '{ROOT_REPOSITORY}'\"]",
+    "binding": "The merged plan bytes are hash-bound by the final approval at the recorded AI.Tools merge and compared to the committed gitlink. check_published_index also requires the canonical McpCli repository URL in every inventory and approval link."
+  },
+  "verify_reconciliation.py:933:4:and1": {
+    "expression": "[line for line in metadata if line.startswith('plan_version:')] == [\"plan_version: '1.3.0'\"]",
+    "binding": "The approved final plan comes from the exact recorded AI.Tools merge, binds to finalPlanApproval.planSha256, and must match the committed gitlink bytes. The receipt and integration also independently require plan version 1.3.0."
+  },
+  "verify_reconciliation.py:873:8:and1": {
+    "expression": "isinstance(delivered, dict)",
+    "binding": "The preceding owner-set comprehension and the matching delivery selection use each entry's get or dictionary indexing. The surviving delivered.get('commit') also requires a JSON object."
+  },
+  "verify_reconciliation.py:969:4:and1": {
+    "expression": "len(inputs.get('authorities', [])) == 4",
+    "binding": "The published inputs.json digest binds the complete authority array. Duplicating a record without changing its path set alters those bytes and fails the approved artifact comparison with INVENTORY_PUBLICATION."
+  },
+  "verify_reconciliation.py:969:4:and2": {
+    "expression": "{b['path'] for b in inputs['authorities']} == authority_paths",
+    "binding": "The published inputs.json digest binds the exact authority paths. Even before that artifact check, each included authority record is compared byte-for-byte to its immutable baseline file."
+  },
+  "verify_reconciliation.py:971:4:and1": {
+    "expression": "len(priors) == 4",
+    "binding": "The published inputs.json digest binds the full priorApprovals array. Duplicating a predecessor while keeping the path set alters the approved inputs bytes."
+  },
+  "verify_reconciliation.py:971:4:and2": {
+    "expression": "{b.get('path') for b in priors} == {str(B.A / f'evidence/story-5-{s}/approval.json') for s in [7, 8, 9, 10]}",
+    "binding": "The approved inputs.json digest binds the exact 5.7–5.10 receipt path set, and the next loop compares each listed receipt to its immutable baseline bytes."
+  },
+  "verify_reconciliation.py:981:4:and2": {
+    "expression": "prior_register.get('state') == 'integrated'",
+    "binding": "The preceding prerequisites.story510.labels path and hash comparison binds the Story 5.10 register bytes. check_prior_delivery independently requires register.state == integrated before replaying the original delivery."
+  },
+  "check_offline_cli.py:78:4:and1": {
+    "expression": "isinstance(tools, list)",
+    "binding": "A nonempty JSON mapping iterates string keys, which are refused by all(isinstance(tool, dict)). An empty mapping cannot satisfy the surviving length five and exact tool-name checks."
+  }
+}

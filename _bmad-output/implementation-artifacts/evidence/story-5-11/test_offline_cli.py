@@ -68,11 +68,57 @@ class OfflineCliTests(unittest.TestCase):
                 with self.assertRaisesRegex(ValueError,'^describe: expected typed offline discovery required$'):
                     C.validate_probe('describe',result)
 
+    def test_discovery_requires_the_exact_cohort_and_operation_kinds(self):
+        cases = (
+            ('modules',lambda doc:doc['modules'][0].update(name='other')),
+            ('modules',lambda doc:doc['modules'][0].update(operationCount=50)),
+            ('modules',lambda doc:doc['modules'].append(doc['modules'][0])),
+            ('modules',lambda doc:doc['modules'][0].update(description='')),
+            ('tenants',lambda doc:doc.update(module='parties')),
+            ('tenants',lambda doc:doc['operations'].append(doc['operations'][0])),
+            ('tenants',lambda doc:doc['operations'][0].update(description='')),
+            ('tenants',lambda doc:next(row for row in doc['operations']
+                                       if row['name']=='tenants.create-tenant').update(kind='read')),
+        )
+        messages = {
+            'modules':'modules: expected published cohort required',
+            'tenants':'tenants: expected operation names/kinds/descriptions required',
+        }
+        for name,update in cases:
+            with self.subTest(name=name,update=update):
+                document = json.loads((C.E/f'offline-{name}.stdout.txt').read_bytes())
+                update(document)
+                result = subprocess.CompletedProcess([],0,json.dumps(document).encode(),b'')
+                with self.assertRaises(ValueError) as refused:
+                    C.validate_probe(name,result)
+                self.assertEqual(str(refused.exception),messages[name])
+
     def test_exact_tool_names_are_required(self):
-        response={'jsonrpc':'2.0','id':2,'result':{'tools':[{'name':name,'inputSchema':{}} for name in sorted(C.TOOLS)]}}
+        def result():
+            return {'jsonrpc':'2.0','id':2,'result':{'tools':[
+                {'name':name,'inputSchema':{}} for name in sorted(C.TOOLS)]}}
+        response = result()
         C.validate_tools(response)
-        response['result']['tools'][0]['name']='unrelated'
-        with self.assertRaisesRegex(ValueError,'exact generic tool names'):C.validate_tools(response)
+        for field,value in (('id',1),('jsonrpc','1.0'),('name','unrelated'),('inputSchema',[]),('count',6)):
+            with self.subTest(field=field):
+                response = result()
+                tools = response['result']['tools']
+                if field == 'count':
+                    tools.append(tools[0])
+                elif field in tools[0]:
+                    tools[0][field] = value
+                else:
+                    response[field] = value
+                with self.assertRaisesRegex(ValueError,'^stdio: exact generic tool names and schemas required$'):
+                    C.validate_tools(response)
+
+    def test_stdio_reports_early_close_before_the_requested_response(self):
+        read,write = os.pipe()
+        with os.fdopen(read,'rb') as reader:
+            with os.fdopen(write,'wb') as writer:
+                writer.write(b'{"id": 2}\n')
+            with self.assertRaisesRegex(ValueError,'^stdio closed before discovery response$'):
+                C.Responses(reader).receive(1,timeout=0.05)
 
     def test_partial_line_obeys_absolute_deadline_and_bounded_cleanup(self):
         process=subprocess.Popen([sys.executable,'-c','import os,time;os.write(1,b\'{"id":1\');time.sleep(10)'],stdin=subprocess.PIPE,stdout=subprocess.PIPE)

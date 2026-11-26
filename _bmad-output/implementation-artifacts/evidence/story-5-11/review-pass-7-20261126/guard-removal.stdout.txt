@@ -1,0 +1,83 @@
+survived verify_reconciliation.py:79:4:and1: isinstance(histories, dict)
+25 of 517 removals tested
+survived verify_reconciliation.py:84:12:and2: item.get('path') == str(B.A / path)
+survived verify_reconciliation.py:82:8:and1: isinstance(chain, list)
+survived verify_reconciliation.py:88:12:and2: re.fullmatch('[0-9a-f]{40}', source_revision)
+survived verify_reconciliation.py:89:12:and1: isinstance(item.get('sourceRepository'), str)
+survived verify_reconciliation.py:88:12:and3: re.search('^source_revision:\\s*[\'\\"]?' + source_revision + '[\'\\"]?\\s*$', data.decode(), re.M)
+50 of 517 removals tested
+survived verify_reconciliation.py:135:4:and1: len(rows) == 14
+survived verify_reconciliation.py:151:4:and1: set(labels.get('repositories', [])) == {row['repository'] for row in rows}
+survived verify_reconciliation.py:135:4:and2: {r.get('id') for r in rows} == set(expected)
+survived verify_reconciliation.py:151:4:and2: len(labels['repositories']) == 7
+survived verify_reconciliation.py:142:8:and2: 'technical-tools inventory 1.0.4' in text
+survived verify_reconciliation.py:142:8:and3: inventory[str(B.A / 'technical-tools-migration-inventory-v1.0.4.md')] in text
+survived verify_reconciliation.py:173:4:and1: recipe.get('schemaVersion') == '1.0.0'
+75 of 517 removals tested
+survived verify_reconciliation.py:176:8:and1: nonblank(edit.get('old'))
+survived verify_reconciliation.py:183:4:and1: len(owners) == 9
+survived verify_reconciliation.py:183:4:and2: {o.get('name') for o in owners} == set(B.PATHS) | {'ai-tools'}
+survived verify_reconciliation.py:184:4:and1: len(manifest.get('noChange', [])) == 8
+survived verify_reconciliation.py:187:8:and1: isinstance(revision, str)
+survived verify_reconciliation.py:184:4:and2: {o.get('name') for o in manifest['noChange']} == {'platform', 'agents', 'conversations', 'timesheets', 'works', 'builds', 'commons', 'polymorphicserializations'}
+survived verify_reconciliation.py:199:8:and1: re.fullmatch('[0-9a-f]{40}', owner.get('baseRevision', '')) is not None
+survived verify_reconciliation.py:201:8:and1: len(owner.get('files', [])) == len(expected_paths)
+survived verify_reconciliation.py:201:8:and2: {f.get('path') for f in owner['files']} == expected_paths
+100 of 517 removals tested
+survived verify_reconciliation.py:216:16:and1: patch
+survived verify_reconciliation.py:222:20:and1: stats.returncode == 0
+survived verify_reconciliation.py:222:20:and3: not re.search(b'^(?:rename|copy) (?:from|to) ', patch, re.M)
+survived verify_reconciliation.py:260:4:and1: "plan_version: '1.3.0'" in plan
+survived verify_reconciliation.py:260:4:and3: 'status: candidate-not-publishable' in plan
+survived verify_reconciliation.py:263:12:and1: item['path'] in plan
+survived verify_reconciliation.py:263:12:and3: item['version'] in plan
+125 of 517 removals tested
+survived verify_reconciliation.py:316:8:and1: len(repositories) == 2
+survived verify_reconciliation.py:316:8:and2: {r.get('name') for r in repositories} == {'chatbot', 'memories'}
+survived verify_reconciliation.py:368:4:and1: isinstance(tag, str)
+survived verify_reconciliation.py:368:4:and5: isinstance(revision, str)
+150 of 517 removals tested
+survived verify_reconciliation.py:398:4:and2: isinstance(body, str)
+175 of 517 removals tested
+survived verify_reconciliation.py:423:4:and1: bool(migration_status)
+200 of 517 removals tested
+225 of 517 removals tested
+250 of 517 removals tested
+275 of 517 removals tested
+300 of 517 removals tested
+survived verify_reconciliation.py:720:12:and1: len(entries) == 1
+survived verify_reconciliation.py:720:12:and2: entries[0][3].strip() == f'`{digest}`'
+325 of 517 removals tested
+survived verify_reconciliation.py:803:4:and2: type(checks.get('storyTestsPassed')) is int
+survived verify_reconciliation.py:803:4:and3: checks['storyTestsPassed'] > 0
+survived verify_reconciliation.py:812:4:and1: re.fullmatch('[0-9a-f]{40}', reviewed) is not None
+survived verify_reconciliation.py:812:4:and2: re.fullmatch('https://github\\.com/Hexalith/Hexalith\\.AI\\.Tools/pull/[0-9]+', pull_request) is not None
+350 of 517 removals tested
+survived verify_reconciliation.py:819:4:and1: checks.get('builds') == 'passed'
+survived verify_reconciliation.py:819:4:and3: checks.get('buildsSource') == 'GitHub Actions PR build and tests'
+survived verify_reconciliation.py:819:4:and4: re.fullmatch('https://github\\.com/Hexalith/Hexalith\\.AI\\.Tools/actions/runs/[0-9]+', run) is not None
+survived verify_reconciliation.py:844:4:and1: isinstance(authorization, dict)
+375 of 517 removals tested
+survived verify_reconciliation.py:903:4:and2: re.fullmatch('[0-9a-f]{40}', ai)
+survived verify_reconciliation.py:905:4:and1: isinstance(ai_delivery, dict)
+survived verify_reconciliation.py:907:4:and1: isinstance(containing, str)
+survived verify_reconciliation.py:911:4:and1: len(tree) == 4
+survived verify_reconciliation.py:911:4:and4: re.fullmatch('[0-9a-f]{40}', tree[2])
+survived verify_reconciliation.py:911:4:and3: tree[3] == AI_TOOLS_GITLINK
+survived verify_reconciliation.py:921:4:and1: len(frontmatter) == 3
+survived verify_reconciliation.py:921:4:and3: B.sha(plan) == integration.get('planSha256')
+survived verify_reconciliation.py:926:4:and2: [line for line in metadata if line.startswith('inventory_repository:')] == [f"inventory_repository: '{ROOT_REPOSITORY}'"]
+400 of 517 removals tested
+survived verify_reconciliation.py:933:4:and1: [line for line in metadata if line.startswith('plan_version:')] == ["plan_version: '1.3.0'"]
+survived verify_reconciliation.py:873:8:and1: isinstance(delivered, dict)
+425 of 517 removals tested
+survived verify_reconciliation.py:969:4:and1: len(inputs.get('authorities', [])) == 4
+survived verify_reconciliation.py:969:4:and2: {b['path'] for b in inputs['authorities']} == authority_paths
+survived verify_reconciliation.py:971:4:and2: {b.get('path') for b in priors} == {str(B.A / f'evidence/story-5-{s}/approval.json') for s in [7, 8, 9, 10]}
+survived verify_reconciliation.py:971:4:and1: len(priors) == 4
+survived verify_reconciliation.py:981:4:and2: prior_register.get('state') == 'integrated'
+450 of 517 removals tested
+475 of 517 removals tested
+survived check_offline_cli.py:78:4:and1: isinstance(tools, list)
+500 of 517 removals tested
+517 of 517 removals tested

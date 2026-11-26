@@ -95,7 +95,8 @@
     "AC3 generated release notes: CiCd/Builds must append the committed migration status. The owner deferred this in ledger entry 77748cf5a6cb9421 on 2026-11-19.",
     "The ChatBot and Works owner documentation follow-up awaits fresh approval and integration into owner main.",
     "The status-neutral guidance patches for EventStore, Folders, FrontComposer, Memories, Parties, Projects and Tenants await fresh owner approval and integration into owner main.",
-    "22 of the 65 approved audit entries still have changed ledger statuses after restoring ea9d3ee950934c10. The first refusal is 1c8ef2a87fc429cc. No separate owner-approved resolutions are recorded."
+    "22 of the 65 approved audit entries still have changed ledger statuses after restoring ea9d3ee950934c10. The first refusal is 1c8ef2a87fc429cc. No separate owner-approved resolutions are recorded.",
+    "The McpCli product owner must reassess SM-3 on the recorded completion date against the 2027-02-05 deadline and record the reason for any overdue slip."
   ],
   "limits": "Authorized documentation and evidence delivery. Preserve the existing runtime, exposure, production dependency, census, CI ownership, historical releases, frozen evidence, AD-23 and retirement gates.",
   "completedOn": null,
