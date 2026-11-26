@@ -334,8 +334,9 @@ absent, with a pinned SHA-256 verified before extraction; bounded
 existing incompatible CLI or Dapr version is refused. Python requirements are
 installed in a task-owned virtual environment. The existing bootstrap extracts
 the four digest-pinned, SHA-256-verified binaries into a new runtime beneath
-`RUNNER_TEMP` (the system temporary directory locally). Only a nonsecret
-preparation receipt path is exported through `GITHUB_ENV`. Source SHAs and Git
+`RUNNER_TEMP` (the system temporary directory locally). Nothing is exported
+through `GITHUB_ENV`: the run step reads the preparation receipt from the same
+task-owned evidence directory and refuses any other override. Source SHAs and Git
 status, each host's selected `HexalithEventStoreVersion`, gateway provenance,
 tool versions and executable hashes are retained. The Gateway receipt also
 binds the native .NET apphost alongside the managed assemblies and configuration. Source-checkout commits record

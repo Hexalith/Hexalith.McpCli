@@ -70,6 +70,7 @@ Approved 2026-10-26. The Build implementation stage prohibits pushes and remote 
 ## Spec Change Log
 
 - 2026-10-28: User approved keeping the inherited Tenants source dependency after the explicit source-versus-published question. Amend the frozen dependency constraint with that exception; preserve the passing native lane and all isolation, deadline and semantic requirements.
+- 2026-11-26: CiCd Story 15 removed the Python `GITHUB_ENV` export of `MCPCLI_CI_PREPARATION` from preparation, so preparation no longer exports a path. The run step defaults to the receipt in the same task-owned evidence directory and still refuses any other override. This supersedes the nonsecret export in the `prepare-ci.sh` task and the export rationale in BH10.
 
 ## Review Triage Log
 

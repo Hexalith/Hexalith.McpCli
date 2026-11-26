@@ -2212,6 +2212,22 @@ pathlib.Path(sys.argv[sys.argv.index('--output') + 1]).write_text(json.dumps({'r
         self.assertIn('binary hash mismatch: sentry', result.stderr)
         self.assertFalse(any('run-vectors.py' in str(call) for call in self.calls()))
 
+    def test_different_path_dotnet_refuses_live_before_any_dotnet_child(self):
+        prepared = self.prepare()
+        self.assertEqual(str(self.bin / 'dotnet'), prepared['tools']['executables']['dotnet']['path'])
+        other = self.root / 'other-bin'
+        other.mkdir()
+        shutil.copy2(self.bin / 'dotnet', other / 'dotnet')
+        self.env['PATH'] = str(other) + os.pathsep + self.env['PATH']
+        (self.root / 'calls.jsonl').unlink()
+        result = self.invoke('run-ci.sh')
+        self.assertNotEqual(0, result.returncode)
+        self.assertIn('The current PATH no longer selects the prepared dotnet executable.', result.stderr)
+        self.assertEqual('failed', json.loads((self.evidence / 'ci-live.json').read_text())['result'])
+        calls = self.calls() if (self.root / 'calls.jsonl').exists() else []
+        self.assertFalse(any(call[0] == 'dotnet' for call in calls), calls)
+        self.assert_no_build_or_live()
+
     def test_caller_contract_and_unsafe_evidence_paths_are_refused(self):
         for key, value, message in [('ASPIRE_TEST_PROJECT', 'other-tests', 'ASPIRE_TEST_PROJECT must be tests/Hexalith.McpCli.Integration.Tests.'),
                                    ('TEST_PLATFORM', 'vstest', 'TEST_PLATFORM must be microsoft-testing-platform.'),

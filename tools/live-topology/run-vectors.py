@@ -21,6 +21,11 @@ from validate import VectorError, _load_json
 ROOT = Path(__file__).resolve().parents[2]
 
 
+def path_argument(value: str) -> Path:
+    """Convert a path option without passing the Path class itself to argparse."""
+    return Path(value)
+
+
 def expected_operations() -> list[str]:
     """Independently require every approved vector that has a companion plan, never a returned subset."""
     plans = ROOT / 'tools/live-topology/plans-current'
@@ -91,9 +96,9 @@ def bounded_child(command: list[str], environment: dict, output: Path, timeout: 
 
 def main(argv=None) -> int:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument('--output', type=lambda value: Path(value), required=True)
-    parser.add_argument('--host', type=lambda value: Path(value), default=ROOT / 'tests/Hexalith.McpCli.ConformanceHost/bin/Release/net11.0/Hexalith.McpCli.ConformanceHost.dll')
-    parser.add_argument('--tests', type=lambda value: Path(value), default=ROOT / 'tests/Hexalith.McpCli.Integration.Tests/bin/Release/net11.0/Hexalith.McpCli.Integration.Tests.dll')
+    parser.add_argument('--output', type=path_argument, required=True)
+    parser.add_argument('--host', type=path_argument, default=ROOT / 'tests/Hexalith.McpCli.ConformanceHost/bin/Release/net11.0/Hexalith.McpCli.ConformanceHost.dll')
+    parser.add_argument('--tests', type=path_argument, default=ROOT / 'tests/Hexalith.McpCli.Integration.Tests/bin/Release/net11.0/Hexalith.McpCli.Integration.Tests.dll')
     parser.add_argument('--child-timeout', type=float, default=960)
     parser.add_argument('--operation', help='Diagnostic subset; never grants full live acceptance.')
     parser.add_argument('--preflight-only', action='store_true')
@@ -118,6 +123,12 @@ def main(argv=None) -> int:
 
     def save():
         receipt.write_text(json.dumps(report, indent=2) + '\n')
+
+    def launch(command: list[str], environment: dict, output: Path, outcome: dict) -> int:
+        """Record the exact child argv in the receipt, then start that same argv."""
+        outcome['command'] = list(command)
+        save()
+        return bounded_child(command, environment, output, args.child_timeout)
 
     try:
         if not 1 <= args.child_timeout <= 960:
@@ -146,11 +157,6 @@ def main(argv=None) -> int:
                 output = generation / operation
                 output.mkdir()
                 outcome.update(result='running', output=str(output.relative_to(args.output)))
-                command = [sys.executable, str(ROOT / 'tools/live-topology/run-isolated.py'), '--',
-                           'dotnet', str(args.tests.resolve()), '-class', 'Hexalith.McpCli.Integration.Tests.LiveVectorTests',
-                           '-trait', 'Operation=' + operation, '-preEnumerateTheories', '-failSkips', '-result-xml', str(output / 'tests.xml')]
-                outcome['command'] = command
-                save()
                 environment = os.environ.copy()
                 for key in list(environment):
                     if key.startswith(('MCPCLI_LIVE_', 'EVENTSTORE_')):
@@ -160,10 +166,10 @@ def main(argv=None) -> int:
                 environment.update(MCPCLI_LIVE_OPERATION=operation, MCPCLI_LIVE_OUTPUT=str(output),
                                    MCPCLI_LIVE_HOST=host, MCPCLI_LIVE_BINDING=binding)
                 try:
-                    code = bounded_child([sys.executable, str(ROOT / 'tools/live-topology/run-isolated.py'), '--',
-                                          'dotnet', str(args.tests.resolve()), '-class', 'Hexalith.McpCli.Integration.Tests.LiveVectorTests',
-                                          '-trait', 'Operation=' + operation, '-preEnumerateTheories', '-failSkips', '-result-xml', str(output / 'tests.xml')],
-                                         environment, output, args.child_timeout)
+                    code = launch([sys.executable, str(ROOT / 'tools/live-topology/run-isolated.py'), '--',
+                                   'dotnet', str(args.tests.resolve()), '-class', 'Hexalith.McpCli.Integration.Tests.LiveVectorTests',
+                                   '-trait', 'Operation=' + operation, '-preEnumerateTheories', '-failSkips', '-result-xml', str(output / 'tests.xml')],
+                                  environment, output, outcome)
                     outcome['exitCode'] = code
                     if code != 0:
                         raise VectorError(f'{operation}: isolated child exited {code}; see {output}')

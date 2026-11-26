@@ -202,6 +202,9 @@ class ProductPlatformTests(unittest.TestCase):
             output = self.root / ('runner-' + mode); calls = []
             def execute(argv, **kwargs):
                 self.assertIn('-xml', argv, 'Platform checks must reuse already built suites without restore/build.')
+                self.assertEqual({'MCPCLI_HOME': str(output.resolve() / 'home')},
+                                 {key: value for key, value in kwargs['env'].items() if key.startswith(('EVENTSTORE_', 'MCPCLI_'))})
+                self.assertEqual('kept', kwargs['env']['PLATFORM_FIXTURE_KEPT'])
                 suite = 'Core' if '.Core.Tests/' in argv[1] else 'Cli'; calls.append(suite)
                 if suite == 'Core' and mode == 'core-launch-failure': raise OSError('fixture Core process launch failure')
                 xml = Path(argv[argv.index('-xml') + 1])
@@ -218,6 +221,8 @@ class ProductPlatformTests(unittest.TestCase):
                                                    stdout=(suite + ' diagnostic').encode(), stderr=b'fixture stderr')
             with self.subTest(mode=mode), patch.object(self.runner, 'source_sha', return_value=SHA), \
                     patch.object(self.runner.platform, 'system', return_value='Windows'), \
+                    patch.dict(os.environ, {'MCPCLI_FIXTURE_TOKEN': 'removed', 'EVENTSTORE_FIXTURE_URL': 'removed',
+                                            'PLATFORM_FIXTURE_KEPT': 'kept'}), \
                     patch.object(self.runner.subprocess, 'run', side_effect=execute):
                 if mode == 'passed':
                     self.runner.run_tests(self.prepared_path, output)
