@@ -1,0 +1,1 @@
+PASS: published 2.0.1 offline discovery/help, safe unknown-operation refusal and five generic stdio tools. Evidence in _bmad-output/implementation-artifacts/evidence/story-5-11/offline-runs/run-g777xqtd

@@ -1,0 +1,24 @@
+22 of 65 audited entries have changed sourceStatus.
+1c8ef2a87fc429cc | Unrecorded; proposed McpCli product/architecture owner
+cb256bc9ea051e97 | Parties maintainer and EventStore Gateway maintainer.
+cb5fc897454fbeac | McpCli maintainer / CI redaction maintainer.
+52e621923be2365a | McpCli maintainer / CI redaction maintainer.
+97ff87a26c46ec8b | McpCli maintainer / CI redaction maintainer.
+e237a31da32a3ab2 | McpCli maintainer / CI redaction maintainer.
+ed8b36e5612e24e5 | McpCli maintainer / CI redaction maintainer.
+4fdf5ec4cd690c8d | McpCli maintainer / CI redaction maintainer.
+2825bc0195c0d54d | McpCli maintainer / CI redaction maintainer.
+ad73be0f7f31edc3 | McpCli maintainer / CI redaction maintainer.
+bcf011d9603aebe0 | McpCli maintainer / CI redaction maintainer.
+db3f193610c6db23 | McpCli maintainer / CI redaction maintainer.
+79dda498e65f04a7 | McpCli maintainer / CI redaction maintainer.
+7ea2341374f1a5cb | McpCli maintainer / CI redaction maintainer.
+cb83b6da301fa987 | McpCli maintainer (agent-instruction entry points).
+c92a970254e1caba | McpCli maintainer (paired-release source gate).
+260eb8ddd9199993 | McpCli maintainer (proprietary-surface census).
+345a3ead37540792 | McpCli maintainer (proprietary-surface census).
+7394777debdb0693 | McpCli maintainer (proprietary-surface census).
+84668e94b642bd73 | McpCli product/architecture owner; reconcile MR1, and its Epic 6 "as written" application, before any Admin or diagnostic-surface retirement spec relies on it, at the latest in Story 5.11.
+ddfd98571de3514a | McpCli maintainer with the Commons and Builds owning maintainers.
+a03161fe049a33d2 | McpCli CI and live-topology maintenance owners.
+Separate owner resolutions recorded: 0.

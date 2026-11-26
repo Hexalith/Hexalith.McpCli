@@ -1,0 +1,20 @@
+Description:
+  Serve the generic MCP tools over stdio
+
+Usage:
+  Hexalith.McpCli mcp [options]
+
+Options:
+  --transport <transport>  stdio or http
+  -?, -h, --help           Show help and usage information
+  --url <url>              EventStore gateway URL
+  --token <token>          Gateway Bearer [REDACTED]
+  --tenant <tenant>        Session tenant
+  --actor <actor>          Trusted operator actor
+  --allow-tenant-override  Allow MCP per-call tenant selection
+  --profile <profile>      Connection profile
+  --format <format>        json or table
+  --output <output>        Write the result to a file
+  --read-only              Disable command submission
+  --strict                 Reject any Catalog diagnostic
+

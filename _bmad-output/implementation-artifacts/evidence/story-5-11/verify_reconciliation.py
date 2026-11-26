@@ -435,7 +435,7 @@ def check_release_notes(root, integration, note, completed):
     check_release_publication(root,resolution,released,generated,decided)
 
 
-def check_retained_deferrals(root, integration, audit):
+def check_retained_deferrals(root, integration, audit, completed):
     current = {}
     for entry in B.scoped_deferrals((root/LEDGER).read_text()):
         current.setdefault(entry['id'],[]).append(entry)
@@ -461,6 +461,8 @@ def check_retained_deferrals(root, integration, audit):
         revision = resolution.get('revision','')
         require(re.fullmatch('[0-9a-f]{40}',revision) is not None,'audited deferral resolution lacks a committed revision: '+entry_id)
         B.git(root,'merge-base','--is-ancestor',revision,'origin/main')
+        require(commit_date(root,revision) <= completed,
+                'audited deferral resolution was committed after completion: '+entry_id)
         committed = B.scoped_deferrals(B.git(root,'show',revision+':'+str(LEDGER)).decode())
         require(any(candidate['entrySha256'] == entry['entrySha256'] for candidate in committed),
                 'audited deferral resolution differs from the recorded ledger revision: '+entry_id)
@@ -476,16 +478,24 @@ def check_owner_conflicts(root):
               'human-decision mutations require current presence at submission',
               'user-delegated via OAuth device flow',
               'current authenticated human',
-              'delegation expiry for audit',
+              'scope, and delegation expiry |',
               '1 hour maximum; terminates on logout, revocation, or lost presence',
               'UI/API, CLI, and MCP association/status/audit parity',
-              'CLI and MCP integration must expose the same governed operations as the UI')),
+              'CLI and MCP integration must expose the same governed operations as the UI',
+              'CLI, human-delegated MCP, AI/tool MCP')),
             (projects+'ux-designs/ux-Hexalith.ChatBot-2026-05-28/EXPERIENCE.md',
              'Both McpCli heads refuse those operations.',
              ('Human-delegated MCP approval is candidate M1 behavior',
               'candidate human-delegated MCP approval remains unavailable',
               'explicitly exposed on UI, CLI, and/or MCP',
               'He confirms an association through an exposed surface')),
+            (projects+'epics.md',
+             'Human-decision operations require a confidential interactive UI client',
+             ('Authorized CLI users can perform the singular M1 parity set',
+              'A current human-delegated MCP client may access',
+              'UI, CLI, and MCP must return equivalent authorization outcomes and state transitions',
+              'CLI, human-delegated MCP, AI/tool MCP',
+              'Distinguish human-delegated MCP with current human presence')),
         ],
         'works': [
             (projects+'ux-designs/ux-works-2026-06-14/EXPERIENCE.md',
@@ -497,7 +507,9 @@ def check_owner_conflicts(root):
              ('exact tools, resources, syntax, and protocol remain source-open',)),
             (projects+'ux-designs/ux-works-2026-06-14/mockups/key-mcp-cli.html',
              'The shared McpCli CLI and stdio MCP heads expose eligible Works operations',
-             ('Both adapters expose registered domain commands and resources',)),
+             ('Both adapters expose registered domain commands and resources',
+              'adapter command syntax intentionally unspecified',
+              'input: retained in adapter context')),
         ],
     }
     normalize = prior_verifier(root).L57.github_repository
@@ -661,7 +673,7 @@ def check_assessments(root,integration):
     require(max(delivered) <= completed,'completion predates approval or verified delivery')
     check_release_notes(root,integration,notes[0],completed)
     check_owner_conflicts(root)
-    check_retained_deferrals(root,integration,audit['entries'])
+    check_retained_deferrals(root,integration,audit['entries'],completed)
     assessment = integration.get('sm3Assessment')
     require(isinstance(assessment,dict),'structured SM-3 assessment missing')
     require(recorded_date(assessment.get('assessedOn'),'SM-3 assessment date missing') == completed,'SM-3 assessment must bind recorded completion date')

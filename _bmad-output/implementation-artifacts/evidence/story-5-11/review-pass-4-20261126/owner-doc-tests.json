@@ -1,0 +1,65 @@
+{
+  "workingDirectory": "Disposable git archive of baseRevision with the named follow-up applied and the existing Release test binaries copied from the owner checkout.",
+  "checks": [
+    {
+      "owner": "memories",
+      "baseRevision": "1f68406be7a61064044963139941c9ba2c117947",
+      "patchSha256": "3ae9261858501b510d3b1e842ff00612c091c5a83d3968119d718cc75a52e276",
+      "testAssemblySha256": "efb0fc9e687a9912519a5a26be001d49e7bcc864fda804e16c3c6d912c2fa323",
+      "command": [
+        "dotnet",
+        "tests/Hexalith.Memories.Server.Tests/bin/Release/net11.0/Hexalith.Memories.Server.Tests.dll",
+        "-method",
+        "Hexalith.Memories.Server.Tests.Architecture.ConsistencyModelDecisionTests.ArchitectureD3_RatifiesEventStoreAggregatesWithRebuildableProjections"
+      ],
+      "exitCode": 0,
+      "stdout": "memories-docs.stdout.txt",
+      "stderr": "memories-docs.stderr.txt"
+    },
+    {
+      "owner": "chatbot",
+      "baseRevision": "794753deb77b636f59f0f94e64ad4fbccdbf13da",
+      "patchSha256": "27d3aea99d8d767ef7dcb50ab8de3c297e7157a020856c13e258a35406fe3eea",
+      "testAssemblySha256": "604f5b9dcc6e79044174d02a2d1fc9a7d21abae8b4f6273e8f33e9de4e726017",
+      "command": [
+        "dotnet",
+        "tests/Hexalith.ChatBot.Architecture.Tests/bin/Release/net11.0/Hexalith.ChatBot.Architecture.Tests.dll",
+        "-method",
+        "Hexalith.ChatBot.Architecture.Tests.AiResponseStreamingTransportAdrTests.Architecture_ShouldLinkAcceptedAiResponseStreamingTransportAdrWithCanonicalMapping"
+      ],
+      "exitCode": 0,
+      "stdout": "chatbot-streaming-adr.stdout.txt",
+      "stderr": "chatbot-streaming-adr.stderr.txt"
+    },
+    {
+      "owner": "chatbot",
+      "baseRevision": "794753deb77b636f59f0f94e64ad4fbccdbf13da",
+      "patchSha256": "27d3aea99d8d767ef7dcb50ab8de3c297e7157a020856c13e258a35406fe3eea",
+      "testAssemblySha256": "604f5b9dcc6e79044174d02a2d1fc9a7d21abae8b4f6273e8f33e9de4e726017",
+      "command": [
+        "dotnet",
+        "tests/Hexalith.ChatBot.Architecture.Tests/bin/Release/net11.0/Hexalith.ChatBot.Architecture.Tests.dll",
+        "-method",
+        "Hexalith.ChatBot.Architecture.Tests.DomainServiceSdkHostAdoptionAdrTests.ArchitectureD8_ShouldLinkAcceptedAdrAndCanonicalTechnicalEnablerMapping"
+      ],
+      "exitCode": 0,
+      "stdout": "chatbot-host-adoption-adr.stdout.txt",
+      "stderr": "chatbot-host-adoption-adr.stderr.txt"
+    },
+    {
+      "owner": "frontcomposer",
+      "baseRevision": "ac145de3bfe5aaf1614cecf0feed7c7b732847ee",
+      "patchSha256": "11ca64e06997822e639aeaf0564b2cfa350c6f3565a905887f4f54d753630d45",
+      "testAssemblySha256": "8cc3b13ff40682a2eedcdb805408935d07f6f66e516c230e65e939a99170ac3c",
+      "command": [
+        "dotnet",
+        "tests/Hexalith.FrontComposer.Shell.Tests/bin/Release/net11.0/Hexalith.FrontComposer.Shell.Tests.dll",
+        "-method",
+        "Hexalith.FrontComposer.Shell.Tests.Governance.CiGovernanceTests.DependencyGovernance_UsesExactRevisionsAndPolicyOwnedStaticModuleCommands"
+      ],
+      "exitCode": 0,
+      "stdout": "frontcomposer-docs.stdout.txt",
+      "stderr": "frontcomposer-docs.stderr.txt"
+    }
+  ]
+}

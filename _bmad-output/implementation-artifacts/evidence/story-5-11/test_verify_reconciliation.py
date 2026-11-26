@@ -49,14 +49,14 @@ def streams(action):
     return code,stdout.getvalue(),stderr.getvalue()
 
 
-def replay_follow_up():
+def replay_follow_up(include_base=False):
     folder = HERE/'owner-doc-follow-up'
     index = (folder/'README.md').read_text()
     rows = re.findall(r'^\| \[[^\]]+\]\(([^)]+)\.patch\) \| `([a-f0-9]{40})` \| (\d+) \| `([a-f0-9]{64})` \|$',index,re.M)
     expected_patches = {patch.stem for patch in folder.glob('*.patch')}
     if len(rows) != len(expected_patches) or {row[0] for row in rows} != expected_patches:
         raise AssertionError('Follow-up patch index does not match the patch files')
-    results = {}
+    results, baselines = {}, {}
     for owner,revision,count,digest in rows:
         patch = folder/f'{owner}.patch'
         raw = patch.read_bytes()
@@ -74,12 +74,20 @@ def replay_follow_up():
                 path = name.decode()
                 dest = scratch/path
                 dest.parent.mkdir(parents=True,exist_ok=True)
-                dest.write_bytes(B.git(repo,'show',revision+':'+path))
+                base = B.git(repo,'show',revision+':'+path)
+                dest.write_bytes(base)
+                baselines[owner,path] = base
             B.git(scratch,'-c','core.whitespace=cr-at-eol','apply','--whitespace=error',str(patch))
             for name in paths:
                 path = name.decode()
                 results[owner,path] = (scratch/path).read_bytes()
-    return results
+            if include_base:
+                B.git(scratch,'-c','core.whitespace=cr-at-eol','apply','--reverse','--whitespace=nowarn',str(patch))
+                for name in paths:
+                    path = name.decode()
+                    if (scratch/path).read_bytes() != baselines[owner,path]:
+                        raise AssertionError(f'{owner}: reverse patch did not restore {path}')
+    return (results,baselines) if include_base else results
 
 
 def without_guard(token):
@@ -499,6 +507,9 @@ class CompletionBindingTests(unittest.TestCase):
                   b'candidate human-delegated MCP approval remains unavailable',
                   b'explicitly exposed on UI, CLI, and/or MCP',
                   b'He confirms an association through an exposed surface'),b'Both McpCli heads refuse those operations.'),
+            '/epics.md':
+                ((b'A current human-delegated MCP client may access',),
+                 b'Human-decision operations require a confidential interactive UI client'),
             'ux-works-2026-06-14/EXPERIENCE.md':
                 ((b'Exact MCP tools/resources and CLI commands over the kernel',
                   b'exact tool/resource names and syntax remain source-open'),
@@ -678,13 +689,22 @@ class CompletionBindingTests(unittest.TestCase):
                                  (0,VERIFIED,reported))
 
     def test_owner_guidance_requires_visible_correction_and_refuses_each_stale_claim(self):
-        documents = replay_follow_up()
+        documents,bases = replay_follow_up(include_base=True)
         self.assertIsNone(self.check_guidance(documents))
-        chatbot_prd = '_bmad-output/planning-artifacts/prds/prd-Hexalith.ChatBot-2026-05-28/prd.md'
-        [stdio_client] = [line for line in documents['chatbot',chatbot_prd].splitlines()
-                          if line.startswith(b'| `mcpcli-stdio-client` |')]
-        self.assertIn(b'configured Gateway credential and session actor (`--actor`)',stdio_client)
-        self.assertIn(b'The session runs until the stdio process exits.',stdio_client)
+        planning = '_bmad-output/planning-artifacts/'
+        chatbot_prd = documents['chatbot',planning+'prds/prd-Hexalith.ChatBot-2026-05-28/prd.md'].splitlines()
+        chatbot_epics = documents['chatbot',planning+'epics.md'].splitlines()
+        [shared_client] = [line for line in chatbot_prd if line.startswith(b'| `cli-automation-client` |')]
+        self.assertIn(b"Both McpCli heads use the profile's Gateway credential and session actor (`--actor`)",shared_client)
+        self.assertIn(b'The EventStore Gateway authorizes actor, tenant and operation.',shared_client)
+        self.assertIn(b'Approval and approved execution require the confidential ChatBot UI.',shared_client)
+        self.assertIn(b'Credential expiry and renewal follow the issuer. The stdio session ends when its process exits.',shared_client)
+        self.assertIn(b'| `mcp-human-delegated-client` | Withdrawn for M1 | No credential issued | No operation access | No session |',
+                      chatbot_prd)
+        self.assertFalse(any(b'mcpcli-stdio-client' in line for line in chatbot_prd))
+        for prefix in (b'- FR82: ', b'- FR83: ', b'- FR84: ', b'- NFR67: '):
+            [requirement] = [line for line in chatbot_prd if line.startswith(prefix)]
+            self.assertIn(requirement,chatbot_epics)
         for (owner,path),raw in documents.items():
             with self.subTest(owner=owner,path=path):
                 self.assertNotIn(b'Current McpCli disposition (Story 5.11 candidate)',raw)
@@ -698,24 +718,56 @@ class CompletionBindingTests(unittest.TestCase):
         targets = (
             ('chatbot','prds/prd-Hexalith.ChatBot-2026-05-28/prd.md',
              b'approved execution and confirmation-required behavior route to the confidential ChatBot UI.',
-             [b'user-delegated via OAuth device flow',b'UI/API, CLI, and MCP association/status/audit parity',
-              b'current authenticated human',b'delegation expiry for audit',
-              b'1 hour maximum; terminates on logout, revocation, or lost presence']),
+             (b'Inspect, associate, reject, defer, retry, approve, execute',
+              b'human-decision mutations require current presence at submission',
+              b'user-delegated via OAuth device flow',
+              b'current authenticated human',
+              b'scope, and delegation expiry |',
+              b'1 hour maximum; terminates on logout, revocation, or lost presence',
+              b'UI/API, CLI, and MCP association/status/audit parity',
+              b'CLI and MCP integration must expose the same governed operations as the UI',
+              b'CLI, human-delegated MCP, AI/tool MCP')),
             ('chatbot','ux-designs/ux-Hexalith.ChatBot-2026-05-28/EXPERIENCE.md',
              b'Both McpCli heads refuse those operations.',
-             [b'explicitly exposed on UI, CLI, and/or MCP']),
+             (b'Human-delegated MCP approval is candidate M1 behavior',
+              b'candidate human-delegated MCP approval remains unavailable',
+              b'explicitly exposed on UI, CLI, and/or MCP',
+              b'He confirms an association through an exposed surface')),
+            ('chatbot','epics.md',
+             b'Human-decision operations require a confidential interactive UI client',
+             (b'Authorized CLI users can perform the singular M1 parity set',
+              b'A current human-delegated MCP client may access',
+              b'UI, CLI, and MCP must return equivalent authorization outcomes and state transitions',
+              b'CLI, human-delegated MCP, AI/tool MCP',
+              b'Distinguish human-delegated MCP with current human presence')),
             ('works','ux-designs/ux-works-2026-06-14/EXPERIENCE.md',
              b'Discover enrolled Works Commands and Queries through the generic McpCli heads.',
-             [b'Exact MCP tools/resources and CLI commands over the kernel']),
+             (b'Exact MCP tools/resources and CLI commands over the kernel',
+              b'exact tool/resource names and syntax remain source-open')),
+            ('works','ux-designs/ux-works-2026-06-14/DESIGN.md',
+             b'after Works Contracts enrollment and authorization.',
+             (b'exact tools, resources, syntax, and protocol remain source-open',)),
+            ('works','ux-designs/ux-works-2026-06-14/mockups/key-mcp-cli.html',
+             b'The shared McpCli CLI and stdio MCP heads expose eligible Works operations',
+             (b'Both adapters expose registered domain commands and resources',
+              b'adapter command syntax intentionally unspecified',
+              b'input: retained in adapter context')),
         )
         for owner,suffix,required,obsolete in targets:
-            path = '_bmad-output/planning-artifacts/'+suffix
+            path = planning+suffix
             raw = documents[owner,path]
-            changes = [raw.replace(required,b'<!-- '+required+b' -->'),*(raw+b'\n'+phrase for phrase in obsolete)]
-            for index,changed in enumerate(changes):
-                with self.subTest(path=path,edit=index):
-                    self.assertEqual(self.check_guidance({**documents,(owner,path):changed}),
-                                     'completion requires published '+owner+' migration guidance: '+path)
+            refusal = 'completion requires published '+owner+' migration guidance: '+path
+            with self.subTest(path=path,hidden=required):
+                self.assertIn(required,raw)
+                changed = raw.replace(required,b'<!-- '+required+b' -->')
+                self.assertEqual(self.check_guidance({**documents,(owner,path):changed}),refusal)
+            baseline = V.visible_markdown(bases[owner,path]).encode()
+            for phrase in obsolete:
+                with self.subTest(path=path,obsolete=phrase):
+                    self.assertIn(phrase,baseline)
+                    self.assertNotIn(phrase,V.visible_markdown(raw).encode())
+                    changed = raw+b'\n'+phrase+b'\n'
+                    self.assertEqual(self.check_guidance({**documents,(owner,path):changed}),refusal)
 
     def check_guidance(self, documents):
         git = B.git
@@ -749,8 +801,9 @@ class CompletionBindingTests(unittest.TestCase):
     def test_changed_deferral_requires_a_unique_entry_and_a_committed_owner_resolution(self):
         entry = next(e for e in data('deferral-dispositions.json')['entries'] if e['id']=='fb595c8ae94063d4')
         entry_id = entry['id']
-        revision = V.FINAL_INTEGRATION_RECORD
-        def exercise(change_resolution=None, ledger_change=None, committed=True):
+        revision = recorded_git(ROOT,'rev-parse',V.INVENTORY_PUBLICATION+'^').decode().strip()
+        def exercise(change_resolution=None, ledger_change=None, committed=True,
+                     committed_at=b'2026-11-22T23:59:59+00:00'):
             def update(integration,files,binding):
                 text = files[ROOT/V.LEDGER].decode()
                 summary = text.index('  summary: '+entry['summary'])
@@ -778,6 +831,8 @@ class CompletionBindingTests(unittest.TestCase):
                     published[str(V.LEDGER)] = files[ROOT/V.LEDGER]
             published = {}
             def git_fixture(repo,args,git):
+                if repo == ROOT and args == ('show','-s','--format=%cI',revision):
+                    return committed_at
                 if repo == ROOT and args == ('show',revision+':'+str(V.LEDGER)):
                     return published.get(str(V.LEDGER),b'Unrelated ledger')
             return self.run_binding(file_mutation=update,git_mutation=git_fixture)
@@ -798,6 +853,8 @@ class CompletionBindingTests(unittest.TestCase):
                          (1,'','FAIL: audited deferral resolution lacks a committed revision: '+entry_id+'\n'))
         self.assertEqual(exercise(committed=False),
                          (1,'','FAIL: audited deferral resolution differs from the recorded ledger revision: '+entry_id+'\n'))
+        self.assertEqual(exercise(committed_at=b'2026-11-23T00:00:00+00:00'),
+                         (1,'','FAIL: audited deferral resolution was committed after completion: '+entry_id+'\n'))
 
     def test_mandatory_delivery_bindings(self):
         cases = [
@@ -989,6 +1046,12 @@ class CompletionBindingTests(unittest.TestCase):
                 return b''
         self.assertEqual(self.run_binding(git_mutation=deleted,default=True,full=True),
                          (0,VERIFIED,'reported: eventstore: current main migration text drift: '+path+'\n'))
+
+    def test_current_projects_spine_accepts_the_adopted_ad29_guidance(self):
+        path = '_bmad-output/planning-artifacts/architecture/architecture-projects-2026-07-15/ARCHITECTURE-SPINE.md'
+        spine = recorded_git(ROOT.parent/'projects','show','origin/main:'+path)
+        self.assertEqual(self.run_binding(default=True,full=True,current_documents={('projects',path):spine}),
+                         (0,VERIFIED,''))
 
     def test_current_main_reports_a_removed_passage_reintroduced_alongside_the_correction(self):
         repo = ROOT.parent/'memories'

@@ -27,6 +27,28 @@ class OfflineCliTests(unittest.TestCase):
             with self.assertRaisesRegex(ValueError,'complete error document'):C.validate_probe('unknown',subprocess.CompletedProcess([],2,stdout,stderr))
         with self.assertRaisesRegex(ValueError,'published cohort'):C.validate_probe('modules',subprocess.CompletedProcess([],0,b'{"modules":[]}',b''))
 
+    def test_cli_refuses_bad_status_discovery_streams_and_help(self):
+        modules = (C.E/'offline-modules.stdout.txt').read_bytes()
+        unknown = (C.E/'offline-unknown.stdout.txt').read_bytes()
+        error = json.loads(modules)
+        error['error'] = {'code': 'configuration_invalid'}
+        cases = (
+            ('modules', 2, modules, b'', 'modules: unexpected exit code'),
+            ('unknown', 0, unknown, b'', 'unknown: unexpected exit code'),
+            ('modules', 0, modules, b'unexpected diagnostic\n', 'modules: unexpected discovery stderr'),
+            ('modules', 0, json.dumps(error).encode(), b'', 'modules: discovery result required'),
+            ('modules', 0, b'[]\n', b'', 'modules: discovery result required'),
+            ('mcp-help', 0, b'', b'', 'mcp-help: help output required'),
+            ('mcp-help', 0, b'Usage: hexalith mcp\n', b'unexpected diagnostic\n', 'mcp-help: help output required'),
+            ('mcp-help', 0, b'ERROR: invalid arguments\n', b'', 'mcp-help: help output required'),
+        )
+        C.validate_probe('mcp-help', subprocess.CompletedProcess([], 0, b'Usage: hexalith mcp\n', b''))
+        for name,status,stdout,stderr,message in cases:
+            with self.subTest(name=name,status=status,stdout=stdout[:40],stderr=stderr):
+                with self.assertRaises(ValueError) as refused:
+                    C.validate_probe(name,subprocess.CompletedProcess([],status,stdout,stderr))
+                self.assertEqual(str(refused.exception),message)
+
     def test_exact_tool_names_are_required(self):
         response={'jsonrpc':'2.0','id':2,'result':{'tools':[{'name':name,'inputSchema':{}} for name in sorted(C.TOOLS)]}}
         C.validate_tools(response)
@@ -41,6 +63,15 @@ class OfflineCliTests(unittest.TestCase):
         finally:C.stop_process(process,timeout=0.2)
         self.assertLess(time.monotonic()-started,2)
         self.assertIsNotNone(process.returncode)
+
+    def test_stdio_rejects_a_response_larger_than_the_buffer(self):
+        child = 'import sys; sys.stdout.buffer.write(b" " * (1024 * 1024 + 1) + b\'{"id": 1}\\n\')'
+        process = subprocess.Popen([sys.executable,'-c',child],stdout=subprocess.PIPE,stderr=subprocess.DEVNULL)
+        try:
+            with self.assertRaisesRegex(ValueError,'^stdio response exceeds buffer bound$'):
+                C.Responses(process.stdout).receive(1,timeout=5)
+        finally:
+            C.stop_process(process,timeout=0.2)
 
     def test_stdio_rejects_nonobject_responses(self):
         for line in (b'null\n',b'[]\n',b'"message"\n',b'1\n'):
@@ -194,6 +225,38 @@ class OfflineCliTests(unittest.TestCase):
             self.assertEqual(captured, C.retained(raw))
             self.assertEqual(record['stdoutSha256'], hashlib.sha256(captured).hexdigest())
             self.assertEqual(record['rawStdoutSha256'], hashlib.sha256(raw).hexdigest())
+
+    def test_stdio_requires_initialize_identity_and_clean_shutdown(self):
+        cases = (
+            ('2024-11-05', {'name': 'hexalith'}, 0, 'stdio: valid initialization required'),
+            ('2025-06-18', {'name': 'unrelated'}, 0, 'stdio: valid initialization required'),
+            ('2025-06-18', [], 0, 'stdio: valid initialization required'),
+            ('2025-06-18', {'name': 'hexalith'}, 3, 'stdio: clean shutdown required'),
+        )
+        for protocol,server,status,message in cases:
+            with self.subTest(protocol=protocol,server=server,status=status), tempfile.TemporaryDirectory() as directory:
+                root = Path(directory)
+                responses = {
+                    1: {'id': 1, 'jsonrpc': '2.0', 'result': {'protocolVersion': protocol, 'serverInfo': server}},
+                    2: {'id': 2, 'jsonrpc': '2.0', 'result': {'tools': [
+                        {'name': name, 'inputSchema': {}} for name in sorted(C.TOOLS)]}},
+                }
+                child = (
+                    'import json, sys\n'
+                    f'responses = {responses!r}\n'
+                    'for line in sys.stdin:\n'
+                    '    request_id = json.loads(line).get("id")\n'
+                    '    if request_id in responses:\n'
+                    '        print(json.dumps(responses[request_id]), flush=True)\n'
+                    f'sys.exit({status})\n'
+                )
+                with self.assertRaises(ValueError) as refused:
+                    C.discover_stdio([sys.executable,'-c',child],None,root,root)
+                self.assertEqual(str(refused.exception),message)
+                seen = (1,2) if status else (1,)
+                self.assertEqual((root/'offline-stdio.stdout.txt').read_text(),
+                                 ''.join(json.dumps(responses[request_id])+'\n' for request_id in seen))
+                self.assertEqual((root/'offline-stdio.stderr.txt').read_bytes(),b'')
 
     def test_failed_rerun_preserves_prior_manifest_and_capture(self):
         capture = 'offline-modules.stdout.txt'

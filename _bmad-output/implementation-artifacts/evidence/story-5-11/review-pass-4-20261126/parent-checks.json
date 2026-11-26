@@ -1,0 +1,76 @@
+{
+  "environment": "Repository root under run-with-temp env PYTHONDONTWRITEBYTECODE=1",
+  "checks": [
+    {
+      "name": "delivery",
+      "command": [
+        "python3",
+        "_bmad-output/implementation-artifacts/evidence/story-5-11/verify_reconciliation.py"
+      ],
+      "exitCode": 0,
+      "expectedExitCode": 0,
+      "stdout": "delivery.stdout.txt",
+      "stderr": "delivery.stderr.txt"
+    },
+    {
+      "name": "completion",
+      "command": [
+        "python3",
+        "_bmad-output/implementation-artifacts/evidence/story-5-11/verify_reconciliation.py",
+        "--approved-completion"
+      ],
+      "exitCode": 1,
+      "expectedExitCode": 1,
+      "stdout": "completion.stdout.txt",
+      "stderr": "completion.stderr.txt"
+    },
+    {
+      "name": "ad23",
+      "command": [
+        "python3",
+        "_bmad-output/implementation-artifacts/evidence/story-5-2/verify_class_map.py"
+      ],
+      "exitCode": 0,
+      "expectedExitCode": 0,
+      "stdout": "ad23.stdout.txt",
+      "stderr": "ad23.stderr.txt"
+    },
+    {
+      "name": "instruction-sync",
+      "command": [
+        "bash",
+        "scripts/check-agent-instructions-sync.sh"
+      ],
+      "exitCode": 0,
+      "expectedExitCode": 0,
+      "stdout": "instruction-sync.stdout.txt",
+      "stderr": "instruction-sync.stderr.txt"
+    },
+    {
+      "name": "release-notes",
+      "command": [
+        "node",
+        "--test",
+        "scripts/tests/migration-release-notes.test.mjs"
+      ],
+      "exitCode": 1,
+      "expectedExitCode": 1,
+      "stdout": "release-notes.stdout.txt",
+      "stderr": "release-notes.stderr.txt"
+    },
+    {
+      "name": "diff-check",
+      "command": [
+        "git",
+        "-c",
+        "core.commitGraph=false",
+        "diff",
+        "--check"
+      ],
+      "exitCode": 0,
+      "expectedExitCode": 0,
+      "stdout": "diff-check.stdout.txt",
+      "stderr": "diff-check.stderr.txt"
+    }
+  ]
+}

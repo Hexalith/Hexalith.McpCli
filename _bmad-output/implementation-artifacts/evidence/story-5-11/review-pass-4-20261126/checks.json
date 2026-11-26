@@ -1,0 +1,62 @@
+{
+  "cwd": ".",
+  "checks": {
+    "published-offline": {
+      "command": [
+        "run-with-temp",
+        "env",
+        "PYTHONDONTWRITEBYTECODE=1",
+        "python3",
+        "_bmad-output/implementation-artifacts/evidence/story-5-11/check_offline_cli.py",
+        "--output",
+        "_bmad-output/implementation-artifacts/evidence/story-5-11/offline-runs"
+      ],
+      "exitCode": 0,
+      "stdout": "published-offline.stdout.txt",
+      "stderr": "published-offline.stderr.txt"
+    },
+    "retained-deferrals": {
+      "command": [
+        "run-with-temp",
+        "env",
+        "PYTHONDONTWRITEBYTECODE=1",
+        "python3",
+        "-c",
+        "from datetime import date\nimport importlib.util\nimport json\nfrom pathlib import Path\nevidence = Path('_bmad-output/implementation-artifacts/evidence/story-5-11')\nspec = importlib.util.spec_from_file_location('story_5_11', evidence/'verify_reconciliation.py')\nverifier = importlib.util.module_from_spec(spec)\nspec.loader.exec_module(verifier)\naudit = json.loads((evidence/'deferral-dispositions.json').read_bytes())['entries']\nintegration = json.loads((evidence/'integration.json').read_bytes())\nledger = (verifier.ROOT/verifier.LEDGER).read_text()\ncurrent = {entry['id']: entry for entry in verifier.B.scoped_deferrals(ledger)}\nchanges = [entry for entry in audit if entry['sourceStatus'] != current[entry['id']]['sourceStatus']]\nprint(f'{len(changes)} of {len(audit)} audited entries have changed sourceStatus.')\nfor entry in changes:\n    print(f\"{entry['id']} | {entry['owner']}\")\nprint(f\"Separate owner resolutions recorded: {len(integration.get('deferralResolutions', {}))}.\")\ntry:\n    verifier.check_retained_deferrals(verifier.ROOT, integration, audit, date.fromisoformat('2026-11-26'))\nexcept ValueError as error:\n    raise SystemExit(f'FAIL: {error}')\n"
+      ],
+      "exitCode": 1,
+      "stdout": "retained-deferrals.stdout.txt",
+      "stderr": "retained-deferrals.stderr.txt"
+    },
+    "owner-main": {
+      "command": [
+        "run-with-temp",
+        "env",
+        "PYTHONDONTWRITEBYTECODE=1",
+        "python3",
+        "-c",
+        "import os\nfrom pathlib import Path\nimport subprocess\nfolder = Path('_bmad-output/implementation-artifacts/evidence/story-5-11/owner-doc-follow-up').resolve()\nfor patch in sorted(folder.glob('*.patch')):\n    repository = Path.cwd().parent/patch.stem\n    revision = subprocess.check_output(['git', '-C', repository, 'rev-parse', 'origin/main']).decode().strip()\n    scratch = Path(os.environ['TMPDIR'])/patch.stem\n    scratch.mkdir()\n    subprocess.run(['git', 'init', '--quiet', scratch], check=True)\n    for line in patch.read_bytes().splitlines():\n        if line.startswith(b'--- a/'):\n            path = line.removeprefix(b'--- a/').decode()\n            output = scratch/path\n            output.parent.mkdir(parents=True, exist_ok=True)\n            output.write_bytes(subprocess.check_output(['git', '-C', repository, 'show', f'{revision}:{path}']))\n    subprocess.run(['git', '-C', scratch, '-c', 'core.whitespace=cr-at-eol', 'apply',\n                    '--check', '--whitespace=error', patch], check=True)\n    print(f'{patch.stem} {revision}: pass', flush=True)\n"
+      ],
+      "exitCode": 0,
+      "stdout": "owner-main.stdout.txt",
+      "stderr": "owner-main.stderr.txt"
+    },
+    "tests": {
+      "command": [
+        "run-with-temp",
+        "env",
+        "PYTHONDONTWRITEBYTECODE=1",
+        "python3",
+        "-m",
+        "unittest",
+        "discover",
+        "-v",
+        "-s",
+        "_bmad-output/implementation-artifacts/evidence/story-5-11"
+      ],
+      "exitCode": 0,
+      "stdout": "tests.stdout.txt",
+      "stderr": "tests.stderr.txt"
+    }
+  }
+}

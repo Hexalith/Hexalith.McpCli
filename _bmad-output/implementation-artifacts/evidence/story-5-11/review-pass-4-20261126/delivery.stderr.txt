@@ -1,0 +1,1 @@
+reported: eventstore: current main migration text drift: _bmad-output/planning-artifacts/prd.md

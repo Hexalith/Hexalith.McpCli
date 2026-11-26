@@ -1,0 +1,25 @@
+Description:
+  Inspect and manage mcpcli profile settings
+
+Usage:
+  Hexalith.McpCli config [command] [options]
+
+Options:
+  -?, -h, --help           Show help and usage information
+  --url <url>              EventStore gateway URL
+  --token <token>          Gateway Bearer [REDACTED]
+  --tenant <tenant>        Session tenant
+  --actor <actor>          Trusted operator actor
+  --allow-tenant-override  Allow MCP per-call tenant selection
+  --profile <profile>      Connection profile
+  --format <format>        json or table
+  --output <output>        Write the result to a file
+  --read-only              Disable command submission
+  --strict                 Reject any Catalog diagnostic
+
+Commands:
+  current                        Show resolved settings and sources
+  profile                        Manage named connection profiles
+  use <name>                     Select or clear the active profile
+  set <profile> <field> <value>  Set tenant, actor, allowTenantOverride, or allowedExtensions
+

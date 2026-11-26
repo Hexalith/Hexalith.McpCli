@@ -37,3 +37,13 @@
 -    <section class="surfaces" aria-label="Theme 2 adapter examples">
 +    <section class="surfaces" aria-label="Theme 2 shared-head examples">
        <article class="terminal"><h2>MCP · registered command descriptor</h2><div class="note">Illustrative rendering of generated metadata; not a proposed protocol payload.</div><pre><span class="label">registered act</span>  <span class="value">Claim</span>
+@@ -58,3 +58,3 @@
+                   next legal action: use current server capability</pre></article>
+-      <article class="terminal"><h2>CLI · registered command descriptor</h2><div class="note">Illustrative field/value transcript; adapter command syntax intentionally unspecified.</div><pre><span class="label">registered act</span>  <span class="value">ReportProgress</span>
++      <article class="terminal"><h2>CLI · registered command descriptor</h2><div class="note">Illustrative field/value transcript. Use <code>hexalith describe &lt;operation&gt;</code> to inspect an enrolled operation.</div><pre><span class="label">registered act</span>  <span class="value">ReportProgress</span>
+ <span class="label">target</span>          <span class="value">sample Work Item W-204</span>
+@@ -67,3 +67,3 @@
+   mutation: none
+-  input: retained in adapter context
++  input: the caller retains the original request
+   freshness: last committed projection identified

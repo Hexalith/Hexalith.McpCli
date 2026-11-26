@@ -1,0 +1,7 @@
+xUnit.net v3 In-Process Runner v4.0.3+384aa7f0b4 (64-bit .NET 11.0.0)
+  Discovering: Hexalith.ChatBot.Architecture.Tests
+  Discovered:  Hexalith.ChatBot.Architecture.Tests
+  Starting:    Hexalith.ChatBot.Architecture.Tests
+  Finished:    Hexalith.ChatBot.Architecture.Tests (ID = '7b70cb7f7d89a7e9437cf05a52a8efad5c567312342102d4a49223899b7d7dc4')
+=== TEST EXECUTION SUMMARY ===
+   Hexalith.ChatBot.Architecture.Tests  Total: 1, Errors: 0, Failed: 0, Skipped: 0, Not Run: 0, Time: 0.088s

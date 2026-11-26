@@ -1,0 +1,11 @@
+{
+  "error": {
+    "code": "unknown_operation",
+    "operation": "folders.unavailable",
+    "suggestions": [
+      "parties.update-party",
+      "parties.create-party",
+      "parties.get-party"
+    ]
+  }
+}

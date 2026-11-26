@@ -371,7 +371,7 @@ reported EventStore PRD drift on stderr. Story 5.11 remains in review.
 
 All 69 tests passed in a single discovery run. The replay applied all nine
 follow-ups at their recorded owner revisions. The default
-and completion fixtures both reported the expected ten drift lines and
+and completion fixtures both reported the expected eleven drift lines and
 accepted the unchanged PS03 and PS14 labels. Separate cases exercised a
 reintroduced passage, a listed but unreadable document, and retained offline
 probe evidence from malformed discovery responses. Removing either drift
@@ -387,10 +387,11 @@ run-with-temp env PYTHONDONTWRITEBYTECODE=1 python3 -m unittest discover -v \
 All nine patches also passed `git apply --check --whitespace=error` against
 the locally available owner `origin/main` snapshots. The affected Memories
 architecture documentation test passed using the existing Release assembly
-against the patched owner files in scratch. The published 2.0.1 offline probe
-passed, and the built 3.0.0 CLI help confirmed `--transport stdio` and `--actor`.
+against the patched owner files in scratch. The built 3.0.0 CLI help confirmed
+`--transport stdio` and `--actor`.
 [Patch check](review-pass-3-20261126/owner-main.stdout.txt) ·
-[Memories test](review-pass-3-20261126/memories-docs.stdout.txt)
+[Pass-3 Memories output](review-pass-3-20261126/memories-docs.stdout.txt) ·
+[3.0.0 offline capture](offline-cli-release-20261126.json)
 
 `verify_reconciliation.py` exited 0 and reported EventStore PRD drift.
 `verify_reconciliation.py --approved-completion` exited 1 with empty stdout
@@ -400,6 +401,37 @@ exited 0. The Node notes command exited 1 because the test file is absent.
 The fresh scan covers the changed story evidence, spec and retained check
 streams. [Check streams](review-pass-3-20261126) ·
 [Secret scan receipt](review-pass-3-20261126/secret-scan.json)
+
+### Pass-4 verification on 26 November 2026
+
+All 73 focused tests passed. The suite replays all nine hash-bound follow-ups
+and verifies that reverse application restores the owner documents. Each
+obsolete phrase is present in its base document and triggers the expected refusal
+when restored. The suite covers the adopted Projects AD-29 on owner main,
+the seven offline-probe guards and the completion-date cutoff for committed
+deferral resolutions. The owner documentation checks passed in disposable
+exports using the final patches. All nine patches passed the apply check
+against the local owner main snapshots. The default verifier confirmed the
+approved delivery and reported EventStore PRD drift. The completion verifier
+reported the same drift and refused because AC3 remains deferred.
+[Command and exit-code manifest](review-pass-4-20261126/checks.json) ·
+[Owner documentation tests and commands](review-pass-4-20261126/owner-doc-tests.json) ·
+[Delivery, completion and policy check manifest](review-pass-4-20261126/parent-checks.json)
+
+The shared secret scan passed for the changed evidence and edited ledger and
+sprint-status lines. The full-file scan reported the same redaction spans in
+the ledger and sprint status as at the starting revision.
+[Changed evidence scan](review-pass-4-20261126/secret-scan.json) ·
+[Full-file scan](review-pass-4-20261126/full-file-secret-scan.json)
+
+The installed 2.0.1 tool passed offline discovery and help, the complete
+unknown-operation refusal and stdio discovery of all five generic tools.
+The independent ledger replay counted 22 changed statuses among the 65
+approved entries and found zero separate resolutions. The check exited 1
+with its first refusal at `1c8ef2a87fc429cc`.
+[Published 2.0.1 capture](offline-runs/run-g777xqtd/offline-cli.json) ·
+[Deferral replay output](review-pass-4-20261126/retained-deferrals.stdout.txt) ·
+[Deferral refusal](review-pass-4-20261126/retained-deferrals.stderr.txt)
 
 - **CiCd / Builds** owns AC3. The generated GitHub release notes must end with
   the migration status committed at the tagged release source. Completion
@@ -426,8 +458,12 @@ streams. [Check streams](review-pass-3-20261126) ·
 
 | Audited owner | Changed ledger entries awaiting resolution evidence |
 | --- | --- |
-| McpCli product/architecture owner, proposed in the audit | `1c8ef2a87fc429cc` |
-| Parties and EventStore Gateway maintainers | `cb256bc9ea051e97` |
-| McpCli and CI redaction maintainers | `cb5fc897454fbeac`, `52e621923be2365a`, `97ff87a26c46ec8b`, `e237a31da32a3ab2`, `ed8b36e5612e24e5`, `4fdf5ec4cd690c8d`, `2825bc0195c0d54d`, `ad73be0f7f31edc3`, `bcf011d9603aebe0`, `db3f193610c6db23`, `79dda498e65f04a7`, `7ea2341374f1a5cb` |
-| McpCli product/architecture and maintenance roles | `cb83b6da301fa987`, `c92a970254e1caba`, `260eb8ddd9199993`, `345a3ead37540792`, `7394777debdb0693`, `84668e94b642bd73`, `a03161fe049a33d2` |
-| McpCli, Commons and Builds maintainers | `ddfd98571de3514a` |
+| `Unrecorded; proposed McpCli product/architecture owner` | `1c8ef2a87fc429cc` |
+| `Parties maintainer and EventStore Gateway maintainer.` | `cb256bc9ea051e97` |
+| `McpCli maintainer / CI redaction maintainer.` | `cb5fc897454fbeac`, `52e621923be2365a`, `97ff87a26c46ec8b`, `e237a31da32a3ab2`, `ed8b36e5612e24e5`, `4fdf5ec4cd690c8d`, `2825bc0195c0d54d`, `ad73be0f7f31edc3`, `bcf011d9603aebe0`, `db3f193610c6db23`, `79dda498e65f04a7`, `7ea2341374f1a5cb` |
+| `McpCli maintainer (agent-instruction entry points).` | `cb83b6da301fa987` |
+| `McpCli maintainer (paired-release source gate).` | `c92a970254e1caba` |
+| `McpCli maintainer (proprietary-surface census).` | `260eb8ddd9199993`, `345a3ead37540792`, `7394777debdb0693` |
+| `McpCli product/architecture owner; reconcile MR1, and its Epic 6 "as written" application, before any Admin or diagnostic-surface retirement spec relies on it, at the latest in Story 5.11.` | `84668e94b642bd73` |
+| `McpCli maintainer with the Commons and Builds owning maintainers.` | `ddfd98571de3514a` |
+| `McpCli CI and live-topology maintenance owners.` | `a03161fe049a33d2` |
