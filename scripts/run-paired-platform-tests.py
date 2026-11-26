@@ -43,7 +43,10 @@ def run_tests(prepared_path, output):
     if system not in ('Windows', 'Darwin'):
         raise ValueError('Platform suites require actual Windows or macOS execution.')
     suites = ['Core', 'Cli'] if system == 'Windows' else ['Cli']
-    env = {key: value for key, value in os.environ.items() if not key.startswith(('EVENTSTORE_', 'MCPCLI_'))}
+    env = os.environ.copy()
+    for key in tuple(env):
+        if key.startswith(('EVENTSTORE_', 'MCPCLI_')):
+            env.pop(key)
     env['MCPCLI_HOME'] = str(output / 'home')
     def command(name, arguments, required=True):
         try:
@@ -51,11 +54,11 @@ def run_tests(prepared_path, output):
         except OSError as error:
             (output / f'{name}.stdout.txt').write_bytes(b'')
             (output / f'{name}.stderr.txt').write_text(str(error) + '\n')
-            write_new(output / f'{name}.command.json', {'argv': arguments, 'exit_code': None, 'error': str(error)})
+            write_new(output / f'{name}.command.json', {'argv': list(arguments), 'exit_code': None, 'error': str(error)})
             raise
         (output / f'{name}.stdout.txt').write_bytes(result.stdout)
         (output / f'{name}.stderr.txt').write_bytes(result.stderr)
-        write_new(output / f'{name}.command.json', {'argv': arguments, 'exit_code': result.returncode})
+        write_new(output / f'{name}.command.json', {'argv': list(arguments), 'exit_code': result.returncode})
         if required:
             result.check_returncode()
         return result

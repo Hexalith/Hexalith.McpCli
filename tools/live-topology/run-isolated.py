@@ -153,10 +153,13 @@ def inside(run_dir: Path, command: list[str]) -> int:
                     if time.monotonic() >= deadline:
                         raise TimeoutError('Private Sentry certificates were not ready')
                     time.sleep(0.1)
+                trust_anchors = (certificate_dir / 'ca.crt').read_text()
+                certificate_chain = (certificate_dir / 'issuer.crt').read_text()
+                certificate_key = (certificate_dir / 'issuer.key').read_text()
                 environment.update({
-                    'DAPR_TRUST_ANCHORS': (certificate_dir / 'ca.crt').read_text(),
-                    'DAPR_CERT_CHAIN': (certificate_dir / 'issuer.crt').read_text(),
-                    'DAPR_CERT_KEY': (certificate_dir / 'issuer.key').read_text(),
+                    'DAPR_TRUST_ANCHORS': trust_anchors,
+                    'DAPR_CERT_CHAIN': certificate_chain,
+                    'DAPR_CERT_KEY': certificate_key,
                     'NAMESPACE': 'default',
                 })
                 result['mtls'] = {'enabled': True, 'trustDomain': 'public', 'namespace': 'default',

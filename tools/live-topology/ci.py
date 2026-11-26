@@ -124,8 +124,11 @@ def require_current_runtime_profile(prepared: dict) -> dict:
     if prepared.get('runtimeProfile') != {'sha256': hashlib.sha256(path.read_bytes()).hexdigest(),
                                          'binariesSha256': profile['binaries']['sha256']}:
         raise ValueError('The prepared current runtime profile changed or is missing.')
+    # Inspect the prepared host through the same PATH selection that its children use.
+    if shutil.which('dotnet') != prepared['tools']['executables']['dotnet']['path']:
+        raise ValueError('The current PATH no longer selects the prepared dotnet executable.')
     managed = current_managed_runtime_selection(subprocess.check_output(
-        [prepared['tools']['executables']['dotnet']['path'], '--list-runtimes'], timeout=30, text=True))
+        ['dotnet', '--list-runtimes'], timeout=30, text=True))
     if prepared['tools'].get('managedResourceRuntimes') != managed:
         raise ValueError('The prepared managed resource runtime selection changed or is missing.')
     verify_current_tool_bytes(profile, {name: prepared['tools']['executables'][name]['path'] for name in ('aspire', 'dapr')}

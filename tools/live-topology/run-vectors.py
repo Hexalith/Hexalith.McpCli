@@ -13,10 +13,12 @@ import sys
 import uuid
 import xml.etree.ElementTree as ET
 
-from live_plans import ROOT, preflight, require_phases, selection_binding
+from live_plans import preflight, require_phases, selection_binding
 from evidence_redaction import ShortEvidenceCredentialError, require_evidence_credentials, sanitized
 from retained_output import OUTPUT_LIMIT, read_capped
 from validate import VectorError, _load_json
+
+ROOT = Path(__file__).resolve().parents[2]
 
 
 def expected_operations() -> list[str]:
@@ -89,9 +91,9 @@ def bounded_child(command: list[str], environment: dict, output: Path, timeout: 
 
 def main(argv=None) -> int:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument('--output', type=Path, required=True)
-    parser.add_argument('--host', type=Path, default=ROOT / 'tests/Hexalith.McpCli.ConformanceHost/bin/Release/net11.0/Hexalith.McpCli.ConformanceHost.dll')
-    parser.add_argument('--tests', type=Path, default=ROOT / 'tests/Hexalith.McpCli.Integration.Tests/bin/Release/net11.0/Hexalith.McpCli.Integration.Tests.dll')
+    parser.add_argument('--output', type=lambda value: Path(value), required=True)
+    parser.add_argument('--host', type=lambda value: Path(value), default=ROOT / 'tests/Hexalith.McpCli.ConformanceHost/bin/Release/net11.0/Hexalith.McpCli.ConformanceHost.dll')
+    parser.add_argument('--tests', type=lambda value: Path(value), default=ROOT / 'tests/Hexalith.McpCli.Integration.Tests/bin/Release/net11.0/Hexalith.McpCli.Integration.Tests.dll')
     parser.add_argument('--child-timeout', type=float, default=960)
     parser.add_argument('--operation', help='Diagnostic subset; never grants full live acceptance.')
     parser.add_argument('--preflight-only', action='store_true')
@@ -153,11 +155,15 @@ def main(argv=None) -> int:
                 for key in list(environment):
                     if key.startswith(('MCPCLI_LIVE_', 'EVENTSTORE_')):
                         del environment[key]
+                host = str(args.host.resolve())
+                binding = json.dumps(selection_binding(item))
                 environment.update(MCPCLI_LIVE_OPERATION=operation, MCPCLI_LIVE_OUTPUT=str(output),
-                                   MCPCLI_LIVE_HOST=str(args.host.resolve()),
-                                   MCPCLI_LIVE_BINDING=json.dumps(selection_binding(item)))
+                                   MCPCLI_LIVE_HOST=host, MCPCLI_LIVE_BINDING=binding)
                 try:
-                    code = bounded_child(command, environment, output, args.child_timeout)
+                    code = bounded_child([sys.executable, str(ROOT / 'tools/live-topology/run-isolated.py'), '--',
+                                          'dotnet', str(args.tests.resolve()), '-class', 'Hexalith.McpCli.Integration.Tests.LiveVectorTests',
+                                          '-trait', 'Operation=' + operation, '-preEnumerateTheories', '-failSkips', '-result-xml', str(output / 'tests.xml')],
+                                         environment, output, args.child_timeout)
                     outcome['exitCode'] = code
                     if code != 0:
                         raise VectorError(f'{operation}: isolated child exited {code}; see {output}')
