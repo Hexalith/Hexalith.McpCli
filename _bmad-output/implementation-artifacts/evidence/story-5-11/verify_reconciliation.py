@@ -461,8 +461,12 @@ def check_retained_deferrals(root, integration, audit, completed):
         revision = resolution.get('revision','')
         require(re.fullmatch('[0-9a-f]{40}',revision) is not None,'audited deferral resolution lacks a committed revision: '+entry_id)
         B.git(root,'merge-base','--is-ancestor',revision,'origin/main')
-        require(commit_date(root,revision) <= completed,
+        committed_on = commit_date(root,revision)
+        require(committed_on <= completed,
                 'audited deferral resolution was committed after completion: '+entry_id)
+        decided = recorded_date(resolution.get('decidedOn'),'audited deferral owner decision date missing: '+entry_id)
+        require(committed_on <= decided <= completed,
+                'audited deferral owner decision predates the ledger revision or exceeds completion: '+entry_id)
         committed = B.scoped_deferrals(B.git(root,'show',revision+':'+str(LEDGER)).decode())
         require(any(candidate['entrySha256'] == entry['entrySha256'] for candidate in committed),
                 'audited deferral resolution differs from the recorded ledger revision: '+entry_id)
@@ -495,6 +499,7 @@ def check_owner_conflicts(root):
               'A current human-delegated MCP client may access',
               'UI, CLI, and MCP must return equivalent authorization outcomes and state transitions',
               'CLI, human-delegated MCP, AI/tool MCP',
+              'Deliver CLI parity for the singular M1 set',
               'Distinguish human-delegated MCP with current human presence')),
         ],
         'works': [

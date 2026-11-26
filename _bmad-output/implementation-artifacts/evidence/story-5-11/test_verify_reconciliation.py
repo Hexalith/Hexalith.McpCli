@@ -23,6 +23,7 @@ B,ROOT,E = V.B,V.ROOT,V.E
 recorded_git = cache(B.git)
 PASS = 'PASS: eight inventory histories; preserved AD-23/predecessors; fourteen labels; nine owner patch sets; scoped deferral accounting\n'
 VERIFIED = PASS+'PASS: decision: approved; approved integration verified\n'
+RELEASE_REVISION = '1'*40
 
 
 def data(name):
@@ -47,6 +48,17 @@ def streams(action):
     with contextlib.redirect_stdout(stdout),contextlib.redirect_stderr(stderr):
         code = action()
     return code,stdout.getvalue(),stderr.getvalue()
+
+
+def missing_ancestry(checkout, ancestor, descendant):
+    args = ('merge-base','--is-ancestor',ancestor,descendant)
+    message = 'git '+' '.join(args)+': '
+
+    def reject(repo, command, git):
+        if repo == checkout and command == args:
+            raise ValueError(message)
+
+    return message,reject
 
 
 def replay_follow_up(include_base=False):
@@ -461,21 +473,20 @@ class CompletionBindingTests(unittest.TestCase):
             ledger = ledger[:start]+update+ledger[end:]
             files[ROOT/V.LEDGER] = ledger.encode()
             active = next(row for row in B.scoped_deferrals(ledger) if row['id'] == entry['id'])
-            rev = integration['rootIntegrationRevision']
-            status = git(ROOT,'show',rev+':docs/release/migration-status.md')
+            status = git(ROOT,'show',integration['rootIntegrationRevision']+':docs/release/migration-status.md')
             notes_body = b'# Generated release notes\n\n'+status
             notes = binding('fixture-notes.md',notes_body)
             resolution = {
                 'decision':'resolved','entryId':entry['id'],'auditedEntrySha256':entry['entrySha256'],
                 'resolvedEntrySha256':active['entrySha256'],'owner':'Hexalith.Builds',
                 'exactWords':'approve','source':'Fixture release owner decision',
-                'decidedOn':'2026-11-22','releaseRevision':rev,'releaseTag':tag,'releaseRunId':123,'generatedNotes':notes,
+                'decidedOn':'2026-11-22','releaseRevision':RELEASE_REVISION,'releaseTag':tag,'releaseRunId':123,'generatedNotes':notes,
                 'evidenceRevision':V.FINAL_INTEGRATION_RECORD,
             }
             hosted.update({
                 'publishedRelease':{'html_url':V.ROOT_REPOSITORY+'/releases/tag/'+tag,'draft':False,'tag_name':tag,
                                     'published_at':'2026-11-22T23:59:00Z','id':456,'body':notes_body.decode()},
-                'releaseRun':{'id':123,'conclusion':'success','head_sha':rev,'path':'.github/workflows/release.yml',
+                'releaseRun':{'id':123,'conclusion':'success','head_sha':RELEASE_REVISION,'path':'.github/workflows/release.yml',
                               'html_url':V.ROOT_REPOSITORY+'/actions/runs/123'},
             })
             if hosted_mutation:
@@ -540,7 +551,14 @@ class CompletionBindingTests(unittest.TestCase):
             if plan_mutation and repo == ai_repo and args[0] == 'show' and args[1].endswith(':'+V.PLAN_PATH):
                 return plan
             if args in (('rev-parse',tag_ref),('rev-parse',tag_ref+'^{commit}')):
-                return integration['rootIntegrationRevision'].encode()
+                return RELEASE_REVISION.encode()
+            if resolved and repo == ROOT:
+                if args[:2] == ('merge-base','--is-ancestor') and RELEASE_REVISION in args[2:]:
+                    return b''
+                if args == ('show','-s','--format=%cI',RELEASE_REVISION):
+                    return b'2026-11-22T23:59:00+00:00'
+                if args == ('show',RELEASE_REVISION+':docs/release/migration-status.md'):
+                    return status
             if repo == ROOT and args[0] == 'show' and args[1].startswith(V.FINAL_INTEGRATION_RECORD+':'):
                 artifact = args[1].split(':',1)[1]
                 if artifact in release_evidence:
@@ -641,7 +659,6 @@ class CompletionBindingTests(unittest.TestCase):
             with self.subTest(field=key):
                 self.refusal('AC3 requires a published McpCli release record for the tag',
                              hosted_mutation=lambda hosted:hosted['publishedRelease'].update({key:value}))
-        release = data('integration.json')['rootIntegrationRevision']
         def commit_time(revision, timestamp):
             return lambda repo,args,git: timestamp.encode() if args == ('show','-s','--format=%cI',revision) else None
         for mutation in (
@@ -651,8 +668,17 @@ class CompletionBindingTests(unittest.TestCase):
         ):
             with self.subTest(mutation=mutation):
                 self.refusal('AC3 owner approval predates the committed release evidence',**mutation)
-        self.assertEqual(self.run_binding(git_mutation=commit_time(release,'2026-11-23T00:30:00+02:00')),
+        self.assertEqual(self.run_binding(git_mutation=commit_time(RELEASE_REVISION,'2026-11-23T00:30:00+02:00')),
                          (0,VERIFIED,''))
+
+    def test_release_requires_ancestry_from_the_inventory_through_committed_main_evidence(self):
+        release = RELEASE_REVISION
+        evidence = V.FINAL_INTEGRATION_RECORD
+        for ancestor,descendant in ((V.INVENTORY_PUBLICATION,release),(release,'origin/main'),
+                                    (release,evidence),(evidence,'origin/main')):
+            with self.subTest(ancestor=ancestor,descendant=descendant):
+                message,git_mutation = missing_ancestry(ROOT,ancestor,descendant)
+                self.refusal(message,git_mutation=git_mutation)
 
     def test_completion_requires_both_owner_conflicts_to_be_closed(self):
         for owner,path in [
@@ -696,7 +722,9 @@ class CompletionBindingTests(unittest.TestCase):
         chatbot_epics = documents['chatbot',planning+'epics.md'].splitlines()
         [shared_client] = [line for line in chatbot_prd if line.startswith(b'| `cli-automation-client` |')]
         self.assertIn(b"Both McpCli heads use the profile's Gateway credential and session actor (`--actor`)",shared_client)
-        self.assertIn(b'The EventStore Gateway authorizes actor, tenant and operation.',shared_client)
+        self.assertIn(b'The EventStore Gateway authorizes the credential, tenant and operation.',shared_client)
+        self.assertIn(b'The session actor provides attribution.',shared_client)
+        self.assertIn(b'Both heads expose only enrolled, Gateway-authorized operations in the shared agent-eligible set.',shared_client)
         self.assertIn(b'Approval and approved execution require the confidential ChatBot UI.',shared_client)
         self.assertIn(b'Credential expiry and renewal follow the issuer. The stdio session ends when its process exits.',shared_client)
         self.assertIn(b'| `mcp-human-delegated-client` | Withdrawn for M1 | No credential issued | No operation access | No session |',
@@ -705,6 +733,8 @@ class CompletionBindingTests(unittest.TestCase):
         for prefix in (b'- FR82: ', b'- FR83: ', b'- FR84: ', b'- NFR67: '):
             [requirement] = [line for line in chatbot_prd if line.startswith(prefix)]
             self.assertIn(requirement,chatbot_epics)
+        self.assertIn('FR82: Epic 5 — Deliver parity for the approved agent-eligible M1 set on both McpCli heads after Contracts and Gateway enrollment.'.encode(),
+                      chatbot_epics)
         for (owner,path),raw in documents.items():
             with self.subTest(owner=owner,path=path):
                 self.assertNotIn(b'Current McpCli disposition (Story 5.11 candidate)',raw)
@@ -739,6 +769,7 @@ class CompletionBindingTests(unittest.TestCase):
               b'A current human-delegated MCP client may access',
               b'UI, CLI, and MCP must return equivalent authorization outcomes and state transitions',
               b'CLI, human-delegated MCP, AI/tool MCP',
+              b'Deliver CLI parity for the singular M1 set',
               b'Distinguish human-delegated MCP with current human presence')),
             ('works','ux-designs/ux-works-2026-06-14/EXPERIENCE.md',
              b'Discover enrolled Works Commands and Queries through the generic McpCli heads.',
@@ -803,7 +834,7 @@ class CompletionBindingTests(unittest.TestCase):
         entry_id = entry['id']
         revision = recorded_git(ROOT,'rev-parse',V.INVENTORY_PUBLICATION+'^').decode().strip()
         def exercise(change_resolution=None, ledger_change=None, committed=True,
-                     committed_at=b'2026-11-22T23:59:59+00:00'):
+                     committed_at=b'2026-11-22T23:59:59+00:00', git_mutation=None):
             def update(integration,files,binding):
                 text = files[ROOT/V.LEDGER].decode()
                 summary = text.index('  summary: '+entry['summary'])
@@ -820,7 +851,7 @@ class CompletionBindingTests(unittest.TestCase):
                     'entryId':entry_id,'auditedEntrySha256':entry['entrySha256'],
                     'resolvedEntrySha256':B.sha(resolved.encode()),'owner':entry['owner'],
                     'exactWords':'approve','source':'Fixture owning maintainer decision','decision':'resolved',
-                    'revision':revision,
+                    'revision':revision,'decidedOn':'2026-11-22',
                 }
                 if change_resolution:
                     change_resolution(resolution)
@@ -831,6 +862,8 @@ class CompletionBindingTests(unittest.TestCase):
                     published[str(V.LEDGER)] = files[ROOT/V.LEDGER]
             published = {}
             def git_fixture(repo,args,git):
+                if git_mutation:
+                    git_mutation(repo,args,git)
                 if repo == ROOT and args == ('show','-s','--format=%cI',revision):
                     return committed_at
                 if repo == ROOT and args == ('show',revision+':'+str(V.LEDGER)):
@@ -855,6 +888,14 @@ class CompletionBindingTests(unittest.TestCase):
                          (1,'','FAIL: audited deferral resolution differs from the recorded ledger revision: '+entry_id+'\n'))
         self.assertEqual(exercise(committed_at=b'2026-11-23T00:00:00+00:00'),
                          (1,'','FAIL: audited deferral resolution was committed after completion: '+entry_id+'\n'))
+        refusal,off_main = missing_ancestry(ROOT,revision,'origin/main')
+        self.assertEqual(exercise(git_mutation=off_main),(1,'','FAIL: '+refusal+'\n'))
+        self.assertEqual(exercise(change_resolution=lambda resolution:resolution.pop('decidedOn')),
+                         (1,'','FAIL: audited deferral owner decision date missing: '+entry_id+'\n'))
+        for day in ('2026-11-21','2026-11-23'):
+            with self.subTest(decidedOn=day):
+                self.assertEqual(exercise(change_resolution=lambda resolution:resolution.update(decidedOn=day)),
+                                 (1,'','FAIL: audited deferral owner decision predates the ledger revision or exceeds completion: '+entry_id+'\n'))
 
     def test_mandatory_delivery_bindings(self):
         cases = [
@@ -897,6 +938,11 @@ class CompletionBindingTests(unittest.TestCase):
         for message,mutate in cases:
             with self.subTest(message=message):
                 self.refusal(message,mutate)
+        for field,value in [('exactApprovalInstruction','I do not approve'),('approvalSource','')]:
+            for default in (True,False):
+                with self.subTest(field=field,default=default):
+                    self.refusal('final plan approval lacks explicit owner instruction',
+                                 lambda i,f:f.update({field:value}),default=default)
 
     def test_content_and_complete_delivery_footprints(self):
         integration = data('integration.json')
@@ -1049,7 +1095,8 @@ class CompletionBindingTests(unittest.TestCase):
 
     def test_current_projects_spine_accepts_the_adopted_ad29_guidance(self):
         path = '_bmad-output/planning-artifacts/architecture/architecture-projects-2026-07-15/ARCHITECTURE-SPINE.md'
-        spine = recorded_git(ROOT.parent/'projects','show','origin/main:'+path)
+        revision = '4d740a889787bb095b16303ed749ec7f165e5683'
+        spine = recorded_git(ROOT.parent/'projects','show',revision+':'+path)
         self.assertEqual(self.run_binding(default=True,full=True,current_documents={('projects',path):spine}),
                          (0,VERIFIED,''))
 
@@ -1079,6 +1126,8 @@ class CompletionBindingTests(unittest.TestCase):
 
     def test_final_plan_requires_authority_and_capability_outcomes(self):
         cases = [
+            (f"inventory_revision: '{V.INVENTORY_PUBLICATION}'",f"inventory_revision: '{'0'*40}'",
+             'exact plan bytes/publication binding missing'),
             ('status: approved','status: draft','final plan lacks approved authority for the canonical inventory repository'),
             ('G01–G06','REMOVED','final approved plan lost independent gate/exemption: G01–G06'),
             ('Version **1.3.0**','Version **1.3.0 candidate**','completion requires final plan 1.3.0 bytes'),
@@ -1155,13 +1204,19 @@ class CompletionBindingTests(unittest.TestCase):
     def test_sm3_requires_the_parties_gates_verdict_and_proof_of_owner_removal(self):
         label = next(row for row in data('labels.json')['rows'] if row['id']=='PS05')
         surface = label['surface']
-        def claim(surface,gates=None,with_verdict=False,tamper_result=False,words='approve'):
+        parties = ROOT.parent/'parties'
+        delivered = next(d['commit'] for d in data('integration.json')['ownerIntegrations'] if d['name']=='parties')
+        removal_revision = recorded_git(parties,'rev-parse',delivered+'^').decode().strip()
+        snapshot_revision = recorded_git(ROOT,'rev-parse',V.INVENTORY_PUBLICATION+'^').decode().strip()
+        def claim(surface,gates=None,with_verdict=False,tamper_result=False,words='approve',
+                  receipt_changes=None,retirement_count=1):
             def mutate(integration,files,binding):
                 receipt = {
                     'state':'retired','owner':'Fixture owner','source':'Fixture','surface':surface,'retiredOn':'2026-11-22',
                     'ownerRole':'Parties owning maintainer','exactApprovalInstruction':words,
-                    'removalRevision':next(d['commit'] for d in integration['ownerIntegrations'] if d['name']=='parties'),
+                    'removalRevision':removal_revision,
                 }
+                receipt.update(receipt_changes or {})
                 if gates is not None:
                     receipt['gateEvidence'] = gates
                 if with_verdict:
@@ -1186,7 +1241,7 @@ class CompletionBindingTests(unittest.TestCase):
                         }))
                         scan.update(inputFileCount=1,manifestSha256=index_hash)
                         verdict.update(recordedAtUtc='2026-11-22T23:59:01Z',approvalScope='Approve the exact successor as retirement-ready.')
-                        verdict['approvedSnapshot'].update(commit=candidate,candidateHeadCommit=candidate,manifest=manifest,scanReceipt=scan)
+                        verdict['approvedSnapshot'].update(commit=snapshot_revision,candidateHeadCommit=candidate,manifest=manifest,scanReceipt=scan)
                     receipt['story54Verdict'] = binding('fixture-parties-verdict.json',B.serialized(verdict))
                     receipt['gateEvidence'] = {}
                     for index,gate in enumerate(gates):
@@ -1198,7 +1253,7 @@ class CompletionBindingTests(unittest.TestCase):
                                  'removalRevision':receipt['removalRevision']}
                         receipt['gateEvidence'][gate] = binding(f'fixture-gate-proof-{index}.json',B.serialized(proof))
                 retirement = binding('fixture-retirement.json',B.serialized(receipt))
-                integration['sm3Assessment'].update(outcome='met',retirements=[retirement])
+                integration['sm3Assessment'].update(outcome='met',retirements=[retirement]*retirement_count)
             return mutate
         for exempt in ('Hexalith.FrontComposer.Cli','tools/MigrateEmbeddingVectors','Hexalith.ChatBot.Cli'):
             self.refusal('SM-3 requires an inventoried Legacy Server',file_mutation=claim(exempt))
@@ -1209,6 +1264,26 @@ class CompletionBindingTests(unittest.TestCase):
         project = 'src/Hexalith.Parties.Mcp/Hexalith.Parties.Mcp.csproj'
         self.refusal('SM-3 retirement lacks explicit owning-maintainer approval',
                      file_mutation=claim(surface,gates,words='I do not approve retiring Parties.'))
+        for field,value in [('state','planned'),('owner',''),('source','')]:
+            with self.subTest(retirement_field=field):
+                self.refusal('SM-3 retirement receipt lacks retired state or authority',
+                             file_mutation=claim(surface,gates,receipt_changes={field:value}))
+        self.refusal('SM-3 duplicate retirement receipts',file_mutation=claim(surface,gates,retirement_count=2))
+        self.refusal('SM-3 retirement lacks owning repository removal revision',
+                     file_mutation=claim(surface,gates,receipt_changes={'removalRevision':removal_revision[:8]}))
+        self.refusal('SM-3 retirement must occur by its deadline and assessment',
+                     file_mutation=claim(surface,gates,receipt_changes={'retiredOn':'2026-11-23'}))
+        def after_deadline(integration,final):
+            integration['completedOn'] = integration['sm3Assessment']['assessedOn'] = '2027-02-07'
+        with mock.patch.object(V,'date',wraps=V.date) as clock:
+            clock.today.return_value = V.date.fromisoformat('2027-02-08')
+            self.refusal('SM-3 retirement must occur by its deadline and assessment',after_deadline,
+                         file_mutation=claim(surface,gates,receipt_changes={'retiredOn':'2027-02-06'}))
+        def future_removal(repo,args,git):
+            if repo == parties and args == ('show','-s','--format=%cI',removal_revision):
+                return b'2026-11-23T00:00:00+00:00'
+        self.refusal('SM-3 removal revision postdates the retirement',
+                     git_mutation=future_removal,file_mutation=claim(surface,gates))
         self.refusal('SM-3 retirement lacks owner removal of '+project,
                      file_mutation=claim(surface,gates))
         def removed(repo,args,git):
@@ -1229,7 +1304,8 @@ class CompletionBindingTests(unittest.TestCase):
                      git_mutation=removed,file_mutation=claim(surface,gates))
         self.refusal('SM-3 Parties verdict must approve a new evidence snapshot',
                      git_mutation=removed,file_mutation=claim(surface,gates,with_verdict='empty'))
-        def complete_fixture(tamper=False, verdict_changes=None, gate_changes=None, scan_changes=False, outcome='met'):
+        def complete_fixture(tamper=False, verdict_changes=None, gate_changes=None, scan_changes=None,
+                             outcome='met', manifest_changes=None, gate_result=None, git_mutation=None):
             evidence = {}
             def write_fixture(integration,files,binding):
                 claim(surface,gates,with_verdict=True,tamper_result=tamper)(integration,files,binding)
@@ -1239,14 +1315,23 @@ class CompletionBindingTests(unittest.TestCase):
                 verdict = json.loads(files[ROOT/'fixture-parties-verdict.json'])
                 if verdict_changes:
                     verdict_changes(verdict)
-                if gate_changes:
+                if gate_changes or gate_result is not None:
                     first_gate = next(iter(retirement['gateEvidence']))
                     proof = json.loads(files[ROOT/'fixture-gate-proof-0.json'])
-                    proof.update(gate_changes)
+                    proof.update(gate_changes or {})
+                    if gate_result is not None:
+                        proof['resultEvidence'] = binding('fixture-gate-result-0.txt',gate_result)
                     retirement['gateEvidence'][first_gate] = binding('fixture-gate-proof-0.json',B.serialized(proof))
-                if scan_changes:
+                if scan_changes or manifest_changes:
                     scan = json.loads(files[ROOT/'fixture-scanReceipt.json'])
-                    scan['files'][0]['path'] = 'unrelated-manifest.json'
+                    if manifest_changes:
+                        manifest = json.loads(files[ROOT/'fixture-manifest.json'])
+                        manifest_changes(manifest)
+                        manifest_ref = binding('fixture-manifest.json',B.serialized(manifest))
+                        verdict['approvedSnapshot']['manifest'] = manifest_ref
+                        scan['files'] = [manifest_ref]
+                    if scan_changes:
+                        scan_changes(scan)
                     scan['manifestSha256'] = B.sha(json.dumps(scan['files'],sort_keys=True,separators=(',',':')).encode())
                     scan_ref = binding('fixture-scanReceipt.json',B.serialized(scan))
                     scan_ref.update(inputFileCount=1,manifestSha256=scan['manifestSha256'])
@@ -1256,7 +1341,11 @@ class CompletionBindingTests(unittest.TestCase):
                 evidence.update({str(path.relative_to(ROOT)):raw for path,raw in files.items()
                                  if path.name in {'fixture-scanReceipt.json','fixture-manifest.json'}})
             def git_fixture(repo,args,git):
-                if repo == ROOT and args[0]=='show' and ':' in args[1]:
+                if git_mutation:
+                    changed = git_mutation(repo,args,git)
+                    if changed is not None:
+                        return changed
+                if repo == ROOT and args[0]=='show' and args[1].startswith(snapshot_revision+':'):
                     path = args[1].split(':',1)[1]
                     if path in evidence:
                         return evidence[path]
@@ -1265,6 +1354,14 @@ class CompletionBindingTests(unittest.TestCase):
         self.refusal('artifact hash mismatch: fixture-gate-result-0.txt',
                      **complete_fixture(tamper=True))
         self.assertEqual(self.run_binding(**complete_fixture())[0],0)
+        historical_verdict = 'story-5-4-owner-approval/owner-approval.json'
+        previous_snapshot = json.loads(recorded_git(ROOT,'show',B.BASELINE+':'+str(E.parent/historical_verdict)))['approvedSnapshot']['commit']
+        for checkout,ancestor,descendant in ((parties,removal_revision,'origin/main'),
+                                             (ROOT,previous_snapshot,snapshot_revision),
+                                             (ROOT,snapshot_revision,'origin/main')):
+            with self.subTest(ancestor=ancestor,descendant=descendant):
+                message,git_mutation = missing_ancestry(checkout,ancestor,descendant)
+                self.refusal(message,**complete_fixture(git_mutation=git_mutation))
         for field,value in [('approval','denied'),('verdict','retirement-blocked')]:
             with self.subTest(verdict=field):
                 self.refusal('SM-3 Parties retirement requires the successor retirement-ready owner verdict',
@@ -1275,12 +1372,34 @@ class CompletionBindingTests(unittest.TestCase):
             self.refusal('SM-3 Parties verdict lacks resolved G01–G06 with their recorded owners',
                          **complete_fixture(verdict_changes=change))
         self.refusal('SM-3 Parties clean scan does not bind the approved successor manifest',
-                     **complete_fixture(scan_changes=True))
+                     **complete_fixture(scan_changes=lambda scan:scan['files'][0].update(path='unrelated-manifest.json')))
+        for field in ('fullLiveAccepted','fullV1Accepted'):
+            with self.subTest(acceptance=field):
+                self.refusal('SM-3 Parties successor manifest or clean scan is missing',
+                             **complete_fixture(manifest_changes=lambda manifest:manifest['acceptanceEvidence'].update({field:False})))
+        self.refusal('SM-3 Parties successor manifest or clean scan is missing',
+                     **complete_fixture(scan_changes=lambda scan:scan.update(findings=[{'path':'fixture-manifest.json'}])))
+        self.refusal('SM-3 Parties owner did not expressly approve the committed successor as retirement-ready',
+                     **complete_fixture(verdict_changes=lambda verdict:verdict.update(
+                         approvalScope='Approve a retirement-ready review with a retirement-blocked result.')))
+        self.refusal('SM-3 Parties verdict postdates retirement',
+                     **complete_fixture(verdict_changes=lambda verdict:verdict.update(recordedAtUtc='2026-11-23T00:00:00Z')))
+        def late_snapshot(repo,args,git):
+            if repo == ROOT and args == ('show','-s','--format=%cI',snapshot_revision):
+                return b'2026-11-23T00:00:00+00:00'
+        self.refusal('SM-3 Parties owner did not expressly approve the committed successor as retirement-ready',
+                     **complete_fixture(git_mutation=late_snapshot))
+        for path in ('fixture-manifest.json','fixture-scanReceipt.json'):
+            with self.subTest(snapshot=path):
+                self.refusal('SM-3 Parties snapshot bytes differ from the committed evidence: '+path,
+                             **complete_fixture(git_mutation=lambda repo,args,git:
+                                 b'{}' if repo == ROOT and args == ('show',snapshot_revision+':'+path) else None))
         for field,value in [('surface','An unrelated server'),('gate','An unrelated gate'),
                             ('result','failed'),('removalRevision','0'*40)]:
             with self.subTest(gate_proof=field):
                 self.refusal('SM-3 removal evidence does not prove '+next(iter(gates))+' for '+surface,
                              **complete_fixture(gate_changes={field:value}))
+        self.refusal('SM-3 gate result evidence is empty: '+next(iter(gates)),**complete_fixture(gate_result=b''))
         for outcome in ('pending-not-met','slip'):
             self.refusal('SM-3 pending/slip must not claim retirement',**complete_fixture(outcome=outcome))
         self.refusal('pre-deadline unmet SM-3 remains pending',

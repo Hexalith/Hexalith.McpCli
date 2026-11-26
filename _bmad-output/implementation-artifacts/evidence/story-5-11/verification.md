@@ -397,7 +397,9 @@ against the patched owner files in scratch. The built 3.0.0 CLI help confirmed
 `verify_reconciliation.py --approved-completion` exited 1 with empty stdout
 and the existing AC3 refusal after the EventStore drift report. The adopted
 AD-23 verifier, `scripts/check-agent-instructions-sync.sh` and `git diff --check`
-exited 0. The Node notes command exited 1 because the test file is absent.
+exited 0. The Node notes command exited 1 because the test file is absent. The
+[pass-4 manifest](review-pass-4-20261126/parent-checks.json) re-records these
+commands and their exit codes on the final pass-4 bytes.
 The fresh scan covers the changed story evidence, spec and retained check
 streams. [Check streams](review-pass-3-20261126) ·
 [Secret scan receipt](review-pass-3-20261126/secret-scan.json)
@@ -417,6 +419,10 @@ reported the same drift and refused because AC3 remains deferred.
 [Command and exit-code manifest](review-pass-4-20261126/checks.json) ·
 [Owner documentation tests and commands](review-pass-4-20261126/owner-doc-tests.json) ·
 [Delivery, completion and policy check manifest](review-pass-4-20261126/parent-checks.json)
+
+The Node release-notes command exercised no tests. The test file was removed
+when AC3 moved to CiCd/Builds on 19 November.
+[Deferral `77748cf5a6cb9421`](../../deferred-work.md#deferred-from-code-review-of-spec-5-11-reconcile-product-claims-and-the-migration-planmd-2026-11-19)
 
 The shared secret scan passed for the changed evidence and edited ledger and
 sprint-status lines. The full-file scan reported the same redaction spans in
@@ -452,8 +458,10 @@ with its first refusal at `1c8ef2a87fc429cc`.
 - **McpCli product and maintenance owners**, with **CI redaction**, **Parties
   and EventStore Gateway**, and **Commons and Builds** maintainers for their
   respective rows, must record separate owner-approved resolutions for the
-  22 audited ledger changes. The live gate refuses first on
-  `1c8ef2a87fc429cc`. Reassess SM-3 on the eventual completion date.
+  22 audited ledger changes. Each resolution records a `decidedOn` date between
+  the committed ledger revision and story completion, inclusive. The live gate
+  refuses first on `1c8ef2a87fc429cc`. Reassess SM-3 on the eventual completion
+  date.
   [Approved audit and recorded owners](deferral-dispositions.md)
 
 | Audited owner | Changed ledger entries awaiting resolution evidence |
@@ -467,3 +475,31 @@ with its first refusal at `1c8ef2a87fc429cc`.
 | `McpCli product/architecture owner; reconcile MR1, and its Epic 6 "as written" application, before any Admin or diagnostic-surface retirement spec relies on it, at the latest in Story 5.11.` | `84668e94b642bd73` |
 | `McpCli maintainer with the Commons and Builds owning maintainers.` | `ddfd98571de3514a` |
 | `McpCli CI and live-topology maintenance owners.` | `a03161fe049a33d2` |
+
+### Pass-5 verification on 26 November 2026
+
+The ChatBot follow-up separates Gateway authorization from session actor
+attribution and limits FR82 coverage to the approved agent-eligible M1 set.
+Both targeted ChatBot architecture documentation tests passed against the
+revised patch at the recorded owner revision.
+[Owner documentation tests and commands](review-pass-5-20261126/owner-doc-tests.json)
+
+All 75 focused tests passed. They replay the nine owner patches and exercise
+refusals for deferral decision dates, release and retirement ancestry, Parties
+evidence, final-plan approval and publication bindings, and typed offline discovery.
+The Projects AD-29 fixture uses the recorded owner revision.
+[Focused suite command and results](review-pass-5-20261126/focused-tests.json)
+
+All nine follow-ups passed the apply check on the local owner main snapshots.
+The built CLI help confirmed `--transport stdio` and `--actor`. Adopted AD-23,
+instruction sync and the story diff check passed. The delivery verifier
+confirmed the approved integration and reported EventStore PRD drift. The
+completion verifier refused on the deferred AC3 release notes. A separate
+ledger check found 22 changed audited entries and zero separate resolutions.
+[Delivery and policy checks](review-pass-5-20261126/parent-checks.json)
+
+The secret scan passed for the changed evidence and edited sprint-status lines.
+The full sprint-status file still contains the same redaction spans as the
+starting revision.
+[Changed evidence scan](review-pass-5-20261126/secret-scan.json) ·
+[Full-file scan](review-pass-5-20261126/full-file-secret-scan.json)

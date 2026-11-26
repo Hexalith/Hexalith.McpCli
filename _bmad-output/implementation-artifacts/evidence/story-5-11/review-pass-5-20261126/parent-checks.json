@@ -1,0 +1,230 @@
+{
+  "head": "f02f292969ddd8ec0c2c6c136b0a87d341e09af8",
+  "checks": [
+    {
+      "name": "delivery",
+      "command": [
+        "/usr/bin/python3",
+        "_bmad-output/implementation-artifacts/evidence/story-5-11/verify_reconciliation.py"
+      ],
+      "exitCode": 0,
+      "expectedExitCode": 0,
+      "stdout": "PASS: eight inventory histories; preserved AD-23/predecessors; fourteen labels; nine owner patch sets; scoped deferral accounting\nPASS: decision: approved; approved integration verified\n",
+      "stderr": "reported: eventstore: current main migration text drift: _bmad-output/planning-artifacts/prd.md\n"
+    },
+    {
+      "name": "completion",
+      "command": [
+        "/usr/bin/python3",
+        "_bmad-output/implementation-artifacts/evidence/story-5-11/verify_reconciliation.py",
+        "--approved-completion"
+      ],
+      "exitCode": 1,
+      "expectedExitCode": 1,
+      "stdout": "",
+      "stderr": "reported: eventstore: current main migration text drift: _bmad-output/planning-artifacts/prd.md\nFAIL: AC3 generated release notes remain deferred by the owner\n"
+    },
+    {
+      "name": "ad23",
+      "command": [
+        "/usr/bin/python3",
+        "_bmad-output/implementation-artifacts/evidence/story-5-2/verify_class_map.py"
+      ],
+      "exitCode": 0,
+      "expectedExitCode": 0,
+      "stdout": "PASS: _bmad-output/implementation-artifacts/eventstore-admin-migration-inventory-v1.md: 71 classified rows + 20 non-operation records = 91\nPASS: _bmad-output/implementation-artifacts/technical-tools-migration-inventory-v1.md: 28 classified rows + 40 non-operation records = 68\nPASS: _bmad-output/implementation-artifacts/folders-migration-inventory-v1.md: 103 classified rows + 58 non-operation records = 161\nPASS: _bmad-output/implementation-artifacts/projects-migration-inventory-v1.md: 46 classified rows + 6 non-operation records = 52\nPASS: _bmad-output/implementation-artifacts/frontcomposer-migration-inventory-v1.md: 26 classified rows + 4 non-operation records = 30\nPASS: _bmad-output/implementation-artifacts/chatbot-migration-inventory-v1.md: 39 classified rows + 9 non-operation records = 48\nPASS: _bmad-output/implementation-artifacts/memories-migration-inventory-v1.md: 39 classified rows + 12 non-operation records = 51\nPASS: _bmad-output/implementation-artifacts/parties-migration-inventory-v1.md: 20 classified rows + 4 non-operation records = 24\nPASS: exact-byte partition verified; effective decision status: adopted; parity remains a separate gate\n",
+      "stderr": ""
+    },
+    {
+      "name": "instruction-sync",
+      "command": [
+        "bash",
+        "scripts/check-agent-instructions-sync.sh"
+      ],
+      "exitCode": 0,
+      "expectedExitCode": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "release-notes-test-unavailable",
+      "command": [
+        "node",
+        "--test",
+        "scripts/tests/migration-release-notes.test.mjs"
+      ],
+      "exitCode": 1,
+      "expectedExitCode": 1,
+      "stdout": "",
+      "stderr": "Could not find 'scripts/tests/migration-release-notes.test.mjs'\n"
+    },
+    {
+      "name": "diff-check",
+      "command": [
+        "git",
+        "-c",
+        "core.commitGraph=false",
+        "diff",
+        "--check",
+        "--",
+        "_bmad-output/implementation-artifacts/evidence/story-5-11",
+        "_bmad-output/implementation-artifacts/spec-5-11-reconcile-product-claims-and-the-migration-plan.md",
+        "_bmad-output/implementation-artifacts/sprint-status.yaml"
+      ],
+      "exitCode": 0,
+      "expectedExitCode": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "owner-main-chatbot",
+      "revision": "794753deb77b636f59f0f94e64ad4fbccdbf13da",
+      "command": [
+        "git",
+        "apply",
+        "--check",
+        "--whitespace=error",
+        "/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-5-11/owner-doc-follow-up/chatbot.patch"
+      ],
+      "exitCode": 0,
+      "expectedExitCode": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "owner-main-eventstore",
+      "revision": "a11d584a5bc9fe680c9b6d7908befb574d98e620",
+      "command": [
+        "git",
+        "apply",
+        "--check",
+        "--whitespace=error",
+        "/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-5-11/owner-doc-follow-up/eventstore.patch"
+      ],
+      "exitCode": 0,
+      "expectedExitCode": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "owner-main-folders",
+      "revision": "a878668e185f0e5d7492556b7a675da1ed33a157",
+      "command": [
+        "git",
+        "apply",
+        "--check",
+        "--whitespace=error",
+        "/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-5-11/owner-doc-follow-up/folders.patch"
+      ],
+      "exitCode": 0,
+      "expectedExitCode": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "owner-main-frontcomposer",
+      "revision": "789b28b41981822b43b2b14479a67c16389ca9d1",
+      "command": [
+        "git",
+        "apply",
+        "--check",
+        "--whitespace=error",
+        "/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-5-11/owner-doc-follow-up/frontcomposer.patch"
+      ],
+      "exitCode": 0,
+      "expectedExitCode": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "owner-main-memories",
+      "revision": "66aa2f26ed4818768e3ae541cafe5907b16705eb",
+      "command": [
+        "git",
+        "apply",
+        "--check",
+        "--whitespace=error",
+        "/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-5-11/owner-doc-follow-up/memories.patch"
+      ],
+      "exitCode": 0,
+      "expectedExitCode": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "owner-main-parties",
+      "revision": "3eb2aee3884604d1c36b06e82b427c1789740ca8",
+      "command": [
+        "git",
+        "apply",
+        "--check",
+        "--whitespace=error",
+        "/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-5-11/owner-doc-follow-up/parties.patch"
+      ],
+      "exitCode": 0,
+      "expectedExitCode": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "owner-main-projects",
+      "revision": "fa85cf96b1d5804334dac772281e98cab2f7e139",
+      "command": [
+        "git",
+        "apply",
+        "--check",
+        "--whitespace=error",
+        "/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-5-11/owner-doc-follow-up/projects.patch"
+      ],
+      "exitCode": 0,
+      "expectedExitCode": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "owner-main-tenants",
+      "revision": "ce3aadd8f2f7c96c67544d4bdc422f6e923a69d0",
+      "command": [
+        "git",
+        "apply",
+        "--check",
+        "--whitespace=error",
+        "/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-5-11/owner-doc-follow-up/tenants.patch"
+      ],
+      "exitCode": 0,
+      "expectedExitCode": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "owner-main-works",
+      "revision": "3202ebb1e3291a5efe01d0309b90bdef7b6c7cfe",
+      "command": [
+        "git",
+        "apply",
+        "--check",
+        "--whitespace=error",
+        "/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-5-11/owner-doc-follow-up/works.patch"
+      ],
+      "exitCode": 0,
+      "expectedExitCode": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "built-cli-help",
+      "command": [
+        "dotnet",
+        "src/Hexalith.McpCli/bin/Release/net11.0/Hexalith.McpCli.dll",
+        "mcp",
+        "--help"
+      ],
+      "exitCode": 0,
+      "verifiedOptions": [
+        "--transport stdio",
+        "--actor"
+      ],
+      "stderr": ""
+    }
+  ]
+}

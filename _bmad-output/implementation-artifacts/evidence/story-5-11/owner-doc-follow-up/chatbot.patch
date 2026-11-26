@@ -89,7 +89,7 @@
  | `ai-action-mediator-client` | M0 | per-tenant + per-AI-actor; bound to requester, Project, proposal, approval, and one allowlisted command | submits exactly one approved `Project.AppendConversationMessage`; AI actor never authenticates directly | short-lived delegated grant; expires on use, revocation, or 5 minutes |
 -| `cli-automation-client` | M1 | per-tenant; configured per CLI installation; user-delegated via OAuth device flow | the MVP parity set (per §Cross-surface parity outcomes) | 7 days, refresh required |
 -| `mcp-human-delegated-client` | M1 | per-tenant + current authenticated human; records source user, user presence, `actorType=human`, scope, and delegation expiry | the actor-authorized MVP parity set; human-decision mutations require current presence at submission | 1 hour maximum; terminates on logout, revocation, or lost presence |
-+| `cli-automation-client` | M1 | Both McpCli heads use the profile's Gateway credential and session actor (`--actor`). The EventStore Gateway authorizes actor, tenant and operation. | Both heads expose only enrolled, actor-authorized operations in the shared agent-eligible set. Approval and approved execution require the confidential ChatBot UI. | Credential expiry and renewal follow the issuer. The stdio session ends when its process exits. |
++| `cli-automation-client` | M1 | Both McpCli heads use the profile's Gateway credential and session actor (`--actor`). The EventStore Gateway authorizes the credential, tenant and operation. The session actor provides attribution. | Both heads expose only enrolled, Gateway-authorized operations in the shared agent-eligible set. Approval and approved execution require the confidential ChatBot UI. | Credential expiry and renewal follow the issuer. The stdio session ends when its process exits. |
 +| `mcp-human-delegated-client` | Withdrawn for M1 | No credential issued | No operation access | No session |
  | `mcp-tool-client` | M1 | per-tenant + per-AI/tool actor; MCP-tool-scoped grants | only actor-visible status/evidence queries plus `ProposeAIAction` and eligible `ExecuteLowRiskAssistance`; explicitly excludes association decisions, approval/revision decisions, approved execution, outbound, policy, permission, and admin mutations | 24 hours maximum; refresh required |
 @@ -667,3 +667,3 @@
@@ -168,7 +168,10 @@
 -- NFR67: Security validation must include negative authorization for UI/API, CLI, human-delegated MCP, AI/tool MCP, workers, mailbox events, service clients, and AI actors, including proof that AI/tool/service credentials cannot approve, reject, request revision, or self-approve an AI-originated proposal.
 +- NFR67: Security validation must include negative authorization tests for UI/API, both McpCli heads, AI/tool MCP, background workers, mailbox events, service clients, and AI actors. Verify that both McpCli heads refuse association decisions, approval, rejection, revision requests, and approved execution. Verify that AI/tool/service credentials cannot approve, reject, request revision, or self-approve an AI-originated proposal.
  - NFR68: Evaluation data/fixtures must be consented, redacted, or synthetic and versioned/reproducible with redaction checks, expected outcomes, and regression history across association, authorization, duplicate, retry, approval, refusal, and audit.
-@@ -561,3 +561,3 @@
+@@ -559,5 +559,5 @@
+ 
+-FR82: Epic 5 — Deliver CLI parity for the singular M1 set.
++FR82: Epic 5 — Deliver parity for the approved agent-eligible M1 set on both McpCli heads after Contracts and Gateway enrollment.
  
 -FR83: Epic 5 — Distinguish human-delegated MCP with current human presence from structurally restricted AI/tool MCP, without extending the AI allowlist.
 +FR83: Epic 5 — Prove both McpCli heads refuse human decisions and approved execution. Prove the approved actor-visible query, proposal, and eligible-low-risk set without extending the AI allowlist.

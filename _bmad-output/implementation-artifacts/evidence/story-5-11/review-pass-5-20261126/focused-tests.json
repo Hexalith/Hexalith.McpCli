@@ -1,0 +1,19 @@
+{
+  "command": [
+    "run-with-temp",
+    "env",
+    "PYTHONDONTWRITEBYTECODE=1",
+    "python3",
+    "-m",
+    "unittest",
+    "discover",
+    "-v",
+    "-s",
+    "_bmad-output/implementation-artifacts/evidence/story-5-11",
+    "-p",
+    "test_*.py"
+  ],
+  "exitCode": 0,
+  "stdout": "tests.stdout.txt",
+  "stderr": "tests.stderr.txt"
+}

@@ -49,6 +49,21 @@ class OfflineCliTests(unittest.TestCase):
                     C.validate_probe(name,subprocess.CompletedProcess([],status,stdout,stderr))
                 self.assertEqual(str(refused.exception),message)
 
+    def test_describe_requires_the_expected_offline_schema_scope_and_availability(self):
+        captured = (C.E/'offline-describe.stdout.txt').read_bytes()
+        for field,path,value in (('submittable',(),True),
+                                 ('platformScope',('envelope',),'platform:other'),
+                                 ('Unexpected',('schema','properties'),{'type':'string'})):
+            with self.subTest(field=field):
+                document = json.loads(captured)
+                parent = document
+                for key in path:
+                    parent = parent[key]
+                parent[field] = value
+                result = subprocess.CompletedProcess([],0,json.dumps(document).encode(),b'')
+                with self.assertRaisesRegex(ValueError,'^describe: expected typed offline discovery required$'):
+                    C.validate_probe('describe',result)
+
     def test_exact_tool_names_are_required(self):
         response={'jsonrpc':'2.0','id':2,'result':{'tools':[{'name':name,'inputSchema':{}} for name in sorted(C.TOOLS)]}}
         C.validate_tools(response)

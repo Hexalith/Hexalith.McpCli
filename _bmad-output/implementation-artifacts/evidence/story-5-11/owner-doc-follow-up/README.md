@@ -7,14 +7,18 @@ the earlier work. This follow-up awaits owner approval and integration.
 ChatBot's PRD, epics and experience spine direct association decisions, AI-action
 approval and approved execution to the confidential UI. Both generic McpCli
 heads refuse those actions. Both use the existing `cli-automation-client` class
-with the profile's Gateway credential and session actor. The issuer sets
-credential expiry, and the stdio session ends with the process.
+with the profile's Gateway credential and session actor. The Gateway authorizes
+the credential, tenant and operation. The session actor provides attribution.
+The issuer sets credential expiry, and the stdio session ends with the process.
 `mcp-human-delegated-client` is withdrawn for M1. The patch updates FR83 and
 NFR67 in the active requirements and synchronizes the adjacent FR82 and FR84
-epics summaries with the delivered PRD. Epic 5 acceptance criteria remain under
-the course-correction banner at `epics.md:30`. Related legacy guidance remains in
-the worker-only exposure criterion at `epics.md:1609` and the typed MCP tool
-criterion at `epics.md:5686`.
+epics summaries with the delivered PRD. The FR82 coverage line also limits
+parity to the approved agent-eligible set. The Epic 5 overview at
+`epics.md:632-636` and its acceptance criteria remain under the course-correction
+banner at `epics.md:30`. Related legacy guidance remains in the worker-only
+exposure criterion at `epics.md:1609`, Story 7.11 at `epics.md:4479` and the typed
+MCP tool criterion at `epics.md:5686`. Line references use the listed ChatBot
+base revision.
 
 Works' design and experience spine describe future access through enrolled and
 authorized Works Contracts on the shared McpCli heads. The mockup points readers
@@ -33,7 +37,7 @@ matched the prepared bytes, including the original line endings.
 
 | Patch | Owner main revision | Files | Patch SHA-256 |
 | --- | --- | ---: | --- |
-| [ChatBot](chatbot.patch) | `794753deb77b636f59f0f94e64ad4fbccdbf13da` | 6 | `27d3aea99d8d767ef7dcb50ab8de3c297e7157a020856c13e258a35406fe3eea` |
+| [ChatBot](chatbot.patch) | `794753deb77b636f59f0f94e64ad4fbccdbf13da` | 6 | `ec4f1c597d861e043f84980bb36e286df045c70489fd094f3524b606bd16ac83` |
 | [EventStore](eventstore.patch) | `7a42a0f01cfc6cafe6aa2d3e5ef05cbc370b22cb` | 4 | `0d1173c15a08ce6cb9d0d671e83db9a1009c1f86c700ce5fa2fb8be7fc55e90d` |
 | [Folders](folders.patch) | `20b7a0a82d1056030088e7e94cadcc2d416d4f73` | 3 | `14f81f29ce1b47e5dee36e3c4e19bdf52002d0b5070d35c72cdaf426a1099da2` |
 | [FrontComposer](frontcomposer.patch) | `ac145de3bfe5aaf1614cecf0feed7c7b732847ee` | 5 | `11ca64e06997822e639aeaf0564b2cfa350c6f3565a905887f4f54d753630d45` |
