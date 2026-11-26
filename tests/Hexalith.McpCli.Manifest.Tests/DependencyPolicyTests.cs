@@ -127,7 +127,7 @@ public sealed class DependencyPolicyTests
         string[] helpers = ["Hexalith.EventStore.Aspire", "Hexalith.Parties.Aspire", "Hexalith.Tenants.Aspire"];
         Assert.Equal(Array.Empty<string>(), DependencyPolicyGate.CheckAspireHelperClosure(policy, graph, helpers));
         Assert.Equal(graph.RootId, Assert.Single(graph.Nodes.Values, node => node.Type == "project").Id);
-        Assert.Equal(new[] { "Hexalith.Commons.UniqueIds/3.0.2", "Hexalith.EventStore.Aspire/5.5.1", "Hexalith.EventStore.Client/5.5.1", "Hexalith.EventStore.Contracts/5.5.1", "Hexalith.EventStore.ServiceDefaults/5.5.1", "Hexalith.Parties.Aspire/4.0.0", "Hexalith.Tenants.Aspire/8.0.2" },
+        Assert.Equal(new[] { "Hexalith.Commons.UniqueIds/3.0.2", "Hexalith.EventStore.Aspire/5.5.2", "Hexalith.EventStore.Client/5.5.2", "Hexalith.EventStore.Contracts/5.5.2", "Hexalith.EventStore.ServiceDefaults/5.5.2", "Hexalith.Parties.Aspire/4.0.0", "Hexalith.Tenants.Aspire/8.0.2" },
             graph.Nodes.Values.Where(node => node.Type == "package" && node.Id.StartsWith("Hexalith.", StringComparison.OrdinalIgnoreCase))
                 .OrderBy(node => node.Id, StringComparer.Ordinal).Select(node => node.Identity));
     }
@@ -1266,14 +1266,14 @@ public sealed class DependencyPolicyTests
         Assert.Equal(new[]
         {
             "Hexalith.Commons.UniqueIds/3.0.2",
-            "Hexalith.EventStore.Aspire/5.5.1",
-            "Hexalith.EventStore.Client/5.5.1",
-            "Hexalith.EventStore.Contracts/5.5.1",
-            "Hexalith.EventStore.DomainService/5.5.1",
-            "Hexalith.EventStore.Server/5.5.1",
-            "Hexalith.EventStore.ServiceDefaults/5.5.1",
-            "Hexalith.EventStore.Testing/5.5.1",
-            "Hexalith.EventStore.Testing.Integration/5.5.1",
+            "Hexalith.EventStore.Aspire/5.5.2",
+            "Hexalith.EventStore.Client/5.5.2",
+            "Hexalith.EventStore.Contracts/5.5.2",
+            "Hexalith.EventStore.DomainService/5.5.2",
+            "Hexalith.EventStore.Server/5.5.2",
+            "Hexalith.EventStore.ServiceDefaults/5.5.2",
+            "Hexalith.EventStore.Testing/5.5.2",
+            "Hexalith.EventStore.Testing.Integration/5.5.2",
             "Hexalith.McpCli.Abstractions/3.0.0",
             "Hexalith.Parties.Aspire/4.0.0",
             "Hexalith.Tenants.Aspire/8.0.2",

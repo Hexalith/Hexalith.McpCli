@@ -1,8 +1,8 @@
 {
   "profile": "published",
-  "eventStoreVersion": "5.5.1",
+  "eventStoreVersion": "5.5.2",
   "sourceRepository": "https://github.com/Hexalith/Hexalith.EventStore.git",
-  "sourceCommit": "f2ade96970f929dd96e8865075339954233e61ed",
+  "sourceCommit": "f0694e52814a8cbaed632fa608f54cb20c512d85",
   "files": {
     "Configuration/appsettings.gateway.json": {
       "sourcePath": "src/Hexalith.EventStore/appsettings.json",

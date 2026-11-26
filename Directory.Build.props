@@ -1,7 +1,7 @@
 <Project>
   <PropertyGroup>
     <!-- Match the EventStore cohort reviewed by the dependency policy and native topology. -->
-    <HexalithEventStoreVersion Condition="'$(HexalithEventStoreVersion)' == ''">5.5.1</HexalithEventStoreVersion>
+    <HexalithEventStoreVersion Condition="'$(HexalithEventStoreVersion)' == ''">5.5.2</HexalithEventStoreVersion>
     <HexalithProjectsVersion Condition="'$(HexalithProjectsVersion)' == ''">2.0.0</HexalithProjectsVersion>
     <HexalithMcpCliVersion Condition="'$(HexalithMcpCliVersion)' == ''">3.0.0</HexalithMcpCliVersion>
     <HexalithPartiesVersion Condition="'$(HexalithPartiesVersion)' == ''">4.0.0</HexalithPartiesVersion>

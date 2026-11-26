@@ -182,13 +182,13 @@ Every live child still proves all four private namespaces; setup or probe failur
 fails preparation.
 
 `prepare-ci.sh` authenticates the complete native runtime selection in
-`native-runtime-current.json`: exact public EventStore **5.5.1** archives, public Tenants
+`native-runtime-current.json`: exact public EventStore **5.5.2** archives, public Tenants
 **8.0.2** archives and their embedded repository commits, plus the separately
 qualified Parties and Platform source revisions. Parties source commit
 `7639a5d20c36ce3e2ec5139685f3b08dbf2ab1f9` matches public Contracts and Aspire
 helpers **4.0.0**. Tenants 8.0.2 binds
 `30b233026648488ca71fe5904fd218b7af934aed`. The current
-Testing.Integration **5.5.1** package consumes Platform descriptors. This isolated
+Testing.Integration **5.5.2** package consumes Platform descriptors. This isolated
 suite retains ownership of its AppHost through Aspire’s public testing API,
 with bounded startup, named endpoint discovery, liveness and independent cleanup.
 The product, current fixture hosts and selected owner exports target `net11.0`.
@@ -210,7 +210,7 @@ Operation Shape; its omitted inventory row is reported, and no live repair-seman
 Generic CLI and MCP query requests preserve every descriptor-declared
 `projectionActorType`, when the current owner declares one. The current Parties annotations omit the
 deprecated compatibility hint and retain the same domain-service projection target. SDK
-5.5.1 supplies the exact owner-enrolled selector policy. The immutable Parties
+5.5.2 supplies the exact owner-enrolled selector policy. The immutable Parties
 source selection includes its three digest-bound compatibility bindings; foreign
 selectors remain refused. The committed catalog chooses the actual receiver.
 Fresh complete native CI remains required for this selected cohort; offline
@@ -227,11 +227,11 @@ Integration.Tests/AppHost are built with the public SDK cohort. Parties uses the
 the separate adapter use the root McpCli 3.0.0 pin so their Abstractions identity
 matches the AppHost, including later SDK/Aspire rebuilds. The published Tenants **8.0.2** source qualifies EventStore only through **5.3.1**.
 Published Parties **4.0.0** likewise gates `HEXALITH_EVENTSTORE_CATALOG_API` on that
-same 5.3.1 list, so a 5.5.1 fixture compile would omit the compiled declaration
+same 5.3.1 list, so a 5.5.2 fixture compile would omit the compiled declaration
 source attribute. `Microsoft.Common.targets` imports `CustomAfterMicrosoftCommonTargets` before
 that frozen `Directory.Build.targets`, so preparation also sets
 `CustomAfterDirectoryBuildTargets` to a private late import that enables the
-5.5.1 catalog constants for Tenants and Parties and replaces the owner's catalog-SDK and canonical-boundary
+5.5.2 catalog constants for Tenants and Parties and replaces the owner's catalog-SDK and canonical-boundary
 Error targets. Isolated Parties still imports `Hexalith3BuildPackageProps`
 without `Exists()`; preparation points that property, plus Hexalith1/2 and
 `HexalithBuildPackageVersions1`, at the same overlay so the missing nested
@@ -280,7 +280,7 @@ catalog files and the pinned catalog; execution rejects source or file drift
 before vectors and again before smoke. Server build commands retain their
 separate 300-second bounds. The owned gateway's mandatory
 configuration snapshot is verified against native source commit
-`f2ade96970f929dd96e8865075339954233e61ed`, matching the public 5.5.1 archive
+`f0694e52814a8cbaed632fa608f54cb20c512d85`, matching the public 5.5.2 archive
 metadata; normal overrides, real JWT validation and sidecar tokens remain active.
 
 Before creating any digest material or catalog authority, the AppHost verifies
