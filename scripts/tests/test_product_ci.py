@@ -38,7 +38,8 @@ class ProductControllerTests(unittest.TestCase):
             'version': '1.0.0', 'packages': product_packages.packages(self.staged / 'packages', '1.0.0')})
         for setting in (patch.object(product_ci, 'ROOT', self.fixture.root),
                         patch.object(product_ci, 'staging_root', return_value=self.product),
-                        patch.object(product_ci, 'git', side_effect=lambda *args: SHA if args[0] == 'rev-parse' else '')):
+                        patch.object(product_ci, 'source_sha', return_value=SHA),
+                        patch.object(product_ci, 'source_changes', return_value='')):
             setting.start(); self.addCleanup(setting.stop)
         self.fixture.executable('git', '#!/usr/bin/env python3\nprint(' + repr(SHA) + ')\n')
 
@@ -80,11 +81,12 @@ class ProductControllerTests(unittest.TestCase):
             with self.subTest(defect=defect):
                 original = (self.staged / 'packages' / fixtures.PACKAGE).read_bytes()
                 if defect == 'package': (self.staged / 'packages' / fixtures.PACKAGE).write_bytes(original + b'changed')
-                def git(*args):
-                    if args[0] == 'rev-parse': return 'b' * 40 if defect == 'head' else SHA
-                    return ' M source.cs' if defect == 'tracked' else '?? source.cs' if defect == 'untracked' else ''
+                head = 'b' * 40 if defect == 'head' else SHA
+                changes = ' M source.cs' if defect == 'tracked' else '?? source.cs' if defect == 'untracked' else ''
                 try:
-                    with patch.object(product_ci, 'git', side_effect=git), patch.object(product_ci, 'execute') as execute:
+                    with patch.object(product_ci, 'source_sha', return_value=head), \
+                            patch.object(product_ci, 'source_changes', return_value=changes), \
+                            patch.object(product_ci, 'execute') as execute:
                         with self.assertRaises(ValueError): product_ci.package_checks()
                         execute.assert_not_called()
                 finally: (self.staged / 'packages' / fixtures.PACKAGE).write_bytes(original)
@@ -214,7 +216,7 @@ class ProductPlatformTests(unittest.TestCase):
                     ElementTree.ElementTree(root).write(xml)
                 return subprocess.CompletedProcess(argv, 1 if suite == 'Core' and mode == 'core-exit-failure' else 0,
                                                    stdout=(suite + ' diagnostic').encode(), stderr=b'fixture stderr')
-            with self.subTest(mode=mode), patch.object(self.runner, 'git', return_value=SHA), \
+            with self.subTest(mode=mode), patch.object(self.runner, 'source_sha', return_value=SHA), \
                     patch.object(self.runner.platform, 'system', return_value='Windows'), \
                     patch.object(self.runner.subprocess, 'run', side_effect=execute):
                 if mode == 'passed':
@@ -250,7 +252,7 @@ class ProductPlatformTests(unittest.TestCase):
                  'RuntimeIdentifier': '', 'RuntimeIdentifiers': '', 'CreateRidSpecificToolPackages': '', 'PackageId': 'Hexalith.McpCli', 'Version': '1.0.0'}
         def evaluate(changes):
             result = subprocess.CompletedProcess([], 0, stdout=json.dumps({'Properties': {**valid, **changes}}))
-            with patch.object(validator, 'run', return_value=result): validator.validate_effective_properties([tool], '1.0.0')
+            with patch.object(validator.subprocess, 'run', return_value=result): validator.validate_effective_properties([tool], '1.0.0')
         evaluate({})
         for changes in ({'TargetFramework': 'net9.0'}, {'TargetFramework': 'net10.0'}, {'TargetFrameworks': 'net11.0;net9.0'},
                         {'PackageId': 'Other'}, {'Version': '9.9.9'}, {'PackAsTool': 'false'}, {'ToolCommandName': 'other'},

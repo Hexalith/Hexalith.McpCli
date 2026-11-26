@@ -12,12 +12,17 @@ ROOT = Path(__file__).resolve().parents[1]
 PAIR = ["Hexalith.McpCli.Abstractions", "Hexalith.McpCli"]
 
 
-def run(arguments, **kwargs):
-    return subprocess.run([str(arg) for arg in arguments], check=True, capture_output=True, **kwargs)
-
-
 def git(*args):
-    return run(['git', *args], text=True).stdout.strip()
+    """Read Git metadata; keep every caller in this module with literal operands."""
+    return subprocess.run(['git', *args], check=True, capture_output=True, text=True).stdout.strip()
+
+
+def source_sha():
+    return git('rev-parse', 'HEAD')
+
+
+def source_changes():
+    return git('status', '--porcelain', '--untracked-files=normal', '--ignore-submodules=all')
 
 
 def digest(path):
@@ -81,8 +86,9 @@ def validate_version(version: str) -> None:
 def bootstrap_target_framework(version):
     """Bind bootstrap package and consumer checks to the checked-out source."""
     project = 'src/Hexalith.McpCli.Abstractions/Hexalith.McpCli.Abstractions.csproj'
-    result = run(['dotnet', 'msbuild', project, '-nologo', '-tl:off', '-p:Configuration=Release',
-                  f'-p:Version={version}', '-getProperty:TargetFramework,TargetFrameworks'], text=True)
+    result = subprocess.run(['dotnet', 'msbuild', project, '-nologo', '-tl:off', '-p:Configuration=Release',
+                             f'-p:Version={version}', '-getProperty:TargetFramework,TargetFrameworks'],
+                            check=True, capture_output=True, text=True)
     properties = json.loads(result.stdout)['Properties']
     framework = properties['TargetFramework']
     if framework not in ('net10.0', 'net11.0') or properties['TargetFrameworks']:

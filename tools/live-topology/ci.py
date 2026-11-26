@@ -957,10 +957,8 @@ def prepare(evidence: Path) -> None:
                 raise RuntimeError(f'Private runtime binary hash mismatch: {path.name}')
         receipt.update(result='prepared', python=str(python), runtime=str(runtime),
                        path=str(python.parent) + os.pathsep + os.environ['PATH'])
+        # The run step reads this receipt from the same task-owned evidence directory by default.
         save(evidence / 'preparation.json', receipt)
-        if os.environ.get('GITHUB_ENV'):
-            with Path(os.environ['GITHUB_ENV']).open('a') as output:
-                output.write(f'MCPCLI_CI_PREPARATION={evidence / "preparation.json"}\n')
         print(f'Prepared live CI: {evidence / "preparation.json"}', flush=True)
     except BaseException as error:
         receipt.update(result='failed', error=f'{type(error).__name__}: {error}')

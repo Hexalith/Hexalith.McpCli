@@ -14,7 +14,8 @@ import tempfile
 
 from product_process import run as run_owned
 from evidence_redaction import require_evidence_credentials
-from product_packages import read_json, check_prepared, digest, failure_detail, git, packages, validate_version, write_new
+from product_packages import (read_json, check_prepared, digest, failure_detail, packages, source_changes, source_sha,
+                              validate_version, write_new)
 
 ROOT = Path(__file__).resolve().parents[1]
 
@@ -33,12 +34,12 @@ def staging_root() -> Path:
 
 
 def require_source(receipt: dict) -> None:
-    if receipt['source_sha'] != git('rev-parse', 'HEAD') or git('status', '--porcelain', '--untracked-files=normal', '--ignore-submodules=all'):
+    if receipt['source_sha'] != source_sha() or source_changes():
         raise ValueError('Product checks require this exact clean checkout SHA; tracked or untracked source drift is refused.')
 
 
 def stage_packages() -> None:
-    source = git('rev-parse', 'HEAD')
+    source = source_sha()
     require_source({'source_sha': source})
     directory = staging_root() / 'staged'
     directory.mkdir(parents=True, exist_ok=False)

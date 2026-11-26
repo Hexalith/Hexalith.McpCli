@@ -9,7 +9,7 @@ import platform
 import subprocess
 import sys
 from xml.etree import ElementTree
-from product_packages import failure_detail, digest, git, write_new
+from product_packages import failure_detail, digest, source_sha, write_new
 
 WINDOWS_REQUIRED = [
     'Hexalith.McpCli.Core.Tests.ProfileStoreTests.WindowsProfileFilesHavePrivateAcls',
@@ -35,7 +35,7 @@ def inspect_xml(path):
 
 def run_tests(prepared_path, output):
     prepared = json.loads(Path(prepared_path).read_text())
-    if git('rev-parse', 'HEAD') != prepared['source_sha']:
+    if source_sha() != prepared['source_sha']:
         raise ValueError('Platform tests do not use the preparation source SHA.')
     output = Path(output).resolve()
     output.mkdir(parents=True, exist_ok=False)

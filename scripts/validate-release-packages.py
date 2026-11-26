@@ -5,7 +5,8 @@ import argparse
 import json
 import re
 import struct
-from product_packages import bootstrap_target_framework, digest, run, write_new
+import subprocess
+from product_packages import bootstrap_target_framework, digest, write_new
 from pathlib import Path
 from xml.etree import ElementTree
 from zipfile import ZipFile
@@ -247,8 +248,9 @@ def validate_effective_properties(packages, version):
              'PublishTrimmed', 'PublishAot', 'PublishReadyToRun', 'SelfContained', 'RuntimeIdentifier', 'RuntimeIdentifiers',
              'CreateRidSpecificToolPackages', 'PackageId', 'Version']
     for package in packages:
-        result = run(['dotnet', 'msbuild', package['project'], '-nologo', '-p:Configuration=Release',
-                      f'-p:Version={version}', '-getProperty:' + ','.join(names)], text=True)
+        result = subprocess.run(['dotnet', 'msbuild', str(package['project']), '-nologo', '-p:Configuration=Release',
+                                 f'-p:Version={version}', '-getProperty:' + ','.join(names)],
+                                check=True, capture_output=True, text=True)
         properties = json.loads(result.stdout)['Properties']
         if properties['TargetFramework'] != 'net11.0' or properties['TargetFrameworks']:
             raise ValueError('Release packages must target only net11.0.')
