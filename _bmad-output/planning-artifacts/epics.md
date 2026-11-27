@@ -61,6 +61,7 @@ changeProposals:
   - _bmad-output/planning-artifacts/sprint-change-proposal-2026-11-10.md
   - _bmad-output/planning-artifacts/sprint-change-proposal-2026-11-10-shape-coverage.md
   - _bmad-output/planning-artifacts/sprint-change-proposal-2026-11-20.md
+  - _bmad-output/planning-artifacts/sprint-change-proposal-2026-11-27.md
 inputDocuments:
   - _bmad-output/planning-artifacts/prds/prd-mcpcli-2026-09-21/prd.md
   - _bmad-output/planning-artifacts/prds/prd-mcpcli-2026-09-21/addendum.md
@@ -2160,7 +2161,7 @@ As a maintainer, I need the native restore to use verifiable, current advisory d
 
 - Capture the advisory page identity, retrieval time and semantic difference for the restored cache and official feed. Distinguish confirmed feed rotation from unavailable data, a persistent mismatch or a real advisory affecting the restored graph.
 - If rotation is confirmed, restore into a fresh isolated cache and audit that restore and its artifacts against the new snapshot. Bound recovery to one new attempt. Test a stable feed, rotation, persistent mismatch, unavailable feed and a policy-violating dependency. Only a fully verified restore passes.
-- Run the full Linux lane on the candidate SHA and record the actual outcomes of the approved live vectors and independent cases (22 plus two at the audit baseline). Require passing Windows and macOS product jobs on that SHA. A discovery or preflight receipt alone cannot satisfy this story.
+- Run the full Linux lane on the candidate SHA and record the actual outcomes of every active approved companion-plan live vector and both independent cases (22 plus two at the 2026-11-20 audit baseline; reduced to 8 plus two once Story 5.27 lands). Require passing Windows and macOS product jobs on that SHA. A discovery or preflight receipt alone cannot satisfy this story.
 
 ### Story 5.14: Restore the proprietary surface census gate
 
@@ -2246,6 +2247,42 @@ As a module author, I need discovery to advertise only Query defaults the execut
 - Check for conflicting declarations first. A Query with both `aggregateIdProperty` and an `aggregateId` constant is excluded with `ambiguous_aggregate_id`, even if its constant is malformed.
 - For a sole constant, apply both the Gateway syntax and the Module's Identifier Kind using the same rules as execution. Exclude an invalid default with `invalid_routing_value`. Cover a Gateway-valid string such as `routing-list` in a Module with `IdentifierKind.Ulid`, an invalid Gateway identifier in a Module with `IdentifierKind.String`, and valid defaults for both kinds.
 - Through CLI and stdio MCP, verify discovery marks the aggregate ID optional for an admitted default and a Query that omits it sends that default to the Gateway. Verify a valid explicit ID overrides the constant. A Query with neither declaration remains discoverable with `aggregateIdRequired: true`.
+
+### Story 5.25: Fail Fast and Reorder Product CI Gates
+
+As a McpCli maintainer, I need CI to surface live-topology and packaging failures within ~15 minutes instead of waiting 60+ minutes or looping for 3+ hours on broken runs. McpCli owns `.github/actions/after-unit-tests/action.yml`, `tools/live-topology/run-vectors.py`, and `tests/Hexalith.McpCli.Integration.Tests/AspireTopologyFixture.cs`. [AD-16, NFR-7](architecture/architecture-mcpcli-2026-09-22/ARCHITECTURE-SPINE.md)
+
+- Reorder `.github/actions/after-unit-tests/action.yml` so fast package staging/validation/smoke runs first (~25s), followed by `prepare-ci.sh` and the `boundary` live gate before slower conformance and live-vector loops, while keeping all existing artifact uploads (`mcpcli-product-packages`, `mcpcli-linux-product-diagnostics`).
+- Add bounded fail-fast to `tools/live-topology/run-vectors.py` (default `--max-failures 2`, and immediate abort on infrastructure/timeout exit code `124` or fixture initialization failure), marking remaining vectors `skipped-fail-fast` in `live-lane.json` so full live acceptance remains `false` and the run terminates in minutes instead of looping up to the 3h 08m cap.
+- Update `AspireTopologyFixture.cs` to observe Aspire resource terminal failure states (`FailedToStart`, `Exited`) during startup/readiness waiting and fail immediately with the crashed resource's identity instead of waiting out 2-minute readiness or 15-minute command timeouts.
+- Cover fail-fast termination, `skipped-fail-fast` receipt status, and early crashed-host detection with focused unit/runner tests; verify no test weakens `fullLiveAccepted` or masks failures.
+
+### Story 5.26: Remove CI-Script Self-Tests and Cold-Cache Rebuilds from Product CI
+
+As a McpCli maintainer, I need `scripts/product_ci.py linux` to finish in ~4–6 minutes instead of ~55 minutes by stopping CI-script self-tests in the blocking product gate and eliminating redundant empty-cache NuGet downloads and single-threaded rebuilds. McpCli owns `scripts/product_ci.py` and the conformance-vector scripts. [AD-16, NFR-7, AGENTS.md CI policy](architecture/architecture-mcpcli-2026-09-22/ARCHITECTURE-SPINE.md)
+
+- Remove the `tools/live-topology` Python `unittest` suite (~29.5 min) from `scripts/product_ci.py linux` so blocking product CI checks product behavior rather than CI scripts themselves (per `AGENTS.md` / `hexalith-llm-instructions.md`). Refactor the slow `dotnet msbuild` subprocess cases in `tools/live-topology/test_ci.py` to mock MSBuild or separate into an opt-in local suite so on-demand execution runs quickly.
+- Eliminate empty temporary `NUGET_PACKAGES` cold restores and redundant `-m:1` rebuilds in `tools/conformance-vectors/v1/run-sample-loopback.sh`, `run_packaged_process_fixture.py`, and `check_enrolled.py` / `verify_artifact.py`: reuse the warm runner NuGet package cache (read-only / isolated feed overlay for local sample packages) and the already-built Release outputs without mutating shared `bin/` or `obj/` assets.
+- Avoid redundant per-module isolated host rebuilds in `check_enrolled.py` where restored-package integrity (`project.assets.json` + archive SHA-512), inventory coverage, shape coverage, and `production_replay` already verify the exact restored production graph, while keeping `verify_artifact.py` available for standalone candidate-package verification.
+- Verify `scripts/product_ci.py linux` completes with all package, sample-validation, sample-loopback, enrolled-coverage, and live-preflight checks passing and records its wall-clock reduction.
+
+### Story 5.27: Reduce Live Vector Plans to Shape/FR-20 Coverage and Optimize Isolated Execution
+
+As a McpCli maintainer, I need the blocking live Aspire lane to run in ~12–18 minutes instead of 2h 33m while keeping 100% of Operation Shapes, declared Operation kinds, FR-20 Tenants audit/paging proofs, and all 26 loopback parity vectors covered. McpCli owns `tools/live-topology/` and `tests/Hexalith.McpCli.{AppHost,Integration.Tests}`. [FR-20, NFR-7, AD-16](architecture/architecture-mcpcli-2026-09-22/ARCHITECTURE-SPINE.md)
+
+- Trim `tools/live-topology/plans-current/` from 22 plans to the 8 shape- and FR-20-covering plans: Tenants (`tenants.update-tenant`, `tenants.get-tenant-audit`, `tenants.list-tenants`, `tenants.get-tenant`), Parties (`parties.update-party`, `parties.get-party`, `parties.list-parties`), and Projects (`projects.list`). Retain all 26 conformance vectors unchanged in `tools/conformance-vectors/v1/current/modules/` so the 14 de-planned operations continue running in loopback parity. Upgrade `tenants.update-tenant` and `parties.update-party` live vectors/plans to include a caller-supplied idempotency key per AD-16/P6 (closing the Story 5.12 deferred keying follow-up).
+- Pre-prepare `PrepareEventStoreDevelopmentOwnerAsync` owner metadata (`tenants` and `projects`) and Platform `CatalogBuilder` output **once** during `tools/live-topology/prepare-ci.sh`, hash-bind the prepared bundle in `preparation.json`, and consume it in `NativeCatalogRuntime.cs` instead of running 2× `dotnet build` + CatalogBuilder inside every isolated test run.
+- Add bounded parallel isolated-namespace execution (`--max-workers 2`, default 2 on ≥4-vCPU Linux runners, configurable to 1) in `tools/live-topology/run-vectors.py` — leveraging `run-isolated.py`'s existing `unshare --user --net --pid --mount` isolation — and/or reuse a verified clean isolated topology per module when private state reset and owned cleanup receipts remain verified.
+- Update `tools/live-topology/README.md`, `tools/conformance-vectors/v1/README.md`, `README.md`, and `AGENTS.md` (+ byte-identical `CLAUDE.md` and `.github/copilot-instructions.md` via `scripts/check-agent-instructions-sync.sh`). Verify `topology-vector-discovery`, `check_enrolled.py`, preflight, and a full green live CI run on the candidate SHA.
+
+### Story 5.28: Propose Upstream Hexalith.CiCd Job Split for Parallel Product, Live, and Platform Lanes
+
+As a McpCli maintainer, I want `Hexalith.CiCd` to parallelize Linux conformance checks, the live Aspire lane, and Windows/macOS product jobs so platform regressions surface in ~10 minutes instead of waiting behind the entire live lane. `Hexalith.CiCd` owns `.github/workflows/ci.yml` and `.github/hexalith-ci.json`; McpCli owns the proposal and module-side hook split. [AD-16, AGENTS.md Hexalith.CiCd ownership](architecture/architecture-mcpcli-2026-09-22/ARCHITECTURE-SPINE.md)
+
+- Author and submit an upstream change proposal/PR to `Hexalith.CiCd` (making zero local edits to owned `.github/workflows/**` or `.github/hexalith-ci.json` in McpCli) that:
+  1. Allows `windows-windows-product` and `windows-macos-product` to depend on a fast package-staging job/output rather than blocking on the full Linux live Aspire lane.
+  2. Allows Linux product conformance (`product_ci.py`) and Linux live Aspire (`prepare-ci.sh` + `run-ci.sh`) to execute as parallel jobs consuming the shared Release build / staged package artifact.
+- Record the upstream `Hexalith.CiCd` tracking reference and adopt the delivered workflow once `Hexalith.CiCd` rolls it out to McpCli, keeping `python3 references/Hexalith.Builds/check.py` passing.
 
 ## Epic 6: Replace and Retire the Folders CLI and MCP Server
 
