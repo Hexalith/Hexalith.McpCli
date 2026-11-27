@@ -17,7 +17,8 @@ dotnet pack tests/Hexalith.McpCli.Sample.Contracts/Hexalith.McpCli.Sample.Contra
     --configuration "$configuration" --no-build --no-restore \
     -p:IsPackable=true -p:Version=1.0.0 --output "$artifact_dir" -m:1
 
-python3 -m unittest discover -s tools/conformance-vectors/v1 -p 'test_*.py'
+env -u GITHUB_ENV -u GITHUB_PATH -u GITHUB_OUTPUT -u GITHUB_STATE -u GITHUB_STEP_SUMMARY \
+    python3 -m unittest discover -s tools/conformance-vectors/v1 -p 'test_*.py'
 artifact="$artifact_dir/Hexalith.McpCli.Sample.Contracts.1.0.0.nupkg"
 python3 tools/conformance-vectors/v1/validate.py \
     --artifact "$artifact" \

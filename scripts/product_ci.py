@@ -136,12 +136,17 @@ def package_checks(*, platform_checks=False, expected_os=None) -> None:
 def linux_checks() -> None:
     stage_packages()
     package_checks()
-    execute([sys.executable, '-m', 'unittest', 'discover', '-v', '-s', 'scripts/tests', '-p', 'test_*.py'], timeout=900)
+    # Unit tests start without the variables that locate the runner's workflow command files.
+    execute(['env', '-u', 'GITHUB_ENV', '-u', 'GITHUB_PATH', '-u', 'GITHUB_OUTPUT', '-u', 'GITHUB_STATE',
+             '-u', 'GITHUB_STEP_SUMMARY', sys.executable, '-m', 'unittest', 'discover', '-v', '-s', 'scripts/tests',
+             '-p', 'test_*.py'], timeout=900)
     execute(['bash', ROOT / 'tools/conformance-vectors/v1/run-sample-validation.sh', 'Release'])
     execute(['bash', ROOT / 'tools/conformance-vectors/v1/run-sample-loopback.sh'], timeout=1800)
     execute([sys.executable, ROOT / 'tools/conformance-vectors/v1/check_enrolled.py', '--output',
              staging_root() / 'enrolled'], timeout=1800)
-    execute([sys.executable, '-m', 'unittest', 'discover', '-v', '-s', 'tools/live-topology', '-p', 'test_*.py'], timeout=3600)
+    execute(['env', '-u', 'GITHUB_ENV', '-u', 'GITHUB_PATH', '-u', 'GITHUB_OUTPUT', '-u', 'GITHUB_STATE',
+             '-u', 'GITHUB_STEP_SUMMARY', sys.executable, '-m', 'unittest', 'discover', '-v', '-s', 'tools/live-topology',
+             '-p', 'test_*.py'], timeout=3600)
     execute([sys.executable, ROOT / 'tools/live-topology/run-vectors.py', '--output', staging_root() / 'preflight', '--preflight-only'])
 
 
