@@ -38,9 +38,33 @@ Close the five ledger findings on constant overrides, blank cursors with offsets
 - Low, patched. The five original ledger entries link to the resolution table.
 - Low, patched. The sprint tracker links Story 5.24 to this follow-up and records its review status.
 
+### Review Findings
+
+Review on 2026-11-27 of `95a4329a..bcf8cf5d`, with later fixes checked on `main`.
+
+- [ ] [Review][Patch] Medium. Reject a case variant of the `run_query` `aggregateId` argument before submitting to the Gateway [src/Hexalith.McpCli.Mcp/McpCliMcpServiceCollectionExtensions.cs:87]. The stdio probe supplied a valid override with `AggregateId` and received the fixture's default aggregate. The same value under `aggregateId` reached the Gateway as the override.
+- [ ] [Review][Patch] Low. Make the advertised `run_query` input schema reject the reserved paging case variants [src/Hexalith.McpCli.Mcp/McpCliMcpServiceCollectionExtensions.cs:45]. The schema accepted `PageSize: 25` and the same session returned `InvalidParams` for that input. Preserve support for unrelated additional properties.
+- [ ] [Review][Patch] Low. Cover `Cursor` with an offset over child-process stdio for both revisions [tests/Hexalith.McpCli.Cli.Tests/McpStdioProcessTests.cs:279]. The child-process matrix covers the two numeric aliases. The cursor alias is exercised in the in-process matrix.
+- [ ] [Review][Patch] Low. Test a canonical paging argument alongside its case variant [tests/Hexalith.McpCli.Mcp.Tests/McpExecutionTests.cs:337]. An isolated alias test would still pass if the guard accidentally allowed `PageSize` whenever `pageSize` was present. Assert `InvalidParams` and zero Gateway calls for the mixed request.
+- [ ] [Review][Patch] Low. Exercise a malformed explicit `aggregateId` on a defaulted Query over stdio [tests/Hexalith.McpCli.Cli.Tests/McpStdioProcessTests.cs:119]. The CLI checks the complete `/aggregateId` refusal. The new stdio matrix covers omission and valid override. Check the structured and text refusal and zero submissions over stdio.
+- [ ] [Review][Patch] Low. Clarify diagnostic precedence for conflicting Query declarations in the README [README.md:570]. `invalid_routing_value` applies to a sole invalid constant. A Query with both declarations reports `ambiguous_aggregate_id` even when its constant is invalid.
+- [x] [Review][Defer] Low. Correct the obsolete AD-19 description of catalog admission [_bmad-output/planning-artifacts/architecture/architecture-mcpcli-2026-09-22/ARCHITECTURE-SPINE.md:232]. Deferred to the architecture document. Runtime admission uses both checks.
+
+#### Rejected
+
+- Low. The SDK discovery probe could fall back before a slow child started. `1bff511a` gives the pinned handshake the test's overall deadline.
+- Medium. The reviewed revision could return success for malformed Gateway paging. Story 5.22 adds response validation and parity tests. The resolution is already tracked (`deferred-work.md:80`).
+- Low. The original verification record omitted the sample loopback command. The independent review ran the conformance gates and records their results below.
+
 ## Verification
 
 - The .NET 11 Release solution restore and build passed with the workspace's installed Aspire bundle. The first full Core, CLI and MCP suites reported 922, 632 and 96 passing tests. Six expected platform or benchmark tests were skipped.
 - After the review patches, the Release CLI and MCP test builds passed with warnings treated as errors. The focused `PlatformScopeCommandTests`, `McpStdioProcessTests`, and `McpExecutionTests` ran 67 tests with zero failures or skips.
 - `run-sample-validation.sh Release` passed 194 validator tests and validated three sample vectors. The pinned Commitlint CLI reported zero warnings and problems for the exact commit message.
 - `git diff --check` passed.
+
+### Independent review on 2026-11-27
+
+- On `bcf8cf5d` with its pinned Builds revision, the three focused Release projects built with `-warnaserror`. `CatalogTests`, `PlatformScopeCommandTests`, `McpStdioProcessTests`, and `McpExecutionTests` passed all 131 tests.
+- `bash tools/conformance-vectors/v1/run-sample-validation.sh Release` passed the 194 validator tests and all three sample vectors.
+- A local stdio probe with the routing fixture and a loopback Gateway confirmed the aggregate override casing issue and the difference between the advertised schema and the paging guard.

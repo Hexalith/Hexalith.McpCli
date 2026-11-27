@@ -1719,3 +1719,10 @@ failure found during verification adds one open entry, for a total of 53.
   owner: McpCli maintainer.
   evidence: `deferred-work.md:259`, `:406`, `:492`, `:646`, `:863`, `:926`, `:971`, `:1094` and `:1355` carry "2026-12-21", as do the headings at `:1689` and `:1708`. The 25 November Story 5.11 code review found them, and Story 5.11 audited entries `bcf011d9603aebe0` and `a03161fe049a33d2` are among them.
   status: open; pre-existing data from the six-item deferred-work batch.
+
+## Deferred from: code review of spec-reconcile-deferred-query-contract.md (2026-11-27)
+
+- source_spec: `_bmad-output/implementation-artifacts/spec-reconcile-deferred-query-contract.md`
+  summary: Correct AD-19's obsolete description of Query default admission.
+  evidence: `_bmad-output/planning-artifacts/architecture/architecture-mcpcli-2026-09-22/ARCHITECTURE-SPINE.md:232` says catalog admission checks only Gateway syntax. `src/Hexalith.McpCli.Core/Catalog/CatalogBuilder.cs:195` checks both Gateway syntax and the Module's Identifier Kind.
+  status: open. Update the architecture description to match the implemented rule.
