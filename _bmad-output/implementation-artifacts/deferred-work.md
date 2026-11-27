@@ -1733,3 +1733,32 @@ failure found during verification adds one open entry, for a total of 53.
   summary: Verify whether Aspire `*-dapr` / `*-dapr-cli` sidecar resources can safely be added to `IsolatedTopologyLifecycle` terminal-failure watching without false triggers.
   evidence: Medium (unverified / `maybe-false`). `tests/Hexalith.McpCli.Integration.Tests/IsolatedTopologyLifecycle.cs:64-68` watches only the declared `AspireResource.Name` project resources (`eventstore`, `tenants`, `parties`, `projects`, `projects-workers`). `tests/Hexalith.McpCli.Integration.Tests/AspireTopologyFixture.cs:72-81` already bounds sidecar discovery and `/v1.0/healthz` checks to 10s + 30s. Settling this requires observing live Aspire 17.0.0 + CommunityToolkit Dapr preview `ResourceNotificationService` state transitions for `IDaprSidecarResource` and `*-dapr-cli` during a real isolated live run to confirm sidecar resources never emit benign `Finished`/`Exited` transitions.
   status: open.
+
+## Deferred from: code review of spec-5-25-fail-fast-and-reorder-product-ci-gates.md (2026-11-30)
+
+- source_spec: `_bmad-output/implementation-artifacts/spec-5-25-fail-fast-and-reorder-product-ci-gates.md`
+  summary: Match each passing live case to a distinct runtime directory.
+  evidence: `tools/live-topology/ci.py:1304` counts unique raw vector receipt strings before resolving paths. `tools/live-topology/ci.py:1269` checks smoke reuse only against independent receipts. `tools/live-topology/ci.py:1356` compares the final directory count without matching the directory set to the verified receipts.
+  status: open. The legacy gate already had the raw-string uniqueness and directory-count checks.
+
+- source_spec: `_bmad-output/implementation-artifacts/spec-5-25-fail-fast-and-reorder-product-ci-gates.md`
+  summary: Revalidate prepared fixture provenance after the last live test.
+  evidence: `tools/live-topology/ci.py:1258` checks prepared provenance before launching smoke. `tools/live-topology/ci.py:1356` checks only the runtime count afterward, so a fixture change during smoke can survive into final acceptance.
+  status: open. The legacy gate already verified fixture provenance only before the final case.
+
+- source_spec: `_bmad-output/implementation-artifacts/spec-5-25-fail-fast-and-reorder-product-ci-gates.md`
+  summary: Record a source advisory diagnostic and refuse cache index drift.
+  evidence: `tools/live-topology/ci.py:508` raises before writing a diagnostic if the required index is missing or ambiguous. At the optional post-build check it returns without matching the cache to the sealed advisory snapshot.
+  status: open. Story 5.13 owns the source advisory proof.
+
+- source_spec: `_bmad-output/implementation-artifacts/spec-5-25-fail-fast-and-reorder-product-ci-gates.md`
+  summary: Bind the live runner's NuGet caches to the successful restore attempt.
+  evidence: `tools/live-topology/ci.py:1221` takes the cache fields from preparation and validates directory containment. In a disposable advisory rotation fixture, replacing both paths with the superseded attempt's directories still allowed boundary to pass with the older HTTP cache.
+  status: open. Story 5.13 owns cache binding after advisory rotation.
+
+## Deferred from: code review of spec-5-13-restore-the-native-dependency-audit-and-live-ci.md (2026-11-27)
+
+- source_spec: `_bmad-output/implementation-artifacts/spec-5-13-restore-the-native-dependency-audit-and-live-ci.md`
+  summary: Harden Story 5.25 split-lane `ci.py` boundary and `live-lane.json` guards (symlinked `ci-live.json` refusal in `run_remaining`, pre-existing receipt check ordering in `run_boundary`, `outside.json` symlink ordering in `verify_boundary_receipt`, and strict `int` checks for `passed`/`failed`/`exitCode`).
+  evidence: Surfaced during Story 5.13 code review (BH11, ECH11, ECH13) from concurrent Story 5.25 hunks in `e3a5080a` (`tools/live-topology/ci.py:1299-1307`, `:1361-1455`, `:1456-1475`, `:1541-1551`); not caused by Story 5.13.
+  status: open.

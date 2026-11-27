@@ -8,7 +8,7 @@ import json
 import os
 from pathlib import Path
 import re
-from urllib.parse import urlsplit
+from urllib.parse import unquote, urlsplit
 import xml.etree.ElementTree as ET
 
 PACKAGE_SOURCE = 'https://api.nuget.org/v3/index.json'
@@ -26,9 +26,14 @@ CLASSIFICATION_ADVISORY_AFFECTING_GRAPH = 'advisory_affecting_graph'
 _ISO8601_RE = re.compile(
     r'^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2})(?:\.(\d+))?(Z|[+-]\d{2}:\d{2})$'
 )
-_REDACTED_HEADERS = frozenset({'authorization', 'proxy-authorization', 'cookie', 'set-cookie'})
+_REDACTED_HEADERS = frozenset({
+    'authorization', 'proxy-authorization', 'cookie', 'set-cookie',
+    'x-api-key', 'x-nuget-apikey', 'www-authenticate',
+})
 _NU19_CODE_RE = re.compile(r'\b(NU190[0-4])\b', re.IGNORECASE)
 _ADVISORY_ERROR_CODES = frozenset({'NU1901', 'NU1902', 'NU1903', 'NU1904'})
+_ENCODED_TRAVERSAL_RE = re.compile(r'%(?:2e|2f|5c)', re.IGNORECASE)
+_PROXY_TUNNEL_RE = re.compile(r'^HTTP/\S+\s+200\s+connection\s+established\b', re.IGNORECASE)
 
 
 class AdvisoryVerificationError(ValueError):
@@ -81,24 +86,33 @@ def parse_iso8601_utc(value: object) -> tuple[int, int]:
         raise ValueError('Advisory @updated timestamp has unsupported fractional precision: ' + value)
     nanos = int(fraction.ljust(9, '0')) if fraction else 0
     base = value[:19] + ('+00:00' if match.group(8) == 'Z' else match.group(8))
-    dt = datetime.fromisoformat(base).astimezone(timezone.utc)
-    epoch = int(dt.timestamp())
+    try:
+        dt = datetime.fromisoformat(base).astimezone(timezone.utc)
+        epoch = int(dt.timestamp())
+    except (ValueError, OverflowError) as error:
+        raise ValueError('Advisory @updated timestamp is out of range or invalid: ' + value) from error
     return epoch, nanos
 
 
 def _is_official_page_url(url: object) -> bool:
     if not isinstance(url, str) or not url.startswith(PAGE_PREFIX):
         return False
-    if any(ch.isspace() or ord(ch) < 32 for ch in url):
+    if any(ch.isspace() or ord(ch) < 32 for ch in url) or '\\' in url:
+        return False
+    if _ENCODED_TRAVERSAL_RE.search(url):
         return False
     parsed = urlsplit(url)
     if parsed.scheme != 'https' or parsed.netloc != 'data.nuget.org':
         return False
     if not parsed.path.startswith('/v3-vulnerabilities/') or parsed.query or parsed.fragment:
         return False
-    segments = parsed.path.split('/')
-    if any(part in ('..', '.') for part in segments) or not segments[-1]:
+    decoded_path = unquote(parsed.path)
+    if '\\' in decoded_path or not decoded_path.startswith('/v3-vulnerabilities/'):
         return False
+    for candidate in (parsed.path, decoded_path):
+        segments = candidate.split('/')
+        if any(part in ('..', '.') for part in segments) or not segments[-1]:
+            return False
     return True
 
 
@@ -112,10 +126,9 @@ def validate_advisory_index(raw_bytes: bytes, *, source_label: str = 'advisory')
         raise ValueError('The native audit advisory index is incomplete.')
     if any(not isinstance(page, dict) for page in pages):
         raise ValueError('The native audit advisory index has invalid or ambiguous pages.')
-    names = [page.get('@name', '') for page in pages]
-    if len(set(names)) != len(names) or any(
-            not isinstance(name, str) or not re.fullmatch(r'[A-Za-z0-9_-]+', name) or name == 'index'
-            for name in names):
+    names = [page.get('@name') for page in pages]
+    if any(not isinstance(name, str) or not re.fullmatch(r'[A-Za-z0-9_-]+', name) or name in ('index', 'diagnostic')
+           for name in names) or len(set(names)) != len(names):
         raise ValueError('The native audit advisory index has invalid or ambiguous pages.')
     for page in pages:
         if not _is_official_page_url(page.get('@id')):
@@ -134,7 +147,8 @@ def parse_advisory_page(raw_bytes: bytes, *, name: str) -> dict[str, list]:
         raise ValueError(f'The native audit advisory page must be a JSON object: {name}')
     normalized: dict[str, list] = {}
     for package_id, advisories in document.items():
-        if not isinstance(package_id, str) or not isinstance(advisories, list):
+        if not isinstance(package_id, str) or not isinstance(advisories, list) \
+                or any(not isinstance(entry, dict) for entry in advisories):
             raise ValueError(f'The native audit advisory page has malformed entries: {name}')
         key = package_id.lower()
         normalized.setdefault(key, []).extend(advisories)
@@ -150,6 +164,8 @@ def parse_http_headers(headers_path: Path | None) -> tuple[int | None, dict[str,
     last_status_index = None
     last_status = None
     for idx, line in enumerate(lines):
+        if _PROXY_TUNNEL_RE.match(line):
+            continue
         match = re.match(r'^HTTP/\S+\s+(\d+)', line)
         if match:
             last_status_index = idx
@@ -201,8 +217,6 @@ def _merge_advisory_maps(page_maps: dict[str, dict[str, list]]) -> dict[str, dic
 
 
 def compute_semantic_diff(
-    cached_index: list[dict] | None,
-    online_index: list[dict] | None,
     cached_page_maps: dict[str, dict[str, list]],
     online_page_maps: dict[str, dict[str, list]],
     index_changes: dict,
@@ -285,6 +299,28 @@ def write_diagnostic(diagnostic: dict, *paths: Path | None) -> None:
         written.add(resolved)
 
 
+def preserve_prior_rotation(error: BaseException, prior_rotation_diag: dict | None, *paths: Path | None) -> None:
+    """Attach priorRotationDiagnostic to a failing retry diagnostic and rewrite retained files."""
+    if prior_rotation_diag is None:
+        return
+    diag = getattr(error, 'diagnostic', None)
+    if isinstance(diag, dict):
+        enriched = dict(diag, priorRotationDiagnostic=prior_rotation_diag)
+        error.diagnostic = enriched  # type: ignore[attr-defined]
+        write_diagnostic(enriched, *paths)
+        return
+    for path in paths:
+        if path is not None and path.is_file():
+            try:
+                existing = json.loads(path.read_text())
+            except (OSError, json.JSONDecodeError):
+                continue
+            if isinstance(existing, dict) and existing.get('priorRotationDiagnostic') is None:
+                existing['priorRotationDiagnostic'] = prior_rotation_diag
+                write_diagnostic(existing, *paths)
+                return
+
+
 def package_graph(assets_path: Path) -> dict:
     """Bind every direct/transitive restored package to its content and archive hashes."""
     assets = json.loads(assets_path.read_text())
@@ -328,16 +364,17 @@ def require_policy(assets_path: Path, *, diagnostic_path: Path | None = None,
     suppressed = [*warnings.get('noWarn', []), *warnings.get('warnNotAsError', []),
                   *(code for framework in assets['project'].get('frameworks', {}).values()
                     for package in framework.get('dependencies', {}).values() for code in package.get('noWarn', []))]
-    logs = [item for item in assets.get('logs', []) if item.get('level', '').lower() in ('warning', 'error')]
+    logs = [item for item in assets.get('logs', [])
+            if isinstance(item, dict) and str(item.get('level') or '').lower() in ('warning', 'error')]
     policy_violation = (
         any(audit.get(name) != value for name, value in
             {'enableAudit': 'true', 'auditLevel': 'low', 'auditMode': 'all'}.items())
         or bool(audit.get('suppressedAdvisories'))
         or warnings.get('allWarningsAsErrors') is not True
-        or any(re.fullmatch(r'NU19\d{2}', code, re.IGNORECASE) for code in suppressed)
+        or any(isinstance(code, str) and re.fullmatch(r'NU19\d{2}', code, re.IGNORECASE) for code in suppressed)
     )
     if policy_violation or logs:
-        log_codes = sorted({str(item.get('code', '')).upper() for item in logs if item.get('code')})
+        log_codes = sorted({str(item.get('code') or '').upper() for item in logs if item.get('code')})
         advisory_codes = [code for code in log_codes if code in _ADVISORY_ERROR_CODES]
         is_feed_outage = 'NU1900' in log_codes and not advisory_codes and not policy_violation
         classification = (
@@ -349,8 +386,8 @@ def require_policy(assets_path: Path, *, diagnostic_path: Path | None = None,
         restored_map = _normalize_restored_packages(effective_packages)
         intersecting = []
         for item in logs:
-            lib = str(item.get('libraryId', '')).lower()
-            message = str(item.get('message', ''))
+            lib = str(item.get('libraryId') or '').lower()
+            message = str(item.get('message') or '')
             matched_pkg = None
             if lib and lib in restored_map:
                 matched_pkg = lib
@@ -363,7 +400,7 @@ def require_policy(assets_path: Path, *, diagnostic_path: Path | None = None,
                 intersecting.append({
                     'packageId': matched_pkg,
                     'restoredIdentities': restored_map[matched_pkg],
-                    'code': str(item.get('code', '')).upper(),
+                    'code': str(item.get('code') or '').upper(),
                     'message': message,
                 })
         diagnostic = {
@@ -500,11 +537,6 @@ def advisory_bytes_match(cached: bytes, online: bytes) -> bool:
         return False
 
 
-def refuse_advisory_mismatch(name: str, cached: bytes | None, online: bytes | None, status: str) -> None:
-    raise ValueError('The native audit used stale, incomplete or cache-only advisory bytes: ' + name
-                     + ' (cache=' + _meta_summary(cached) + ' online=' + _meta_summary(online) + ' status=' + status + ')')
-
-
 def advisory_cache_index(cache: Path) -> Path:
     """Require the restore HTTP cache to contain exactly one NuGet advisory index."""
     indexes = list(cache.rglob('vuln_index.dat'))
@@ -537,41 +569,41 @@ def snapshot_matches_cache(cache: Path, snapshot: Path) -> bool:
 
 
 def _evaluate_snapshot_comparison(
-    older_index_bytes: bytes,
-    older_pages: list[dict],
-    older_page_bytes: dict[str, bytes | None],
-    older_page_mtimes: dict[str, str | None],
-    newer_index_bytes: bytes,
-    newer_pages: list[dict],
-    newer_page_bytes: dict[str, bytes | None],
-    newer_page_times: dict[str, str | None],
-    newer_page_statuses: dict[str, int | None],
-    newer_page_headers: dict[str, dict[str, str]],
+    cached_index_bytes: bytes,
+    cached_pages: list[dict],
+    cached_page_bytes: dict[str, bytes | None],
+    cached_page_mtimes: dict[str, str | None],
+    online_index_bytes: bytes,
+    online_pages: list[dict],
+    online_page_bytes: dict[str, bytes | None],
+    online_page_times: dict[str, str | None],
+    online_page_statuses: dict[str, int | None],
+    online_page_headers: dict[str, dict[str, str]],
     *,
-    older_index_mtime: str | None,
-    newer_index_time: str | None,
-    newer_index_status: int | None,
-    newer_index_headers: dict[str, str],
+    cached_index_mtime: str | None,
+    online_index_time: str | None,
+    online_index_status: int | None,
+    online_index_headers: dict[str, str],
     restored_packages: dict | set[str] | list[str] | None = None,
 ) -> tuple[str, dict, list[str]]:
-    """Compare two validated official advisory snapshots and classify match / confirmed_rotation / persistent_mismatch."""
-    older_by_name = {entry['@name']: entry for entry in older_pages}
-    newer_by_name = {entry['@name']: entry for entry in newer_pages}
-    all_names = sorted(set(older_by_name) | set(newer_by_name))
+    """Compare cached vs online/proven official advisory snapshots and classify the difference."""
+    cached_by_name = {entry['@name']: entry for entry in cached_pages}
+    online_by_name = {entry['@name']: entry for entry in online_pages}
+    all_names = sorted(set(cached_by_name) | set(online_by_name))
 
-    index_match = advisory_bytes_match(older_index_bytes, newer_index_bytes)
+    index_match = advisory_bytes_match(cached_index_bytes, online_index_bytes)
     pages_diag: dict[str, dict] = {
         'index': {
             'name': 'index',
             'url': INDEX,
-            'cachedSha256': _bytes_sha256(older_index_bytes),
-            'cachedBytes': len(older_index_bytes),
-            'cachedRetrievedAtUtc': older_index_mtime,
-            'onlineSha256': _bytes_sha256(newer_index_bytes),
-            'onlineBytes': len(newer_index_bytes),
-            'onlineRetrievedAtUtc': newer_index_time,
-            'httpStatus': newer_index_status,
-            'headers': newer_index_headers,
+            'cachedSha256': _bytes_sha256(cached_index_bytes),
+            'cachedBytes': len(cached_index_bytes),
+            'cachedRetrievedAtUtc': cached_index_mtime,
+            'onlineSha256': _bytes_sha256(online_index_bytes),
+            'onlineBytes': len(online_index_bytes),
+            'onlineRetrievedAtUtc': online_index_time,
+            'httpStatus': online_index_status,
+            'headers': online_index_headers,
             'bytesMatch': index_match,
         }
     }
@@ -582,16 +614,17 @@ def _evaluate_snapshot_comparison(
     regressed_pages: list[str] = []
     unchanged_drifted_pages: list[str] = []
     missing_or_invalid_cached: list[str] = []
+    missing_or_invalid_online: list[str] = []
 
     cached_maps: dict[str, dict[str, list]] = {}
     online_maps: dict[str, dict[str, list]] = {}
     all_pages_match = True
 
     for name in all_names:
-        c_meta = older_by_name.get(name)
-        o_meta = newer_by_name.get(name)
-        c_bytes = older_page_bytes.get(name)
-        o_bytes = newer_page_bytes.get(name)
+        c_meta = cached_by_name.get(name)
+        o_meta = online_by_name.get(name)
+        c_bytes = cached_page_bytes.get(name)
+        o_bytes = online_page_bytes.get(name)
 
         if c_bytes is not None:
             try:
@@ -602,7 +635,12 @@ def _evaluate_snapshot_comparison(
             missing_or_invalid_cached.append(name)
 
         if o_bytes is not None:
-            online_maps[name] = parse_advisory_page(o_bytes, name=name)
+            try:
+                online_maps[name] = parse_advisory_page(o_bytes, name=name)
+            except ValueError:
+                missing_or_invalid_online.append(name)
+        elif o_meta is not None:
+            missing_or_invalid_online.append(name)
 
         b_match = (c_bytes is not None and o_bytes is not None and advisory_bytes_match(c_bytes, o_bytes))
         if not b_match:
@@ -626,7 +664,7 @@ def _evaluate_snapshot_comparison(
                 regressed_pages.append(name)
             else:
                 direction = 'unchanged'
-                if c_meta['@id'] == o_meta['@id'] and not b_match:
+                if c_meta['@id'] != o_meta['@id'] or not b_match:
                     unchanged_drifted_pages.append(name)
 
         pages_diag[name] = {
@@ -636,14 +674,14 @@ def _evaluate_snapshot_comparison(
             'cachedUpdated': c_meta['@updated'] if c_meta is not None else None,
             'cachedSha256': _bytes_sha256(c_bytes),
             'cachedBytes': len(c_bytes) if c_bytes is not None else None,
-            'cachedRetrievedAtUtc': older_page_mtimes.get(name),
+            'cachedRetrievedAtUtc': cached_page_mtimes.get(name),
             'onlineId': o_meta['@id'] if o_meta is not None else None,
             'onlineUpdated': o_meta['@updated'] if o_meta is not None else None,
             'onlineSha256': _bytes_sha256(o_bytes),
             'onlineBytes': len(o_bytes) if o_bytes is not None else None,
-            'onlineRetrievedAtUtc': newer_page_times.get(name),
-            'httpStatus': newer_page_statuses.get(name),
-            'headers': newer_page_headers.get(name, {}),
+            'onlineRetrievedAtUtc': online_page_times.get(name),
+            'httpStatus': online_page_statuses.get(name),
+            'headers': online_page_headers.get(name, {}),
             'updatedDirection': direction,
             'bytesMatch': b_match,
         }
@@ -656,15 +694,17 @@ def _evaluate_snapshot_comparison(
         'unchangedMetadataDriftedPages': unchanged_drifted_pages,
     }
     semantic_diff = compute_semantic_diff(
-        older_pages, newer_pages, cached_maps, online_maps, index_changes, restored_packages=restored_packages
+        cached_maps, online_maps, index_changes, restored_packages=restored_packages
     )
 
     offending: list[str] = []
-    if index_match and all_pages_match and not added_pages and not removed_pages and not missing_or_invalid_cached:
+    if (index_match and all_pages_match and not added_pages and not removed_pages
+            and not missing_or_invalid_cached and not missing_or_invalid_online):
         classification = CLASSIFICATION_MATCH
     elif (not regressed_pages
           and not unchanged_drifted_pages
           and not missing_or_invalid_cached
+          and not missing_or_invalid_online
           and not removed_pages
           and len(advanced_pages) >= 1):
         classification = CLASSIFICATION_CONFIRMED_ROTATION
@@ -672,12 +712,19 @@ def _evaluate_snapshot_comparison(
     else:
         classification = CLASSIFICATION_PERSISTENT_MISMATCH
         offending = sorted(set(
-            regressed_pages + unchanged_drifted_pages + missing_or_invalid_cached + removed_pages
+            regressed_pages + unchanged_drifted_pages + missing_or_invalid_cached
+            + missing_or_invalid_online + removed_pages + added_pages
         ))
         if not offending:
             offending = ['index']
 
-    details = {'pages': pages_diag, 'semanticDiff': semantic_diff, 'indexChanges': index_changes}
+    details = {
+        'pages': pages_diag,
+        'semanticDiff': semantic_diff,
+        'indexChanges': index_changes,
+        'missingOrInvalidCached': missing_or_invalid_cached,
+        'missingOrInvalidOnline': missing_or_invalid_online,
+    }
     return classification, details, offending
 
 
@@ -783,6 +830,7 @@ def online_advisories(
         raise AdvisoryVerificationError(f'{error} ({CLASSIFICATION_UNAVAILABLE})', CLASSIFICATION_UNAVAILABLE, diag) from error
 
     cache_retrieved_at = _file_mtime_utc(index_path)
+    cached_by_name = {entry['@name']: entry for entry in cached_pages}
     proven_drift_note: str | None = None
 
     if proven is not None:
@@ -854,16 +902,16 @@ def online_advisories(
             proven_page_mtimes[name] = _file_mtime_utc(p_file)
             _, proven_page_headers[name] = parse_http_headers(proven / (name + '.headers'))
 
-        # Compare proven (older) -> cached (newer) to distinguish exact match, forward rotation, or drift.
+        # Compare module cache (cached*) -> proven snapshot (online*) so metadata and semanticDiff stay non-inverted.
         proven_cls, proven_details, proven_offending = _evaluate_snapshot_comparison(
-            proven_index_bytes, proven_pages, proven_page_bytes, proven_page_mtimes,
             cached_index_bytes, cached_pages, cached_page_bytes, cached_page_mtimes,
-            {entry['@name']: 200 for entry in cached_pages},
-            {entry['@name']: proven_page_headers.get(entry['@name'], {}) for entry in cached_pages},
-            older_index_mtime=_file_mtime_utc(proven_index_path),
-            newer_index_time=cache_retrieved_at,
-            newer_index_status=proven_index_status,
-            newer_index_headers=proven_index_headers,
+            proven_index_bytes, proven_pages, proven_page_bytes, proven_page_mtimes,
+            {entry['@name']: 200 for entry in proven_pages},
+            {entry['@name']: proven_page_headers.get(entry['@name'], {}) for entry in proven_pages},
+            cached_index_mtime=cache_retrieved_at,
+            online_index_time=_file_mtime_utc(proven_index_path),
+            online_index_status=proven_index_status,
+            online_index_headers=proven_index_headers,
             restored_packages=restored_packages,
         )
         if proven_cls == CLASSIFICATION_MATCH:
@@ -933,12 +981,25 @@ def online_advisories(
                 receipt['diagnosticPath'] = str(diagnostic_path)
             return receipt
 
-        if proven_cls == CLASSIFICATION_CONFIRMED_ROTATION:
+        # Cache is strictly newer than proven (forward rotation over proven) iff in cached->proven comparison:
+        # zero invalid/missing pages on either side, zero pages where proven > cache (advancedPages),
+        # zero pages with unchanged @updated whose @id or bytes differ, zero pages in proven missing from cache (addedPages),
+        # and >=1 page where cache > proven (regressedPages).
+        idx_changes = proven_details['indexChanges']
+        cache_is_forward_rotation_over_proven = (
+            not proven_details['missingOrInvalidCached']
+            and not proven_details['missingOrInvalidOnline']
+            and not idx_changes['advancedPages']
+            and not idx_changes['unchangedMetadataDriftedPages']
+            and not idx_changes['addedPages']
+            and len(idx_changes['regressedPages']) >= 1
+        )
+        if cache_is_forward_rotation_over_proven:
             # Module restore saw a strictly newer official feed than the proven snapshot.
             # Fall through to verify the cache directly against the live feed!
             proven_drift_note = 'forward_rotation_over_proven_verified_against_live'
         else:
-            # Unchanged-metadata content drift, regression, or missing page vs proven snapshot:
+            # Unchanged-metadata content drift, regression behind proven, corrupt/missing cache page, or dropped page:
             # fail closed immediately without touching the network.
             diagnostic = {
                 'schemaVersion': 1,
@@ -981,7 +1042,7 @@ def online_advisories(
         'onlineRetrievedAtUtc': live_index_time,
         'httpStatus': live_index_status,
         'headers': live_index_headers,
-        'bytesMatch': False,
+        'bytesMatch': live_index_bytes is not None and advisory_bytes_match(cached_index_bytes, live_index_bytes),
     }
     if index_curl_err is not None:
         diag = _build_unavailable_diagnostic(
@@ -1058,28 +1119,33 @@ def online_advisories(
         live_page_times[name] = fetched_at
         live_page_statuses[name] = status
         live_page_headers[name] = headers
-        # Re-read cached page at verification time in case cache state changed.
-        cached_path = index_path.with_name('vuln_data_' + name + '.dat')
-        if cached_path.is_file():
-            cached_page_bytes[name] = cached_path.read_bytes()
-            cached_page_mtimes[name] = _file_mtime_utc(cached_path)
-        else:
-            cached_page_bytes[name] = None
-            cached_page_mtimes[name] = None
+        # Only reload cached vuln_data_<name>.dat for pages declared in cached_pages.
+        c_meta = cached_by_name.get(name)
+        if c_meta is not None:
+            cached_path = index_path.with_name('vuln_data_' + name + '.dat')
+            if cached_path.is_file():
+                cached_page_bytes[name] = cached_path.read_bytes()
+                cached_page_mtimes[name] = _file_mtime_utc(cached_path)
+            else:
+                cached_page_bytes[name] = None
+                cached_page_mtimes[name] = None
+        c_bytes = cached_page_bytes.get(name) if c_meta is not None else None
         partial_pages_diag[name] = {
             '@name': name,
             'url': url,
+            'cachedId': c_meta['@id'] if c_meta is not None else None,
+            'cachedUpdated': c_meta['@updated'] if c_meta is not None else None,
+            'cachedSha256': _bytes_sha256(c_bytes),
+            'cachedBytes': len(c_bytes) if c_bytes is not None else None,
+            'cachedRetrievedAtUtc': cached_page_mtimes.get(name) if c_meta is not None else None,
             'onlineId': url,
             'onlineUpdated': entry['@updated'],
-            'cachedSha256': _bytes_sha256(cached_page_bytes.get(name)),
-            'cachedBytes': len(cached_page_bytes[name]) if cached_page_bytes.get(name) is not None else None,
-            'cachedRetrievedAtUtc': cached_page_mtimes.get(name),
             'onlineSha256': _bytes_sha256(payload),
             'onlineBytes': len(payload) if payload is not None else None,
             'onlineRetrievedAtUtc': fetched_at,
             'httpStatus': status,
             'headers': headers,
-            'bytesMatch': False,
+            'bytesMatch': c_bytes is not None and payload is not None and advisory_bytes_match(c_bytes, payload),
         }
         if curl_err is not None:
             diag = _build_unavailable_diagnostic(
@@ -1116,7 +1182,7 @@ def online_advisories(
             write_diagnostic(diag, output / 'diagnostic.json', diagnostic_path)
             raise AdvisoryVerificationError(
                 f'The native audit advisory page {name} is {CLASSIFICATION_UNAVAILABLE}: HTTP {status} '
-                f'(cache={_meta_summary(cached_page_bytes.get(name))} online={_meta_summary(payload)} status={status})',
+                f'(cache={_meta_summary(c_bytes)} online={_meta_summary(payload)} status={status})',
                 CLASSIFICATION_UNAVAILABLE,
                 diag,
             )
@@ -1142,7 +1208,7 @@ def online_advisories(
                 diag,
             ) from error
 
-    # Re-check every cached page file from cached_pages as well (covers removed/deleted files).
+    # Re-check every cached page file declared in cached_pages (covers deleted/mutated files).
     for entry in cached_pages:
         name = entry['@name']
         cached_path = index_path.with_name('vuln_data_' + name + '.dat')
@@ -1157,10 +1223,10 @@ def online_advisories(
         cached_index_bytes, cached_pages, cached_page_bytes, cached_page_mtimes,
         live_index_bytes, live_pages, live_page_bytes, live_page_times,
         live_page_statuses, live_page_headers,
-        older_index_mtime=cache_retrieved_at,
-        newer_index_time=live_index_time,
-        newer_index_status=live_index_status,
-        newer_index_headers=live_index_headers,
+        cached_index_mtime=cache_retrieved_at,
+        online_index_time=live_index_time,
+        online_index_status=live_index_status,
+        online_index_headers=live_index_headers,
         restored_packages=restored_packages,
     )
 
@@ -1304,6 +1370,7 @@ def audit_project(
             attempt_evidence = evidence if attempt == 0 else evidence.with_name(evidence.name + '-retry-1')
             attempt_proven = proven_advisories if attempt == 0 else None
             attempt_diag_path = diag_target
+            advisories_diag_path = attempt_private / 'advisories/diagnostic.json'
             fixture, config = _create_audit_fixture(attempt_private, expected, sdk_policy)
             environment = dict(
                 os.environ,
@@ -1323,16 +1390,22 @@ def audit_project(
                     300, attempt_evidence, cwd=attempt_private, environment=environment, require_complete_stdout=False,
                 )
             except RuntimeError as error:
-                raise classify_restore_failure(
+                classified = classify_restore_failure(
                     error, attempt_evidence, diagnostic_path=attempt_diag_path,
                     restored_packages=expected, recovery_attempt=attempt,
-                ) from error
+                )
+                preserve_prior_rotation(classified, prior_rotation_diag, attempt_diag_path)
+                raise classified from error
 
             audited_path = attempt_private / 'obj/project.assets.json'
-            policy = require_policy(
-                audited_path, diagnostic_path=attempt_diag_path,
-                restored_packages=expected, recovery_attempt=attempt,
-            )
+            try:
+                policy = require_policy(
+                    audited_path, diagnostic_path=attempt_diag_path,
+                    restored_packages=expected, recovery_attempt=attempt,
+                )
+            except AdvisoryVerificationError as error:
+                preserve_prior_rotation(error, prior_rotation_diag, attempt_diag_path)
+                raise
             actual = package_graph(audited_path)
             require_coverage(expected, actual)
 
@@ -1357,7 +1430,7 @@ def audit_project(
                         reason='second_mismatch_after_retry',
                         priorRotationDiagnostic=prior_rotation_diag,
                     )
-                    write_diagnostic(escalated, attempt_private / 'advisories/diagnostic.json', attempt_diag_path)
+                    write_diagnostic(escalated, advisories_diag_path, attempt_diag_path)
                     pages = ', '.join(escalated.get('offendingPages', [])) or 'index'
                     raise AdvisoryVerificationError(
                         f'The native audit encountered {CLASSIFICATION_PERSISTENT_MISMATCH} after single fresh retry '
@@ -1365,17 +1438,24 @@ def audit_project(
                         CLASSIFICATION_PERSISTENT_MISMATCH,
                         escalated,
                     ) from error
-                if prior_rotation_diag is not None:
-                    enriched_diag = dict(error.diagnostic, priorRotationDiagnostic=prior_rotation_diag)
-                    write_diagnostic(enriched_diag, attempt_private / 'advisories/diagnostic.json', attempt_diag_path)
-                    error.diagnostic = enriched_diag
+                preserve_prior_rotation(
+                    error, prior_rotation_diag,
+                    advisories_diag_path if advisories_diag_path.parent.is_dir() else None,
+                    attempt_diag_path,
+                )
+                raise
+            except RuntimeError as error:
+                preserve_prior_rotation(
+                    error, prior_rotation_diag,
+                    advisories_diag_path if advisories_diag_path.parent.is_dir() else None,
+                    attempt_diag_path,
+                )
                 raise
 
             if prior_rotation_diag is not None:
-                final_diag_file = attempt_private / 'advisories/diagnostic.json'
-                final_diag = json.loads(final_diag_file.read_text())
+                final_diag = json.loads(advisories_diag_path.read_text())
                 final_diag['priorRotationDiagnostic'] = prior_rotation_diag
-                write_diagnostic(final_diag, final_diag_file, attempt_diag_path)
+                write_diagnostic(final_diag, advisories_diag_path, attempt_diag_path)
                 online['priorRotationDiagnostic'] = {
                     'classification': prior_rotation_diag['classification'],
                     'offendingPages': prior_rotation_diag['offendingPages'],

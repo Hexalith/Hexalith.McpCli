@@ -505,12 +505,11 @@ def prove_source_advisories(private: Path, package_cache: Path, tools: dict, bou
     snapshot_name = 'source-advisories' if recovery_attempt == 0 else 'source-advisories-retry-1'
     snapshot = Path(receipt['sourceAdvisories']['directory']) if 'sourceAdvisories' in receipt and 'directory' in receipt['sourceAdvisories'] else private / snapshot_name
     source_diag_path = evidence / 'source-advisories-diagnostic.json'
-    try:
-        native_audit.advisory_cache_index(source_http)
-    except ValueError:
-        if required:
-            raise
-        return
+    if not required:
+        try:
+            native_audit.advisory_cache_index(source_http)
+        except ValueError:
+            return
     if 'sourceAdvisories' not in receipt:
         advisories = native_audit.online_advisories(
             source_http, snapshot, bounded,
@@ -616,13 +615,29 @@ def require_prepared_provenance(prepared: dict) -> dict:
             raise ValueError('Prepared Integration test discovery or binary changed after preparation.')
     if 'sourceAdvisories' in prepared:
         private_root = Path(prepared['privateDirectory']).resolve()
-        snapshot_dir = Path(prepared['sourceAdvisories'].get('directory', str(private_root / 'source-advisories')))
-        if snapshot_dir.is_symlink() or not snapshot_dir.is_dir() \
-                or not snapshot_dir.resolve().is_relative_to(private_root):
+        source_advisories = prepared['sourceAdvisories']
+        if not isinstance(source_advisories, dict) or source_advisories.get('classification') != native_audit.CLASSIFICATION_MATCH:
+            raise ValueError('The native source fixture advisory proof must record a verified match.')
+        raw_snapshot_dir = source_advisories.get('directory', str(private_root / 'source-advisories'))
+        if not isinstance(raw_snapshot_dir, str) or not raw_snapshot_dir:
             raise ValueError('The native source fixture advisory proof directory is invalid or outside preparation.')
-        for name, page in prepared['sourceAdvisories']['pages'].items():
+        snapshot_dir = Path(raw_snapshot_dir)
+        resolved_snapshot_dir = snapshot_dir.resolve()
+        if snapshot_dir.is_symlink() or not snapshot_dir.is_dir() \
+                or not resolved_snapshot_dir.is_relative_to(private_root) \
+                or resolved_snapshot_dir == private_root:
+            raise ValueError('The native source fixture advisory proof directory is invalid or outside preparation.')
+        pages = source_advisories.get('pages')
+        if not isinstance(pages, dict) or not pages:
+            raise ValueError('The native source fixture advisory proof must include verified pages.')
+        for name, page in pages.items():
+            if not isinstance(name, str) or not re.fullmatch(r'[A-Za-z0-9_-]+', name) \
+                    or not isinstance(page, dict) or not isinstance(page.get('sha256'), str):
+                raise ValueError('The native source fixture advisory proof has an invalid page entry.')
             path = snapshot_dir / (name + '.json')
-            if hashlib.sha256(path.read_bytes()).hexdigest() != page['sha256']:
+            if path.is_symlink() or not path.is_file() \
+                    or not path.resolve().is_relative_to(resolved_snapshot_dir) \
+                    or hashlib.sha256(path.read_bytes()).hexdigest() != page['sha256']:
                 raise ValueError('The native source fixture advisory proof changed after preparation.')
     for source in prepared['sources']:
         if source.get('gitlinkOnly'):
@@ -1021,8 +1036,10 @@ def prepare(evidence: Path) -> None:
             receipt['nugetHttpCache'] = str(source_http)
             source_environment['NUGET_PACKAGES'] = str(package_cache)
             source_environment['NUGET_HTTP_CACHE_PATH'] = str(source_http)
-            source_restored_packages = restore_source_fixtures(attempt=1)
+            source_diag_path = evidence / 'source-advisories-diagnostic.json'
+            retry_snapshot_diag = private / 'source-advisories-retry-1/diagnostic.json'
             try:
+                source_restored_packages = restore_source_fixtures(attempt=1)
                 prove_source_advisories(
                     private, package_cache, tools, bounded, evidence, receipt,
                     required=True, restored_packages=source_restored_packages,
@@ -1036,11 +1053,7 @@ def prepare(evidence: Path) -> None:
                         reason='second_mismatch_after_retry',
                         priorRotationDiagnostic=prior_rotation_diag,
                     )
-                    native_audit.write_diagnostic(
-                        escalated,
-                        private / 'source-advisories-retry-1/diagnostic.json',
-                        evidence / 'source-advisories-diagnostic.json',
-                    )
+                    native_audit.write_diagnostic(escalated, retry_snapshot_diag, source_diag_path)
                     pages = ', '.join(escalated.get('offendingPages', [])) or 'index'
                     raise native_audit.AdvisoryVerificationError(
                         f'The native audit encountered {native_audit.CLASSIFICATION_PERSISTENT_MISMATCH} after single fresh source retry '
@@ -1048,6 +1061,20 @@ def prepare(evidence: Path) -> None:
                         native_audit.CLASSIFICATION_PERSISTENT_MISMATCH,
                         escalated,
                     ) from retry_error
+                if 'sourceAdvisories' not in receipt:
+                    native_audit.preserve_prior_rotation(
+                        retry_error, prior_rotation_diag,
+                        retry_snapshot_diag if retry_snapshot_diag.parent.is_dir() else None,
+                        source_diag_path,
+                    )
+                raise
+            except RuntimeError as retry_error:
+                if 'sourceAdvisories' not in receipt:
+                    native_audit.preserve_prior_rotation(
+                        retry_error, prior_rotation_diag,
+                        retry_snapshot_diag if retry_snapshot_diag.parent.is_dir() else None,
+                        source_diag_path,
+                    )
                 raise
         for source in receipt['sources']:
             module = source['module']
@@ -1219,11 +1246,21 @@ def load_prepared_context(evidence: Path) -> tuple[dict, Path, Path, dict[str, s
         if hashlib.sha256(binary.read_bytes()).hexdigest() != row['sha256']:
             raise ValueError(f'Prepared runtime binary hash mismatch: {binary.name}')
     private_root = Path(prepared['privateDirectory']).resolve()
-    nuget_packages = Path(prepared['nugetPackages'])
-    nuget_http_cache = Path(prepared.get('nugetHttpCache', str(source_overrides.with_name('source-http'))))
-    if nuget_packages.is_symlink() or not nuget_packages.is_dir() or not nuget_packages.resolve().is_relative_to(private_root):
+    raw_packages = prepared.get('nugetPackages')
+    raw_http_cache = prepared.get('nugetHttpCache', str(source_overrides.with_name('source-http')))
+    if not isinstance(raw_packages, str) or not raw_packages:
         raise ValueError('Prepared NuGet package cache is invalid or outside preparation.')
-    if nuget_http_cache.is_symlink() or not nuget_http_cache.is_dir() or not nuget_http_cache.resolve().is_relative_to(private_root):
+    if not isinstance(raw_http_cache, str) or not raw_http_cache:
+        raise ValueError('Prepared NuGet HTTP cache is invalid or outside preparation.')
+    nuget_packages = Path(raw_packages)
+    nuget_http_cache = Path(raw_http_cache)
+    resolved_packages = nuget_packages.resolve()
+    resolved_http_cache = nuget_http_cache.resolve()
+    if nuget_packages.is_symlink() or not nuget_packages.is_dir() \
+            or not resolved_packages.is_relative_to(private_root) or resolved_packages == private_root:
+        raise ValueError('Prepared NuGet package cache is invalid or outside preparation.')
+    if nuget_http_cache.is_symlink() or not nuget_http_cache.is_dir() \
+            or not resolved_http_cache.is_relative_to(private_root) or resolved_http_cache == private_root:
         raise ValueError('Prepared NuGet HTTP cache is invalid or outside preparation.')
     environment = os.environ.copy()
     for key in list(environment):

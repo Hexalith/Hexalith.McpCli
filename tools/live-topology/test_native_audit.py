@@ -344,9 +344,11 @@ class NativeAuditTests(unittest.TestCase):
     def test_persistent_mismatch_guards_unchanged_id_drift_regression_removed_page_and_no_advance(self):
         cases = (
             'unchanged-id-content-drift',
+            'unchanged-updated-changed-id-and-content-with-other-advance',
             'regressed-with-other-advance',
             'single-page-regressed',
             'id-changed-without-updated-advance',
+            'added-page-without-updated-advance',
             'removed-page',
             'missing-cached-page-during-rotation',
         )
@@ -362,6 +364,10 @@ class NativeAuditTests(unittest.TestCase):
                 if case == 'unchanged-id-content-drift':
                     live_docs['base'] = {'tampered.pkg': [{'url': 'https://github.com/advisories/GHSA-x', 'severity': 1, 'versions': '[1.0.0, 2.0.0)'}]}
                     expected_page = 'base'
+                elif case == 'unchanged-updated-changed-id-and-content-with-other-advance':
+                    live_pages[0]['@id'] = 'https://data.nuget.org/v3-vulnerabilities/rev2/base.json'
+                    live_docs['base'] = {'drifted.pkg': [{'url': 'https://github.com/advisories/GHSA-d', 'severity': 1, 'versions': '[1.0.0, 2.0.0)'}]}
+                    expected_page = 'base'
                 elif case == 'regressed-with-other-advance':
                     live_pages[0]['@updated'] = '2026-11-15T23:59:59Z'
                     expected_page = 'base'
@@ -370,7 +376,14 @@ class NativeAuditTests(unittest.TestCase):
                     expected_page = 'update'
                 elif case == 'id-changed-without-updated-advance':
                     live_pages[1]['@updated'] = '2026-11-16T00:00:00Z'
-                    expected_page = 'index'
+                    expected_page = 'update'
+                elif case == 'added-page-without-updated-advance':
+                    live_pages[1] = {'@name': 'update', '@id': 'https://data.nuget.org/v3-vulnerabilities/rev1/update.json', '@updated': '2026-11-16T00:00:00Z'}
+                    live_pages.append({'@name': 'extra', '@id': 'https://data.nuget.org/v3-vulnerabilities/rev1/extra.json', '@updated': '2026-11-16T00:00:00Z'})
+                    live_docs = {'base': {}, 'update': {}, 'extra': {'extra.pkg': [{'url': 'https://github.com/advisories/GHSA-e', 'severity': 1, 'versions': '[1.0.0, 2.0.0)'}]}}
+                    # Ensure stray cache file for live-added page is never loaded.
+                    (cache / 'vuln_data_extra.dat').write_text('{"stray": []}')
+                    expected_page = 'extra'
                 elif case == 'removed-page':
                     live_pages = [live_pages[1]]
                     expected_page = 'base'
@@ -388,6 +401,9 @@ class NativeAuditTests(unittest.TestCase):
                 diag = json.loads(diag_path.read_text())
                 self.assertEqual(native_audit.CLASSIFICATION_PERSISTENT_MISMATCH, diag['classification'])
                 self.assertIn(expected_page, diag['offendingPages'])
+                if case == 'added-page-without-updated-advance':
+                    self.assertIsNone(diag['pages']['extra']['cachedSha256'])
+                    self.assertNotIn('stray', diag['semanticDiff']['removedPackages'])
 
     def test_unavailable_feed_conditions_fail_closed_with_zero_retries_and_diagnostic(self):
         cases = (
@@ -712,6 +728,179 @@ class NativeAuditTests(unittest.TestCase):
         self.assertEqual({'obj/project.assets.json', 'bin/Release/net11.0/host.dll'}, set(before))
         self.output.write_bytes(b'changed')
         self.assertNotEqual(before, native_audit.output_snapshot(self.project))
+
+    def test_proven_mode_corrupt_or_missing_cache_writes_diagnostic_and_keeps_non_inverted_fields(self):
+        proven_doc = {'proven.only': [{'url': 'https://github.com/advisories/GHSA-p', 'severity': 1, 'versions': '[1.0.0, 2.0.0)'}]}
+        cache_match = self.advisory_fixture(name='prov-match-cache', update_doc=proven_doc)
+        proven = self.root / 'prov-snapshot'
+        proven.mkdir()
+        (proven / 'index.json').write_bytes((cache_match / 'vuln_index.dat').read_bytes())
+        (proven / 'base.json').write_bytes((cache_match / 'vuln_data_base.dat').read_bytes())
+        (proven / 'update.json').write_bytes((cache_match / 'vuln_data_update.dat').read_bytes())
+
+        match_diag = self.root / 'prov-match-diag.json'
+        native_audit.online_advisories(
+            cache_match, self.root / 'prov-match-out',
+            lambda *_: self.fail('unexpected fetch'), proven=proven, diagnostic_path=match_diag,
+        )
+        diag = json.loads(match_diag.read_text())
+        self.assertEqual(hashlib.sha256((cache_match / 'vuln_data_update.dat').read_bytes()).hexdigest(),
+                         diag['pages']['update']['cachedSha256'])
+        self.assertEqual(hashlib.sha256((proven / 'update.json').read_bytes()).hexdigest(),
+                         diag['pages']['update']['onlineSha256'])
+
+        # Drifted cache: cache has cache.only, proven has proven.only -> addedPackages=['proven.only'], removedPackages=['cache.only'].
+        cache_drift = self.advisory_fixture(
+            name='prov-drift-cache',
+            update_doc={'cache.only': [{'url': 'https://github.com/advisories/GHSA-c', 'severity': 1, 'versions': '[1.0.0, 2.0.0)'}]},
+        )
+        drift_diag = self.root / 'prov-drift-diag.json'
+        with self.assertRaises(native_audit.AdvisoryVerificationError) as ctx:
+            native_audit.online_advisories(
+                cache_drift, self.root / 'prov-drift-out',
+                lambda *_: self.fail('unexpected fetch'), proven=proven, diagnostic_path=drift_diag,
+            )
+        self.assertEqual(native_audit.CLASSIFICATION_PERSISTENT_MISMATCH, ctx.exception.classification)
+        d = json.loads(drift_diag.read_text())
+        self.assertEqual(hashlib.sha256((cache_drift / 'vuln_data_update.dat').read_bytes()).hexdigest(),
+                         d['pages']['update']['cachedSha256'])
+        self.assertEqual(hashlib.sha256((proven / 'update.json').read_bytes()).hexdigest(),
+                         d['pages']['update']['onlineSha256'])
+        self.assertEqual(['proven.only'], d['semanticDiff']['addedPackages'])
+        self.assertEqual(['cache.only'], d['semanticDiff']['removedPackages'])
+
+        # Corrupt and missing cached pages under proven mode must raise AdvisoryVerificationError + write diagnostic.
+        for defect in ('corrupt', 'missing'):
+            with self.subTest(defect=defect):
+                bad_cache = self.advisory_fixture(name='prov-' + defect)
+                if defect == 'corrupt':
+                    (bad_cache / 'vuln_data_update.dat').write_text('{not-json')
+                else:
+                    (bad_cache / 'vuln_data_update.dat').unlink()
+                bad_diag = self.root / f'prov-{defect}-diag.json'
+                with self.assertRaises(native_audit.AdvisoryVerificationError) as ctx:
+                    native_audit.online_advisories(
+                        bad_cache, self.root / ('prov-' + defect + '-out'),
+                        lambda *_: self.fail('unexpected fetch'), proven=proven, diagnostic_path=bad_diag,
+                    )
+                self.assertEqual(native_audit.CLASSIFICATION_PERSISTENT_MISMATCH, ctx.exception.classification)
+                self.assertTrue(bad_diag.is_file())
+                bd = json.loads(bad_diag.read_text())
+                self.assertEqual(native_audit.CLASSIFICATION_PERSISTENT_MISMATCH, bd['classification'])
+                self.assertIn('update', bd['offendingPages'])
+
+    def test_validation_guards_unhashable_names_diagnostic_name_overflow_encoded_urls_and_nondict_entries(self):
+        # Unhashable @name and reserved @name == 'diagnostic'.
+        for bad_name in (['base'], {'k': 'v'}, 'diagnostic', 'index'):
+            with self.subTest(bad_name=bad_name):
+                raw = json.dumps([{'@name': bad_name, '@id': 'https://data.nuget.org/v3-vulnerabilities/rev/a.json',
+                                   '@updated': '2026-11-16T00:00:00Z'}]).encode()
+                with self.assertRaises(ValueError):
+                    native_audit.validate_advisory_index(raw)
+
+        # @updated OverflowError (UTC conversion past year 9999).
+        with self.assertRaisesRegex(ValueError, 'out of range|invalid'):
+            native_audit.parse_iso8601_utc('9999-12-31T23:59:59-10:00')
+
+        # Percent-encoded traversal/slashes and backslashes in @id.
+        for bad_url in (
+            'https://data.nuget.org/v3-vulnerabilities/%2e%2e/secret.json',
+            'https://data.nuget.org/v3-vulnerabilities/rev%2f..%2fsecret.json',
+            'https://data.nuget.org/v3-vulnerabilities/rev%5cbase.json',
+            'https://data.nuget.org/v3-vulnerabilities/rev\\base.json',
+        ):
+            with self.subTest(bad_url=bad_url):
+                raw = json.dumps([{'@name': 'base', '@id': bad_url, '@updated': '2026-11-16T00:00:00Z'}]).encode()
+                with self.assertRaisesRegex(ValueError, 'not bound to its official source'):
+                    native_audit.validate_advisory_index(raw)
+
+        # Non-dict advisory list entries.
+        with self.assertRaisesRegex(ValueError, 'malformed entries'):
+            native_audit.parse_advisory_page(json.dumps({'pkg': ['not-a-dict']}).encode(), name='update')
+
+        # require_policy tolerates level: None and code: None without crashing or producing 'NONE'.
+        value = json.loads(json.dumps(self.document))
+        value['logs'] = [{'code': None, 'level': None}, {'code': None, 'level': 'Warning', 'message': 'plain warning'}]
+        self.assets.write_text(json.dumps(value))
+        diag_path = self.root / 'null-log-diag.json'
+        with self.assertRaises(native_audit.AdvisoryVerificationError) as ctx:
+            native_audit.require_policy(self.assets, diagnostic_path=diag_path)
+        self.assertEqual([], ctx.exception.diagnostic['advisoryCodes'])
+        self.assertEqual([], json.loads(diag_path.read_text())['advisoryCodes'])
+
+    def test_parse_http_headers_ignores_proxy_tunnel_and_redacts_api_keys_and_partial_live_diag_preserves_cache_meta(self):
+        headers_file = self.root / 'proxy.headers'
+        headers_file.write_text(
+            'HTTP/1.1 200 Connection established\r\nProxy-Agent: test\r\n\r\n'
+            'HTTP/2 503\r\nRetry-After: 12\r\nX-Api-Key: secret1\r\nX-NuGet-ApiKey: secret2\r\n'
+            'WWW-Authenticate: Bearer realm="test"\r\n\r\n'
+        )
+        status, parsed = native_audit.parse_http_headers(headers_file)
+        self.assertEqual(503, status)
+        self.assertEqual({'retry-after': '12'}, parsed)
+
+        # Proxy tunnel alone (no upstream response yet) must not report 200.
+        tunnel_only = self.root / 'tunnel-only.headers'
+        tunnel_only.write_text('HTTP/1.1 200 Connection established\r\n\r\n')
+        self.assertEqual((None, {}), native_audit.parse_http_headers(tunnel_only))
+
+        # Partial diagnostic on page-2 failure retains cachedId/cachedUpdated and actual bytesMatch for index and page 1.
+        cache = self.advisory_fixture(name='partial-meta-cache')
+        pages = json.loads((cache / 'vuln_index.dat').read_text())
+        fetcher = self.make_live_fetcher(pages, {'base': {}, 'update': {}}, status_map={'update': 503})
+        diag_path = self.root / 'partial-meta-diag.json'
+        with self.assertRaises(native_audit.AdvisoryVerificationError):
+            native_audit.online_advisories(cache, self.root / 'partial-meta-out', fetcher, diagnostic_path=diag_path)
+        diag = json.loads(diag_path.read_text())
+        self.assertTrue(diag['pages']['index']['bytesMatch'])
+        self.assertTrue(diag['pages']['base']['bytesMatch'])
+        self.assertEqual(pages[0]['@id'], diag['pages']['base']['cachedId'])
+        self.assertEqual(pages[0]['@updated'], diag['pages']['base']['cachedUpdated'])
+
+    def test_audit_project_attempt_1_non_rotation_failures_preserve_prior_rotation_diagnostic(self):
+        rev2_pages = [
+            {'@name': 'base', '@id': 'https://data.nuget.org/v3-vulnerabilities/rev1/base.json', '@updated': '2026-11-16T00:00:00Z'},
+            {'@name': 'update', '@id': 'https://data.nuget.org/v3-vulnerabilities/rev2/update.json', '@updated': '2026-11-17T00:00:00Z'},
+        ]
+        rev2_fetch = self.make_live_fetcher(rev2_pages, {'base': {}, 'update': {'p2': []}})
+
+        for failure_mode in ('retry-nu1902', 'retry-policy', 'retry-curl-503', 'retry-http-304'):
+            with self.subTest(failure_mode=failure_mode):
+                def restore_behavior(attempt, cwd, pkg_cache, http_cache, output):
+                    if attempt == 0:
+                        self._populate_audit_restore(cwd, pkg_cache, http_cache, 'rev1', '2026-11-16T00:00:00Z', {})
+                        return
+                    if failure_mode == 'retry-nu1902':
+                        (output.parent / (output.name + '.stdout.txt')).write_text(
+                            "audit.csproj : error NU1902: Package 'Direct' 1.0.0 has a known vulnerability.\n"
+                        )
+                        (output.parent / (output.name + '.stderr.txt')).write_text('')
+                        raise RuntimeError('dotnet restore exited 1')
+                    self._populate_audit_restore(cwd, pkg_cache, http_cache, 'rev2', '2026-11-17T00:00:00Z', {'p2': []})
+                    if failure_mode == 'retry-policy':
+                        assets = cwd / 'obj/project.assets.json'
+                        doc = json.loads(assets.read_text())
+                        doc['project']['restore']['restoreAuditProperties']['auditLevel'] = 'high'
+                        assets.write_text(json.dumps(doc))
+
+                retry_fetch = (
+                    self.make_live_fetcher(rev2_pages, {'base': {}, 'update': {'p2': []}},
+                                           status_map={'index': 503}, curl_error_pages={'index'})
+                    if failure_mode == 'retry-curl-503'
+                    else self.make_live_fetcher(rev2_pages, {'base': {}, 'update': {'p2': []}}, status_map={'index': 304})
+                )
+
+                with self.assertRaises((RuntimeError, native_audit.AdvisoryVerificationError)):
+                    self._run_fake_audit_project(
+                        'mod-retry-fail-' + failure_mode,
+                        restore_behavior,
+                        lambda attempt, cmd: rev2_fetch(cmd) if attempt == 0 else retry_fetch(cmd),
+                    )
+                diag = json.loads((self.root / f'mod-retry-fail-{failure_mode}-ev-advisory-diagnostic.json').read_text())
+                self.assertIsNotNone(diag['priorRotationDiagnostic'])
+                self.assertEqual(native_audit.CLASSIFICATION_CONFIRMED_ROTATION,
+                                 diag['priorRotationDiagnostic']['classification'])
+                self.assertEqual(1, diag['recoveryAttempt'])
 
 
 if __name__ == '__main__':

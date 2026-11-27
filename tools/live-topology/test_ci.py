@@ -122,10 +122,17 @@ if name == 'dotnet':
         if mode == 'advisory-nu1902-failure' and 'Hexalith.Tenants' in args[1]:
             print("src/Hexalith.Tenants/Hexalith.Tenants.csproj : error NU1902: Package 'Hexalith.EventStore.Gateway' 5.6.0 has a known moderate severity vulnerability, https://github.com/advisories/GHSA-example", file=sys.stderr)
             sys.exit(1)
+        if mode == 'advisory-retry-nu1902' and pathlib.Path(os.environ['NUGET_HTTP_CACHE_PATH']).name == 'source-http-retry-1' and 'Hexalith.Tenants' in args[1]:
+            print("src/Hexalith.Tenants/Hexalith.Tenants.csproj : error NU1902: Package 'Hexalith.EventStore.Gateway' 5.6.0 has a known moderate severity vulnerability, https://github.com/advisories/GHSA-retry", file=sys.stderr)
+            sys.exit(1)
         project = pathlib.Path(args[1]); private = project.parent
         cache = pathlib.Path(os.environ['NUGET_PACKAGES'])
         if not cache.is_dir() or not any(cache.iterdir()):
             shutil.copytree(root / 'package-cache', cache, dirs_exist_ok=True)
+        if mode == 'advisory-retry-missing-archive' and pathlib.Path(os.environ['NUGET_HTTP_CACHE_PATH']).name == 'source-http-retry-1':
+            target_archive = cache / 'hexalith.eventstore.gateway/5.6.0/hexalith.eventstore.gateway.5.6.0.nupkg'
+            if target_archive.exists():
+                target_archive.unlink()
         assets_path = private / 'obj/project.assets.json'
         if project.name == 'audit.csproj':
             libraries = {}
@@ -140,21 +147,30 @@ if name == 'dotnet':
         else:
             # Source fixtures model the full restored graph, including transitive runtime assets.
             assets = json.loads(assets_path.read_text())
+            if mode == 'advisory-zero-exit-nu1902' and 'Hexalith.Tenants' in args[1]:
+                assets['logs'] = [{'code': 'NU1902', 'level': 'Warning', 'libraryId': 'Hexalith.EventStore.Gateway',
+                                   'message': "Package 'Hexalith.EventStore.Gateway' 5.6.0 has a known vulnerability"}]
+            if mode == 'advisory-zero-exit-weakened-policy' and 'Hexalith.Tenants' in args[1]:
+                assets['project']['restore']['restoreAuditProperties']['auditLevel'] = 'moderate'
         assets['packageFolders'] = {str(cache): {}}
         assets_path.parent.mkdir(exist_ok=True)
         assets_path.write_text(json.dumps(assets))
         http_path = os.environ['NUGET_HTTP_CACHE_PATH']
         is_retry_1 = pathlib.Path(http_path).name == 'source-http-retry-1'
         is_module_audit = project.name == 'audit.csproj'
-        if mode == 'advisory-source-rotation' and (is_retry_1 or is_module_audit):
+        if mode == 'advisory-missing-source-index' and not is_module_audit:
+            pathlib.Path(http_path).mkdir(parents=True, exist_ok=True)
+        elif mode == 'advisory-source-rotation' and (is_retry_1 or is_module_audit):
             write_advisory_cache(http_path, 'rev2', '2026-11-17T00:00:00Z',
                                  {'unrelated.pkg': [{'url': 'https://github.com/advisories/GHSA-rot2', 'severity': 1, 'versions': '[1.0.0, 2.0.0)'}]})
-        elif mode == 'advisory-second-rotation' and is_retry_1:
+        elif mode in ('advisory-second-rotation', 'advisory-retry-unavailable') and is_retry_1:
             write_advisory_cache(http_path, 'rev2', '2026-11-17T00:00:00Z',
                                  {'unrelated.pkg': [{'url': 'https://github.com/advisories/GHSA-rot2', 'severity': 1, 'versions': '[1.0.0, 2.0.0)'}]})
         elif mode == 'advisory-module-rotation' and is_module_audit:
             write_advisory_cache(http_path, 'rev2', '2026-11-17T00:00:00Z',
                                  {'unrelated.pkg': [{'url': 'https://github.com/advisories/GHSA-mod2', 'severity': 1, 'versions': '[1.0.0, 2.0.0)'}]})
+        elif mode == 'advisory-module-drift-fail' and is_module_audit:
+            write_advisory_cache(http_path, 'revision', '2026-11-16T00:00:00Z', {'tampered.module': []})
         else:
             write_advisory_cache(http_path, 'revision', '2026-11-16T00:00:00Z', {})
     elif args[0] == 'build':
@@ -193,13 +209,21 @@ elif name == 'curl':
     if mode == 'corrupted-aspire-archive': destination.write_bytes(b'unqualified archive')
     elif any('vulnerabilities/' in value for value in args):
         headers_file = pathlib.Path(args[args.index('--dump-header') + 1])
-        if mode == 'advisory-feed-unavailable':
+        if mode == 'advisory-feed-unavailable' or (mode == 'advisory-retry-unavailable' and destination.parent.name == 'source-advisories-retry-1'):
             headers_file.write_text('HTTP/2 503\r\nRetry-After: 30\r\n\r\n')
             print('curl: (22) The requested URL returned error: 503', file=sys.stderr)
             sys.exit(22)
         private = destination.parent.parent
         name = 'vuln_index.dat' if destination.stem == 'index' else 'vuln_data_' + destination.stem + '.dat'
-        if mode == 'advisory-source-rotation':
+        if mode == 'advisory-source-persistent-mismatch':
+            pages = [
+                {'@name': 'base', '@id': 'https://data.nuget.org/v3-vulnerabilities/revision/base.json', '@updated': '2026-11-16T00:00:00Z'},
+                {'@name': 'update', '@id': 'https://data.nuget.org/v3-vulnerabilities/revision/update.json', '@updated': '2026-11-16T00:00:00Z'},
+            ]
+            docs = {'base': {}, 'update': {'drifted.pkg': [{'url': 'https://github.com/advisories/GHSA-drift', 'severity': 1, 'versions': '[1.0.0, 2.0.0)'}]}}
+            destination.write_text(json.dumps(pages if destination.stem == 'index' else docs[destination.stem]))
+            headers_file.write_text('HTTP/2 200\r\nETag: "drift"\r\n\r\n')
+        elif mode in ('advisory-source-rotation', 'advisory-retry-unavailable', 'advisory-retry-nu1902', 'advisory-retry-missing-archive'):
             pages = [
                 {'@name': 'base', '@id': 'https://data.nuget.org/v3-vulnerabilities/revision/base.json', '@updated': '2026-11-16T00:00:00Z'},
                 {'@name': 'update', '@id': 'https://data.nuget.org/v3-vulnerabilities/rev2/update.json', '@updated': '2026-11-17T00:00:00Z'},
@@ -1197,20 +1221,111 @@ pathlib.Path(sys.argv[sys.argv.index('--output') + 1]).write_text(json.dumps({'r
         self.assertEqual('prepared', prepared['result'])
         mod0_diag = json.loads((self.evidence / 'module-audit-0-advisory-diagnostic.json').read_text())
         self.assertEqual('match', mod0_diag['classification'])
+        self.assertEqual('live', mod0_diag['source'])
         self.assertEqual('forward_rotation_over_proven_verified_against_live', mod0_diag['provenSnapshotDrift'])
+        for idx in (1, 2, 3):
+            mod_diag = json.loads((self.evidence / f'module-audit-{idx}-advisory-diagnostic.json').read_text())
+            self.assertEqual('match', mod_diag['classification'])
+            self.assertEqual('proven', mod_diag['source'])
+        vuln_curls = [call for call in self.calls() if call[0] == 'curl'
+                      and any('vulnerabilities/' in str(value) for value in call)]
+        self.assertEqual(6, len(vuln_curls))
         run_result = self.invoke('run-ci.sh')
         self.assertEqual(0, run_result.returncode, run_result.stdout + run_result.stderr)
+
+    def test_source_persistent_mismatch_and_module_drift_fail_with_zero_source_retries(self):
+        for mode, diag_file in (
+            ('advisory-source-persistent-mismatch', 'source-advisories-diagnostic.json'),
+            ('advisory-module-drift-fail', 'module-audit-0-advisory-diagnostic.json'),
+        ):
+            with self.subTest(mode=mode):
+                self.fresh_evidence()
+                (self.root / 'dotnet-package-caches.jsonl').unlink(missing_ok=True)
+                result = self.invoke('prepare-ci.sh', mode)
+                self.assertNotEqual(0, result.returncode)
+                self.assertIn('persistent_mismatch', result.stderr)
+                receipt = json.loads((self.evidence / 'preparation.json').read_text())
+                self.assertEqual('failed', receipt['result'])
+                private = Path(receipt['privateDirectory'])
+                self.assertFalse((private / 'packages-retry-1').exists())
+                self.assertFalse((private / 'source-http-retry-1').exists())
+                dotnet_calls = [json.loads(line) for line in (self.root / 'dotnet-package-caches.jsonl').read_text().splitlines()]
+                source_restores = [call for call in dotnet_calls if call['args'][0] == 'restore' and call['args'][1].startswith('src/')]
+                self.assertEqual(5, len(source_restores))
+                self.assertEqual([], [call for call in dotnet_calls if call['args'][0] == 'build'])
+                diag = json.loads((self.evidence / diag_file).read_text())
+                self.assertEqual('persistent_mismatch', diag['classification'])
+
+    def test_source_attempt_1_non_rotation_failures_preserve_prior_rotation_diagnostic(self):
+        for mode, expected_cls in (
+            ('advisory-retry-unavailable', 'unavailable'),
+            ('advisory-retry-nu1902', 'advisory_affecting_graph'),
+        ):
+            with self.subTest(mode=mode):
+                self.fresh_evidence()
+                result = self.invoke('prepare-ci.sh', mode)
+                self.assertNotEqual(0, result.returncode)
+                self.assertIn(expected_cls, result.stderr)
+                diag = json.loads((self.evidence / 'source-advisories-diagnostic.json').read_text())
+                self.assertEqual(expected_cls, diag['classification'])
+                self.assertEqual(1, diag['recoveryAttempt'])
+                self.assertIsNotNone(diag['priorRotationDiagnostic'])
+                self.assertEqual('confirmed_rotation', diag['priorRotationDiagnostic']['classification'])
+
+    def test_zero_exit_source_policy_or_advisory_violation_and_retry_1_missing_archive_fail_before_builds(self):
+        for mode, expected_text, expected_cls in (
+            ('advisory-zero-exit-nu1902', 'NU1902', 'advisory_affecting_graph'),
+            ('advisory-zero-exit-weakened-policy', 'low-and-higher', 'advisory_affecting_graph'),
+            ('advisory-missing-source-index', 'unavailable', 'unavailable'),
+        ):
+            with self.subTest(mode=mode):
+                self.fresh_evidence()
+                (self.root / 'calls.jsonl').unlink(missing_ok=True)
+                result = self.invoke('prepare-ci.sh', mode)
+                self.assertNotEqual(0, result.returncode)
+                self.assertIn(expected_text, result.stderr)
+                diag = json.loads((self.evidence / 'source-advisories-diagnostic.json').read_text())
+                self.assertEqual(expected_cls, diag['classification'])
+                self.assertEqual([], [call for call in self.calls() if call[0] == 'dotnet' and call[2] == 'build'])
+
+        self.fresh_evidence()
+        (self.root / 'calls.jsonl').unlink(missing_ok=True)
+        missing_archive = self.invoke('prepare-ci.sh', 'advisory-retry-missing-archive')
+        self.assertNotEqual(0, missing_archive.returncode)
+        self.assertIn('unambiguous package archive', missing_archive.stderr)
+        self.assertEqual([], [call for call in self.calls() if call[0] == 'dotnet' and call[2] == 'build'])
 
     def test_prepared_provenance_rejects_tampered_advisory_directory_or_cache_escape(self):
         prepared = self.prepare()
         prep_path = self.evidence / 'preparation.json'
         original = prep_path.read_text()
-        for field, value, message in (
+        private = Path(prepared['privateDirectory'])
+        symlink_dir = private / 'symlink-advisories'
+        symlink_dir.symlink_to(private / 'source-advisories', target_is_directory=True)
+        snapshot_dir = Path(prepared['sourceAdvisories']['directory'])
+        symlink_page_dir = private / 'symlink-page-advisories'
+        symlink_page_dir.mkdir()
+        for item in snapshot_dir.iterdir():
+            if item.name == 'index.json':
+                (symlink_page_dir / item.name).symlink_to(item)
+            elif item.is_file():
+                shutil.copyfile(item, symlink_page_dir / item.name)
+        cases = (
             ('sourceAdvisories', {**prepared['sourceAdvisories'], 'directory': str(self.root)}, 'advisory proof directory'),
+            ('sourceAdvisories', {**prepared['sourceAdvisories'], 'directory': str(private)}, 'advisory proof directory'),
+            ('sourceAdvisories', {**prepared['sourceAdvisories'], 'directory': str(symlink_dir)}, 'advisory proof directory'),
+            ('sourceAdvisories', {**prepared['sourceAdvisories'], 'directory': 123}, 'advisory proof directory'),
+            ('sourceAdvisories', {**prepared['sourceAdvisories'], 'classification': 'confirmed_rotation'}, 'verified match'),
+            ('sourceAdvisories', {**prepared['sourceAdvisories'], 'pages': {}}, 'verified pages'),
+            ('sourceAdvisories', {**prepared['sourceAdvisories'], 'pages': {'../escape': {'sha256': '0' * 64}}}, 'invalid page entry'),
+            ('sourceAdvisories', {**prepared['sourceAdvisories'], 'directory': str(symlink_page_dir)}, 'changed after preparation'),
             ('nugetPackages', str(self.root), 'Prepared NuGet package cache'),
+            ('nugetPackages', str(private), 'Prepared NuGet package cache'),
             ('nugetHttpCache', str(self.root), 'Prepared NuGet HTTP cache'),
-        ):
-            with self.subTest(field=field):
+            ('nugetHttpCache', str(private), 'Prepared NuGet HTTP cache'),
+        )
+        for index, (field, value, message) in enumerate(cases):
+            with self.subTest(case=index, field=field):
                 doc = json.loads(original)
                 doc[field] = value
                 prep_path.write_text(json.dumps(doc))
