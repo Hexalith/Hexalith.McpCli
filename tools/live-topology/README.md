@@ -295,7 +295,9 @@ compiled declarations and policies without adding a server dependency edge.
 The shared `AddEventStoreDevelopmentRouteCatalog` composes the real five-host
 model, actual sidecar identities, finite native receiver traffic and run-private
 custody. Its SDK model observer and actual hosts perform prepare/ready/commit;
-all five persisted readbacks must agree before the administrator barrier.
+all five persisted readbacks must agree before the administrator barrier. Tenants starts its administrator
+bootstrap after the other peers publish their pre-commit observations, so their
+cold startup does not consume its finite readiness budget.
 Composition and metadata ownership remain alive until the application stops;
 private digest custody is then removed through its ownership marker.
 

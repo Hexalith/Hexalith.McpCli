@@ -6,6 +6,9 @@ using Aspire.Hosting;
 using Aspire.Hosting.ApplicationModel;
 
 using Hexalith.EventStore.Aspire;
+
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Diagnostics.HealthChecks;
 using System.Collections;
 using System.Runtime.Loader;
 
@@ -124,6 +127,20 @@ internal sealed class NativeCatalogRuntime : IAsyncDisposable
                 receivers.Add(new(projectsWorkers!, []));
             }
             catalog = builder.AddEventStoreDevelopmentRouteCatalog(gateway, owners, receivers, stateComponent, custody);
+            if (projects is not null)
+            {
+                // Tenants starts its finite administrator bootstrap budget when its web host starts.
+                // The other hosts can publish observations before Tenants joins the real catalog commit.
+                foreach (IResourceBuilder<ProjectResource> peer in new[] { gateway, parties, projects, projectsWorkers! })
+                {
+                    string healthCheck = $"native-observation-{peer.Resource.Name}";
+                    string observation = Path.Combine(catalog.Directory, $"{peer.Resource.Name}.observation.json");
+                    builder.Services.AddHealthChecks().AddCheck(healthCheck, () => File.Exists(observation)
+                        ? HealthCheckResult.Healthy()
+                        : HealthCheckResult.Unhealthy("Waiting for the SDK's pre-commit observation."));
+                    tenants.WaitFor(peer.WithHealthCheck(healthCheck));
+                }
+            }
             tenants.WithEnvironment("Tenants__BootstrapBoundWorkloadEnabled", "true")
                 .WithEnvironment("Tenants__BootstrapBoundWorkloadReceiptPath", Path.Combine(catalog.Directory, "tenants.bootstrap.json"));
             gateway.WithEnvironment("Authentication__BoundCommand__AllowedDomains__tenants", "global-administrators");

@@ -23,16 +23,14 @@ public sealed class AspireTopologyFixture : IsolatedTopologyLifecycle<Projects.H
     {
         get
         {
-            AspireResource[] hosts =
-            [
-                new("eventstore", "http", TimeSpan.FromSeconds(30), TimeSpan.FromMinutes(2), true, TimeSpan.FromMinutes(2)),
-                new("tenants", "http", TimeSpan.FromSeconds(30), TimeSpan.FromMinutes(2), true, TimeSpan.FromMinutes(2)),
-                new("parties", "http", TimeSpan.FromSeconds(30), TimeSpan.FromMinutes(2), true, TimeSpan.FromMinutes(2)),
-            ];
+            AspireResource gateway = new("eventstore", "http", TimeSpan.FromSeconds(30), TimeSpan.FromMinutes(2), true, TimeSpan.FromMinutes(2));
+            AspireResource tenants = new("tenants", "http", TimeSpan.FromSeconds(30), TimeSpan.FromMinutes(2), true, TimeSpan.FromMinutes(2));
+            AspireResource parties = new("parties", "http", TimeSpan.FromSeconds(30), TimeSpan.FromMinutes(2), true, TimeSpan.FromMinutes(2));
             return TopologyConfiguration.NativeLaneEnabled
-                ? [.. hosts, new("projects", "http", TimeSpan.FromSeconds(30), TimeSpan.FromMinutes(2), true, TimeSpan.FromMinutes(2)),
-                    new("projects-workers", "http", TimeSpan.FromSeconds(30), TimeSpan.FromMinutes(2), true, TimeSpan.FromMinutes(2))]
-                : hosts;
+                ? [gateway, parties, new("projects", "http", TimeSpan.FromSeconds(30), TimeSpan.FromMinutes(2), true, TimeSpan.FromMinutes(2)),
+                    new("projects-workers", "http", TimeSpan.FromSeconds(30), TimeSpan.FromMinutes(2), true, TimeSpan.FromMinutes(2)),
+                    tenants with { ReadinessTimeout = TimeSpan.FromMinutes(2) }]
+                : [gateway, tenants, parties];
         }
     }
 
