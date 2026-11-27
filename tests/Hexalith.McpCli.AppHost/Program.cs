@@ -115,9 +115,16 @@ IResourceBuilder<ProjectResource>? projects = NativeSourceFixtures.Enabled
         .WithGeneratedEventStoreAppChannelToken()
         .WithEnvironment("Projects__IsolatedLiveFixtures__Enabled", "true")
     : null;
+IResourceBuilder<ProjectResource>? projectsWorkers = projects is null ? null
+    : builder.AddProject<PreparedProjectsWorkersProject>("projects-workers")
+        .WithHttpEndpoint(name: "http")
+        .AddEventStoreDomainModule(topology, "projects-workers", access,
+            daprPlacementHostAddress: placement, daprSchedulerHostAddress: scheduler)
+        .WithGeneratedEventStoreAppChannelToken()
+        .WithEnvironment("Projects__IsolatedLiveFixtures__Enabled", "true");
 IResourceBuilder<ProjectResource>[] launched = projects is null
     ? [gateway, tenants, parties]
-    : [gateway, tenants, parties, projects];
+    : [gateway, tenants, parties, projects, projectsWorkers!];
 
 // Current qualification uses one managed runtime for metadata and its isolated resource processes.
 // Refuse roll-forward so every current net11 resource uses the sealed runtime image.
@@ -139,6 +146,9 @@ if (usePackagedGateway)
         .WithEnvironment("Authentication__BoundStreamRead__AllowedDomains__tenants", "tenants,global-administrators")
         .WithEnvironment("Authentication__DaprInternal__Audience", "eventstore")
         .WithEnvironment("Authentication__DaprInternal__AllowedCallers__0", "tenants");
+    if (projects is not null)
+        gateway.WithEnvironment("EventStore__Publisher__TopicOverrides__tenants", "system.tenants.events")
+            .WithEnvironment("Authentication__QueryAuthority__RequiredQueries__projects__0", "Hexalith.Projects.Queries.ListProjects.v1");
 }
 
 foreach (IResourceBuilder<ProjectResource> resource in launched)
@@ -154,7 +164,7 @@ foreach (IResourceBuilder<ProjectResource> resource in launched)
     resource.WithEnvironment("UseHexalithProjectReferences", "false")
         .WithEnvironment("UseNuGetDeps", "true")
         .WithEnvironment("HexalithEventStoreFromSource", "false")
-        .WithEnvironment("HexalithEventStoreVersion", "5.5.2")
+        .WithEnvironment("HexalithEventStoreVersion", "5.6.0")
         .WithEnvironment("ASPNETCORE_ENVIRONMENT", "Development")
         .WithEnvironment("DOTNET_ENVIRONMENT", "Development")
         .WithEnvironment("Authentication__JwtBearer__Authority", string.Empty)
@@ -168,6 +178,21 @@ foreach (IResourceBuilder<ProjectResource> resource in launched)
         resource.WithEnvironment("Authentication__WorkloadIssuer__Workload", resource.Resource.Name)
             .WithEnvironment("Authentication__Workload__Audience", resource.Resource.Name)
             .WithEnvironment("Authentication__Workload__AllowedCallers__0", "eventstore");
+    if (resource == projects)
+    {
+        // The fixture exercises the authenticated Gateway-to-owner path. Direct human calls require OIDC.
+        const string humanIssuer = "https://projects-human.invalid";
+        resource.WithEnvironment("Authentication__JwtBearer__Authority", humanIssuer)
+            .WithEnvironment("Authentication__JwtBearer__Issuer", humanIssuer)
+            .WithEnvironment("Authentication__JwtBearer__AllowedAlgorithms__0", "RS256")
+            .WithEnvironment("Authentication__JwtBearer__SigningKey", string.Empty)
+            .WithEnvironment("Authentication__JwtBearer__RequireHttpsMetadata", "true")
+            .WithEnvironment("Authentication__WorkloadJwtBearer__Issuer", "mcpcli-live-tests")
+            .WithEnvironment("Authentication__WorkloadJwtBearer__Audience", "projects")
+            .WithEnvironment("Authentication__WorkloadJwtBearer__AllowedAlgorithms__0", "HS256")
+            .WithEnvironment("Authentication__WorkloadJwtBearer__SigningKey", key)
+            .WithEnvironment("Authentication__WorkloadJwtBearer__RequireHttpsMetadata", "false");
+    }
     foreach (EndpointAnnotation endpoint in resource.Resource.Annotations.OfType<EndpointAnnotation>())
     {
         endpoint.Port = null;
@@ -259,7 +284,7 @@ if (inspectComposition)
 }
 
 await using NativeCatalogRuntime? catalog = usePackagedGateway
-    ? await NativeCatalogRuntime.CreateAsync(builder, gateway, tenants, parties, projects,
+    ? await NativeCatalogRuntime.CreateAsync(builder, gateway, tenants, parties, projects, projectsWorkers,
         Path.Combine(components, "statestore.yaml")).ConfigureAwait(false)
     : null;
 await using DistributedApplication application = builder.Build();

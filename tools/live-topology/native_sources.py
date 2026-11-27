@@ -11,6 +11,7 @@ HOST_PROJECTS = {
     'Hexalith.Parties': 'src/Hexalith.Parties/Hexalith.Parties.csproj',
     'Hexalith.Projects': 'src/Hexalith.Projects.Server/Hexalith.Projects.Server.csproj',
 }
+PROJECTS_WORKER = 'src/Hexalith.Projects.Workers/Hexalith.Projects.Workers.csproj'
 
 
 def host_project(module: str) -> str:
@@ -24,7 +25,7 @@ def files(checkout: Path) -> dict:
     paths = subprocess.check_output(['git', 'ls-files', '-z'], cwd=checkout, timeout=10).decode().split('\0')
     regular = [checkout / path for path in paths if path and (checkout / path).is_file()]
     for project in ('Hexalith.Tenants', 'Hexalith.Parties', 'Hexalith.Parties.EventStoreExtensions',
-                    'Hexalith.Projects.Server'):
+                    'Hexalith.Projects.Server', 'Hexalith.Projects.Workers'):
         directory = checkout / 'src' / project
         regular.extend(path for path in (directory / 'bin/Release').rglob('*') if path.is_file())
         assets = directory / 'obj/project.assets.json'

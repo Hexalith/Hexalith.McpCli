@@ -30,7 +30,8 @@ public sealed class AspireTopologyFixture : IsolatedTopologyLifecycle<Projects.H
                 new("parties", "http", TimeSpan.FromSeconds(30), TimeSpan.FromMinutes(2), true, TimeSpan.FromMinutes(2)),
             ];
             return TopologyConfiguration.NativeLaneEnabled
-                ? [.. hosts, new("projects", "http", TimeSpan.FromSeconds(30), TimeSpan.FromMinutes(2), true, TimeSpan.FromMinutes(2))]
+                ? [.. hosts, new("projects", "http", TimeSpan.FromSeconds(30), TimeSpan.FromMinutes(2), true, TimeSpan.FromMinutes(2)),
+                    new("projects-workers", "http", TimeSpan.FromSeconds(30), TimeSpan.FromMinutes(2), true, TimeSpan.FromMinutes(2))]
                 : hosts;
         }
     }
@@ -105,6 +106,22 @@ public sealed class AspireTopologyFixture : IsolatedTopologyLifecycle<Projects.H
     internal async Task<Uri> DiscoverGatewaySidecarEndpointAsync(CancellationToken cancellationToken)
         => (await GatewaySidecarEndpoint.DiscoverAsync(["eventstore"], cancellationToken).ConfigureAwait(false))[0];
 
+    /// <summary>Signs a credential limited to the Projects list action on the seeded tenant.</summary>
+    internal string CreateProjectsListIdentity()
+    {
+        long now = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
+        return Sign(new Dictionary<string, object>
+        {
+            ["iss"] = "mcpcli-live-tests", ["aud"] = "hexalith-eventstore", ["sub"] = NativeProjectsListSetup.ReaderId,
+            ["eventstore:surface"] = "agent",
+            ["eventstore:tenant"] = NativeProjectsListSetup.TenantId,
+            ["eventstore:domain"] = "projects",
+            ["eventstore:permission"] = new[] { "query:read", "projects:list" },
+            ["scope"] = "projects.list", ["role"] = "TenantOperator",
+            ["iat"] = now, ["nbf"] = now - 30, ["exp"] = now + 300,
+        });
+    }
+
     /// <summary>Creates the short-lived delegated identity shared privately with one runner.</summary>
     internal string CreateLiveIdentity() => CreateIdentity(invalidSignature: false, live: true);
 
@@ -162,7 +179,6 @@ public sealed class AspireTopologyFixture : IsolatedTopologyLifecycle<Projects.H
     private string CreateIdentity(bool invalidSignature, bool live, bool maintenance = false, bool authorityRead = false, bool nonmember = false, bool boundary = false, bool boundaryAuthority = false)
     {
         long now = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
-        string header = Encode(JsonSerializer.SerializeToUtf8Bytes(new { alg = "HS256", typ = "JWT" }));
         IReadOnlyDictionary<string, object> claims = NativeFixtureIdentity.CreateClaims(now, live, maintenance, authorityRead, nonmember);
         if (boundary || boundaryAuthority)
         {
@@ -172,6 +188,12 @@ public sealed class AspireTopologyFixture : IsolatedTopologyLifecycle<Projects.H
                 : nonmember ? Array.Empty<string>() : new[] { "tenant-a" };
             claims = bounded;
         }
+        return Sign(claims, invalidSignature);
+    }
+
+    private string Sign(IReadOnlyDictionary<string, object> claims, bool invalidSignature = false)
+    {
+        string header = Encode(JsonSerializer.SerializeToUtf8Bytes(new { alg = "HS256", typ = "JWT" }));
         string payload = Encode(JsonSerializer.SerializeToUtf8Bytes(claims));
         string unsigned = header + "." + payload;
         string signature = Encode(HMACSHA256.HashData(Encoding.UTF8.GetBytes(invalidSignature ? Convert.ToBase64String(RandomNumberGenerator.GetBytes(32)) : _signingKey), Encoding.ASCII.GetBytes(unsigned)));

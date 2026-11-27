@@ -68,7 +68,7 @@ class CurrentCohortTests(unittest.TestCase):
         old = native_cohort.manifest(ROOT / 'tools/live-topology/native-runtime.json')
         current = native_cohort.manifest(ROOT / 'tools/live-topology/native-runtime-current.json')
         self.assertEqual('4.1.0', old['eventStoreVersion'])
-        self.assertEqual('5.5.2', current['eventStoreVersion'])
+        self.assertEqual('5.6.0', current['eventStoreVersion'])
         self.assertNotIn('Hexalith.Projects', old['sources'])
         self.assertIn('Hexalith.Projects', current['sources'])
         missing = copy.deepcopy(current)

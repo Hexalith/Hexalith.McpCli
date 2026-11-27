@@ -10,9 +10,9 @@ import subprocess
 import xml.etree.ElementTree as ET
 from zipfile import ZipFile
 
-COHORT = '5.5.2'
+COHORT = '5.6.0'
 # Historical and current tuples are closed independently; crossed cohorts refuse.
-TENANT_COHORTS = {'4.1.0': '7.0.5', '4.2.0': '7.0.7', '5.1.0': '8.0.0', '5.4.0': '8.0.2', '5.5.1': '8.0.2', '5.5.2': '8.0.2'}
+TENANT_COHORTS = {'4.1.0': '7.0.5', '4.2.0': '7.0.7', '5.1.0': '8.0.0', '5.4.0': '8.0.2', '5.5.1': '8.0.2', '5.5.2': '8.0.2', '5.6.0': '8.1.0'}
 MODULES = ('Hexalith.EventStore', 'Hexalith.Tenants', 'Hexalith.Parties', 'Hexalith.Projects', 'Hexalith.Platform')
 # Hexalith.CiCd does not initialize Projects; CI clones the gitlink object into the private fixture.
 GITLINK_ONLY = frozenset({'Hexalith.Projects'})
@@ -27,7 +27,7 @@ def manifest(path: Path) -> dict:
     tenant = TENANT_COHORTS.get(cohort)
     sources = set(value.get('sources', {}))
     if tenant is None or not set(BASELINE_MODULES) <= sources or sources - set(MODULES) \
-            or cohort == COHORT and GITLINK_ONLY - sources:
+            or cohort in ('5.5.2', COHORT) and GITLINK_ONLY - sources:
         raise ValueError('The native runtime requires the complete exact public cohort and qualified source set.')
     for module, source in value['sources'].items():
         if source.get('repository') != REPOSITORIES[module] or not re.fullmatch('[0-9a-f]{40}', source.get('commit', '')):

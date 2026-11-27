@@ -59,7 +59,7 @@ SOURCE_PACKAGE_VERSIONS = {
     'Grpc.Reflection': ('Include', '2.85.0'),
     'Microsoft.Extensions.AI.Abstractions': ('Include', '11.0.0'),
     'Microsoft.Extensions.Caching.Abstractions': ('Include', '11.0.0'),
-    'Hexalith.Commons.UniqueIds': ('Update', '3.0.2'),
+    'Hexalith.Commons.UniqueIds': ('Update', '3.0.4'),
     'Microsoft.CodeAnalysis.Analyzers': ('Update', '5.12.0'),
     'Microsoft.CodeAnalysis.Common': ('Update', '5.12.0'),
     'Microsoft.CodeAnalysis.CSharp': ('Update', '5.12.0'),
@@ -78,7 +78,7 @@ def current_runtime_profile() -> dict:
     if value.get('managedTestHosts') != {'runtime': '11.0.0', 'targetFramework': 'net11.0',
             'projects': ['Hexalith.McpCli.AppHost', 'Hexalith.McpCli.Integration.Tests'],
             'resourceLaunch': {'rollForward': 'Disable', 'highestInstalledRuntime': '11.0.0',
-                               'resources': ['eventstore', 'tenants', 'parties', 'projects']}}:
+                               'resources': ['eventstore', 'tenants', 'parties', 'projects', 'projects-workers']}}:
         raise ValueError('The exact current owned managed test-host runtime is required.')
     for name, version in expected.items():
         item = value['tools'][name]
@@ -312,6 +312,8 @@ def gateway_package_provenance(source_root: Path | None = None) -> dict:
     domains = {module: restored_cohort(source_root / module / native_sources.host_project(module),
                                       'Hexalith.EventStore.DomainService')
                for module in native_sources.MODULES}
+    worker = restored_cohort(source_root / 'Hexalith.Projects' / native_sources.PROJECTS_WORKER,
+                             'Hexalith.EventStore.ServiceDefaults', apphost_required=True)
     adapter = restored_cohort(source_root / 'Hexalith.Parties/src/Hexalith.Parties.EventStoreExtensions/Hexalith.Parties.EventStoreExtensions.csproj',
                               'Hexalith.EventStore.DomainService', deployed_required=True)
     tenant = native_cohort.TENANT_COHORTS[EVENTSTORE_COHORT]
@@ -355,10 +357,14 @@ def gateway_package_provenance(source_root: Path | None = None) -> dict:
         directory = (source_root / module / native_sources.host_project(module)).parent
         paths.extend(sorted(directory.glob('appsettings*.json')))
         paths.extend(sorted((directory / 'bin/Release/net11.0').glob('appsettings*.json')))
+    directory = (source_root / 'Hexalith.Projects' / native_sources.PROJECTS_WORKER).parent
+    paths.extend(sorted(directory.glob('appsettings*.json')))
+    paths.extend(sorted((directory / 'bin/Release/net11.0').glob('appsettings*.json')))
     configuration = {str(path.relative_to(ROOT)) if path.is_relative_to(ROOT) else 'source-fixtures/' + str(path.relative_to(source_root)):
                      hashlib.sha256(path.read_bytes()).hexdigest() for path in paths}
     return {'profile': 'published', 'version': EVENTSTORE_COHORT, 'sourceCommit': package['sourceCommit'],
             'sha256': package['sha256'], 'gatewayHost': gateway, 'domainHosts': domains, 'partiesAdapter': adapter,
+            'projectsWorker': worker,
             'compositionHost': composition, 'clientHost': client,
             'configurationSourceCommit': commit, 'configuration': configuration}
 
@@ -426,7 +432,8 @@ def reader_audit_provenance(prepared: dict | None = None) -> dict:
                 'tests/Hexalith.McpCli.ConformanceHost/Hexalith.McpCli.ConformanceHost.csproj',
                 *(f'references/Hexalith.{name}/src/Hexalith.{name}/Hexalith.{name}.csproj' for name in ('Tenants', 'Parties')),
                 'references/Hexalith.Parties/src/Hexalith.Parties.EventStoreExtensions/Hexalith.Parties.EventStoreExtensions.csproj',
-                'references/Hexalith.Projects/src/Hexalith.Projects.Server/Hexalith.Projects.Server.csproj']
+                'references/Hexalith.Projects/' + native_sources.host_project('Hexalith.Projects'),
+                'references/Hexalith.Projects/' + native_sources.PROJECTS_WORKER]
     if prepared is not None:
         projects = [*MODULE_AUDIT_PROJECTS, *projects[3:]]
     packages, archives, sources = {}, {}, {}
@@ -817,9 +824,8 @@ def prepare(evidence: Path) -> None:
         ET.ElementTree(overrides_xml).write(overrides, encoding='utf-8', xml_declaration=True)
         # Microsoft.Common.targets imports CustomAfterMicrosoftCommonTargets inside
         # CurrentVersion.targets, then Directory.Build.targets. The published Tenants
-        # 8.0.2 source qualifies EventStore only through 5.3.1; this late import
-        # replaces those Error targets after the owner file and enables the 5.5.2
-        # catalog constants without rewriting the frozen checkout.
+        # fixture uses this late import to keep the catalog flags consistent across
+        # the explicit preparation build and subsequent SDK/Aspire builds.
         after_directory = private / 'source-runtime-after-directory.targets'
         after_xml = ET.Element('Project')
         tenants_projects = ("'$(MSBuildProjectName)' == 'Hexalith.Tenants' or "
@@ -829,7 +835,7 @@ def prepare(evidence: Path) -> None:
         ET.SubElement(catalog_properties, 'DefineConstants').text = (
             '$(DefineConstants);HEXALITH_DEVELOPMENT_CATALOG_COHORT;HEXALITH_DEVELOPMENT_CATALOG_SOURCE;'
             'HEXALITH_TECHNICAL_HTTP_CATALOG_BINDING;HEXALITH_CHECKPOINTED_TENANT_PROJECTION')
-        # Published Parties 4.0.0 source qualifies the catalog API only through EventStore 5.3.1.
+        # Parties 4.0.1 needs explicit catalog flags when built with EventStore 5.6.0.
         parties_projects = ("'$(MSBuildProjectName)' == 'Hexalith.Parties' or "
                             "$(MSBuildProjectName.StartsWith('Hexalith.Parties.'))")
         parties_properties = ET.SubElement(after_xml, 'PropertyGroup', {'Condition': parties_projects})
@@ -842,6 +848,9 @@ def prepare(evidence: Path) -> None:
         ET.SubElement(projects_properties, 'DefineConstants').text = (
             '$(DefineConstants);HEXALITH_EVENTSTORE_CATALOG_API;HEXALITH_EVENTSTORE_CATALOG_HOSTS;'
             'HEXALITH_EVENTSTORE_QUERY_SELECTOR_BINDINGS;HES_CANCELLABLE_PROJECTIONS')
+        worker_properties = ET.SubElement(after_xml, 'PropertyGroup',
+                                          {'Condition': "'$(MSBuildProjectName)' == 'Hexalith.Projects.Workers'"})
+        ET.SubElement(worker_properties, 'DefineConstants').text = '$(DefineConstants);SUPPORTED_PROJECT_READ_SOURCE'
         ET.SubElement(after_xml, 'Target', {'Name': 'ValidateCatalogSdkSelection'})
         ET.SubElement(after_xml, 'Target', {'Name': 'ValidateCanonicalBoundaryPackageCohort'})
         ET.ElementTree(after_xml).write(after_directory, encoding='utf-8', xml_declaration=True)
@@ -909,6 +918,11 @@ def prepare(evidence: Path) -> None:
                          '-p:CopyLocalLockFileAssemblies=true', *properties],
                         300, evidence / 'parties-adapter-restore', cwd=working, environment=source_environment,
                         require_complete_stdout=False)
+            if module == 'Hexalith.Projects':
+                bounded(['dotnet', 'restore', native_sources.PROJECTS_WORKER, '--configfile', str(source_restore_config),
+                         '-p:Configuration=Release', '-warnaserror', *properties],
+                        300, evidence / 'projects-workers-restore', cwd=working, environment=source_environment,
+                        require_complete_stdout=False)
         prove_source_advisories(private, package_cache, tools, bounded, evidence, receipt, required=True)
         for source in receipt['sources']:
             module = source['module']
@@ -929,6 +943,11 @@ def prepare(evidence: Path) -> None:
                 bounded(['dotnet', 'build', 'src/Hexalith.Parties.EventStoreExtensions/Hexalith.Parties.EventStoreExtensions.csproj',
                          '--no-restore', '--configuration', 'Release', '-warnaserror', '-m:1', '-p:CopyLocalLockFileAssemblies=true', *properties],
                         300, evidence / 'parties-adapter-build', cwd=working, environment=source_environment,
+                        require_complete_stdout=False)
+            if module == 'Hexalith.Projects':
+                bounded(['dotnet', 'build', native_sources.PROJECTS_WORKER, '--no-restore',
+                         '--configuration', 'Release', '-warnaserror', '-m:1', *properties],
+                        300, evidence / 'projects-workers-build', cwd=working, environment=source_environment,
                         require_complete_stdout=False)
             prove_source_advisories(private, package_cache, tools, bounded, evidence, receipt)
         source_path = evidence / 'native-source-fixtures.json'

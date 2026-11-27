@@ -30,6 +30,7 @@
     "eventstore",
     "parties",
     "projects",
+    "projects-workers",
     "tenants"
   ]
 }

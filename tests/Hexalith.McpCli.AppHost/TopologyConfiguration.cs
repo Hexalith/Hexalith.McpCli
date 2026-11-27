@@ -21,6 +21,7 @@ internal static class TopologyConfiguration
             "tenants" => 3512,
             "parties" => 3513,
             "projects" => 3514,
+            "projects-workers" => 3515,
             _ => throw new ArgumentOutOfRangeException(nameof(name)),
         };
 
@@ -75,10 +76,10 @@ internal static class TopologyConfiguration
     }
 
     /// <summary>The Dapr applications owned by this topology.</summary>
-    internal static readonly string[] ApplicationIds = ["eventstore", "tenants", "parties", "projects"];
+    internal static readonly string[] ApplicationIds = ["eventstore", "tenants", "parties", "projects", "projects-workers"];
 
     /// <summary>SDK catalog participants in ordinal order, including the Projects query host.</summary>
-    internal static readonly string[] NativeCatalogHosts = ["eventstore", "parties", "projects", "tenants"];
+    internal static readonly string[] NativeCatalogHosts = ["eventstore", "parties", "projects", "projects-workers", "tenants"];
 
     /// <summary>The root source checkouts required by the published helpers.</summary>
     internal static readonly string[] Modules = ["Hexalith.EventStore", "Hexalith.Tenants", "Hexalith.Parties"];

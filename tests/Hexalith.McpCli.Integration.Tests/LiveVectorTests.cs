@@ -35,9 +35,12 @@ public sealed class LiveVectorTests(AspireTopologyFixture fixture)
         fixture.SkipIfUnavailable();
         await fixture.RequireAdministratorAuthorityAsync(TestContext.Current.CancellationToken).ConfigureAwait(true);
         await fixture.RequireProjectionWriterAsync(TestContext.Current.CancellationToken).ConfigureAwait(true);
+        string identity = operation == "projects.list"
+            ? await NativeProjectsListSetup.PrepareAsync(fixture, TestContext.Current.CancellationToken).ConfigureAwait(true)
+            : fixture.CreateLiveIdentity();
         await LiveVectorProcess.RunAsync(RepositoryProjectPaths.GetRepositoryRoot(), operation,
             RequiredEnvironment("MCPCLI_LIVE_OUTPUT"), RequiredEnvironment("MCPCLI_LIVE_HOST"),
-            RequiredEnvironment("MCPCLI_LIVE_BINDING"), fixture.GatewayEndpoint, fixture.CreateLiveIdentity(),
+            RequiredEnvironment("MCPCLI_LIVE_BINDING"), fixture.GatewayEndpoint, identity,
             TestContext.Current.CancellationToken).ConfigureAwait(true);
     }
     private static string RequiredEnvironment(string name)

@@ -36,7 +36,8 @@ internal sealed class NativeCatalogRuntime : IAsyncDisposable
     /// <summary>Uses real host metadata, the existing separate-artifact Platform reader and SDK activation.</summary>
     internal static async Task<NativeCatalogRuntime> CreateAsync(IDistributedApplicationBuilder builder,
         IResourceBuilder<ProjectResource> gateway, IResourceBuilder<ProjectResource> tenants,
-        IResourceBuilder<ProjectResource> parties, IResourceBuilder<ProjectResource>? projects, string stateComponent)
+        IResourceBuilder<ProjectResource> parties, IResourceBuilder<ProjectResource>? projects,
+        IResourceBuilder<ProjectResource>? projectsWorkers, string stateComponent)
     {
         string backup = Environment.GetEnvironmentVariable("MCPCLI_ISOLATED_REDIS_BACKUP_RECEIPT")
             ?? throw new InvalidOperationException("Native catalog startup requires the wrapper's pre-application Redis backup.");
@@ -64,7 +65,7 @@ internal sealed class NativeCatalogRuntime : IAsyncDisposable
             await NativeCatalogTool.RunOwnedPreparationAsync(directory, owner, async () =>
             {
                 using JsonDocument receipt = await NativeCatalogTool.GenerateAsync(new DirectoryInfo(root), directory,
-                    owner, "eventstore", "5.5.2", [(contracts, adapter, "parties")], deadline.Token).ConfigureAwait(false);
+                    owner, "eventstore", "5.6.0", [(contracts, adapter, "parties")], deadline.Token).ConfigureAwait(false);
                 partyArtifacts = receipt.RootElement.GetProperty("loadedArtifacts").Clone();
                 foreach (JsonElement artifact in partyArtifacts.EnumerateArray())
                 {
@@ -114,12 +115,13 @@ internal sealed class NativeCatalogRuntime : IAsyncDisposable
             {
                 IResourceBuilder<ProjectResource> projectsSource = PreparationSource(builder, projects);
                 projectsOwner = await projectsSource.PrepareEventStoreDevelopmentOwnerAsync(
-                    "Hexalith.Projects.Contracts.dll", "Hexalith.Projects.Server.dll",
+                    "Hexalith.Projects.Contracts.dll", "Hexalith.Projects.EventStoreExtensions.dll",
                     TimeSpan.FromMinutes(3), deadline.Token).ConfigureAwait(false);
                 owners.Add(BindOwner(projectsOwner.Owner, projects));
                 gatewayCalls.Add(new(projects, "/api/v1/queries", ["POST"]));
                 receivers[0] = new(gateway, gatewayCalls) { TechnicalHttp = true };
                 receivers.Add(new(projects, domainCalls));
+                receivers.Add(new(projectsWorkers!, []));
             }
             catalog = builder.AddEventStoreDevelopmentRouteCatalog(gateway, owners, receivers, stateComponent, custody);
             tenants.WithEnvironment("Tenants__BootstrapBoundWorkloadEnabled", "true")

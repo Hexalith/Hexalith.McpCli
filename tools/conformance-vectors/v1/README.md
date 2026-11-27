@@ -274,7 +274,7 @@ warm-up builds or retries. Evidence records the assembly/module/operation popula
 identifier kinds, elapsed milliseconds, 500 ms limit, missing modules and diagnostics.
 The existing isolated String-kind Catalog test remains part of Core.Tests.
 
-Current enrollment selects the authentic signed Tenants 8.0.2 Contracts artifact and
+Current enrollment selects the authentic signed Tenants 8.1.0 Contracts artifact and
 retains all fourteen approved vectors and the twenty inventory decisions byte for
 byte. Version differences and the unmentioned `tenants.refresh-tenant-access`
 operation are reported without failure. The new operation shares an already

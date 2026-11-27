@@ -36,7 +36,7 @@ public sealed class TopologyDaprComponentTests
             expected["keyPrefix"] = "name";
         }
         Assert.Equal(expected.OrderBy(item => item.Key, StringComparer.Ordinal), metadata.OrderBy(item => item.Key, StringComparer.Ordinal));
-        Assert.Equal(new[] { "eventstore", "parties", "projects", "tenants" },
+        Assert.Equal(new[] { "eventstore", "parties", "projects", "projects-workers", "tenants" },
             component.GetProperty("scopes").EnumerateArray().Select(scope => scope.GetString()).Order(StringComparer.Ordinal));
 
         string wrapper = File.ReadAllText(Path.Combine(root, "tools", "live-topology", "run-isolated.py"));

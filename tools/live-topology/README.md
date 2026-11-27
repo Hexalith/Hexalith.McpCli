@@ -182,18 +182,18 @@ Every live child still proves all four private namespaces; setup or probe failur
 fails preparation.
 
 `prepare-ci.sh` authenticates the complete native runtime selection in
-`native-runtime-current.json`: exact public EventStore **5.5.2** archives, public Tenants
-**8.0.2** archives and their embedded repository commits, plus the separately
-qualified Parties and Platform source revisions. Parties source commit
-`7639a5d20c36ce3e2ec5139685f3b08dbf2ab1f9` matches public Contracts and Aspire
-helpers **4.0.0**. Tenants 8.0.2 binds
-`30b233026648488ca71fe5904fd218b7af934aed`. The current
-Testing.Integration **5.5.2** package consumes Platform descriptors. This isolated
+`native-runtime-current.json`: exact public EventStore **5.6.0** archives, public Tenants
+**8.1.0** archives and their embedded repository commits, plus the separately
+qualified Parties, Projects and Platform source revisions. Parties source commit
+`f2b77d32cec947d8389ea20f675cc902dfee357a` matches public Contracts and Aspire
+helpers **4.0.1**. Tenants 8.1.0 binds
+`e4e28904dfb41ed19dd2885cc36b881aef167af2`. The current
+Testing.Integration **5.6.0** package consumes Platform descriptors. This isolated
 suite retains ownership of its AppHost through Aspire’s public testing API,
 with bounded startup, named endpoint discovery, liveness and independent cleanup.
 The product, current fixture hosts and selected owner exports target `net11.0`.
 The current fixture requires the shared .NET **11.0.0** runtime through
-`McpCliCurrentNativeProfile=true`. The three isolated resource launch
+`McpCliCurrentNativeProfile=true`. All five isolated resource launch
 environments select `DOTNET_ROLL_FORWARD=Disable`. Preparation and every
 execution recheck require the highest installed Core and ASP.NET runtime to be
 exactly 11.0.0, and no resource may substitute another runtime version. The actual
@@ -204,13 +204,13 @@ required. This configuration grants no acceptance before the full live lane.
 
 The historical `native-runtime.json`, approved current vectors and plans, and prior receipts remain unchanged.
 Current vectors retain their bound Tenants 7.0.7 version; the ordinary conformance gate reports
-the restored 8.0.2 difference. The newly decorated RefreshTenantAccess operation shares an approved
+the restored 8.1.0 difference. RefreshTenantAccess shares an approved
 Operation Shape; its omitted inventory row is reported, and no live repair-semantics proof is claimed.
 
 Generic CLI and MCP query requests preserve every descriptor-declared
 `projectionActorType`, when the current owner declares one. The current Parties annotations omit the
 deprecated compatibility hint and retain the same domain-service projection target. SDK
-5.5.2 supplies the exact owner-enrolled selector policy. The immutable Parties
+5.6.0 supplies the exact owner-enrolled selector policy. The immutable Parties
 source selection includes its three digest-bound compatibility bindings; foreign
 selectors remain refused. The committed catalog chooses the actual receiver.
 Fresh complete native CI remains required for this selected cohort; offline
@@ -224,17 +224,14 @@ qualified commit; local revisions and nested dependencies are never updated.
 All builds and nested preparation processes inherit a fresh task-owned
 `NUGET_PACKAGES`. The actual gateway, domain hosts, separate Parties adapter and
 Integration.Tests/AppHost are built with the public SDK cohort. Parties uses the current root catalog’s published dependency selections. Before importing
-that catalog, the overlay sets `HexalithTenantsVersion` to the native Tenants **8.0.2** cohort,
-which must equal the root pin. The catalog's newer Tenants default would select packages that
-require EventStore 5.6.0, and Tenants derives its assembly version from the same property. Source hosts and
+that catalog, the overlay sets `HexalithTenantsVersion` to the native Tenants **8.1.0** cohort,
+which must equal the root pin. Tenants derives its assembly version from the same property. Source hosts and
 the separate adapter use the root McpCli 3.0.0 pin so their Abstractions identity
-matches the AppHost, including later SDK/Aspire rebuilds. The published Tenants **8.0.2** source qualifies EventStore only through **5.3.1**.
-Published Parties **4.0.0** likewise gates `HEXALITH_EVENTSTORE_CATALOG_API` on that
-same 5.3.1 list, so a 5.5.2 fixture compile would omit the compiled declaration
-source attribute. `Microsoft.Common.targets` imports `CustomAfterMicrosoftCommonTargets` before
+matches the AppHost, including later SDK/Aspire rebuilds. Published Parties **4.0.1**
+requires the compatibility constants for the explicitly selected EventStore **5.6.0** SDK. `Microsoft.Common.targets` imports `CustomAfterMicrosoftCommonTargets` before
 that frozen `Directory.Build.targets`, so preparation also sets
 `CustomAfterDirectoryBuildTargets` to a private late import that enables the
-5.5.2 catalog constants for Tenants and Parties and replaces the owner's catalog-SDK and canonical-boundary
+catalog constants for the isolated owners and replaces the owner's catalog-SDK and canonical-boundary
 Error targets. Isolated Parties still imports `Hexalith3BuildPackageProps`
 without `Exists()`; preparation points that property, plus Hexalith1/2 and
 `HexalithBuildPackageVersions1`, at the same overlay so the missing nested
@@ -283,19 +280,22 @@ catalog files and the pinned catalog; execution rejects source or file drift
 before vectors and again before smoke. Server build commands retain their
 separate 300-second bounds. The owned gateway's mandatory
 configuration snapshot is verified against native source commit
-`f0694e52814a8cbaed632fa608f54cb20c512d85`, matching the public 5.5.2 archive
+`295b5a6ba584167f21cfef40787477b8814e32da`, matching the public 5.6.0 archive
 metadata; normal overrides, real JWT validation and sidecar tokens remain active.
 
 Before creating any digest material or catalog authority, the AppHost verifies
 the genuine empty pre-application Redis backup. The selected Tenants host uses
-SDK preparation of its real Contracts/Server artifacts and dependency closure.
+SDK preparation of its real Contracts/Server artifacts and dependency closure. Projects uses
+its compiled Contracts declarations and separate EventStoreExtensions adapters. The
+separately audited Projects worker consumes actual Tenant events and writes the
+access projection required by the Projects list query.
 Parties preserves its separate EventStoreExtensions artifact: the existing
 qualified Platform CatalogBuilder prepares and checks its actual adapter factory,
 compiled declarations and policies without adding a server dependency edge.
-The shared `AddEventStoreDevelopmentRouteCatalog` composes the real three-host
+The shared `AddEventStoreDevelopmentRouteCatalog` composes the real five-host
 model, actual sidecar identities, finite native receiver traffic and run-private
 custody. Its SDK model observer and actual hosts perform prepare/ready/commit;
-all three persisted readbacks must agree before the administrator barrier.
+all five persisted readbacks must agree before the administrator barrier.
 Composition and metadata ownership remain alive until the application stops;
 private digest custody is then removed through its ownership marker.
 

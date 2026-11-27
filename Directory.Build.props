@@ -1,12 +1,12 @@
 <Project>
   <PropertyGroup>
     <!-- Match the EventStore cohort reviewed by the dependency policy and native topology. -->
-    <HexalithEventStoreVersion Condition="'$(HexalithEventStoreVersion)' == ''">5.5.2</HexalithEventStoreVersion>
+    <HexalithEventStoreVersion Condition="'$(HexalithEventStoreVersion)' == ''">5.6.0</HexalithEventStoreVersion>
     <HexalithProjectsVersion Condition="'$(HexalithProjectsVersion)' == ''">2.0.0</HexalithProjectsVersion>
     <HexalithMcpCliVersion Condition="'$(HexalithMcpCliVersion)' == ''">3.0.0</HexalithMcpCliVersion>
-    <HexalithPartiesVersion Condition="'$(HexalithPartiesVersion)' == ''">4.0.0</HexalithPartiesVersion>
-    <HexalithPartiesAspireVersion Condition="'$(HexalithPartiesAspireVersion)' == ''">4.0.0</HexalithPartiesAspireVersion>
-    <HexalithTenantsVersion Condition="'$(HexalithTenantsVersion)' == ''">8.0.2</HexalithTenantsVersion>
+    <HexalithPartiesVersion Condition="'$(HexalithPartiesVersion)' == ''">4.0.1</HexalithPartiesVersion>
+    <HexalithPartiesAspireVersion Condition="'$(HexalithPartiesAspireVersion)' == ''">4.0.1</HexalithPartiesAspireVersion>
+    <HexalithTenantsVersion Condition="'$(HexalithTenantsVersion)' == ''">8.1.0</HexalithTenantsVersion>
     <HexalithBuildPackageVersions1>$(MSBuildThisFileDirectory)references/Hexalith.Builds/Props/Directory.Packages.props</HexalithBuildPackageVersions1>
     <HexalithBuildPackageVersions2>$(MSBuildThisFileDirectory)../Hexalith.Builds/Props/Directory.Packages.props</HexalithBuildPackageVersions2>
     <HexalithBuildPackageVersions3>$(MSBuildThisFileDirectory)../../Hexalith.Builds/Props/Directory.Packages.props</HexalithBuildPackageVersions3>
@@ -24,7 +24,7 @@
     <PackageVersion Include="Microsoft.Extensions.AI.Abstractions" Version="11.0.0" />
     <PackageVersion Include="Microsoft.Extensions.Caching.Abstractions" Version="11.0.0" />
     <!-- Keep the production and test closures on the reviewed UniqueIds version. -->
-    <PackageVersion Update="Hexalith.Commons.UniqueIds" Version="3.0.2" />
+    <PackageVersion Update="Hexalith.Commons.UniqueIds" Version="3.0.4" />
     <!-- Align the bundled analyzer compiler API and build-time rules with SDK 11. -->
     <PackageVersion Update="Microsoft.CodeAnalysis.Analyzers" Version="5.12.0" />
     <PackageVersion Update="Microsoft.CodeAnalysis.Common" Version="5.12.0" />

@@ -126,9 +126,9 @@ public sealed class PackageGatewayBoundaryTests : IAsyncLifetime
         using JsonDocument document = JsonDocument.Parse(File.ReadAllText(Path.Combine(host, "Configuration", "provenance-current.json")));
         JsonElement profile = document.RootElement;
         Assert.Equal("published", profile.GetProperty("profile").GetString());
-        Assert.Equal("5.5.2", profile.GetProperty("eventStoreVersion").GetString());
+        Assert.Equal("5.6.0", profile.GetProperty("eventStoreVersion").GetString());
         Assert.Equal("https://github.com/Hexalith/Hexalith.EventStore.git", profile.GetProperty("sourceRepository").GetString());
-        Assert.Equal("f0694e52814a8cbaed632fa608f54cb20c512d85", profile.GetProperty("sourceCommit").GetString());
+        Assert.Equal("295b5a6ba584167f21cfef40787477b8814e32da", profile.GetProperty("sourceCommit").GetString());
         foreach (JsonProperty file in profile.GetProperty("files").EnumerateObject())
         {
             string path = Path.Combine(host, file.Name);
