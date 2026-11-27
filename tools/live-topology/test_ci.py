@@ -797,7 +797,7 @@ pathlib.Path(sys.argv[sys.argv.index('--output') + 1]).write_text(json.dumps({'r
         self.assertNotEqual(self.env['NUGET_PACKAGES'], str(cache))
         calls = [json.loads(line) for line in (self.root / 'dotnet-package-caches.jsonl').read_text().splitlines()]
         builds = [call for call in calls if call['args'][0] in ('build', 'msbuild')]
-        self.assertEqual(7, len(builds))
+        self.assertEqual(8, len(builds))
         self.assertEqual({str(cache)}, {call['cache'] for call in builds})
         self.assertEqual(0, self.invoke('run-ci.sh').returncode)
 
