@@ -106,6 +106,29 @@ context:
 - `[VG-5]` **medium** (`patch`): Pre-verified by `verification-gap` — `RunWithTerminalFailureWatchAsync` non-terminal exception and timeout propagation is untested (same test-gap group as `[BH-8]`).
 - `[VG-6]` **high** (`patch`): Verified directly against built `Hexalith.McpCli.Integration.Tests.dll` — xUnit v3 emits `AspireTopologyFixture.InitializeAsync()` crashes as `errors="0" failed="1"` with `Xunit.Sdk.TestPipelineException` (same root cause as `[BH-5]`).
 
+### Review Findings
+
+Second review of the story-scoped diff from `38eedb2e` through `670319a8` (15 files). All four review layers reported.
+
+- [ ] [Review][Patch] **High** Bind all split phases to the same clean McpCli checkout [tools/live-topology/ci.py:604]. The boundary receipt and prepared provenance omit root checkout identity, and conformance snapshots its own starting SHA. A disposable fixture still reported full acceptance after the root vector runner changed between phases. (Blind Hunter, Acceptance Auditor)
+- [ ] [Review][Patch] **High** Protect the prior CI report path before writing [tools/live-topology/ci.py:1543]. A split run skips reading a symlinked `ci-live.json` but writes through it when recording the refusal. A scratch run overwrote the symlink target. (Blind Hunter, Edge Case Hunter)
+- [ ] [Review][Patch] **High** Verify the sealed boundary artifacts again before granting full acceptance [tools/live-topology/ci.py:1575]. The split-lane fixture still returned exit 0 and full acceptance when the smoke process changed the prior boundary XML. (Edge Case Hunter)
+- [ ] [Review][Patch] **Medium** Preserve skipped outcomes when a malformed XML encoding raises `LookupError` [tools/live-topology/run-vectors.py:133]. A three-vector run stopped on the first child but left both remaining entries `not-run` with no fail-fast reason. (Blind Hunter, Edge Case Hunter, Acceptance Auditor)
+- [ ] [Review][Patch] **Medium** Attempt smoke even when the failed vector receipt cannot be read [tools/live-topology/ci.py:1320]. An injected `PermissionError` during receipt reading replaced the original vector error and prevented the smoke call. (Blind Hunter)
+- [ ] [Review][Patch] **Medium** Check the latest declared resource state before rethrowing a readiness error [tests/Hexalith.McpCli.Integration.Tests/IsolatedTopologyLifecycle.cs:217]. A scratch test delayed watcher delivery and reproduced a readiness `TimeoutException` even though the latest snapshot already showed `eventstore` in `Exited` with code 42. (Edge Case Hunter, Acceptance Auditor)
+- [ ] [Review][Patch] **Medium** Exercise failure watching through the fixture's startup and cleanup wiring [tests/Hexalith.McpCli.Integration.Tests/IsolatedTopologyLifecycle.cs:84]. The helper tests supply their own linked token, and the real-assembly failure test exits before startup. Changing the startup calls to pass the outer token would escape those checks. (Blind Hunter, Verification Gap Reviewer)
+- [ ] [Review][Patch] **Medium** Assert the subprocess deadlines in the split-lane test [tools/live-topology/test_ci.py:3184]. Subtracting the boundary timeout twice cut the vector deadline from 11,280 to 10,320 seconds while both existing deadline tests passed. (Verification Gap Reviewer)
+- [x] [Review][Defer] **Medium** Require distinct resolved vector and smoke runtime receipts and compare their directory set [tools/live-topology/ci.py:1304] — deferred: the legacy gate already checked raw receipt strings and final directory count. (Blind Hunter, Edge Case Hunter)
+- [x] [Review][Defer] **Medium** Recheck prepared fixture provenance after smoke [tools/live-topology/ci.py:1351] — deferred: the legacy gate also verified provenance before smoke and checked only the runtime count afterward. (Blind Hunter)
+- [x] [Review][Defer] **Medium** Record and enforce missing or ambiguous advisory cache index results [tools/live-topology/ci.py:508] — deferred: Story 5.13 owns source advisory proof and diagnostics. The required path raises before recording diagnostics, and the later optional call returns without checking the previously sealed cache. (Blind Hunter, Edge Case Hunter)
+- [x] [Review][Defer] **High** Verify that live children use the winning NuGet cache directories [tools/live-topology/ci.py:1221] — deferred: Story 5.13 owns cache selection after advisory rotation. A prepared fixture still ran boundary after both cache fields were pointed at the superseded attempt. (Blind Hunter, Verification Gap Reviewer)
+
+**Rejected**
+
+- **Low** Symlinked boundary artifact parent. An equivalent linked copy still has to match the sealed XML hash and exact test case. Refusing parent links adds path handling for an unlikely case without a demonstrated change to acceptance. (Blind Hunter)
+- **Low** A nonnumeric `--max-failures` leaves prior output intact. Argument parsing rejects the command before a run starts, and the CI consumer creates a new output generation. Changing parse-time receipt handling would add special cases for direct invocations. (Blind Hunter)
+- **False** A normal wrapper run returns success with a reported error or non-boolean prerequisites. The wrapper writes literal `True` for readiness, sets exit 1 when it writes an error, and the caller rejects the nonzero exit before accepting the vector. (Blind Hunter)
+
 ## Verification
 
 **Commands:**
