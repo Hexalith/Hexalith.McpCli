@@ -490,8 +490,10 @@ lane.main(['--output',sys.argv[2]])
                              [item['result'] for item in report['vectors']])
 
     def test_immediate_fail_fast_aborts_on_timeout_wrapper_or_fixture_init_failure(self):
-        modes = ('exit-124', 'wrapper-missing-receipt', 'wrapper-prerequisites-false',
-                 'wrapper-error', 'fixture-missing-xml', 'fixture-malformed-xml', 'fixture-xml-errors')
+        modes = ('exit-124', 'wrapper-missing-receipt', 'wrapper-prerequisites-false', 'wrapper-error',
+                 'fixture-missing-xml', 'fixture-malformed-xml', 'fixture-unknown-encoding',
+                 'fixture-unsupported-encoding', 'fixture-xml-errors')
+        encodings = {'fixture-unknown-encoding': 'unknown-encoding', 'fixture-unsupported-encoding': 'cp932'}
         for mode in modes:
             with self.subTest(mode=mode), tempfile.TemporaryDirectory() as directory:
                 selections = [{'operation': f'fixture.operation-{i}', **{key: key for key in BINDING_KEYS}} for i in range(4)]
@@ -516,6 +518,9 @@ lane.main(['--output',sys.argv[2]])
                     if mode == 'fixture-malformed-xml':
                         (output / 'tests.xml').write_text('<assemblies><broken')
                         return 1
+                    if mode in encodings:
+                        (output / 'tests.xml').write_text(f'<?xml version="1.0" encoding="{encodings[mode]}"?><assemblies/>')
+                        return 1
                     if mode == 'fixture-xml-errors':
                         (output / 'tests.xml').write_text(
                             self.xml(total='1', passed='0', failed='0', skipped='0', errors='1', result='Fail', operation=operation))
@@ -534,6 +539,8 @@ lane.main(['--output',sys.argv[2]])
                 self.assertTrue(report['failFastTriggered'])
                 self.assertIsInstance(report['failFastReason'], str)
                 self.assertTrue(report['failFastReason'])
+                if mode in encodings:
+                    self.assertEqual('fixture.operation-0: fixture initialization failed: malformed tests.xml', report['failFastReason'])
                 self.assertEqual(1, report['failed'])
                 self.assertEqual(3, report['skipped'])
                 self.assertEqual(['failed', 'skipped-fail-fast', 'skipped-fail-fast', 'skipped-fail-fast'],

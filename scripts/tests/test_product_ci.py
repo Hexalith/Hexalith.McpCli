@@ -270,6 +270,83 @@ class ProductControllerTests(unittest.TestCase):
                 product_ci.linux_conformance()
         self.assertGreater(calls, 0)
 
+    def test_split_conformance_checks_sealed_preparation_sha_on_entry_and_exit(self):
+        preparation = self.root / 'preparation.json'
+        preparation_id, boundary_id = '1' * 32, '2' * 32
+        preparation_data = {'result': 'prepared', 'runId': preparation_id, 'source_sha': SHA}
+        preparation.write_text(json.dumps(preparation_data))
+        boundary = self.root / 'boundary-receipt.json'
+        report = self.root / 'ci-live.json'
+        boundary_data = {'schema': 'mcpcli-live-boundary/v1', 'result': 'passed', 'fullLiveAccepted': False,
+                         'boundaryRunId': boundary_id, 'preparationRunId': preparation_id,
+                         'preparationSha256': product_packages.digest(preparation)}
+        report_data = {'result': 'boundary-passed', 'phase': 'boundary', 'fullLiveAccepted': False,
+                       'runId': boundary_id, 'preparationRunId': preparation_id}
+
+        def seal(boundary_payload, prior, *, digest=None):
+            boundary.write_text(json.dumps({**boundary_payload,
+                'contentSha256': product_packages.canonical_digest(boundary_payload) if digest is None else digest}))
+            report.write_text(json.dumps({**prior,
+                'boundaryReceipt': {'path': str(boundary), 'sha256': product_packages.digest(boundary)}}))
+
+        argv = ['product_ci.py', 'linux-conformance', '--live-preparation', str(preparation)]
+        invalid = 'receipt sealed by the passing live boundary'
+
+        for mode, heads, changes, calls, message in (
+                ('complete', [SHA, SHA], ['', ''], 6, ''),
+                ('head-before', ['b' * 40], [''], 0, 'exact clean checkout SHA'),
+                ('dirty-before', [SHA], [' M source.cs'], 0, 'exact clean checkout SHA'),
+                ('head-after', [SHA, 'b' * 40], [''], 6, 'exact clean checkout SHA'),
+                ('dirty-after', [SHA, SHA], ['', '?? source.cs'], 6, 'exact clean checkout SHA'),
+                ('changed-evidence', [SHA, SHA], ['', ''], 6, 'evidence changed during split conformance'),
+                ('unsealed-preparation', ['b' * 40], [''], 0, invalid),
+                ('failed-boundary', [], [], 0, invalid),
+                ('wrong-phase', [], [], 0, invalid),
+                ('wrong-schema', [], [], 0, invalid),
+                ('content-hash', [], [], 0, invalid),
+                ('different-boundary-run', [], [], 0, invalid),
+                ('missing-run-ids', [], [], 0, invalid)):
+            with self.subTest(mode=mode):
+                preparation.write_text(json.dumps(preparation_data))
+                payload, prior = boundary_data.copy(), report_data.copy()
+                if mode == 'failed-boundary':
+                    payload['result'] = 'failed'
+                if mode == 'wrong-phase':
+                    prior['phase'] = 'remaining'
+                if mode == 'wrong-schema':
+                    payload['schema'] = 'unknown'
+                if mode == 'different-boundary-run':
+                    prior['runId'] = '3' * 32
+                if mode == 'missing-run-ids':
+                    preparation.write_text(json.dumps({key: value for key, value in preparation_data.items() if key != 'runId'}))
+                    payload.update(preparationSha256=product_packages.digest(preparation))
+                    for document, keys in ((payload, ('preparationRunId', 'boundaryRunId')), (prior, ('preparationRunId', 'runId'))):
+                        for key in keys:
+                            document.pop(key)
+                seal(payload, prior, digest='invalid' if mode == 'content-hash' else None)
+                if mode == 'unsealed-preparation':
+                    preparation.write_text(json.dumps({**preparation_data, 'source_sha': 'b' * 40}))
+
+                def execute(*_args, **_kwargs):
+                    if mode == 'changed-evidence':
+                        report.write_bytes(report.read_bytes() + b' ')
+
+                with patch.object(sys, 'argv', argv), \
+                        patch.dict(os.environ, {'HEXALITH_CI_PYTHON': sys.executable}), \
+                        patch('importlib.metadata.version', return_value='4.26.0'), \
+                        patch.object(product_ci.signal, 'signal'), \
+                        patch.object(product_ci, 'source_sha', side_effect=heads), \
+                        patch.object(product_ci, 'source_changes', side_effect=changes), \
+                        patch.object(product_ci, 'execute', side_effect=execute) as child, \
+                        contextlib.redirect_stderr(io.StringIO()) as stderr:
+                    error = int(bool(message))
+                    self.assertEqual(error, product_ci.main(), stderr.getvalue())
+                    if error:
+                        self.assertIn(message, stderr.getvalue())
+                    else:
+                        self.assertEqual('', stderr.getvalue())
+                    self.assertEqual(calls, child.call_count)
+
 
 class ProductPlatformTests(unittest.TestCase):
     def setUp(self):

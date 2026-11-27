@@ -12,31 +12,44 @@ ROOT = Path(__file__).resolve().parents[1]
 PAIR = ["Hexalith.McpCli.Abstractions", "Hexalith.McpCli"]
 
 
-def git(*args):
+def git(*args, cwd=None):
     """Read Git metadata; keep every caller in this module with literal operands."""
-    return subprocess.run(['git', *args], check=True, capture_output=True, text=True).stdout.strip()
+    return subprocess.run(['git', *args], cwd=cwd, check=True, capture_output=True, text=True).stdout.strip()
 
 
-def source_sha():
-    return git('rev-parse', 'HEAD')
+def source_sha(*, cwd=None):
+    return git('rev-parse', 'HEAD', cwd=cwd)
 
 
-def source_changes():
-    return git('status', '--porcelain', '--untracked-files=normal', '--ignore-submodules=all')
+def source_changes(*, cwd=None):
+    # Qualified submodule worktrees can differ from the root gitlinks. Staged gitlink edits still change the root.
+    return (git('status', '--porcelain', '--untracked-files=normal', '--ignore-submodules=all', cwd=cwd)
+            or git('diff', '--cached', '--name-only', '--ignore-submodules=none', '--', cwd=cwd))
 
 
 def digest(path):
     return hashlib.sha256(Path(path).read_bytes()).hexdigest()
 
 
-def read_json(path):
+def canonical_digest(payload: dict) -> str:
+    """Hash a deterministic JSON representation without its outer digest key."""
+    canonical = json.dumps(payload, sort_keys=True, separators=(',', ':'), ensure_ascii=False).encode('utf-8')
+    return hashlib.sha256(canonical).hexdigest()
+
+
+def read_json_with_digest(path):
     path = Path(path)
     if path.is_symlink() or not path.is_file():
         raise ValueError('Evidence must be a regular file.')
-    document = json.loads(path.read_text(encoding='utf-8'))
+    content = path.read_bytes()
+    document = json.loads(content.decode('utf-8'))
     if not isinstance(document, dict):
         raise ValueError('Evidence must contain a JSON object.')
-    return document
+    return document, hashlib.sha256(content).hexdigest()
+
+
+def read_json(path):
+    return read_json_with_digest(path)[0]
 
 
 def write_new(path, value):

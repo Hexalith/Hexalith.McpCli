@@ -132,7 +132,7 @@ def classify_immediate_fail_fast(output: Path, exit_code: int | None) -> str | N
         return 'fixture initialization failed: missing tests.xml'
     try:
         root = ET.parse(tests_xml).getroot()
-    except (OSError, ET.ParseError):
+    except (OSError, ET.ParseError, LookupError, ValueError):
         return 'fixture initialization failed: malformed tests.xml'
     assemblies = root.findall('assembly')
     if len(assemblies) != 1:

@@ -5,6 +5,7 @@ import argparse
 import json
 import os
 import platform
+import re
 import signal
 import shutil
 from pathlib import Path
@@ -14,8 +15,8 @@ import tempfile
 
 from product_process import run as run_owned
 from evidence_redaction import require_evidence_credentials
-from product_packages import (read_json, check_prepared, digest, failure_detail, packages, source_changes, source_sha,
-                              validate_version, write_new)
+from product_packages import (canonical_digest, check_prepared, digest, failure_detail, packages, read_json,
+                              read_json_with_digest, source_changes, source_sha, validate_version, write_new)
 
 ROOT = Path(__file__).resolve().parents[1]
 
@@ -34,12 +35,12 @@ def staging_root() -> Path:
 
 
 def require_source(receipt: dict) -> None:
-    if receipt['source_sha'] != source_sha() or source_changes():
+    if receipt['source_sha'] != source_sha(cwd=ROOT) or source_changes(cwd=ROOT):
         raise ValueError('Product checks require this exact clean checkout SHA; tracked or untracked source drift is refused.')
 
 
 def stage_packages() -> None:
-    source = source_sha()
+    source = source_sha(cwd=ROOT)
     require_source({'source_sha': source})
     directory = staging_root() / 'staged'
     directory.mkdir(parents=True, exist_ok=False)
@@ -138,9 +139,41 @@ def linux_packages() -> None:
     package_checks()
 
 
-def linux_conformance() -> None:
-    source = source_sha()
-    require_source({'source_sha': source})
+def sealed_live_source(preparation_path: Path) -> tuple[dict, tuple[str, str, str]]:
+    preparation, preparation_sha256 = read_json_with_digest(preparation_path)
+    boundary_path = preparation_path.with_name('boundary-receipt.json')
+    boundary, boundary_sha256 = read_json_with_digest(boundary_path)
+    report, report_sha256 = read_json_with_digest(preparation_path.with_name('ci-live.json'))
+    preparation_id = preparation.get('runId')
+    boundary_id = boundary.get('boundaryRunId')
+    payload = {key: value for key, value in boundary.items() if key != 'contentSha256'}
+    if (preparation.get('result') != 'prepared'
+            or not isinstance(preparation.get('source_sha'), str)
+            or not isinstance(preparation_id, str) or re.fullmatch(r'[0-9a-f]{32}', preparation_id) is None
+            or not isinstance(boundary_id, str) or re.fullmatch(r'[0-9a-f]{32}', boundary_id) is None
+            or boundary.get('schema') != 'mcpcli-live-boundary/v1'
+            or boundary.get('result') != 'passed'
+            or boundary.get('fullLiveAccepted') is not False
+            or boundary.get('contentSha256') != canonical_digest(payload)
+            or boundary.get('preparationRunId') != preparation_id
+            or boundary.get('preparationSha256') != preparation_sha256
+            or report.get('phase') != 'boundary'
+            or report.get('result') != 'boundary-passed'
+            or report.get('fullLiveAccepted') is not False
+            or report.get('preparationRunId') != preparation_id
+            or report.get('runId') != boundary_id
+            or report.get('boundaryReceipt') != {'path': str(boundary_path.resolve()), 'sha256': boundary_sha256}):
+        raise ValueError('Split conformance requires the preparation receipt sealed by the passing live boundary.')
+    return preparation, (preparation_sha256, boundary_sha256, report_sha256)
+
+
+def linux_conformance(live_preparation: Path | None = None) -> None:
+    if live_preparation is None:
+        source = {'source_sha': source_sha(cwd=ROOT)}
+    else:
+        live_preparation = ROOT / live_preparation
+        source, sealed_evidence = sealed_live_source(live_preparation)
+    require_source(source)
     # Unit tests start without the variables that locate the runner's workflow command files.
     execute(['env', '-u', 'GITHUB_ENV', '-u', 'GITHUB_PATH', '-u', 'GITHUB_OUTPUT', '-u', 'GITHUB_STATE',
              '-u', 'GITHUB_STEP_SUMMARY', sys.executable, '-m', 'unittest', 'discover', '-v', '-s', 'scripts/tests',
@@ -153,7 +186,9 @@ def linux_conformance() -> None:
              '-u', 'GITHUB_STEP_SUMMARY', sys.executable, '-m', 'unittest', 'discover', '-v', '-s', 'tools/live-topology',
              '-p', 'test_*.py'], timeout=3600)
     execute([sys.executable, ROOT / 'tools/live-topology/run-vectors.py', '--output', staging_root() / 'preflight', '--preflight-only'])
-    require_source({'source_sha': source})
+    require_source(source)
+    if live_preparation is not None and sealed_live_source(live_preparation)[1] != sealed_evidence:
+        raise ValueError('The sealed live boundary evidence changed during split conformance.')
 
 
 def linux_checks() -> None:
@@ -166,7 +201,10 @@ def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('phase', choices=('stage', 'linux', 'linux-packages', 'linux-conformance', 'platform'))
     parser.add_argument('--expected-os', choices=('Windows', 'Darwin'))
+    parser.add_argument('--live-preparation', type=Path, help='Check conformance against the SHA sealed by the live boundary.')
     arguments = parser.parse_args()
+    if arguments.live_preparation is not None and arguments.phase != 'linux-conformance':
+        parser.error('--live-preparation requires linux-conformance')
     try:
         # The GitHub-hosted Windows image exports this public default for its
         # disabled PostgreSQL service. The product checks do not use PostgreSQL.
@@ -185,7 +223,7 @@ def main() -> int:
         if arguments.phase == 'stage': stage_packages()
         elif arguments.phase == 'linux': linux_checks()
         elif arguments.phase == 'linux-packages': linux_packages()
-        elif arguments.phase == 'linux-conformance': linux_conformance()
+        elif arguments.phase == 'linux-conformance': linux_conformance(arguments.live_preparation)
         else: package_checks(platform_checks=True, expected_os=arguments.expected_os)
         return 0
     except Exception as error:

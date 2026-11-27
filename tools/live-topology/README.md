@@ -376,9 +376,17 @@ have no previous runs and still contain the qualified binaries. The standalone
 600 seconds of provenance/cleanup headroom (11280 seconds). In Linux product CI,
 the split hooks run `ci.py run-boundary` (1080-second outer deadline, writing
 hash-bound `boundary-receipt.json` with `fullLiveAccepted: false`) ahead of
-conformance and then `ci.py run-remaining` (12840-second outer deadline,
-verifying `boundary-receipt.json`, provenance, and runtime count and giving
+`product_ci.py linux-conformance --live-preparation TestResults/live-ci/preparation.json`
+and then `ci.py run-remaining` (12840-second outer deadline, giving
 `run-vectors.py` 12840 minus 960 for `smoke` minus 600 headroom = 11280 seconds).
+Preparation records the clean McpCli root checkout SHA. Both split live phases
+and split conformance require that SHA and a clean root on entry and exit.
+Conformance verifies that the successful boundary sealed the supplied preparation
+receipt. The remaining phase verifies the sealed boundary artifacts before
+vectors and again before granting full live acceptance. It also requires a
+fresh boundary-only runtime before vectors and the complete runtime count after
+smoke. A symbolic link at `ci-live.json` causes the live phase to refuse the
+run and preserve the link and its destination.
 Both independent wrappers, `GatewaySmokeTests` and `SharedHeadBoundaryTests`, get 960 seconds with `-failSkips`. Each owns a separate isolated runtime; the expected runtime count is derived from the vector inventory plus the independent-case registry.
 The vector runner's 960-second child and wrapper's 900-second command limits
 remain enforced. The 360-minute hosted job budget includes preparation, testing,
@@ -394,7 +402,8 @@ or symbolic links. Its default is `TestResults/live-ci`.
 Preparation requires an absent or empty evidence directory, and records an
 ownership marker before writing its receipts. A retry needs a fresh evidence
 directory, for example `ASPIRE_EVIDENCE_PATH=TestResults/live-ci-retry`, supplied
-to both hooks; existing user files are refused and left unchanged. Builds rejects
+to both hooks; existing user files are refused and left unchanged. Use a
+Git-ignored directory for generated evidence so the root remains clean. Builds rejects
 nonempty evidence before enabling its upload. `RUNNER_TEMP` must be outside the
 evidence upload directory. Failed preparation retains its owned private directory
 path for cleanup. Nested Python processes inherit the prepared virtual environment.

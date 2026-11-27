@@ -42,13 +42,26 @@ public abstract class IsolatedTopologyLifecycle<TAppHost> : IAsyncLifetime where
         ? client : throw new InvalidOperationException("The declared isolated topology client is unavailable.");
 
     /// <inheritdoc/>
-    public async ValueTask InitializeAsync()
+    public ValueTask InitializeAsync() => InitializeAsync(
+        DistributedApplicationTestingBuilder.CreateAsync<TAppHost>,
+        static (application, token) => application.StartAsync(token),
+        static (application, resource) => application.CreateHttpClient(resource.Name, resource.EndpointName),
+        Path.Combine(Path.GetTempPath(), "hexalith-dapr-test-fixture.lock"),
+        CancellationToken.None);
+
+    /// <summary>Initializes and owns an AppHost, with controllable application startup for offline fixture tests.</summary>
+    internal async ValueTask InitializeAsync(
+        Func<string[], CancellationToken, Task<IDistributedApplicationTestingBuilder>> createBuilder,
+        Func<DistributedApplication, CancellationToken, Task> startApplication,
+        Func<DistributedApplication, AspireResource, HttpClient> createClient,
+        string lockPath,
+        CancellationToken cancellationToken)
     {
-        using var startup = new CancellationTokenSource(TimeSpan.FromMinutes(6));
+        using var startup = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken);
+        startup.CancelAfter(TimeSpan.FromMinutes(6));
         try
         {
             // Serialize the owned AppHost lifecycle, with the same outer startup deadline.
-            string lockPath = Path.Combine(Path.GetTempPath(), "hexalith-dapr-test-fixture.lock");
             while (_fixtureLock is null)
             {
                 startup.Token.ThrowIfCancellationRequested();
@@ -58,9 +71,9 @@ public abstract class IsolatedTopologyLifecycle<TAppHost> : IAsyncLifetime where
             string[] arguments = [.. ExtraAppArgs,
                 $"--Dapr:PlacementHostAddress=localhost:{DaprLocalEndpoints.PlacementPort}",
                 $"--Dapr:SchedulerHostAddress=localhost:{DaprLocalEndpoints.SchedulerPort}"];
-            _builder = await DistributedApplicationTestingBuilder.CreateAsync<TAppHost>(arguments, startup.Token).ConfigureAwait(false);
+            _builder = await createBuilder(arguments, startup.Token).ConfigureAwait(false);
             _application = await _builder.BuildAsync(startup.Token).ConfigureAwait(false);
-            await _application.StartAsync(startup.Token).ConfigureAwait(false);
+            await startApplication(_application, startup.Token).ConfigureAwait(false);
             IReadOnlyList<AspireResource> resources = Resources;
             string[] watchedResources = [.. resources.Select(resource => resource.Name)];
             await RunWithTerminalFailureWatchAsync(
@@ -74,7 +87,7 @@ public abstract class IsolatedTopologyLifecycle<TAppHost> : IAsyncLifetime where
                         ready.CancelAfter(resource.ReadinessTimeout);
                         await _application.ResourceNotifications.WaitForResourceAsync(resource.Name, KnownResourceStates.Running, ready.Token).ConfigureAwait(false);
                         string endpoint = await WaitForEndpointCoreAsync(_application.ResourceNotifications, resource.Name, resource.EndpointName, ready.Token).ConfigureAwait(false);
-                        HttpClient client = _application.CreateHttpClient(resource.Name, resource.EndpointName);
+                        HttpClient client = createClient(_application, resource);
                         client.BaseAddress ??= new Uri(endpoint);
                         client.Timeout = resource.ClientTimeout;
                         _clients.Add(resource.Name, client);
@@ -146,14 +159,7 @@ public abstract class IsolatedTopologyLifecycle<TAppHost> : IAsyncLifetime where
             return;
         }
 
-        foreach (string name in watched)
-        {
-            if (notifications.TryGetCurrentState(name, out ResourceEvent? current)
-                && IsTerminalFailureState(current.Snapshot.State?.Text))
-            {
-                throw CreateTerminalFailureException(current.Resource.Name, current.Snapshot);
-            }
-        }
+        ThrowIfDeclaredResourceFailed(notifications, watched);
 
         using var linked = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken);
         using var watchStop = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken);
@@ -214,6 +220,8 @@ public abstract class IsolatedTopologyLifecycle<TAppHost> : IAsyncLifetime where
             throw terminal;
         }
 
+        ThrowIfDeclaredResourceFailed(notifications, watched);
+
         if (operationFailure is not null)
         {
             if (operationFailure is OperationCanceledException && !cancellationToken.IsCancellationRequested
@@ -229,7 +237,10 @@ public abstract class IsolatedTopologyLifecycle<TAppHost> : IAsyncLifetime where
         {
             ExceptionDispatchInfo.Capture(unexpectedWatcherFailure).Throw();
         }
+    }
 
+    private static void ThrowIfDeclaredResourceFailed(ResourceNotificationService notifications, IEnumerable<string> watched)
+    {
         foreach (string name in watched)
         {
             if (notifications.TryGetCurrentState(name, out ResourceEvent? current)

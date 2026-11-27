@@ -1,12 +1,17 @@
 using System.Collections.Immutable;
 using System.Diagnostics;
 
+using Aspire.Hosting;
 using Aspire.Hosting.ApplicationModel;
+using Aspire.Hosting.Testing;
 
 using Hexalith.McpCli.Integration.Tests;
 
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging.Abstractions;
+
+using NSubstitute;
 
 namespace Hexalith.McpCli.Manifest.Tests;
 
@@ -188,6 +193,141 @@ public sealed class IsolatedTopologyLifecycleTests
         Assert.Contains("projects", failure.Message, StringComparison.Ordinal);
         Assert.Contains(KnownResourceStates.RuntimeUnhealthy, failure.Message, StringComparison.Ordinal);
         Assert.Contains("7", failure.Message, StringComparison.Ordinal);
+    }
+
+    /// <summary>A published terminal state takes precedence even when the watcher has not delivered it.</summary>
+    [Fact]
+    public async Task ReadinessErrorChecksLatestSnapshotBeforeRethrowing()
+    {
+        using var lifetime = new TestHostApplicationLifetime();
+        using var notifications = CreateNotifications(lifetime);
+        var resource = new TestResource("eventstore");
+        await PublishStateAsync(notifications, resource, KnownResourceStates.Running);
+
+        InvalidOperationException failure = await Assert.ThrowsAsync<InvalidOperationException>(() =>
+            IsolatedTopologyLifecycle<object>.RunWithTerminalFailureWatchAsync(
+                notifications,
+                [resource.Name],
+                async _ =>
+                {
+                    await PublishStateAsync(notifications, resource, KnownResourceStates.Exited, 42);
+                    throw new TimeoutException("readiness timed out");
+                },
+                DelayedEventsAsync,
+                TestContext.Current.CancellationToken));
+
+        Assert.Equal("Declared Aspire resource 'eventstore' entered terminal failure state 'Exited' (exit code: 42) during topology startup.",
+            failure.Message);
+    }
+
+    /// <summary>Initialization cancels each readiness wait and releases every initialized owner.</summary>
+    /// <param name="stage">The readiness wait in progress when another declared resource crashes.</param>
+    [Theory]
+    [InlineData("Running")]
+    [InlineData("Endpoint")]
+    [InlineData("Aliveness")]
+    [InlineData("Readiness")]
+    public async Task FailedInitializationCancelsReadinessAndDisposesAllOwners(string stage)
+    {
+        var resource = new TestResource("eventstore");
+        var crashed = new TestResource("tenants");
+        var timeout = TimeSpan.FromSeconds(15);
+        AspireResource[] resources =
+        [
+            new(resource.Name, "http", timeout, timeout, stage == "Aliveness", timeout),
+            new(crashed.Name, "http", timeout, timeout, false, timeout),
+        ];
+        var readyEntered = new TaskCompletionSource(TaskCreationOptions.RunContinuationsAsynchronously);
+        using var limit = CancellationTokenSource.CreateLinkedTokenSource(TestContext.Current.CancellationToken);
+        limit.CancelAfter(TimeSpan.FromSeconds(5));
+        CancellationToken readinessToken = default;
+        async Task WaitAsync(CancellationToken token)
+        {
+            readinessToken = token;
+            readyEntered.SetResult();
+            await Task.Delay(Timeout.InfiniteTimeSpan, token);
+        }
+        await using var fixture = new LifecycleTestFixture(resources, WaitAsync);
+
+        int appDisposals = 0;
+        IDistributedApplicationBuilder appBuilder = DistributedApplication.CreateBuilder(
+            new DistributedApplicationOptions { DisableDashboard = true });
+        appBuilder.AddResource(resource);
+        appBuilder.AddResource(crashed);
+        appBuilder.Services.AddSingleton(_ => new NativeCatalogTestDisposable(() =>
+        {
+            appDisposals++;
+            return ValueTask.CompletedTask;
+        }));
+        DistributedApplication application = appBuilder.Build();
+        _ = application.Services.GetRequiredService<NativeCatalogTestDisposable>();
+        UrlSnapshot[] urls = [new UrlSnapshot("http", "http://127.0.0.1:1", false)];
+        await PublishStateAsync(application.ResourceNotifications, resource,
+            stage == "Running" ? KnownResourceStates.Starting : KnownResourceStates.Running,
+            urls: stage is "Running" or "Endpoint" ? null : urls);
+        await PublishStateAsync(application.ResourceNotifications, crashed, KnownResourceStates.Running, urls: urls);
+        var builder = Substitute.For<IDistributedApplicationTestingBuilder>();
+        builder.BuildAsync(Arg.Any<CancellationToken>()).Returns(application);
+        using var handler = new LivenessHandler(cancelFirst: false, WaitAsync);
+        using var client = new HttpClient(handler);
+        using var secondClient = new HttpClient();
+        var createdClients = new List<HttpClient>();
+        DirectoryInfo directory = Directory.CreateTempSubdirectory();
+        string lockPath = Path.Combine(directory.FullName, "fixture.lock");
+        try
+        {
+            Task startup = fixture.InitializeAsync(
+                (_, _) => Task.FromResult(builder),
+                (_, _) => Task.CompletedTask,
+                (_, registered) =>
+                {
+                    HttpClient selected = registered.Name == resource.Name ? client : secondClient;
+                    createdClients.Add(selected);
+                    return selected;
+                },
+                lockPath,
+                limit.Token).AsTask();
+
+            try
+            {
+                if (stage is "Aliveness" or "Readiness")
+                {
+                    await readyEntered.Task.WaitAsync(limit.Token);
+                    Assert.Equal(2, createdClients.Count);
+                }
+                else
+                {
+                    Assert.Empty(createdClients);
+                    Assert.False(startup.IsCompleted);
+                }
+                await PublishStateAsync(application.ResourceNotifications, crashed, KnownResourceStates.Exited, 42);
+
+                InvalidOperationException failure = await Assert.ThrowsAsync<InvalidOperationException>(() => startup);
+                Assert.Equal("Declared Aspire resource 'tenants' entered terminal failure state 'Exited' (exit code: 42) during topology startup.",
+                    failure.Message);
+                if (stage is "Aliveness" or "Readiness")
+                {
+                    Assert.True(readinessToken.IsCancellationRequested);
+                }
+                Assert.False(limit.IsCancellationRequested);
+                Assert.Equal(1, appDisposals);
+                await builder.Received(1).DisposeAsync();
+                foreach (HttpClient owned in createdClients)
+                {
+                    Assert.Throws<ObjectDisposedException>(() => { _ = owned.GetAsync("/alive", limit.Token); });
+                }
+                using FileStream reopened = File.Open(lockPath, FileMode.Open, FileAccess.ReadWrite, FileShare.None);
+            }
+            finally
+            {
+                await limit.CancelAsync();
+                await Task.WhenAny(startup);
+            }
+        }
+        finally
+        {
+            directory.Delete(recursive: true);
+        }
     }
 
     /// <summary>Undeclared explicit-start catalog-source clones in NotStarted or terminal states never false-trigger startup.</summary>
@@ -386,6 +526,13 @@ public sealed class IsolatedTopologyLifecycleTests
 #pragma warning disable CS0162
         yield break;
 #pragma warning restore CS0162
+    }
+
+    private static async IAsyncEnumerable<ResourceEvent> DelayedEventsAsync(
+        [System.Runtime.CompilerServices.EnumeratorCancellation] CancellationToken cancellationToken)
+    {
+        await Task.Delay(Timeout.InfiniteTimeSpan, cancellationToken);
+        yield break;
     }
 
     private static ResourceNotificationService CreateNotifications(IHostApplicationLifetime lifetime)

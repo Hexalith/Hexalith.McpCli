@@ -24,6 +24,7 @@ from unittest.mock import patch
 from zipfile import ZipFile
 
 import ci
+import product_ci
 
 HERE = Path(__file__).resolve().parent
 SOURCE_PACKAGE_VERSIONS = {
@@ -304,7 +305,10 @@ elif name == 'git':
     elif args[:2] == ['show', '--end-of-options']:
         sys.stdout.buffer.write((pathlib.Path.cwd() / args[2].split(':', 1)[1]).read_bytes())
     elif args == ['status', '--porcelain', '--untracked-files=normal', '--ignore-submodules=all']:
-        if source_mode == 'dirty-source' or mode == 'dirty-source' and pathlib.Path.cwd().name != 'Hexalith.Builds' or mode == 'dirty-builds-source' and pathlib.Path.cwd().name == 'Hexalith.Builds': print('M  ' + pathlib.Path.cwd().name + '-fixture.txt')
+        if source_mode == 'dirty-source' or mode == 'dirty-source' and pathlib.Path.cwd() != root and pathlib.Path.cwd().name != 'Hexalith.Builds' or mode == 'dirty-builds-source' and pathlib.Path.cwd().name == 'Hexalith.Builds': print('M  ' + pathlib.Path.cwd().name + '-fixture.txt')
+        if source_mode == 'untracked-source': print('?? untracked.txt')
+    elif args == ['diff', '--cached', '--name-only', '--ignore-submodules=none', '--']:
+        if source_mode == 'staged-gitlink': print('references/Hexalith.EventStore')
 elif name == 'sudo':
     if args != ['-n', 'sysctl', '-w', 'kernel.apparmor_restrict_unprivileged_userns=0']:
         sys.exit(89)
@@ -341,7 +345,8 @@ class CiHooksTests(unittest.TestCase):
         for name in ('prepare-ci.sh', 'run-ci.sh', 'ci.py', 'native_cohort.py', 'native_audit.py', 'native_sources.py', 'retained_output.py'):
             shutil.copyfile(HERE / name, self.tools / name)
         (self.root / 'scripts').mkdir()
-        shutil.copyfile(HERE.parents[1] / 'scripts/evidence_redaction.py', self.root / 'scripts/evidence_redaction.py')
+        for name in ('evidence_redaction.py', 'product_packages.py'):
+            shutil.copyfile(HERE.parents[1] / 'scripts' / name, self.root / 'scripts' / name)
         for name, content in [('bootstrap-runtime.py', BOOTSTRAP), ('run-vectors.py', RUNNERS), ('run-isolated.py', RUNNERS)]:
             (self.tools / name).write_text(content)
         (self.tools / 'capture_heads.py').write_text('''import hashlib, json, pathlib, sys
@@ -1153,7 +1158,7 @@ pathlib.Path(sys.argv[sys.argv.index('--output') + 1]).write_text(json.dumps({'r
         config = str(private / 'source-restore.config')
         self.assertEqual([{'config': config, 'httpCache': expected_http}] * 3, inherited_restore)
         with patch.dict(os.environ, self.env, clear=True):
-            _, _, _, env_map, _ = self.ci_module().load_prepared_context(self.evidence)
+            _, _, _, env_map, _, _ = self.ci_module().load_prepared_context(self.evidence)
         self.assertEqual(expected_packages, env_map['NUGET_PACKAGES'])
         self.assertEqual(expected_http, env_map['NUGET_HTTP_CACHE_PATH'])
 
@@ -3281,7 +3286,8 @@ ci.bounded([sys.executable,sys.argv[2],sys.argv[1],sys.argv[3]],120,pathlib.Path
         self.assertEqual([(child.pid, signal.SIGKILL), (child.pid, signal.SIGKILL)], [call.args for call in kill.call_args_list if call.args[1] != 0])
 
     def test_split_run_boundary_and_run_remaining_completes_full_live_acceptance(self):
-        self.prepare()
+        prepared = self.prepare()
+        self.assertEqual('a' * 40, prepared['source_sha'])
         boundary_result = self.invoke_ci('run-boundary')
         self.assertEqual(0, boundary_result.returncode, boundary_result.stdout + boundary_result.stderr)
         boundary_ci = json.loads((self.evidence / 'ci-live.json').read_text())
@@ -3296,6 +3302,15 @@ ci.bounded([sys.executable,sys.argv[2],sys.argv[1],sys.argv[3]],120,pathlib.Path
         self.assertIs(False, boundary_receipt['fullLiveAccepted'])
         self.assertFalse(any(any(value.endswith('run-vectors.py') for value in call) for call in self.calls()))
 
+        relative_preparation = self.evidence.relative_to(self.root) / 'preparation.json'
+        argv = ['product_ci.py', 'linux-conformance', '--live-preparation', str(relative_preparation)]
+        with patch.dict(os.environ, {**self.env, 'HEXALITH_CI_PYTHON': sys.executable}, clear=True), \
+                patch.object(sys, 'argv', argv), patch.object(product_ci, 'ROOT', self.root), \
+                patch.object(product_ci.signal, 'signal'), patch('importlib.metadata.version', return_value='4.26.0'), \
+                patch.object(product_ci, 'execute') as conformance:
+            self.assertEqual(0, product_ci.main())
+        self.assertEqual(6, conformance.call_count)
+
         remaining_result = self.invoke_ci('run-remaining')
         self.assertEqual(0, remaining_result.returncode, remaining_result.stdout + remaining_result.stderr)
         final_ci = json.loads((self.evidence / 'ci-live.json').read_text())
@@ -3306,6 +3321,277 @@ ci.bounded([sys.executable,sys.argv[2],sys.argv[1],sys.argv[3]],120,pathlib.Path
         self.assertEqual(21, final_ci['vectors']['count'])
         self.assertEqual('passed', final_ci['smoke']['result'])
         self.assertEqual(23, len(list((Path(final_ci['output']) / 'runtime-diagnostics').glob('*/result.json'))))
+        for output, expected in ((Path(boundary_ci['output']) / 'boundary/process.command.json', 960),
+                                 (Path(final_ci['output']) / 'vectors-process.command.json', 11280),
+                                 (Path(final_ci['output']) / 'smoke/process.command.json', 960)):
+            self.assertEqual(expected, json.loads(output.read_text())['timeoutSeconds'])
+
+    def test_split_live_phases_refuse_root_drift_before_launching_children(self):
+        self.prepare()
+        drift = self.root / 'source-drift.json'
+        report_path = self.evidence / 'ci-live.json'
+        for phase in ('run-boundary', 'run-remaining'):
+            if phase == 'run-remaining':
+                boundary = self.invoke_ci('run-boundary')
+                self.assertEqual(0, boundary.returncode, boundary.stderr)
+            prior_report = report_path.read_bytes()
+            for mode in ('moved-source', 'dirty-source', 'untracked-source', 'staged-gitlink'):
+                with self.subTest(phase=phase, mode=mode):
+                    drift.write_text(json.dumps({'source': self.root.name, 'mode': mode}))
+                    try:
+                        before = len(self.calls())
+                        result = self.invoke_ci(phase)
+                        self.assertEqual(1, result.returncode)
+                        self.assertIn('exact clean McpCli checkout SHA', result.stderr)
+                        report = json.loads(report_path.read_text())
+                        self.assertEqual('failed', report['result'])
+                        self.assertIs(False, report['fullLiveAccepted'])
+                        self.assertFalse(any(any(arg.endswith(('run-isolated.py', 'run-vectors.py')) for arg in call)
+                                             for call in self.calls()[before:]))
+                    finally:
+                        drift.unlink()
+                        report_path.write_bytes(prior_report)
+
+    def test_split_live_phases_preserve_existing_and_dangling_report_links(self):
+        self.prepare()
+        report_path = self.evidence / 'ci-live.json'
+        target = self.root / 'report-target'
+        for phase in ('run-boundary', 'run-remaining'):
+            if phase == 'run-remaining':
+                boundary = self.invoke_ci('run-boundary')
+                self.assertEqual(0, boundary.returncode, boundary.stderr)
+            prior_report = report_path.read_bytes()
+            for content in (b'owner data\n', None):
+                with self.subTest(phase=phase, existing_target=content is not None):
+                    if content is not None:
+                        target.write_bytes(content)
+                    report_path.unlink()
+                    report_path.symlink_to(target)
+                    try:
+                        before = len(self.calls())
+                        result = self.invoke_ci(phase)
+                        self.assertEqual(1, result.returncode)
+                        self.assertIn('ci-live.json report must not be a symbolic link', result.stderr)
+                        self.assertEqual(target, report_path.readlink())
+                        self.assertEqual(before + 1, len(self.calls()), 'Only the outer fixture timeout should run.')
+                        if content is None:
+                            self.assertFalse(target.exists())
+                        else:
+                            self.assertEqual(content, target.read_bytes())
+                    finally:
+                        report_path.unlink()
+                        report_path.write_bytes(prior_report)
+                        target.unlink(missing_ok=True)
+
+    def test_run_remaining_rejects_report_swap_after_read_without_clobbering_target(self):
+        self.prepare()
+        boundary = self.invoke_ci('run-boundary')
+        self.assertEqual(0, boundary.returncode, boundary.stderr)
+        module = self.ci_module()
+        read_receipt = module.read_receipt_bytes
+        report_path = self.evidence / 'ci-live.json'
+        prior_report = report_path.read_bytes()
+        target = self.root / 'report-target'
+        target.write_bytes(b'owner data\n')
+        for kind in ('symlink', 'hardlink', 'fifo'):
+            with self.subTest(kind=kind), contextlib.ExitStack() as cleanup:
+                if kind == 'fifo':
+                    fifo = self.root / 'report-fifo'
+                    os.mkfifo(fifo)
+                    # Keep a reader open so a regressed blocking writer returns and fails the assertion.
+                    cleanup.callback(os.close, os.open(fifo, os.O_RDONLY | os.O_NONBLOCK))
+
+                def read(path):
+                    data = read_receipt(path)
+                    if path == report_path:
+                        path.unlink()
+                        if kind == 'symlink':
+                            path.symlink_to(target)
+                        elif kind == 'hardlink':
+                            path.hardlink_to(target)
+                        else:
+                            fifo.rename(path)
+                    return data
+
+                with patch.object(module, 'read_receipt_bytes', side_effect=read), patch.object(module, 'bounded') as child:
+                    with self.assertRaisesRegex(ValueError, r'ci-live\.json report must'):
+                        module.run_remaining(self.evidence)
+                child.assert_not_called()
+                self.assertEqual(b'owner data\n', target.read_bytes())
+                if kind == 'symlink':
+                    self.assertEqual(target, report_path.readlink())
+                elif kind == 'hardlink':
+                    self.assertTrue(report_path.samefile(target))
+                else:
+                    self.assertTrue(report_path.is_fifo())
+                report_path.unlink()
+                report_path.write_bytes(prior_report)
+
+    def test_preparation_and_boundary_refuse_drift_after_their_children(self):
+        module = self.ci_module()
+        bounded = module.bounded
+        drift = self.root / 'source-drift.json'
+        for phase, change in (('prepare', 'moved-source'), ('boundary', 'dirty-source'), ('boundary', 'preparation')):
+            with self.subTest(phase=phase, change=change):
+                self.fresh_evidence()
+                preparation = self.evidence / 'preparation.json'
+                if phase == 'boundary':
+                    self.prepare()
+                else:
+                    with patch.dict(os.environ, self.env, clear=True):
+                        module.evidence_directory(preparing=True)
+
+                def execute(command, *args, **kwargs):
+                    result = bounded(command, *args, **kwargs)
+                    if (phase == 'prepare' and any(arg.endswith('bootstrap-runtime.py') for arg in command)
+                            or phase == 'boundary' and 'Hexalith.McpCli.Integration.Tests.SharedHeadBoundaryTests' in command):
+                        if change == 'preparation':
+                            document = json.loads(preparation.read_bytes())
+                            document['source_sha'] = 'e' * 40
+                            preparation.write_text(json.dumps(document))
+                        else:
+                            drift.write_text(json.dumps({'source': self.root.name, 'mode': change}))
+                    return result
+
+                try:
+                    with patch.dict(os.environ, self.env, clear=True), patch.object(module, 'bounded', side_effect=execute):
+                        message = 'preparation.json receipt changed' if change == 'preparation' else 'exact clean McpCli checkout SHA'
+                        with self.assertRaisesRegex(ValueError, message):
+                            (module.prepare if phase == 'prepare' else module.run_boundary)(self.evidence)
+                    self.assertFalse((self.evidence / 'boundary-receipt.json').exists())
+                    report = json.loads((self.evidence / 'ci-live.json').read_bytes())
+                    self.assertIs(False, report['fullLiveAccepted'])
+                    if phase == 'prepare':
+                        self.assertEqual('failed', json.loads(preparation.read_bytes())['result'])
+                        self.assertEqual('not-run', report['result'])
+                    else:
+                        self.assertEqual('failed', report['result'])
+                        self.assertEqual('passed', report['boundary']['result'])
+                finally:
+                    drift.unlink(missing_ok=True)
+
+    def test_run_remaining_rechecks_root_and_every_sealed_boundary_artifact_after_smoke(self):
+        prepared = self.prepare()
+        boundary = self.invoke_ci('run-boundary')
+        self.assertEqual(0, boundary.returncode, boundary.stderr)
+        report_path = self.evidence / 'ci-live.json'
+        prior_report = report_path.read_bytes()
+        seal = self.evidence / 'boundary-receipt.json'
+        case = json.loads(seal.read_text())['cases']['boundary']
+        runtime_receipt = Path(case['receipt'])
+        boundary_run = runtime_receipt.parent
+        drift = self.root / 'source-drift.json'
+        module = self.ci_module()
+        bounded = module.bounded
+        for artifact, expected in (
+                (Path(case['testsXml']), 'boundary tests.xml artifact changed'),
+                (runtime_receipt, 'boundary runtime receipt changed'),
+                (boundary_run / 'outside.json', 'boundary namespace proof changed'),
+                (seal, 'verified boundary-passed ci-live.json matching boundary-receipt.json is required'),
+                (self.evidence / 'preparation.json', 'preparation.json receipt changed'),
+                (drift, 'exact clean McpCli checkout SHA')):
+            with self.subTest(artifact=artifact.name):
+                content = artifact.read_bytes() if artifact != drift else None
+
+                def execute(command, *args, **kwargs):
+                    result = bounded(command, *args, **kwargs)
+                    if 'Hexalith.McpCli.Integration.Tests.GatewaySmokeTests' in command:
+                        artifact.write_bytes(content + b' ' if content is not None else
+                                             json.dumps({'source': self.root.name, 'mode': 'moved-source'}).encode())
+                    return result
+
+                try:
+                    with patch.dict(os.environ, self.env, clear=True), patch.object(module, 'bounded', side_effect=execute):
+                        with self.assertRaisesRegex(ValueError, expected):
+                            module.run_remaining(self.evidence)
+                    report = json.loads(report_path.read_text())
+                    self.assertEqual('failed', report['result'])
+                    self.assertIs(False, report['fullLiveAccepted'])
+                    self.assertEqual('passed', report['vectors']['result'])
+                    self.assertEqual('passed', report['smoke']['result'])
+                    self.assertIn(expected, report['error'])
+                finally:
+                    if content is None:
+                        artifact.unlink(missing_ok=True)
+                    else:
+                        artifact.write_bytes(content)
+                    report_path.write_bytes(prior_report)
+                    for run_dir in (Path(prepared['runtime']) / 'runs').iterdir():
+                        if run_dir != boundary_run:
+                            shutil.rmtree(run_dir)
+
+    def test_run_remaining_attempts_smoke_after_failed_vector_receipt_read(self):
+        prepared = self.prepare()
+        boundary = self.invoke_ci('run-boundary')
+        self.assertEqual(0, boundary.returncode, boundary.stderr)
+        module = self.ci_module()
+        read_receipt = module.read_receipt_bytes
+        report_path = self.evidence / 'ci-live.json'
+        prior_report = report_path.read_bytes()
+        boundary_run = Path(json.loads(prior_report)['boundary']['receipt']).parent
+
+        for mode in ('unreadable', 'nested', 'oversized'):
+            with self.subTest(mode=mode):
+                def read(path):
+                    if path.name == 'live-lane.json':
+                        if mode == 'unreadable':
+                            raise PermissionError('fixture denied reading the vector receipt')
+                        if mode == 'nested':
+                            depth = sys.getrecursionlimit() + 20
+                            path.write_bytes(b'[' * depth + b']' * depth)
+                        else:
+                            path.write_bytes(b' ' * (module.COMMAND_CHANNEL_LIMIT + 1))
+                    return read_receipt(path)
+
+                with patch.dict(os.environ, {**self.env, 'FIXTURE_MODE': 'vector-exit'}, clear=True), \
+                        patch.object(module, 'read_receipt_bytes', side_effect=read):
+                    with self.assertRaisesRegex(RuntimeError, r'run-vectors\.py .* exited 19'):
+                        module.run_remaining(self.evidence)
+                report = json.loads(report_path.read_bytes())
+                self.assertEqual('failed', report['result'])
+                self.assertIs(False, report['fullLiveAccepted'])
+                self.assertIn('exited 19', report['vectors']['error'])
+                self.assertNotIn('denied reading', report['error'])
+                self.assertEqual('passed', report['smoke']['result'])
+                report_path.write_bytes(prior_report)
+                for run_dir in (Path(prepared['runtime']) / 'runs').iterdir():
+                    if run_dir != boundary_run:
+                        shutil.rmtree(run_dir)
+
+    def test_run_remaining_preserves_primary_failure_when_copying_diagnostics_fails(self):
+        prepared = self.prepare()
+        boundary = self.invoke_ci('run-boundary')
+        self.assertEqual(0, boundary.returncode, boundary.stderr)
+        module = self.ci_module()
+        report_path = self.evidence / 'ci-live.json'
+        prior_report = report_path.read_bytes()
+        boundary_run = Path(json.loads(prior_report)['boundary']['receipt']).parent
+        secondary = PermissionError('fixture diagnostics copying failed')
+
+        for mode in ('vector-exit', ''):
+            with self.subTest(mode=mode):
+                with patch.dict(os.environ, {**self.env, 'FIXTURE_MODE': mode}, clear=True), \
+                        patch.object(module, 'copy_diagnostics', side_effect=secondary):
+                    if mode:
+                        with self.assertRaisesRegex(RuntimeError, r'run-vectors\.py .* exited 19'):
+                            module.run_remaining(self.evidence)
+                    else:
+                        with self.assertRaises(PermissionError) as raised:
+                            module.run_remaining(self.evidence)
+                        self.assertIs(secondary, raised.exception)
+                report = json.loads(report_path.read_bytes())
+                self.assertEqual('failed', report['result'])
+                self.assertIs(False, report['fullLiveAccepted'])
+                self.assertEqual('passed', report['smoke']['result'])
+                if mode:
+                    self.assertIn('exited 19', report['error'])
+                    self.assertEqual(f'PermissionError: {secondary}', report['diagnosticsError'])
+                else:
+                    self.assertEqual(f'PermissionError: {secondary}', report['error'])
+                report_path.write_bytes(prior_report)
+                for run_dir in (Path(prepared['runtime']) / 'runs').iterdir():
+                    if run_dir != boundary_run:
+                        shutil.rmtree(run_dir)
 
     def test_run_boundary_failure_writes_no_boundary_receipt(self):
         self.prepare()
