@@ -199,7 +199,7 @@ lane.main(['--output',sys.argv[2],'--preflight-only'])
                         'MCPCLI_LIVE_UNEXPECTED': 'inherited-value', 'EVENTSTORE_TOKEN': 'user-token',
                         'EVENTSTORE_TENANT': 'user-tenant', 'EVENTSTORE_UNEXPECTED': 'inherited-value'}), \
                     patch.object(lane, 'bounded_child', return_value=1) as child:
-                self.assertEqual(1, lane.main(['--output', directory]))
+                self.assertEqual(1, lane.main(['--output', directory, '--max-failures', '0']))
             self.assertEqual(21, child.call_count)
             for i, call in enumerate(child.call_args_list):
                 self.assertIn('Operation=fixture.operation-' + str(i), call.args[0])
@@ -408,7 +408,7 @@ lane.main(['--output',sys.argv[2]])
                 patch.object(lane, 'preflight', return_value=selections), \
                 patch.dict('os.environ', {'MCPCLI_ISOLATED_RUNTIME_DIR': '/private/test-runtime'}), \
                 patch.object(lane, 'bounded_child', return_value=1) as child:
-            self.assertEqual(1, lane.main(['--output', directory]))
+            self.assertEqual(1, lane.main(['--output', directory, '--max-failures', '0']))
         self.assertEqual(len(operations), child.call_count)
         for operation, call in zip(operations, child.call_args_list):
             with self.subTest(operation=operation):
@@ -432,3 +432,133 @@ lane.main(['--output',sys.argv[2]])
             self.assertEqual(selected_host.resolve(), preflight.call_args.args[0])
             self.assertEqual(str(selected_host.resolve()), child.call_args.args[1]['MCPCLI_LIVE_HOST'])
             self.assertEqual(selection_binding(selection), json.loads(child.call_args.args[1]['MCPCLI_LIVE_BINDING']))
+
+    def write_wrapper_receipt(self, output: Path, *, prerequisites_ready: bool = True,
+                              error=None, command_exit_code: int = 1, omit_stdout_line: bool = False) -> Path:
+        runtime = output / 'runtime'
+        runtime.mkdir(exist_ok=True)
+        receipt = {'commandExitCode': command_exit_code, 'prerequisitesReady': prerequisites_ready,
+                   'ownedInfrastructureStopped': {name: 0 for name in ('sentry', 'redis', 'placement', 'scheduler')}}
+        if error is not None:
+            receipt['error'] = error
+        (runtime / 'result.json').write_text(json.dumps(receipt))
+        if not omit_stdout_line:
+            (output / 'child.stdout.txt').write_text('Isolated run: ' + str(runtime) + '\n')
+        else:
+            (output / 'child.stdout.txt').write_text('unshare failed\n')
+        return runtime
+
+    def test_negative_max_failures_fails_before_preflight_with_vector_error(self):
+        with tempfile.TemporaryDirectory() as directory, \
+                patch.dict('os.environ', {'MCPCLI_ISOLATED_RUNTIME_DIR': '/private/test-runtime'}), \
+                patch.object(lane, 'preflight') as preflight, \
+                patch.object(lane, 'bounded_child') as child:
+            self.assertEqual(1, lane.main(['--output', directory, '--max-failures', '-1']))
+            preflight.assert_not_called()
+            child.assert_not_called()
+            report = json.loads((Path(directory) / 'live-lane.json').read_text())
+            self.assertEqual('failed', report['result'])
+            self.assertFalse(report['fullLiveAccepted'])
+            self.assertIn('VectorError: --max-failures must be 0 or greater.', report['error'])
+
+    def test_threshold_fail_fast_aborts_after_two_normal_failures_by_default(self):
+        with tempfile.TemporaryDirectory() as directory:
+            selections = [{'operation': f'fixture.operation-{i}', **{key: key for key in BINDING_KEYS}} for i in range(5)]
+
+            def normal_failure(_command, environment, output, _timeout):
+                operation = environment['MCPCLI_LIVE_OPERATION']
+                self.write_wrapper_receipt(output, prerequisites_ready=True, command_exit_code=1)
+                (output / 'tests.xml').write_text(
+                    self.xml(total='1', passed='0', failed='1', skipped='0', errors='0', result='Fail', operation=operation))
+                return 1
+
+            with patch.object(lane, 'preflight', return_value=selections), \
+                    patch.object(lane, 'expected_operations', return_value=[item['operation'] for item in selections]), \
+                    patch.dict('os.environ', {'MCPCLI_ISOLATED_RUNTIME_DIR': '/private/test-runtime'}), \
+                    patch.object(lane, 'bounded_child', side_effect=normal_failure) as child:
+                self.assertEqual(1, lane.main(['--output', directory]))
+            self.assertEqual(2, child.call_count)
+            report = json.loads((Path(directory) / 'live-lane.json').read_text())
+            self.assertEqual('failed', report['result'])
+            self.assertFalse(report['fullLiveAccepted'])
+            self.assertTrue(report['failFastTriggered'])
+            self.assertIn('--max-failures 2', report['failFastReason'])
+            self.assertEqual(0, report['passed'])
+            self.assertEqual(2, report['failed'])
+            self.assertEqual(3, report['skipped'])
+            self.assertEqual(['failed', 'failed', 'skipped-fail-fast', 'skipped-fail-fast', 'skipped-fail-fast'],
+                             [item['result'] for item in report['vectors']])
+
+    def test_immediate_fail_fast_aborts_on_timeout_wrapper_or_fixture_init_failure(self):
+        modes = ('exit-124', 'wrapper-missing-receipt', 'wrapper-prerequisites-false',
+                 'wrapper-error', 'fixture-missing-xml', 'fixture-malformed-xml', 'fixture-xml-errors')
+        for mode in modes:
+            with self.subTest(mode=mode), tempfile.TemporaryDirectory() as directory:
+                selections = [{'operation': f'fixture.operation-{i}', **{key: key for key in BINDING_KEYS}} for i in range(4)]
+
+                def failing_child(_command, environment, output, _timeout):
+                    operation = environment['MCPCLI_LIVE_OPERATION']
+                    if mode == 'exit-124':
+                        return 124
+                    if mode == 'wrapper-missing-receipt':
+                        self.write_wrapper_receipt(output, omit_stdout_line=True)
+                        return 1
+                    if mode == 'wrapper-prerequisites-false':
+                        self.write_wrapper_receipt(output, prerequisites_ready=False)
+                        return 1
+                    if mode == 'wrapper-error':
+                        self.write_wrapper_receipt(output, prerequisites_ready=True,
+                                                   error={'type': 'RuntimeError', 'message': 'private sentry failed'})
+                        return 1
+                    self.write_wrapper_receipt(output, prerequisites_ready=True)
+                    if mode == 'fixture-missing-xml':
+                        return 1
+                    if mode == 'fixture-malformed-xml':
+                        (output / 'tests.xml').write_text('<assemblies><broken')
+                        return 1
+                    if mode == 'fixture-xml-errors':
+                        (output / 'tests.xml').write_text(
+                            self.xml(total='1', passed='0', failed='0', skipped='0', errors='1', result='Fail', operation=operation))
+                        return 1
+                    return 1
+
+                with patch.object(lane, 'preflight', return_value=selections), \
+                        patch.object(lane, 'expected_operations', return_value=[item['operation'] for item in selections]), \
+                        patch.dict('os.environ', {'MCPCLI_ISOLATED_RUNTIME_DIR': '/private/test-runtime'}), \
+                        patch.object(lane, 'bounded_child', side_effect=failing_child) as child:
+                    self.assertEqual(1, lane.main(['--output', directory]))
+                self.assertEqual(1, child.call_count)
+                report = json.loads((Path(directory) / 'live-lane.json').read_text())
+                self.assertEqual('failed', report['result'])
+                self.assertFalse(report['fullLiveAccepted'])
+                self.assertTrue(report['failFastTriggered'])
+                self.assertIsInstance(report['failFastReason'], str)
+                self.assertTrue(report['failFastReason'])
+                self.assertEqual(1, report['failed'])
+                self.assertEqual(3, report['skipped'])
+                self.assertEqual(['failed', 'skipped-fail-fast', 'skipped-fail-fast', 'skipped-fail-fast'],
+                                 [item['result'] for item in report['vectors']])
+
+    def test_max_failures_zero_disables_immediate_and_threshold_fail_fast(self):
+        with tempfile.TemporaryDirectory() as directory:
+            selections = [{'operation': f'fixture.operation-{i}', **{key: key for key in BINDING_KEYS}} for i in range(4)]
+
+            def mixed_failures(_command, environment, output, _timeout):
+                op = environment['MCPCLI_LIVE_OPERATION']
+                if op.endswith('-0'):
+                    return 124
+                return 1
+
+            with patch.object(lane, 'preflight', return_value=selections), \
+                    patch.object(lane, 'expected_operations', return_value=[item['operation'] for item in selections]), \
+                    patch.dict('os.environ', {'MCPCLI_ISOLATED_RUNTIME_DIR': '/private/test-runtime'}), \
+                    patch.object(lane, 'bounded_child', side_effect=mixed_failures) as child:
+                self.assertEqual(1, lane.main(['--output', directory, '--max-failures', '0']))
+            self.assertEqual(4, child.call_count)
+            report = json.loads((Path(directory) / 'live-lane.json').read_text())
+            self.assertEqual('failed', report['result'])
+            self.assertFalse(report['fullLiveAccepted'])
+            self.assertFalse(report['failFastTriggered'])
+            self.assertIsNone(report['failFastReason'])
+            self.assertEqual(4, report['failed'])
+            self.assertEqual(0, report['skipped'])

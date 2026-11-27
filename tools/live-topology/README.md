@@ -150,8 +150,12 @@ one passing, unskipped Operation-labelled xUnit case, a matching fresh semantic
 receipt and successful owned infrastructure cleanup for each child. A missing
 prerequisite, skipped case, timeout, assertion mismatch or incomplete run cannot
 grant full acceptance. Standard platform prerequisite diagnostics remain in
-child logs. Receipts record complete coverage and every attempted outcome even
-when another vector fails. `live-result.json` retains the Operation, phase,
+child logs. Receipts record complete coverage and every attempted outcome; by
+default `--max-failures 2` aborts the remaining sweep after two normal vector
+failures (or immediately on exit `124` or wrapper/fixture initialization
+failure), marking remaining entries `skipped-fail-fast` with
+`fullLiveAccepted: false` and exit `1` (`--max-failures 0` disables fail-fast).
+`live-result.json` retains the Operation, phase,
 assertion path, query attempts, sanitized documents and immutable input bindings;
 credentials are excluded. Failed vectors also print their sanitized phase and
 assertion diagnostics so they appear in the selected test failure. Namespace and service cleanup details remain under

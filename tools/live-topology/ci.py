@@ -1032,6 +1032,7 @@ def copy_diagnostics(runtime: Path, output: Path) -> None:
 INDEPENDENT_CASE_TIMEOUT = 960
 RUN_TIMEOUT_SECONDS = 13800
 CLEANUP_HEADROOM_SECONDS = 600
+BOUNDARY_RECEIPT_FILE = 'boundary-receipt.json'
 PRE_VECTOR_CASES = (
     ('boundary', 'Hexalith.McpCli.Integration.Tests.SharedHeadBoundaryTests', 'SharedHeadsPreserveAuthorizationAndDeactivationSafety'),
 )
@@ -1051,143 +1052,393 @@ def require_independent_case(path: Path, class_name: str, method: str) -> None:
         raise ValueError(f'Independent case must contain exactly one passing, unskipped {class_name}.{method}.')
 
 
+def canonical_digest(payload: dict) -> str:
+    """Hash a deterministic JSON representation without its outer digest key."""
+    canonical = json.dumps(payload, sort_keys=True, separators=(',', ':'), ensure_ascii=False).encode('utf-8')
+    return hashlib.sha256(canonical).hexdigest()
+
+
+def redact_generation(generation: Path) -> None:
+    """Sanitize retained child stdout/stderr logs and test XML inside one generation directory."""
+    if not generation.is_dir():
+        return
+    for pattern in ('*.stdout.txt', '*.stderr.txt', 'tests.xml'):
+        for path in generation.rglob(pattern):
+            with path.open('rb') as stream:
+                content, _ = read_command_channel(stream, sanitize=sanitized_xml if path.name == 'tests.xml' else sanitized)
+            path.write_text(content)
+
+
+def load_prepared_context(evidence: Path) -> tuple[dict, Path, Path, dict[str, str], str]:
+    """Validate caller contract, preparation provenance, runtime binaries, and build child environment."""
+    require_contract()
+    source = Path(os.environ.get('MCPCLI_CI_PREPARATION', str(evidence / 'preparation.json')))
+    if source.resolve() != (evidence / 'preparation.json').resolve():
+        raise ValueError('Preparation must come from the current evidence directory.')
+    prepared = json.loads(source.read_text())
+    ownership_id = (evidence / OWNER_FILE).read_text().strip()
+    if prepared.get('result') != 'prepared' or prepared.get('ownershipId') != ownership_id:
+        raise ValueError('Current successful preparation receipt is required.')
+    gateway = require_prepared_provenance(prepared)
+    source_overrides = require_source_catalog(prepared)
+    reader_audit = require_reader_audit(prepared)
+    prepared_runtime = Path(prepared['runtime']).resolve()
+    python = Path(prepared['python'])
+    if not prepared_runtime.is_dir() or not python.is_file() or not TESTS.is_file():
+        raise ValueError('Prepared private runtime, Python and built Release integration tests are required.')
+    for row in json.loads((ROOT / 'tools/live-topology/binaries-current.json').read_text()):
+        binary = prepared_runtime / 'bin' / Path(row['source']).name
+        if hashlib.sha256(binary.read_bytes()).hexdigest() != row['sha256']:
+            raise ValueError(f'Prepared runtime binary hash mismatch: {binary.name}')
+    environment = os.environ.copy()
+    for key in list(environment):
+        if key.startswith(('MCPCLI_LIVE_', 'EVENTSTORE_')):
+            del environment[key]
+    environment.update(McpCliCurrentNativeProfile='true', MCPCLI_ISOLATED_RUNTIME_DIR=str(prepared_runtime),
+                       NUGET_PACKAGES=prepared['nugetPackages'],
+                       MCPCLI_NATIVE_SOURCE_FIXTURES=prepared['sourceFixtures']['path'],
+                       MCPCLI_NATIVE_SOURCE_FIXTURES_SHA256=prepared['sourceFixtures']['sha256'],
+                       CustomAfterMicrosoftCommonTargets=str(source_overrides),
+                       CustomAfterDirectoryBuildTargets=str(source_overrides.with_name('source-runtime-after-directory.targets')),
+                       RestoreConfigFile=str(source_overrides.with_name('source-restore.config')),
+                       NUGET_HTTP_CACHE_PATH=str(source_overrides.with_name('source-http')),
+                       UseHexalithProjectReferences='false', UseNuGetDeps='true',
+                       HexalithEventStoreFromSource='false', HexalithEventStoreVersion=EVENTSTORE_COHORT,
+                       Topology__UsePackagedGateway='true',
+                       MCPCLI_EVENTSTORE_PACKAGE_SOURCE_COMMIT=gateway['sourceCommit'],
+                       MCPCLI_NATIVE_READER_AUDIT_PATH=str(reader_audit),
+                       MCPCLI_NATIVE_READER_AUDIT_SHA256=prepared['readerAudit']['sha256'],
+                       PATH=str(python.parent) + os.pathsep + prepared['path'])
+    return prepared, prepared_runtime, python, environment, ownership_id
+
+
+def execute_independent_cases(cases, *, generation: Path, prepared: dict, python: Path,
+                              runtime: Path, environment: dict, report: dict,
+                              independent_receipts: list[Path], independent_errors: list[str]) -> None:
+    """Run each registered independent case once with fresh state and current provenance."""
+    for name, class_name, method in cases:
+        case = generation / name
+        case.mkdir()
+        try:
+            require_prepared_provenance(prepared)
+            bounded([str(python), str(ROOT / 'tools/live-topology/run-isolated.py'), '--', 'dotnet', str(TESTS),
+                     '-class', class_name, '-failSkips', '-result-xml', str(case / 'tests.xml')],
+                    INDEPENDENT_CASE_TIMEOUT, case / 'process', environment={**environment, 'MCPCLI_LIVE_OUTPUT': str(case)})
+            require_independent_case(case / 'tests.xml', class_name, method)
+            lines = (case / 'process.stdout.txt').read_text().splitlines()
+            runs = [Path(line.removeprefix('Isolated run: ')) for line in lines if line.startswith('Isolated run: ')]
+            if len(runs) != 1:
+                raise ValueError(f'Independent {name} omitted its isolated runtime receipt.')
+            receipt = (runs[0] / 'result.json').resolve()
+            require_owned(receipt, runtime)
+            if receipt in independent_receipts:
+                raise ValueError('Independent cases reused an isolated runtime receipt.')
+            independent_receipts.append(receipt)
+            report[name] = {'result': 'passed', 'receipt': str(receipt)}
+        except Exception as error:
+            report[name] = {'result': 'failed', 'error': f'{type(error).__name__}: {error}'}
+            independent_errors.append(f'independent {name} failed: {error}')
+
+
+def execute_vectors_and_post_cases(*, generation: Path, prepared: dict, python: Path,
+                                   runtime: Path, environment: dict, report: dict,
+                                   independent_receipts: list[Path], independent_errors: list[str]) -> None:
+    """Execute live vectors and post-vector independent smoke, then verify complete runtime counts."""
+    vectors = generation / 'vectors'
+    require_prepared_provenance(prepared)
+    vector_error = None
+    expected = []
+    try:
+        bounded([str(python), str(ROOT / 'tools/live-topology/run-vectors.py'), '--output', str(vectors)],
+                RUN_TIMEOUT_SECONDS - len(INDEPENDENT_CASES) * INDEPENDENT_CASE_TIMEOUT - CLEANUP_HEADROOM_SECONDS,
+                generation / 'vectors-process', environment=environment, require_complete_stdout=False)
+        lane = json.loads((vectors / 'live-lane.json').read_text())
+        # The live set is every approved vector with a companion plan; a vector without one is loopback-only.
+        expected = sorted(operation for operation in (json.loads(path.read_text())['operation'] for path in
+                          (ROOT / 'tools/conformance-vectors/v1/current/modules').rglob('*.vector.json'))
+                          if (ROOT / 'tools/live-topology/plans-current' / (operation + '.json')).is_file())
+        outcomes = lane.get('vectors', [])
+        if not expected or len(set(expected)) != len(expected) or lane.get('coverage') != expected \
+                or lane.get('result') != 'passed' or lane.get('fullLiveAccepted') is not True \
+                or lane.get('failFastTriggered') is True or lane.get('skipped', 0) != 0 \
+                or lane.get('passed') != len(expected) or lane.get('failed') != 0 \
+                or sorted(item.get('operation', '') for item in outcomes) != expected \
+                or len({item.get('isolatedReceipt') for item in outcomes}) != len(expected) \
+                or any(item.get('result') != 'passed' or item.get('exitCode') != 0 for item in outcomes):
+            raise ValueError('Complete current passing evidence for every approved live vector is required; partial/preflight/skipped evidence is refused.')
+        for item in outcomes:
+            vector_receipt = Path(item['isolatedReceipt']).resolve()
+            require_owned(vector_receipt, runtime)
+            if vector_receipt in independent_receipts:
+                raise ValueError('Vector reused an independent case isolated runtime receipt.')
+        report['vectors'] = {'result': 'passed', 'count': len(expected), 'receipt': str(vectors / 'live-lane.json')}
+    except BaseException as error:
+        failures = []
+        interrupted = []
+        skipped_fail_fast = []
+        fail_fast_reason = None
+        lane_error = None
+        if (vectors / 'live-lane.json').is_file():
+            try:
+                lane = json.loads((vectors / 'live-lane.json').read_text())
+                lane_error = lane.get('error')
+                fail_fast_reason = lane.get('failFastReason')
+                failures = [{key: item.get(key) for key in ('operation', 'result', 'error')}
+                            for item in lane.get('vectors', []) if item.get('result') == 'failed']
+                interrupted = [{key: item.get(key) for key in ('operation', 'result', 'error')}
+                               for item in lane.get('vectors', []) if item.get('result') == 'running']
+                skipped_fail_fast = [item.get('operation') for item in lane.get('vectors', [])
+                                     if item.get('result') == 'skipped-fail-fast']
+            except (ValueError, AttributeError, TypeError):
+                pass  # Retain the original failure and still attempt the post-vector independent cases.
+        detail = '; failed Operations: ' + ', '.join(str(item['operation']) for item in failures) if failures else ''
+        if interrupted:
+            detail += '; interrupted Operations: ' + ', '.join(str(item['operation']) for item in interrupted)
+        if skipped_fail_fast:
+            detail += f'; skipped-fail-fast Operations ({len(skipped_fail_fast)}): ' + ', '.join(map(str, skipped_fail_fast))
+        if fail_fast_reason:
+            detail += f'; fail-fast reason: {fail_fast_reason}'
+        if lane_error:
+            detail += f'; lane error: {lane_error}'
+        detail += f'; lane receipt: {vectors / "live-lane.json"}; runner stdout: {generation / "vectors-process.stdout.txt"}'
+        vector_error = RuntimeError(str(error) + detail)
+        report['vectors'] = {'result': 'failed', 'error': str(vector_error), 'failures': failures,
+                             'interrupted': interrupted, 'skippedFailFast': skipped_fail_fast,
+                             'failFastReason': fail_fast_reason, 'laneError': lane_error,
+                             'receipt': str(vectors / 'live-lane.json')}
+        if not isinstance(error, Exception):
+            print(sanitized(f'Live CI interrupted: {type(error).__name__}: {vector_error}'), file=sys.stderr)
+            raise
+    execute_independent_cases(POST_VECTOR_CASES, generation=generation, prepared=prepared, python=python,
+                              runtime=runtime, environment=environment, report=report,
+                              independent_receipts=independent_receipts, independent_errors=independent_errors)
+    if vector_error or independent_errors:
+        raise RuntimeError('; '.join(([str(vector_error)] if vector_error else []) + independent_errors))
+    expected_runtimes = len(expected) + len(INDEPENDENT_CASES)
+    if len(list((runtime / 'runs').iterdir())) != expected_runtimes:
+        raise ValueError(f'Expected exactly {len(expected)} fresh vector runtimes and {len(INDEPENDENT_CASES)} independent runtimes.')
+
+
+def verify_boundary_receipt(evidence: Path, prepared: dict, runtime: Path, ownership_id: str,
+                            prior_report: dict | None) -> tuple[dict, str, list[Path]]:
+    """Verify the hash-bound boundary receipt, its artifacts, and exact pre-vector runtime count."""
+    receipt_path = evidence / BOUNDARY_RECEIPT_FILE
+    if receipt_path.is_symlink() or not receipt_path.is_file():
+        raise ValueError('Verified boundary-receipt.json is required before running remaining live checks.')
+    raw_bytes = receipt_path.read_bytes()
+    receipt_sha256 = hashlib.sha256(raw_bytes).hexdigest()
+    if isinstance(prior_report, dict) and prior_report.get('result') == 'boundary-passed':
+        expected_ref = {'path': str(receipt_path.resolve()), 'sha256': receipt_sha256}
+        if prior_report.get('boundaryReceipt') != expected_ref:
+            raise ValueError('The boundary-receipt.json digest differs from the recorded boundary phase receipt.')
+    try:
+        document = json.loads(raw_bytes.decode('utf-8'))
+    except (UnicodeDecodeError, ValueError) as error:
+        raise ValueError('The boundary-receipt.json file is malformed.') from error
+    if not isinstance(document, dict):
+        raise ValueError('The boundary-receipt.json file must be a JSON object.')
+    recorded_digest = document.get('contentSha256')
+    payload = {key: value for key, value in document.items() if key != 'contentSha256'}
+    if not isinstance(recorded_digest, str) or canonical_digest(payload) != recorded_digest:
+        raise ValueError('The boundary-receipt.json content hash does not match its fields.')
+    preparation_sha256 = hashlib.sha256((evidence / 'preparation.json').read_bytes()).hexdigest()
+    boundary_run_id = document.get('boundaryRunId')
+    if (document.get('schema') != 'mcpcli-live-boundary/v1'
+            or document.get('result') != 'passed'
+            or document.get('fullLiveAccepted') is not False
+            or document.get('ownershipId') != ownership_id
+            or document.get('preparationRunId') != prepared['runId']
+            or document.get('preparationSha256') != preparation_sha256
+            or document.get('runtime') != str(runtime.resolve())
+            or not isinstance(boundary_run_id, str)
+            or re.fullmatch(r'[0-9a-f]{32}', boundary_run_id) is None
+            or document.get('output') != str((evidence / boundary_run_id).resolve())):
+        raise ValueError('The boundary-receipt.json metadata does not match the current prepared evidence.')
+    cases = document.get('cases')
+    expected_names = {name for name, _, _ in PRE_VECTOR_CASES}
+    if not isinstance(cases, dict) or set(cases) != expected_names:
+        raise ValueError('The boundary-receipt.json file must cover every pre-vector independent case.')
+    independent_receipts: list[Path] = []
+    expected_runs: list[str] = []
+    for name, class_name, method in PRE_VECTOR_CASES:
+        entry = cases[name]
+        if (not isinstance(entry, dict)
+                or entry.get('result') != 'passed'
+                or entry.get('className') != class_name
+                or entry.get('method') != method
+                or not isinstance(entry.get('receipt'), str)
+                or not isinstance(entry.get('testsXml'), str)):
+            raise ValueError(f'The boundary-receipt.json entry for {name} is incomplete or did not pass.')
+        case_receipt = Path(entry['receipt']).resolve()
+        require_owned(case_receipt, runtime)
+        if case_receipt in independent_receipts:
+            raise ValueError('Boundary receipt reused an isolated runtime receipt.')
+        if hashlib.sha256(case_receipt.read_bytes()).hexdigest() != entry.get('receiptSha256'):
+            raise ValueError(f'The boundary runtime receipt changed after run-boundary: {name}.')
+        outside = case_receipt.parent / 'outside.json'
+        if hashlib.sha256(outside.read_bytes()).hexdigest() != entry.get('outsideSha256'):
+            raise ValueError(f'The boundary namespace proof changed after run-boundary: {name}.')
+        expected_xml = (evidence / boundary_run_id / name / 'tests.xml').resolve()
+        tests_xml = Path(entry['testsXml']).resolve()
+        if (tests_xml != expected_xml or tests_xml.is_symlink() or not tests_xml.is_file()
+                or hashlib.sha256(tests_xml.read_bytes()).hexdigest() != entry.get('testsXmlSha256')):
+            raise ValueError(f'The boundary tests.xml artifact changed or is missing: {name}.')
+        require_independent_case(tests_xml, class_name, method)
+        if entry.get('runDirectory') != case_receipt.parent.name:
+            raise ValueError(f'The boundary run directory identity changed: {name}.')
+        independent_receipts.append(case_receipt)
+        expected_runs.append(case_receipt.parent.name)
+    runs_dir = runtime / 'runs'
+    if runs_dir.is_symlink() or not runs_dir.is_dir():
+        raise ValueError('CI requires a fresh prepared runtime containing the verified boundary run.')
+    actual_runs = sorted(path.name for path in runs_dir.iterdir())
+    if (actual_runs != sorted(expected_runs)
+            or document.get('runtimeRuns') != sorted(expected_runs)
+            or len(actual_runs) != len(PRE_VECTOR_CASES)):
+        raise ValueError('CI requires a fresh prepared runtime containing only the verified boundary run.')
+    return document, receipt_sha256, independent_receipts
+
+
+def run_boundary(evidence: Path) -> None:
+    report = {'result': 'running', 'phase': 'boundary', 'fullLiveAccepted': False, 'runId': uuid.uuid4().hex}
+    save(evidence / 'ci-live.json', report)
+    runtime = None
+    try:
+        prepared, prepared_runtime, python, environment, ownership_id = load_prepared_context(evidence)
+        if (evidence / BOUNDARY_RECEIPT_FILE).exists():
+            raise ValueError('CI requires a fresh prepared evidence directory without an existing boundary receipt.')
+        if (prepared_runtime / 'runs').exists():
+            raise ValueError('CI requires a fresh prepared runtime with no previous runs.')
+        runtime = prepared_runtime
+        generation = evidence / report['runId']
+        generation.mkdir()
+        report.update(preparationRunId=prepared['runId'], output=str(generation))
+        report['vectors'] = {'result': 'not-run', 'reason': 'Boundary phase only; remaining live vectors and smoke have not executed yet.'}
+        independent_errors: list[str] = []
+        independent_receipts: list[Path] = []
+        execute_independent_cases(PRE_VECTOR_CASES, generation=generation, prepared=prepared, python=python,
+                                  runtime=runtime, environment=environment, report=report,
+                                  independent_receipts=independent_receipts, independent_errors=independent_errors)
+        if independent_errors:
+            report['vectors'] = {'result': 'not-run', 'reason': 'Independent safety cases failed before vector execution.'}
+            raise RuntimeError('; '.join(independent_errors))
+        require_prepared_provenance(prepared)
+        actual_runs = sorted(path.name for path in (runtime / 'runs').iterdir())
+        if len(actual_runs) != len(PRE_VECTOR_CASES):
+            raise ValueError(f'Expected exactly {len(PRE_VECTOR_CASES)} fresh boundary runtime(s).')
+        # Redact retained boundary logs and XML before hashing so run-remaining verifies exact bytes.
+        redact_generation(generation)
+        cases = {}
+        for name, class_name, method in PRE_VECTOR_CASES:
+            case_receipt = Path(report[name]['receipt']).resolve()
+            tests_xml = (generation / name / 'tests.xml').resolve()
+            require_independent_case(tests_xml, class_name, method)
+            cases[name] = {
+                'className': class_name,
+                'method': method,
+                'result': 'passed',
+                'receipt': str(case_receipt),
+                'receiptSha256': hashlib.sha256(case_receipt.read_bytes()).hexdigest(),
+                'outsideSha256': hashlib.sha256((case_receipt.parent / 'outside.json').read_bytes()).hexdigest(),
+                'testsXml': str(tests_xml),
+                'testsXmlSha256': hashlib.sha256(tests_xml.read_bytes()).hexdigest(),
+                'runDirectory': case_receipt.parent.name,
+            }
+        boundary_payload = {
+            'schema': 'mcpcli-live-boundary/v1',
+            'result': 'passed',
+            'fullLiveAccepted': False,
+            'ownershipId': ownership_id,
+            'preparationRunId': prepared['runId'],
+            'preparationSha256': hashlib.sha256((evidence / 'preparation.json').read_bytes()).hexdigest(),
+            'boundaryRunId': report['runId'],
+            'output': str(generation.resolve()),
+            'runtime': str(runtime.resolve()),
+            'cases': cases,
+            'runtimeRuns': actual_runs,
+        }
+        boundary_document = {**boundary_payload, 'contentSha256': canonical_digest(boundary_payload)}
+        receipt_path = evidence / BOUNDARY_RECEIPT_FILE
+        save(receipt_path, boundary_document)
+        report['boundaryReceipt'] = {'path': str(receipt_path.resolve()),
+                                     'sha256': hashlib.sha256(receipt_path.read_bytes()).hexdigest()}
+        report.update(result='boundary-passed', fullLiveAccepted=False)
+    except BaseException as error:
+        report.update(result='failed', fullLiveAccepted=False, error=f'{type(error).__name__}: {error}')
+        raise
+    finally:
+        if runtime:
+            copy_diagnostics(runtime, evidence / report['runId'] / 'runtime-diagnostics')
+        redact_generation(evidence / report['runId'])
+        save(evidence / 'ci-live.json', report)
+
+
+def run_remaining(evidence: Path) -> None:
+    prior_report = None
+    if (evidence / 'ci-live.json').is_file():
+        try:
+            prior_report = json.loads((evidence / 'ci-live.json').read_text())
+        except (OSError, ValueError):
+            prior_report = None
+    report = {'result': 'running', 'phase': 'remaining', 'fullLiveAccepted': False, 'runId': uuid.uuid4().hex}
+    save(evidence / 'ci-live.json', report)
+    runtime = None
+    try:
+        prepared, prepared_runtime, python, environment, ownership_id = load_prepared_context(evidence)
+        boundary_document, receipt_sha256, independent_receipts = verify_boundary_receipt(
+            evidence, prepared, prepared_runtime, ownership_id, prior_report)
+        runtime = prepared_runtime
+        generation = evidence / report['runId']
+        generation.mkdir()
+        report.update(preparationRunId=prepared['runId'], output=str(generation),
+                      boundaryReceipt={'path': str((evidence / BOUNDARY_RECEIPT_FILE).resolve()), 'sha256': receipt_sha256})
+        for name, _, _ in PRE_VECTOR_CASES:
+            report[name] = {'result': 'passed', 'receipt': boundary_document['cases'][name]['receipt'],
+                            'boundaryRunId': boundary_document['boundaryRunId']}
+        report['vectors'] = {'result': 'not-run', 'reason': 'Vector execution has not completed.'}
+        independent_errors: list[str] = []
+        execute_vectors_and_post_cases(generation=generation, prepared=prepared, python=python,
+                                       runtime=runtime, environment=environment, report=report,
+                                       independent_receipts=independent_receipts, independent_errors=independent_errors)
+        report.update(result='passed', fullLiveAccepted=True)
+    except BaseException as error:
+        report.update(result='failed', fullLiveAccepted=False, error=f'{type(error).__name__}: {error}')
+        if isinstance(error, Exception) and report.get('vectors', {}).get('result') == 'failed' and not report.get('smoke'):
+            combined = RuntimeError(f'{report["vectors"]["error"]}; independent smoke failed: {error}')
+            report['error'] = f'RuntimeError: {combined}'
+            raise combined from error
+        raise
+    finally:
+        if runtime:
+            copy_diagnostics(runtime, evidence / report['runId'] / 'runtime-diagnostics')
+        redact_generation(evidence / report['runId'])
+        save(evidence / 'ci-live.json', report)
+
+
 def run(evidence: Path) -> None:
     report = {'result': 'running', 'fullLiveAccepted': False, 'runId': uuid.uuid4().hex}
     save(evidence / 'ci-live.json', report)
     runtime = None
     try:
-        require_contract()
-        source = Path(os.environ.get('MCPCLI_CI_PREPARATION', str(evidence / 'preparation.json')))
-        if source.resolve() != (evidence / 'preparation.json').resolve():
-            raise ValueError('Preparation must come from the current evidence directory.')
-        prepared = json.loads(source.read_text())
-        if prepared.get('result') != 'prepared' or prepared.get('ownershipId') != (evidence / OWNER_FILE).read_text().strip():
-            raise ValueError('Current successful preparation receipt is required.')
-        gateway = require_prepared_provenance(prepared)
-        source_overrides = require_source_catalog(prepared)
-        reader_audit = require_reader_audit(prepared)
-        prepared_runtime = Path(prepared['runtime']).resolve()
-        python = Path(prepared['python'])
-        if not prepared_runtime.is_dir() or not python.is_file() or not TESTS.is_file():
-            raise ValueError('Prepared private runtime, Python and built Release integration tests are required.')
-        for row in json.loads((ROOT / 'tools/live-topology/binaries-current.json').read_text()):
-            binary = prepared_runtime / 'bin' / Path(row['source']).name
-            if hashlib.sha256(binary.read_bytes()).hexdigest() != row['sha256']:
-                raise ValueError(f'Prepared runtime binary hash mismatch: {binary.name}')
+        prepared, prepared_runtime, python, environment, _ = load_prepared_context(evidence)
         if (prepared_runtime / 'runs').exists():
             raise ValueError('CI requires a fresh prepared runtime with no previous runs.')
         runtime = prepared_runtime
-        environment = os.environ.copy()
-        for key in list(environment):
-            if key.startswith(('MCPCLI_LIVE_', 'EVENTSTORE_')):
-                del environment[key]
-        environment.update(McpCliCurrentNativeProfile='true', MCPCLI_ISOLATED_RUNTIME_DIR=str(runtime),
-                           NUGET_PACKAGES=prepared['nugetPackages'],
-                           MCPCLI_NATIVE_SOURCE_FIXTURES=prepared['sourceFixtures']['path'],
-                           MCPCLI_NATIVE_SOURCE_FIXTURES_SHA256=prepared['sourceFixtures']['sha256'],
-                           CustomAfterMicrosoftCommonTargets=str(source_overrides),
-                           CustomAfterDirectoryBuildTargets=str(source_overrides.with_name('source-runtime-after-directory.targets')),
-                           RestoreConfigFile=str(source_overrides.with_name('source-restore.config')),
-                           NUGET_HTTP_CACHE_PATH=str(source_overrides.with_name('source-http')),
-                           UseHexalithProjectReferences='false', UseNuGetDeps='true',
-                           HexalithEventStoreFromSource='false', HexalithEventStoreVersion=EVENTSTORE_COHORT,
-                           Topology__UsePackagedGateway='true',
-                           MCPCLI_EVENTSTORE_PACKAGE_SOURCE_COMMIT=gateway['sourceCommit'],
-                           MCPCLI_NATIVE_READER_AUDIT_PATH=str(reader_audit),
-                           MCPCLI_NATIVE_READER_AUDIT_SHA256=prepared['readerAudit']['sha256'],
-                           PATH=str(python.parent) + os.pathsep + prepared['path'])
         generation = evidence / report['runId']
         generation.mkdir()
-        vectors = generation / 'vectors'
         report.update(preparationRunId=prepared['runId'], output=str(generation))
         report['vectors'] = {'result': 'not-run', 'reason': 'Pre-vector safety and provenance checks have not passed.'}
-        independent_errors = []
-        independent_receipts = []
-
-        def run_independent(cases):
-            """Run each registered independent case once with fresh state and current provenance."""
-            for name, class_name, method in cases:
-                case = generation / name
-                case.mkdir()
-                try:
-                    require_prepared_provenance(prepared)
-                    bounded([str(python), str(ROOT / 'tools/live-topology/run-isolated.py'), '--', 'dotnet', str(TESTS),
-                             '-class', class_name, '-failSkips', '-result-xml', str(case / 'tests.xml')],
-                            INDEPENDENT_CASE_TIMEOUT, case / 'process', environment={**environment, 'MCPCLI_LIVE_OUTPUT': str(case)})
-                    require_independent_case(case / 'tests.xml', class_name, method)
-                    lines = (case / 'process.stdout.txt').read_text().splitlines()
-                    runs = [Path(line.removeprefix('Isolated run: ')) for line in lines if line.startswith('Isolated run: ')]
-                    if len(runs) != 1:
-                        raise ValueError(f'Independent {name} omitted its isolated runtime receipt.')
-                    receipt = runs[0] / 'result.json'
-                    require_owned(receipt, runtime)
-                    if receipt in independent_receipts:
-                        raise ValueError('Independent cases reused an isolated runtime receipt.')
-                    independent_receipts.append(receipt)
-                    report[name] = {'result': 'passed', 'receipt': str(receipt)}
-                except Exception as error:
-                    report[name] = {'result': 'failed', 'error': f'{type(error).__name__}: {error}'}
-                    independent_errors.append(f'independent {name} failed: {error}')
-
-        run_independent(PRE_VECTOR_CASES)
+        independent_errors: list[str] = []
+        independent_receipts: list[Path] = []
+        execute_independent_cases(PRE_VECTOR_CASES, generation=generation, prepared=prepared, python=python,
+                                  runtime=runtime, environment=environment, report=report,
+                                  independent_receipts=independent_receipts, independent_errors=independent_errors)
         if independent_errors:
             report['vectors'] = {'result': 'not-run', 'reason': 'Independent safety cases failed before vector execution.'}
             raise RuntimeError('; '.join(independent_errors))
-        # Recheck all sealed module and private fixture inputs before any vector executes.
-        require_prepared_provenance(prepared)
-        vector_error = None
-        try:
-            bounded([str(python), str(ROOT / 'tools/live-topology/run-vectors.py'), '--output', str(vectors)],
-                    RUN_TIMEOUT_SECONDS - len(INDEPENDENT_CASES) * INDEPENDENT_CASE_TIMEOUT - CLEANUP_HEADROOM_SECONDS,
-                    generation / 'vectors-process', environment=environment, require_complete_stdout=False)
-            lane = json.loads((vectors / 'live-lane.json').read_text())
-            # The live set is every approved vector with a companion plan; a vector without one is loopback-only.
-            expected = sorted(operation for operation in (json.loads(path.read_text())['operation'] for path in
-                              (ROOT / 'tools/conformance-vectors/v1/current/modules').rglob('*.vector.json'))
-                              if (ROOT / 'tools/live-topology/plans-current' / (operation + '.json')).is_file())
-            outcomes = lane.get('vectors', [])
-            if not expected or len(set(expected)) != len(expected) or lane.get('coverage') != expected \
-                    or lane.get('result') != 'passed' or lane.get('fullLiveAccepted') is not True \
-                    or lane.get('passed') != len(expected) or lane.get('failed') != 0 \
-                    or sorted(item.get('operation', '') for item in outcomes) != expected \
-                    or len({item.get('isolatedReceipt') for item in outcomes}) != len(expected) \
-                    or any(item.get('result') != 'passed' or item.get('exitCode') != 0 for item in outcomes):
-                raise ValueError('Complete current passing evidence for every approved live vector is required; partial/preflight/skipped evidence is refused.')
-            for item in outcomes:
-                require_owned(Path(item['isolatedReceipt']), runtime)
-            report['vectors'] = {'result': 'passed', 'count': len(expected), 'receipt': str(vectors / 'live-lane.json')}
-        except BaseException as error:
-            failures = []
-            interrupted = []
-            lane_error = None
-            if (vectors / 'live-lane.json').is_file():
-                try:
-                    lane = json.loads((vectors / 'live-lane.json').read_text())
-                    lane_error = lane.get('error')
-                    failures = [{key: item.get(key) for key in ('operation', 'result', 'error')}
-                                for item in lane.get('vectors', []) if item.get('result') == 'failed']
-                    interrupted = [{key: item.get(key) for key in ('operation', 'result', 'error')}
-                                   for item in lane.get('vectors', []) if item.get('result') == 'running']
-                except (ValueError, AttributeError, TypeError):
-                    pass  # Retain the original failure and still attempt the post-vector independent cases.
-            detail = '; failed Operations: ' + ', '.join(str(item['operation']) for item in failures) if failures else ''
-            if interrupted:
-                detail += '; interrupted Operations: ' + ', '.join(str(item['operation']) for item in interrupted)
-            if lane_error:
-                detail += f'; lane error: {lane_error}'
-            detail += f'; lane receipt: {vectors / "live-lane.json"}; runner stdout: {generation / "vectors-process.stdout.txt"}'
-            vector_error = RuntimeError(str(error) + detail)
-            report['vectors'] = {'result': 'failed', 'error': str(vector_error), 'failures': failures,
-                                 'interrupted': interrupted, 'laneError': lane_error, 'receipt': str(vectors / 'live-lane.json')}
-            if not isinstance(error, Exception):
-                print(sanitized(f'Live CI interrupted: {type(error).__name__}: {vector_error}'), file=sys.stderr)
-                raise
-        run_independent(POST_VECTOR_CASES)
-        if vector_error or independent_errors:
-            raise RuntimeError('; '.join(([str(vector_error)] if vector_error else []) + independent_errors))
-        expected_runtimes = len(expected) + len(INDEPENDENT_CASES)
-        if len(list((runtime / 'runs').iterdir())) != expected_runtimes:
-            raise ValueError(f'Expected exactly {len(expected)} fresh vector runtimes and {len(INDEPENDENT_CASES)} independent runtimes.')
+        execute_vectors_and_post_cases(generation=generation, prepared=prepared, python=python,
+                                       runtime=runtime, environment=environment, report=report,
+                                       independent_receipts=independent_receipts, independent_errors=independent_errors)
         report.update(result='passed', fullLiveAccepted=True)
     except BaseException as error:
         report.update(result='failed', error=f'{type(error).__name__}: {error}')
@@ -1199,11 +1450,7 @@ def run(evidence: Path) -> None:
     finally:
         if runtime:
             copy_diagnostics(runtime, evidence / report['runId'] / 'runtime-diagnostics')
-        for pattern in ('*.stdout.txt', '*.stderr.txt', 'tests.xml'):
-            for path in (evidence / report['runId']).rglob(pattern):
-                with path.open('rb') as stream:
-                    content, _ = read_command_channel(stream, sanitize=sanitized_xml if path.name == 'tests.xml' else sanitized)
-                path.write_text(content)
+        redact_generation(evidence / report['runId'])
         save(evidence / 'ci-live.json', report)
 
 
@@ -1216,8 +1463,12 @@ def main() -> int:
             prepare(evidence)
         elif sys.argv[1:] == ['run']:
             run(evidence)
+        elif sys.argv[1:] == ['run-boundary']:
+            run_boundary(evidence)
+        elif sys.argv[1:] == ['run-remaining']:
+            run_remaining(evidence)
         else:
-            raise ValueError('Expected prepare or run.')
+            raise ValueError('Expected prepare, run, run-boundary or run-remaining.')
         return 0
     except Exception as error:
         print(sanitized(f'Live CI failed: {type(error).__name__}: {error}'), file=sys.stderr)

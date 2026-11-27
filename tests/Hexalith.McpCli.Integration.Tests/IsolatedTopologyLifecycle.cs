@@ -1,3 +1,4 @@
+using System.Globalization;
 using System.Net;
 using System.Runtime.ExceptionServices;
 
@@ -14,6 +15,14 @@ namespace Hexalith.McpCli.Integration.Tests;
 /// This suite instead retains its existing isolated AppHost lifecycle through Aspire's public API.</remarks>
 public abstract class IsolatedTopologyLifecycle<TAppHost> : IAsyncLifetime where TAppHost : class
 {
+    private static readonly HashSet<string> TerminalFailureStates = new(StringComparer.OrdinalIgnoreCase)
+    {
+        KnownResourceStates.FailedToStart,
+        KnownResourceStates.Exited,
+        KnownResourceStates.Finished,
+        KnownResourceStates.RuntimeUnhealthy,
+    };
+
     private DistributedApplication? _application;
     private IDistributedApplicationTestingBuilder? _builder;
     private FileStream? _fixtureLock;
@@ -52,36 +61,190 @@ public abstract class IsolatedTopologyLifecycle<TAppHost> : IAsyncLifetime where
             _builder = await DistributedApplicationTestingBuilder.CreateAsync<TAppHost>(arguments, startup.Token).ConfigureAwait(false);
             _application = await _builder.BuildAsync(startup.Token).ConfigureAwait(false);
             await _application.StartAsync(startup.Token).ConfigureAwait(false);
-            foreach (AspireResource resource in Resources)
-            {
-                using var ready = CancellationTokenSource.CreateLinkedTokenSource(startup.Token);
-                ready.CancelAfter(resource.ReadinessTimeout);
-                await _application.ResourceNotifications.WaitForResourceAsync(resource.Name, KnownResourceStates.Running, ready.Token).ConfigureAwait(false);
-                string? endpoint = null;
-                while (endpoint is null)
+            IReadOnlyList<AspireResource> resources = Resources;
+            string[] watchedResources = [.. resources.Select(resource => resource.Name)];
+            await RunWithTerminalFailureWatchAsync(
+                _application.ResourceNotifications,
+                watchedResources,
+                async watchedToken =>
                 {
-                    if (_application.ResourceNotifications.TryGetCurrentState(resource.Name, out ResourceEvent? current))
-                        endpoint = current.Snapshot.Urls.FirstOrDefault(url =>
-                            string.Equals(url.Name, resource.EndpointName, StringComparison.OrdinalIgnoreCase)
-                            && !string.IsNullOrWhiteSpace(url.Url))?.Url;
-                    if (endpoint is null) await Task.Delay(250, ready.Token).ConfigureAwait(false);
-                }
-                HttpClient client = _application.CreateHttpClient(resource.Name, resource.EndpointName);
-                client.BaseAddress ??= new Uri(endpoint);
-                client.Timeout = resource.ClientTimeout;
-                _clients.Add(resource.Name, client);
-            }
-            foreach (AspireResource resource in Resources.Where(resource => resource.WaitForAliveness))
-            {
-                await WaitForAlivenessAsync(Client(resource.Name), resource.AlivenessTimeout, startup.Token).ConfigureAwait(false);
-            }
+                    foreach (AspireResource resource in resources)
+                    {
+                        using var ready = CancellationTokenSource.CreateLinkedTokenSource(watchedToken);
+                        ready.CancelAfter(resource.ReadinessTimeout);
+                        await _application.ResourceNotifications.WaitForResourceAsync(resource.Name, KnownResourceStates.Running, ready.Token).ConfigureAwait(false);
+                        string endpoint = await WaitForEndpointCoreAsync(_application.ResourceNotifications, resource.Name, resource.EndpointName, ready.Token).ConfigureAwait(false);
+                        HttpClient client = _application.CreateHttpClient(resource.Name, resource.EndpointName);
+                        client.BaseAddress ??= new Uri(endpoint);
+                        client.Timeout = resource.ClientTimeout;
+                        _clients.Add(resource.Name, client);
+                    }
+                    foreach (AspireResource resource in resources.Where(resource => resource.WaitForAliveness))
+                    {
+                        await WaitForAlivenessAsync(Client(resource.Name), resource.AlivenessTimeout, watchedToken).ConfigureAwait(false);
+                    }
 
-            await WaitForReadinessAsync(startup.Token).ConfigureAwait(false);
+                    await WaitForReadinessAsync(watchedToken).ConfigureAwait(false);
+                },
+                startup.Token).ConfigureAwait(false);
         }
         catch (Exception failure)
         {
             await CleanupAsync(failure).ConfigureAwait(false);
             throw;
+        }
+    }
+
+    /// <summary>Determines whether an Aspire resource state indicates a terminal startup failure.</summary>
+    internal static bool IsTerminalFailureState(string? state)
+        => !string.IsNullOrWhiteSpace(state) && TerminalFailureStates.Contains(state);
+
+    /// <summary>Formats a diagnostic exception identifying the crashed resource, terminal state, and exit code.</summary>
+    internal static InvalidOperationException CreateTerminalFailureException(string resourceName, CustomResourceSnapshot snapshot)
+    {
+        ArgumentException.ThrowIfNullOrWhiteSpace(resourceName);
+        ArgumentNullException.ThrowIfNull(snapshot);
+        string state = snapshot.State?.Text ?? "Unknown";
+        string exitCode = snapshot.ExitCode is int code ? code.ToString(CultureInfo.InvariantCulture) : "none";
+        return new InvalidOperationException(
+            $"Declared Aspire resource '{resourceName}' entered terminal failure state '{state}' (exit code: {exitCode}) during topology startup.");
+    }
+
+    /// <summary>Runs a startup operation while watching only declared resources for terminal failure states.</summary>
+    internal static async Task RunWithTerminalFailureWatchAsync(
+        ResourceNotificationService notifications,
+        IEnumerable<string> watchedResources,
+        Func<CancellationToken, Task> operation,
+        CancellationToken cancellationToken)
+    {
+        ArgumentNullException.ThrowIfNull(notifications);
+        ArgumentNullException.ThrowIfNull(watchedResources);
+        ArgumentNullException.ThrowIfNull(operation);
+
+        var watched = new HashSet<string>(watchedResources, StringComparer.OrdinalIgnoreCase);
+        if (watched.Count == 0)
+        {
+            await operation(cancellationToken).ConfigureAwait(false);
+            return;
+        }
+
+        foreach (string name in watched)
+        {
+            if (notifications.TryGetCurrentState(name, out ResourceEvent? current)
+                && IsTerminalFailureState(current.Snapshot.State?.Text))
+            {
+                throw CreateTerminalFailureException(current.Resource.Name, current.Snapshot);
+            }
+        }
+
+        using var linked = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken);
+        using var watchStop = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken);
+        InvalidOperationException? terminalFailure = null;
+
+        Task watchTask = Task.Run(async () =>
+        {
+            try
+            {
+                await foreach (ResourceEvent resourceEvent in notifications.WatchAsync(watchStop.Token).ConfigureAwait(false))
+                {
+                    if (!watched.Contains(resourceEvent.Resource.Name) && !watched.Contains(resourceEvent.ResourceId))
+                    {
+                        continue;
+                    }
+
+                    if (IsTerminalFailureState(resourceEvent.Snapshot.State?.Text))
+                    {
+                        InvalidOperationException failure = CreateTerminalFailureException(
+                            resourceEvent.Resource.Name,
+                            resourceEvent.Snapshot);
+                        Interlocked.CompareExchange(ref terminalFailure, failure, null);
+                        await linked.CancelAsync().ConfigureAwait(false);
+                        return;
+                    }
+                }
+            }
+            catch (OperationCanceledException) when (watchStop.IsCancellationRequested)
+            {
+            }
+        }, CancellationToken.None);
+
+        try
+        {
+            await operation(linked.Token).ConfigureAwait(false);
+        }
+        catch (Exception) when (Volatile.Read(ref terminalFailure) is not null)
+        {
+            throw Volatile.Read(ref terminalFailure)!;
+        }
+        finally
+        {
+            await watchStop.CancelAsync().ConfigureAwait(false);
+            await watchTask.ConfigureAwait(false);
+        }
+
+        if (Volatile.Read(ref terminalFailure) is InvalidOperationException lateFailure)
+        {
+            throw lateFailure;
+        }
+    }
+
+    /// <summary>Waits for a declared resource to enter Running while aborting on any watched terminal failure.</summary>
+    internal static Task WaitForResourceRunningAsync(
+        ResourceNotificationService notifications,
+        string resourceName,
+        IEnumerable<string> watchedResources,
+        CancellationToken cancellationToken)
+    {
+        ArgumentNullException.ThrowIfNull(notifications);
+        ArgumentException.ThrowIfNullOrWhiteSpace(resourceName);
+        return RunWithTerminalFailureWatchAsync(
+            notifications,
+            watchedResources,
+            token => notifications.WaitForResourceAsync(resourceName, KnownResourceStates.Running, token),
+            cancellationToken);
+    }
+
+    /// <summary>Waits for a declared resource endpoint URL while aborting on any watched terminal failure.</summary>
+    internal static async Task<string> WaitForEndpointAsync(
+        ResourceNotificationService notifications,
+        string resourceName,
+        string endpointName,
+        IEnumerable<string> watchedResources,
+        CancellationToken cancellationToken)
+    {
+        ArgumentNullException.ThrowIfNull(notifications);
+        ArgumentException.ThrowIfNullOrWhiteSpace(resourceName);
+        ArgumentException.ThrowIfNullOrWhiteSpace(endpointName);
+        string? endpoint = null;
+        await RunWithTerminalFailureWatchAsync(
+            notifications,
+            watchedResources,
+            async token => endpoint = await WaitForEndpointCoreAsync(notifications, resourceName, endpointName, token).ConfigureAwait(false),
+            cancellationToken).ConfigureAwait(false);
+        return endpoint!;
+    }
+
+    private static async Task<string> WaitForEndpointCoreAsync(
+        ResourceNotificationService notifications,
+        string resourceName,
+        string endpointName,
+        CancellationToken cancellationToken)
+    {
+        while (true)
+        {
+            cancellationToken.ThrowIfCancellationRequested();
+            if (notifications.TryGetCurrentState(resourceName, out ResourceEvent? current))
+            {
+                string? endpoint = current.Snapshot.Urls.FirstOrDefault(url =>
+                    string.Equals(url.Name, endpointName, StringComparison.OrdinalIgnoreCase)
+                    && !string.IsNullOrWhiteSpace(url.Url))?.Url;
+                if (endpoint is not null)
+                {
+                    return endpoint;
+                }
+            }
+
+            await Task.Delay(250, cancellationToken).ConfigureAwait(false);
         }
     }
 

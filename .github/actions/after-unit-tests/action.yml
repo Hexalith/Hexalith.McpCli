@@ -3,9 +3,9 @@ description: Reuse built outputs for package, conformance and the complete isola
 runs:
   using: composite
   steps:
-    - name: Validate package consumers, conformance and product launcher behavior
+    - name: Stage and validate CI fixture packages and smoke consumers
       shell: bash
-      run: timeout --signal=TERM --kill-after=30s 3600 "${HEXALITH_CI_PYTHON:?Shared prepared Python is required}" scripts/product_ci.py linux
+      run: timeout --signal=TERM --kill-after=30s 900 "${HEXALITH_CI_PYTHON:?Shared prepared Python is required}" scripts/product_ci.py linux-packages
     - name: Retain identical CI fixture packages for both platform jobs
       uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
       with:
@@ -17,11 +17,19 @@ runs:
       env:
         ASPIRE_EVIDENCE_PATH: TestResults/live-ci
       run: bash tools/live-topology/prepare-ci.sh
-    - name: Execute every live vector and independent case
+    - name: Execute shared-head boundary safety gate
       shell: bash
       env:
         ASPIRE_EVIDENCE_PATH: TestResults/live-ci
-      run: bash tools/live-topology/run-ci.sh
+      run: timeout --signal=TERM --kill-after=30s 1500 python3 tools/live-topology/ci.py run-boundary
+    - name: Validate conformance, enrolled modules and topology preflight
+      shell: bash
+      run: timeout --signal=TERM --kill-after=30s 3600 "${HEXALITH_CI_PYTHON:?Shared prepared Python is required}" scripts/product_ci.py linux-conformance
+    - name: Execute remaining live vectors and independent smoke
+      shell: bash
+      env:
+        ASPIRE_EVIDENCE_PATH: TestResults/live-ci
+      run: timeout --signal=TERM --kill-after=30s 13800 python3 tools/live-topology/ci.py run-remaining
     - name: Retain product diagnostics
       if: ${{ always() }}
       uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2

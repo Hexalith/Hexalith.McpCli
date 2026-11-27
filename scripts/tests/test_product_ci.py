@@ -210,12 +210,44 @@ class ProductControllerTests(unittest.TestCase):
         self.assertEqual(1, len(reached))
 
     def test_linux_entry_point_requires_prepared_python_without_reinstalling_tools(self):
-        with patch.object(sys, 'argv', ['product_ci.py', 'linux']), \
-                patch.dict(os.environ, {'HEXALITH_CI_PYTHON': str(self.root / 'wrong-python')}), \
-                patch.object(product_ci, 'execute') as execute, contextlib.redirect_stderr(io.StringIO()) as error:
-            self.assertEqual(1, product_ci.main())
-            self.assertIn('shared prepared Python', error.getvalue())
-            execute.assert_not_called()
+        for phase in ('linux', 'linux-packages', 'linux-conformance'):
+            with self.subTest(phase=phase), \
+                    patch.object(sys, 'argv', ['product_ci.py', phase]), \
+                    patch.dict(os.environ, {'HEXALITH_CI_PYTHON': str(self.root / 'wrong-python')}), \
+                    patch.object(product_ci, 'execute') as execute, contextlib.redirect_stderr(io.StringIO()) as error:
+                self.assertEqual(1, product_ci.main())
+                self.assertIn('shared prepared Python', error.getvalue())
+                execute.assert_not_called()
+
+    def test_split_linux_phases_dispatch_and_preserve_combined_linux_order(self):
+        for phase, expected in (
+                ('linux-packages', ['stage_packages', 'package_checks']),
+                ('linux-conformance', ['execute:scripts/tests', 'execute:run-sample-validation.sh',
+                                       'execute:run-sample-loopback.sh', 'execute:check_enrolled.py',
+                                       'execute:tools/live-topology', 'execute:run-vectors.py']),
+                ('linux', ['stage_packages', 'package_checks', 'execute:scripts/tests',
+                           'execute:run-sample-validation.sh', 'execute:run-sample-loopback.sh',
+                           'execute:check_enrolled.py', 'execute:tools/live-topology', 'execute:run-vectors.py'])):
+            events = []
+            def record_execute(command, **_):
+                joined = ' '.join(map(str, command))
+                for marker in ('scripts/tests', 'run-sample-validation.sh', 'run-sample-loopback.sh',
+                               'check_enrolled.py', 'tools/live-topology', 'run-vectors.py'):
+                    if marker in joined and not (marker == 'tools/live-topology' and 'run-vectors.py' in joined):
+                        events.append('execute:' + marker)
+                        break
+                return subprocess.CompletedProcess(command, 0, stdout='', stderr='')
+            with self.subTest(phase=phase), \
+                    patch.object(sys, 'argv', ['product_ci.py', phase]), \
+                    patch.dict(os.environ, {'HEXALITH_CI_PYTHON': sys.executable}), \
+                    patch('importlib.metadata.version', return_value='4.26.0'), \
+                    patch.object(product_ci.signal, 'signal'), \
+                    patch.object(product_ci, 'stage_packages', side_effect=lambda: events.append('stage_packages')), \
+                    patch.object(product_ci, 'package_checks', side_effect=lambda: events.append('package_checks')), \
+                    patch.object(product_ci, 'execute', side_effect=record_execute), \
+                    contextlib.redirect_stderr(io.StringIO()) as stderr:
+                self.assertEqual(0, product_ci.main(), stderr.getvalue())
+                self.assertEqual(expected, events)
 
 
 class ProductPlatformTests(unittest.TestCase):

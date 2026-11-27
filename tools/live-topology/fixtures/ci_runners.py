@@ -101,6 +101,18 @@ if pathlib.Path(__file__).name == 'run-vectors.py':
     if mode in ('failed-vectors', 'both-fail', 'cancel-smoke-after-vector-failure'):
         receipt.update(result='failed', passed=20, failed=1)
         outcomes[0].update(result='failed', error='phase observe-party: gateway_error 500')
+    if mode == 'fail-fast-vectors':
+        receipt.update(result='failed', fullLiveAccepted=False, passed=0, failed=2,
+                       skipped=len(operations) - 2, failFastTriggered=True,
+                       failFastReason='reached --max-failures 2 after ' + operations[1])
+        outcomes[0].update(result='failed', error='phase observe-0: gateway_error 500')
+        outcomes[1].update(result='failed', error='phase observe-1: gateway_error 500')
+        for item in outcomes[2:]:
+            item.update(result='skipped-fail-fast')
+            item.pop('exitCode', None)
+            item.pop('isolatedReceipt', None)
+    if mode == 'forged-fail-fast-passed':
+        receipt.update(failFastTriggered=True, skipped=1)
     if mode == 'duplicate-isolation': outcomes[1]['isolatedReceipt'] = outcomes[0]['isolatedReceipt']
     if mode == 'stale-isolation': outcomes[0]['isolatedReceipt'] = str(owned('foreign', runtime.parent / 'sibling-runtime') / 'result.json')
     if mode == 'extra-runtime': (runtime / 'runs/unexpected').mkdir()
@@ -127,7 +139,7 @@ if pathlib.Path(__file__).name == 'run-vectors.py':
         (root / 'tests/Hexalith.McpCli.EventStoreGateway.TestHost/bin/Release/net11.0/Hexalith.EventStore.Gateway.dll').write_bytes(b'changed-after-vector-lane')
     # Like run-vectors.py, every failed lane result exits 1.
     sys.exit(124 if mode == 'lane-timeout' else 19 if mode == 'vector-exit' else 1 if mode in (
-        'failed-vectors', 'both-fail', 'cancel-smoke-after-vector-failure',
+        'failed-vectors', 'fail-fast-vectors', 'both-fail', 'cancel-smoke-after-vector-failure',
         'lane-preflight', 'lane-admission', 'lane-coverage', 'lane-runtime') else 0)
 else:
     independent = 'boundary' if 'Hexalith.McpCli.Integration.Tests.SharedHeadBoundaryTests' in sys.argv else 'smoke'

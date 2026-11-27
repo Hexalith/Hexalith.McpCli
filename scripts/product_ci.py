@@ -133,9 +133,12 @@ def package_checks(*, platform_checks=False, expected_os=None) -> None:
     require_source(receipt)
 
 
-def linux_checks() -> None:
+def linux_packages() -> None:
     stage_packages()
     package_checks()
+
+
+def linux_conformance() -> None:
     # Unit tests start without the variables that locate the runner's workflow command files.
     execute(['env', '-u', 'GITHUB_ENV', '-u', 'GITHUB_PATH', '-u', 'GITHUB_OUTPUT', '-u', 'GITHUB_STATE',
              '-u', 'GITHUB_STEP_SUMMARY', sys.executable, '-m', 'unittest', 'discover', '-v', '-s', 'scripts/tests',
@@ -150,10 +153,15 @@ def linux_checks() -> None:
     execute([sys.executable, ROOT / 'tools/live-topology/run-vectors.py', '--output', staging_root() / 'preflight', '--preflight-only'])
 
 
+def linux_checks() -> None:
+    linux_packages()
+    linux_conformance()
+
+
 def main() -> int:
     signal.signal(signal.SIGTERM, lambda *_: sys.exit(143))
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument('phase', choices=('stage', 'linux', 'platform'))
+    parser.add_argument('phase', choices=('stage', 'linux', 'linux-packages', 'linux-conformance', 'platform'))
     parser.add_argument('--expected-os', choices=('Windows', 'Darwin'))
     arguments = parser.parse_args()
     try:
@@ -173,6 +181,8 @@ def main() -> int:
                 raise ValueError('Linux product checks require prepared jsonschema 4.26.0.')
         if arguments.phase == 'stage': stage_packages()
         elif arguments.phase == 'linux': linux_checks()
+        elif arguments.phase == 'linux-packages': linux_packages()
+        elif arguments.phase == 'linux-conformance': linux_conformance()
         else: package_checks(platform_checks=True, expected_os=arguments.expected_os)
         return 0
     except Exception as error:

@@ -94,12 +94,60 @@ def bounded_child(command: list[str], environment: dict, output: Path, timeout: 
                     child.wait(timeout=5)
 
 
+def classify_immediate_fail_fast(output: Path, exit_code: int | None) -> str | None:
+    """Return an immediate fail-fast reason for timeouts or wrapper/fixture init failures."""
+    if exit_code == 124:
+        return 'child process timed out (exit 124)'
+    stdout_path = output / 'child.stdout.txt'
+    try:
+        with stdout_path.open('rb') as stream:
+            stdout, omitted = read_capped(stream, OUTPUT_LIMIT)
+    except OSError:
+        return 'wrapper initialization failed: missing isolated child stdout'
+    if stdout is None:
+        return f'wrapper initialization failed: isolated child stdout exceeded {OUTPUT_LIMIT} bytes ({omitted} bytes observed)'
+    lines = stdout.decode('utf-8', errors='replace').splitlines()
+    runs = [Path(line.removeprefix('Isolated run: ')) for line in lines if line.startswith('Isolated run: ')]
+    if len(runs) != 1:
+        return 'wrapper initialization failed: missing isolated runtime receipt'
+    try:
+        owned = json.loads((runs[0] / 'result.json').read_text())
+    except (OSError, ValueError):
+        return 'wrapper initialization failed: missing or unreadable runtime receipt'
+    if not isinstance(owned, dict):
+        return 'wrapper initialization failed: invalid runtime receipt'
+    if owned.get('commandExitCode') == 124:
+        return 'child process timed out (exit 124)'
+    if owned.get('prerequisitesReady') is not True:
+        return 'wrapper initialization failed: prerequisitesReady is not true'
+    if owned.get('error'):
+        return 'wrapper initialization failed: runtime receipt reported error'
+    tests_xml = output / 'tests.xml'
+    if not tests_xml.is_file():
+        return 'fixture initialization failed: missing tests.xml'
+    try:
+        root = ET.parse(tests_xml).getroot()
+    except (OSError, ET.ParseError):
+        return 'fixture initialization failed: malformed tests.xml'
+    assemblies = root.findall('assembly')
+    if len(assemblies) != 1:
+        return 'fixture initialization failed: malformed tests.xml'
+    errors = assemblies[0].get('errors')
+    if errors != '0':
+        return f'fixture initialization failed: tests.xml reported errors={errors}'
+    if not root.findall('.//test'):
+        return 'fixture initialization failed: tests.xml recorded no executed test cases'
+    return None
+
+
 def main(argv=None) -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--output', type=path_argument, required=True)
     parser.add_argument('--host', type=path_argument, default=ROOT / 'tests/Hexalith.McpCli.ConformanceHost/bin/Release/net11.0/Hexalith.McpCli.ConformanceHost.dll')
     parser.add_argument('--tests', type=path_argument, default=ROOT / 'tests/Hexalith.McpCli.Integration.Tests/bin/Release/net11.0/Hexalith.McpCli.Integration.Tests.dll')
     parser.add_argument('--child-timeout', type=float, default=960)
+    parser.add_argument('--max-failures', type=int, default=2,
+                        help='Abort remaining vectors after this many failures (0 disables fail-fast).')
     parser.add_argument('--operation', help='Diagnostic subset; never grants full live acceptance.')
     parser.add_argument('--preflight-only', action='store_true')
     args = parser.parse_args(argv)
@@ -110,7 +158,8 @@ def main(argv=None) -> int:
         return 1
     args.output = args.output.resolve()
     args.output.mkdir(parents=True, exist_ok=True)
-    report = {'runId': uuid.uuid4().hex, 'result': 'pending', 'fullLiveAccepted': False, 'vectors': [], 'reported': []}
+    report = {'runId': uuid.uuid4().hex, 'result': 'pending', 'fullLiveAccepted': False,
+              'failFastTriggered': False, 'failFastReason': None, 'vectors': [], 'reported': []}
     receipt = args.output / 'live-lane.json'
     # Invalidate the public receipt before any fallible preflight. Child outputs use a unique generation.
     receipt.write_text(json.dumps(report, indent=2) + '\n')
@@ -133,6 +182,8 @@ def main(argv=None) -> int:
     try:
         if not 1 <= args.child_timeout <= 960:
             raise VectorError('--child-timeout must be between 1 and 960 seconds.')
+        if args.max_failures < 0:
+            raise VectorError('--max-failures must be 0 or greater.')
         if not args.preflight_only and not os.environ.get('MCPCLI_ISOLATED_RUNTIME_DIR', '').strip():
             raise VectorError('MCPCLI_ISOLATED_RUNTIME_DIR must name a prepared private runtime.')
         try:
@@ -152,7 +203,10 @@ def main(argv=None) -> int:
         if args.preflight_only:
             report['result'] = 'preflight-only'
         else:
-            for item, outcome in zip(selections, report['vectors']):
+            fail_fast_triggered = False
+            fail_fast_reason = None
+            failed_count = 0
+            for index, (item, outcome) in enumerate(zip(selections, report['vectors'])):
                 operation = item['operation']
                 output = generation / operation
                 output.mkdir()
@@ -203,11 +257,40 @@ def main(argv=None) -> int:
                     outcome.update(result='passed', isolatedReceipt=str(runs[0] / 'result.json'))
                 except Exception as error:
                     outcome.update(result='failed', error=f'{type(error).__name__}: {error}')
+                    failed_count += 1
+                    if args.max_failures > 0:
+                        immediate = classify_immediate_fail_fast(output, outcome.get('exitCode'))
+                        if immediate is not None:
+                            fail_fast_triggered = True
+                            fail_fast_reason = f'{operation}: {immediate}'
+                        elif failed_count >= args.max_failures:
+                            fail_fast_triggered = True
+                            fail_fast_reason = f'reached --max-failures {args.max_failures} after {operation}'
+                        if fail_fast_triggered:
+                            report['failFastTriggered'] = True
+                            report['failFastReason'] = fail_fast_reason
+                            for remaining in report['vectors'][index + 1:]:
+                                remaining['result'] = 'skipped-fail-fast'
                 save()
+                if fail_fast_triggered:
+                    break
             report['passed'] = sum(item['result'] == 'passed' for item in report['vectors'])
             report['failed'] = sum(item['result'] == 'failed' for item in report['vectors'])
-            report['fullLiveAccepted'] = not args.operation and report['failed'] == 0 and report['passed'] == len(report['coverage'])
-            report['result'] = 'passed' if report['fullLiveAccepted'] else 'partial' if not report['failed'] else 'failed'
+            report['skipped'] = sum(item['result'] == 'skipped-fail-fast' for item in report['vectors'])
+            report['failFastTriggered'] = fail_fast_triggered
+            report['failFastReason'] = fail_fast_reason
+            report['fullLiveAccepted'] = (
+                not args.operation
+                and not fail_fast_triggered
+                and report['failed'] == 0
+                and report['skipped'] == 0
+                and report['passed'] == len(report['coverage'])
+            )
+            report['result'] = (
+                'passed' if report['fullLiveAccepted']
+                else 'partial' if not report['failed'] and not report['skipped'] and not fail_fast_triggered
+                else 'failed'
+            )
     except Exception as error:
         report.update(result='failed', error=f'{type(error).__name__}: {error}')
     finally:

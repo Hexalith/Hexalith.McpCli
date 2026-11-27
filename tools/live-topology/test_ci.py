@@ -503,6 +503,12 @@ pathlib.Path(sys.argv[sys.argv.index('--output') + 1]).write_text(json.dumps({'r
         self.env['FIXTURE_MODE'] = mode
         return subprocess.run(['bash', str(self.tools / script)], env=self.env, text=True, capture_output=True, timeout=60)
 
+    def invoke_ci(self, command, mode=''):
+        self.env['FIXTURE_MODE'] = mode
+        return subprocess.run(['timeout', '--signal=TERM', '--kill-after=30s', '1500',
+                               'python3', 'tools/live-topology/ci.py', command],
+                              cwd=self.root, env=self.env, text=True, capture_output=True, timeout=60)
+
     @property
     def evidence(self):
         return self.root / self.env['ASPIRE_EVIDENCE_PATH']
@@ -2963,6 +2969,108 @@ ci.bounded([sys.executable,sys.argv[2],sys.argv[1],sys.argv[3]],120,pathlib.Path
                 module.bounded(['inert-child'], 1, self.root / 'escalation')
         self.assertEqual([41, 25, 1], child.timeouts)
         self.assertEqual([(child.pid, signal.SIGKILL), (child.pid, signal.SIGKILL)], [call.args for call in kill.call_args_list if call.args[1] != 0])
+
+    def test_split_run_boundary_and_run_remaining_completes_full_live_acceptance(self):
+        self.prepare()
+        boundary_result = self.invoke_ci('run-boundary')
+        self.assertEqual(0, boundary_result.returncode, boundary_result.stdout + boundary_result.stderr)
+        boundary_ci = json.loads((self.evidence / 'ci-live.json').read_text())
+        self.assertEqual('boundary-passed', boundary_ci['result'])
+        self.assertIs(False, boundary_ci['fullLiveAccepted'])
+        self.assertEqual('passed', boundary_ci['boundary']['result'])
+        self.assertEqual('not-run', boundary_ci['vectors']['result'])
+        receipt_path = self.evidence / 'boundary-receipt.json'
+        self.assertTrue(receipt_path.is_file())
+        boundary_receipt = json.loads(receipt_path.read_text())
+        self.assertEqual('passed', boundary_receipt['result'])
+        self.assertIs(False, boundary_receipt['fullLiveAccepted'])
+        self.assertFalse(any(any(value.endswith('run-vectors.py') for value in call) for call in self.calls()))
+
+        remaining_result = self.invoke_ci('run-remaining')
+        self.assertEqual(0, remaining_result.returncode, remaining_result.stdout + remaining_result.stderr)
+        final_ci = json.loads((self.evidence / 'ci-live.json').read_text())
+        self.assertEqual('passed', final_ci['result'])
+        self.assertIs(True, final_ci['fullLiveAccepted'])
+        self.assertEqual('passed', final_ci['boundary']['result'])
+        self.assertEqual('passed', final_ci['vectors']['result'])
+        self.assertEqual(21, final_ci['vectors']['count'])
+        self.assertEqual('passed', final_ci['smoke']['result'])
+        self.assertEqual(23, len(list((Path(final_ci['output']) / 'runtime-diagnostics').glob('*/result.json'))))
+
+    def test_run_boundary_failure_writes_no_boundary_receipt(self):
+        self.prepare()
+        result = self.invoke_ci('run-boundary', 'skipped-boundary')
+        self.assertNotEqual(0, result.returncode)
+        receipt = json.loads((self.evidence / 'ci-live.json').read_text())
+        self.assertEqual('failed', receipt['result'])
+        self.assertIs(False, receipt['fullLiveAccepted'])
+        self.assertFalse((self.evidence / 'boundary-receipt.json').exists())
+
+    def test_run_remaining_fails_closed_on_missing_tampered_or_drifted_state(self):
+        for defect in ('missing-receipt', 'tampered-field', 'tampered-tests-xml',
+                       'tampered-runtime-receipt', 'extra-runtime', 'post-conformance-drift',
+                       'smoke-reuses-boundary-receipt'):
+            with self.subTest(defect=defect):
+                self.fresh_evidence()
+                prepared = self.prepare()
+                boundary_result = self.invoke_ci('run-boundary')
+                self.assertEqual(0, boundary_result.returncode, boundary_result.stderr)
+                receipt_path = self.evidence / 'boundary-receipt.json'
+                boundary_receipt = json.loads(receipt_path.read_text())
+                gateway = self.root / 'tests/Hexalith.McpCli.EventStoreGateway.TestHost/bin/Release/net11.0/Hexalith.EventStore.Gateway.dll'
+                original_gateway = gateway.read_bytes()
+                try:
+                    if defect == 'missing-receipt':
+                        receipt_path.unlink()
+                    elif defect == 'tampered-field':
+                        boundary_receipt['result'] = 'tampered'
+                        receipt_path.write_text(json.dumps(boundary_receipt))
+                    elif defect == 'tampered-tests-xml':
+                        Path(boundary_receipt['cases']['boundary']['testsXml']).write_text('<assemblies />')
+                    elif defect == 'tampered-runtime-receipt':
+                        runtime_receipt = Path(boundary_receipt['cases']['boundary']['receipt'])
+                        runtime_receipt.write_text(runtime_receipt.read_text() + ' ')
+                    elif defect == 'extra-runtime':
+                        (Path(prepared['runtime']) / 'runs/unexpected').mkdir()
+                    elif defect == 'post-conformance-drift':
+                        gateway.write_bytes(b'mutated-during-conformance')
+                    before_calls = len(self.calls())
+                    mode = 'reused-independent-receipt' if defect == 'smoke-reuses-boundary-receipt' else ''
+                    remaining = self.invoke_ci('run-remaining', mode)
+                finally:
+                    gateway.write_bytes(original_gateway)
+                self.assertNotEqual(0, remaining.returncode)
+                final_ci = json.loads((self.evidence / 'ci-live.json').read_text())
+                self.assertEqual('failed', final_ci['result'])
+                self.assertIs(False, final_ci['fullLiveAccepted'])
+                if defect == 'smoke-reuses-boundary-receipt':
+                    self.assertIn('Independent cases reused an isolated runtime receipt.', remaining.stderr)
+                else:
+                    self.assertFalse(any(any(value.endswith('run-vectors.py') for value in call)
+                                         for call in self.calls()[before_calls:]))
+
+    def test_fail_fast_vectors_surface_skipped_summary_and_still_run_smoke(self):
+        self.prepare()
+        result = self.invoke('run-ci.sh', 'fail-fast-vectors')
+        self.assertNotEqual(0, result.returncode)
+        receipt = json.loads((self.evidence / 'ci-live.json').read_text())
+        self.assertIs(False, receipt['fullLiveAccepted'])
+        self.assertEqual('passed', receipt['smoke']['result'])
+        self.assertEqual(2, len(receipt['vectors']['failures']))
+        self.assertEqual(19, len(receipt['vectors']['skippedFailFast']))
+        self.assertEqual('reached --max-failures 2 after sample.operation-01', receipt['vectors']['failFastReason'])
+        self.assertIn('failed Operations: sample.operation-00, sample.operation-01', result.stderr)
+        self.assertIn('skipped-fail-fast Operations (19):', result.stderr)
+        self.assertIn('fail-fast reason: reached --max-failures 2 after sample.operation-01', result.stderr)
+
+    def test_forged_fail_fast_lane_cannot_grant_acceptance(self):
+        self.prepare()
+        result = self.invoke('run-ci.sh', 'forged-fail-fast-passed')
+        self.assertNotEqual(0, result.returncode)
+        receipt = json.loads((self.evidence / 'ci-live.json').read_text())
+        self.assertIs(False, receipt['fullLiveAccepted'])
+        self.assertEqual('passed', receipt['smoke']['result'])
+        self.assertIn('Complete current passing evidence for every approved live vector is required', result.stderr)
 
 
 class IndependentCaseTests(unittest.TestCase):
