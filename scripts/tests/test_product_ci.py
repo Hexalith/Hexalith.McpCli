@@ -112,6 +112,35 @@ class ProductControllerTests(unittest.TestCase):
         self.assertNotIn(credential, result.stderr)
         self.assertFalse(runner_temp.exists())
 
+    def test_windows_platform_entry_removes_only_the_hosted_postgres_default(self):
+        environment = {'RUNNER_ENVIRONMENT': 'github-hosted', 'PGUSER': 'postgres', 'PGPASSWORD': 'root'}
+        for actual_os, overrides, succeeds in (
+                ('Windows', {}, True),
+                ('Darwin', {}, False),
+                ('Windows', {'RUNNER_ENVIRONMENT': 'self-hosted'}, False),
+                ('Windows', {'PGUSER': 'custom'}, False),
+                ('Windows', {'PGPASSWORD': 'custom'}, False),
+                ('Windows', {'MCPCLI_LIVE_TOKEN': 'secret'}, False)):
+            with self.subTest(actual_os=actual_os, overrides=overrides), \
+                    patch.dict(os.environ, environment | overrides, clear=True), \
+                    patch.object(sys, 'argv', ['product_ci.py', 'platform', '--expected-os', 'Windows']), \
+                    patch.object(product_ci.platform, 'system', return_value=actual_os), \
+                    patch.object(product_ci.signal, 'signal'), \
+                    patch.object(product_ci, 'package_checks') as checks, \
+                    contextlib.redirect_stdout(io.StringIO()) as stdout, \
+                    contextlib.redirect_stderr(io.StringIO()) as stderr:
+                self.assertEqual(0 if succeeds else 1, product_ci.main())
+                self.assertEqual('', stdout.getvalue())
+                if succeeds:
+                    checks.assert_called_once_with(platform_checks=True, expected_os='Windows')
+                    self.assertNotIn('PGPASSWORD', os.environ)
+                    self.assertEqual('', stderr.getvalue())
+                else:
+                    checks.assert_not_called()
+                    self.assertEqual(
+                        'Structured evidence requires known environment credentials of at least eight characters.\n',
+                        stderr.getvalue())
+
     def test_linux_discovery_keeps_preparation_immutable_and_binds_its_exact_hash(self):
         original = self.prepared.read_bytes()
         original_hash = product_packages.digest(self.prepared)

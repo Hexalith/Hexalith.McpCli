@@ -157,6 +157,12 @@ def main() -> int:
     parser.add_argument('--expected-os', choices=('Windows', 'Darwin'))
     arguments = parser.parse_args()
     try:
+        # The GitHub-hosted Windows image exports this public default for its
+        # disabled PostgreSQL service. The product checks do not use PostgreSQL.
+        if (arguments.phase == 'platform' and arguments.expected_os == platform.system() == 'Windows'
+                and os.environ.get('RUNNER_ENVIRONMENT') == 'github-hosted'
+                and os.environ.get('PGUSER') == 'postgres' and os.environ.get('PGPASSWORD') == 'root'):
+            del os.environ['PGPASSWORD']
         require_evidence_credentials()
         if arguments.phase != 'platform':
             prepared_python = os.environ.get('HEXALITH_CI_PYTHON')
