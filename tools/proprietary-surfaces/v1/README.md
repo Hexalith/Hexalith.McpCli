@@ -256,9 +256,23 @@ or more than 4,096 source items fail with their metadata path.
 Unresolved import globs inspect committed local suffix matches regardless of
 extension. An explicit MSBuild `GetPathOfFileAbove` import follows the first
 matching committed file from its starting directory upward. An exact
-`Exists` or nonempty guard makes a missing match optional. Unresolved starts,
-links, and parent-workspace files outside the readable trees produce coverage
-errors under the same one-hop rules as literal imports.
+`Exists` or nonempty guard (matching the `Import`'s property/expression or exact
+expanded value) makes a missing match optional and stops the upward walk at one
+step above the inspected root (`..`) instead of reading an enclosing
+parent-workspace file. Unguarded escapes, bypassable `or` guards, deeper
+starting directories (`../..` and above), literal parent-tree imports,
+unresolved starts, and committed links still produce coverage errors under the
+same one-hop rules as literal imports. An absent fallback import (or carried
+property definition in a static `PropertyGroup`) guarded by
+`'$(Property)' != 'value'` is excused only when a preceding direct unconditional
+`PropertyGroup` declaration or unconditional / single-idempotency-guarded
+proven-present import in the same document unconditionally establishes that
+exact property value (never from a nested gitlink, external `certain` property,
+`Target`-modified property, or across an uninspected SDK/excluded/dynamic/cyclic
+import). An exact hash-and-revision-verified `scope: "file"` exclusion skipped
+by `omitted()` satisfies a local literal `<Import>` in `scan_tree` and
+`compilation_closure` (clearing local property proofs at the import point)
+without weakening directory exclusions or missing-file refusals.
 Shell, PowerShell, batch and Dockerfile continuations are joined within each
 script before publication discovery. Quoted project arguments retain their complete path,
 and Docker push options do not obscure its image argument. Supported Docker
@@ -456,19 +470,27 @@ are an append-only chain referenced by `amendments.json`.
      "removeAllowances": [],
      "addExceptions": [],
      "removeExceptions": [],
-     "addExclusions": []
+     "addExclusions": [],
+     "addRoots": []
    }
    ```
 
    Include `addExclusions: []` in the receipt even when that optional array is
-   absent from the amendment. Rejected, malformed, non-JSON, unrelated and
-   differently scoped receipts fail. The retained v1 receipt format is limited
-   to the original exact fixture scope and its committed historical receipt;
-   an untracked v1 receipt is refused. `legacy-receipts.json` additionally freezes
-   the exact retained receipt path/hash against this baseline's SHA-256.
-   Committing a newly fabricated v1 receipt does not add it to that registry.
-   The registry adds no allowance or new owner authority; preserve its bytes
-   alongside the prior lineage and use v2 for future amendments.
+   absent from the amendment. Optional `addRoots` admits new direct roots using
+   exact `{ "repository", "gitlink", "classification", "owner" }` records
+   validated against existing roots (rejecting duplicates, overlapping paths,
+   invalid gitlinks or blank owners/classifications); whenever `addRoots` is
+   present in either the amendment or the v2 receipt `authorization`, both must
+   carry the exact same array. Prior v2 receipts (`1.0.2`–`1.0.13`) without
+   `addRoots` remain valid and byte-identical. Rejected, malformed, non-JSON,
+   unrelated and differently scoped receipts fail. The retained v1 receipt format
+   is limited to the original exact fixture scope and its committed historical
+   receipt; an untracked v1 receipt is refused. `legacy-receipts.json`
+   additionally freezes the exact retained receipt path/hash against this
+   baseline's SHA-256. Committing a newly fabricated v1 receipt does not add it
+   to that registry. The registry adds no allowance or new owner authority;
+   preserve its bytes alongside the prior lineage and use v2 for future
+   amendments.
 5. If existing approval covers a captured or deliberately malformed metadata
    file, use an exact hash-bound entry in the amendment's `addExclusions`.
    Include `repository`, `prefix` (the complete file path), approved `row`,
@@ -500,8 +522,10 @@ are an append-only chain referenced by `amendments.json`.
 6. Hash the finished receipt into the amendment's evidence binding, then append
    the finished amendment path and SHA-256 to `amendments.json`. Preserve all
    prior baseline, amendment and receipt bytes. Never extend a captured prefix
-   to admit a future fixture. Root/scope changes require an approved new
-   baseline lineage with preserved prior data and provenance.
+   to admit a future fixture. New direct roots use optional `addRoots` in a v2
+   hash-bound amendment and matching receipt; structural baseline replacements
+   require an approved new baseline lineage with preserved prior data and
+   provenance.
 7. Run fixtures and the real scan, retain report/approval hashes, and run
    `scripts/scan-evidence-secrets.py` over retained evidence. Scanning never
    edits policy or infers approval from discovered source.
@@ -550,3 +574,5 @@ Continuation 1.0.11 records the current requesting maintainer's explicit delegat
 Continuation 1.0.12 records the current requesting maintainer's explicit dependency and CI maintenance delegation. Automated comparison renews seven existing exact-file exclusions at the committed reference pins: four helper bodies are byte-identical, FrontComposer quality adds two existing tooling test invocations, Projects compiler inspection selects its evaluated framework and rebuilds generated output, and the package audit remains captured data. The new receipt binds every exact source revision and digest. Prior receipts, scanner rules and runtime selections remain unchanged; no individual human review or runtime, migration or publication acceptance is claimed. Local validation cannot establish full census acceptance because five declared roots, including the legacy Conversations receipt prerequisite, are unavailable in the umbrella workspace. The complete 17-root committed-source hosted census remains required.
 
 Continuation 1.0.13 renews five existing allowances under the same explicit dependency and CI maintenance delegation: three literal package observations in the Builds catalog test, the full eight-source EventStore probe closure, and the full 88-source Platform composition closure. It also adds one new exact external Microsoft SDK-container identity in FrontComposer's existing mutation qualification workflow; the receipt records its resource-isolation rationale and exact image/workflow binding. The SDK image is a new census identity, not a proprietary module implementation. Partial diagnostics count both source errors and rejected surfaces across the 12 available roots. All prior receipts, scanner rules, refusal guards and runtime pins remain unchanged. No individual human review or runtime, migration or publication acceptance is claimed; the full 17-root committed-source hosted census remains required.
+
+Continuation 1.0.14 restores the full 18-root proprietary surface census gate under the requesting maintainer's explicit delegation for Story 5.14. It admits `references/Hexalith.CiCd` (`PN10`) via optional `addRoots` with standard PE07 prefixes (`_bmad-output`, `docs/implementation`, `evidence`), renews 13 drifted exact-file exclusions, adds 5 exact-file exclusions (unmodeled scripts, generated-source test project `Hexalith.Memories.IntegrationTests.csproj`, external-root `PlatformMtlsHelpers.targets`, and captured `eventstore-tests.json`), renews 11 drifted allowances with current compilation closures/source hashes, classifies 99 new surfaces across the 18 committed roots (including the 5 `Hexalith.Memories.IntegrationTests` source files and 10 `Hexalith.CiCd` template surfaces), and retires 113 stale allowances. Because `Hexalith.Memories.IntegrationTests.csproj` is exact-file excluded (bound by `sourceRevision` and `sha256`), neutral `.cs` files in that test directory rely on `scan_tree` source-signal scanning rather than a project compilation closure, while any `.cs` file carrying MCP/CLI signals becomes an unowned `source` candidate requiring exact approval. `baseline.json`, `legacy-receipts.json`, and `1.0.1`–`1.0.13` remain byte-identical. In product CI, `.github/actions/after-unit-tests/action.yml` invokes `scripts/product_ci.py linux-census` to initialize any missing committed `.gitmodules` direct roots with `--literal-pathspecs -c protocol.file.allow=never -c submodule.recurse=false` and `GIT_TERMINAL_PROMPT=0`, execute `tools/proprietary-surfaces/v1/check.py`, and retain sanitized `census.json` in `mcpcli-linux-product-diagnostics`; `test_census.py` remains local/on-demand. Automated exact-source classification only; no individual human source review, runtime, migration or publication acceptance is claimed.

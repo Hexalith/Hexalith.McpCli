@@ -210,7 +210,7 @@ class ProductControllerTests(unittest.TestCase):
         self.assertEqual(1, len(reached))
 
     def test_linux_entry_point_requires_prepared_python_without_reinstalling_tools(self):
-        for phase in ('linux', 'linux-packages', 'linux-conformance'):
+        for phase in ('linux', 'linux-packages', 'linux-census', 'linux-conformance'):
             with self.subTest(phase=phase), \
                     patch.object(sys, 'argv', ['product_ci.py', phase]), \
                     patch.dict(os.environ, {'HEXALITH_CI_PYTHON': str(self.root / 'wrong-python')}), \
@@ -222,18 +222,20 @@ class ProductControllerTests(unittest.TestCase):
     def test_split_linux_phases_dispatch_and_preserve_combined_linux_order(self):
         for phase, expected in (
                 ('linux-packages', ['stage_packages', 'package_checks']),
+                ('linux-census', ['init_submodules', 'execute:proprietary-surfaces/v1/check.py']),
                 ('linux-conformance', ['execute:scripts/tests', 'execute:run-sample-validation.sh',
                                        'execute:run-sample-loopback.sh', 'execute:check_enrolled.py',
                                        'execute:tools/live-topology', 'execute:run-vectors.py']),
-                ('linux', ['stage_packages', 'package_checks', 'execute:scripts/tests',
+                ('linux', ['stage_packages', 'package_checks', 'init_submodules',
+                           'execute:proprietary-surfaces/v1/check.py', 'execute:scripts/tests',
                            'execute:run-sample-validation.sh', 'execute:run-sample-loopback.sh',
                            'execute:check_enrolled.py', 'execute:tools/live-topology', 'execute:run-vectors.py'])):
             events = []
             def record_execute(command, **_):
                 joined = ' '.join(map(str, command))
                 matched = False
-                for marker in ('scripts/tests', 'run-sample-validation.sh', 'run-sample-loopback.sh',
-                               'check_enrolled.py', 'tools/live-topology', 'run-vectors.py'):
+                for marker in ('proprietary-surfaces/v1/check.py', 'scripts/tests', 'run-sample-validation.sh',
+                               'run-sample-loopback.sh', 'check_enrolled.py', 'tools/live-topology', 'run-vectors.py'):
                     if marker in joined and not (marker == 'tools/live-topology' and 'run-vectors.py' in joined):
                         events.append('execute:' + marker)
                         matched = True
@@ -248,10 +250,180 @@ class ProductControllerTests(unittest.TestCase):
                     patch.object(product_ci.signal, 'signal'), \
                     patch.object(product_ci, 'stage_packages', side_effect=lambda: events.append('stage_packages')), \
                     patch.object(product_ci, 'package_checks', side_effect=lambda: events.append('package_checks')), \
+                    patch.object(product_ci, 'initialize_direct_submodules', side_effect=lambda **_: events.append('init_submodules') or []), \
                     patch.object(product_ci, 'execute', side_effect=record_execute), \
                     contextlib.redirect_stderr(io.StringIO()) as stderr:
                 self.assertEqual(0, product_ci.main(), stderr.getvalue())
                 self.assertEqual(expected, events)
+
+    def test_linux_census_initializes_only_missing_direct_roots_non_recursively_and_propagates_failure(self):
+        sha_a, sha_b, sha_c = 'a' * 40, 'b' * 40, 'c' * 40
+        gitmodules = (
+            '[submodule "references/A"]\n\tpath = references/A\n\turl = https://example.invalid/A.git\n'
+            '[submodule "references/B"]\n\tpath = references/B\n\turl = https://example.invalid/B.git\n'
+            '[submodule "references/C"]\n\tpath = references/C\n\turl = https://example.invalid/C.git\n'
+        )
+        ls_tree = (
+            f'160000 commit {sha_a}\treferences/A\n'
+            f'160000 commit {sha_b}\treferences/B\n'
+            f'160000 commit {sha_c}\treferences/C\n'
+        )
+        initialized = {('references/A', sha_a)}
+        calls = []
+
+        def fake_git(*args, cwd=None):
+            if args == ('show', 'HEAD:.gitmodules'):
+                return gitmodules
+            if args == ('-c', 'core.quotePath=false', 'ls-tree', '-r', '--full-tree', 'HEAD'):
+                return ls_tree
+            raise AssertionError(f'Unexpected git call: {args}')
+
+        def fake_execute(command, **kwargs):
+            args = list(map(str, command))
+            calls.append((args, kwargs))
+            if args[:6] == ['git', '--literal-pathspecs', '-c', 'protocol.file.allow=never', '-c', 'submodule.recurse=false']:
+                self.assertNotIn('--recursive', args)
+                self.assertIn('--init', args)
+                self.assertIn('--checkout', args)
+                self.assertEqual(480, kwargs.get('timeout'))
+                self.assertEqual(self.fixture.root, kwargs.get('cwd'))
+                self.assertEqual('0', kwargs['environment']['GIT_TERMINAL_PROMPT'])
+                sep = args.index('--')
+                for path in args[sep + 1:]:
+                    initialized.add((path, {'references/A': sha_a, 'references/B': sha_b, 'references/C': sha_c}[path]))
+            return subprocess.CompletedProcess(command, 0, stdout='', stderr='')
+
+        with patch.object(product_ci, 'git', side_effect=fake_git), \
+                patch.object(product_ci, 'submodule_initialized', side_effect=lambda p, s, cwd=None: (p, s) in initialized), \
+                patch.object(product_ci, 'execute', side_effect=fake_execute):
+            product_ci.linux_census()
+
+        self.assertEqual(2, len(calls))
+        self.assertEqual(['git', '--literal-pathspecs', '-c', 'protocol.file.allow=never', '-c', 'submodule.recurse=false',
+                          'submodule', 'update', '--init', '--checkout', '--', 'references/B', 'references/C'], calls[0][0])
+        self.assertTrue(calls[1][0][1].endswith('tools/proprietary-surfaces/v1/check.py'))
+        self.assertEqual(['--output', str(self.product / 'diagnostics' / 'census.json')], calls[1][0][2:])
+        self.assertEqual(300, calls[1][1].get('timeout'))
+        self.assertFalse(any('test_census.py' in ' '.join(cmd) for cmd, _ in calls))
+
+        # Skip git submodule init entirely when every direct root already has its pinned commit.
+        skip_calls = []
+        with patch.object(product_ci, 'git', side_effect=fake_git), \
+                patch.object(product_ci, 'submodule_initialized', return_value=True), \
+                patch.object(product_ci, 'execute', side_effect=lambda cmd, **kw: skip_calls.append(list(map(str, cmd))) or subprocess.CompletedProcess(cmd, 0)):
+            product_ci.linux_census()
+        self.assertEqual(1, len(skip_calls))
+        self.assertTrue(skip_calls[0][1].endswith('tools/proprietary-surfaces/v1/check.py'))
+
+        # Custom cwd propagates to both direct_submodule_paths and execute().
+        custom_cwd = self.root / 'custom-workspace'
+        custom_cwd.mkdir()
+        git_cwds, exec_cwds = [], []
+        custom_init = set()
+        def custom_git(*args, cwd=None):
+            git_cwds.append(cwd)
+            return fake_git(*args, cwd=cwd)
+        def custom_exec(command, **kwargs):
+            exec_cwds.append(kwargs.get('cwd'))
+            custom_init.update({('references/A', sha_a), ('references/B', sha_b), ('references/C', sha_c)})
+            return subprocess.CompletedProcess(command, 0)
+        with patch.object(product_ci, 'git', side_effect=custom_git), \
+                patch.object(product_ci, 'submodule_initialized', side_effect=lambda p, s, cwd=None: (p, s) in custom_init), \
+                patch.object(product_ci, 'execute', side_effect=custom_exec):
+            product_ci.initialize_direct_submodules(cwd=custom_cwd)
+        self.assertTrue(git_cwds and all(c == custom_cwd for c in git_cwds))
+        self.assertEqual([custom_cwd], exec_cwds)
+
+        # Still-uninitialized root after init fails closed before invoking check.py.
+        with patch.object(product_ci, 'git', side_effect=fake_git), \
+                patch.object(product_ci, 'submodule_initialized', return_value=False), \
+                patch.object(product_ci, 'execute') as exec_mock:
+            with self.assertRaisesRegex(ValueError, 'remain uninitialized'):
+                product_ci.linux_census()
+            self.assertEqual(1, exec_mock.call_count)
+
+        # Census failure propagates non-zero.
+        def failing_census(command, **_):
+            if str(command[1]).endswith('check.py'):
+                raise subprocess.CalledProcessError(1, command, stderr='error: unapproved-root')
+            return subprocess.CompletedProcess(command, 0, stdout='', stderr='')
+
+        with patch.object(product_ci, 'git', side_effect=fake_git), \
+                patch.object(product_ci, 'submodule_initialized', return_value=True), \
+                patch.object(product_ci, 'execute', side_effect=failing_census):
+            with self.assertRaises(subprocess.CalledProcessError):
+                product_ci.linux_census()
+
+    def test_linux_census_refuses_dirty_before_and_drifted_after(self):
+        with patch.object(product_ci, 'source_changes', return_value=' M dirty.py'), \
+                patch.object(product_ci, 'initialize_direct_submodules') as init_mock, \
+                patch.object(product_ci, 'execute') as exec_mock:
+            with self.assertRaisesRegex(ValueError, 'exact clean checkout SHA'):
+                product_ci.linux_census()
+            init_mock.assert_not_called()
+            exec_mock.assert_not_called()
+        with patch.object(product_ci, 'source_changes', side_effect=['', '?? drifted.txt']), \
+                patch.object(product_ci, 'initialize_direct_submodules', return_value=[]), \
+                patch.object(product_ci, 'execute', return_value=subprocess.CompletedProcess([], 0)) as exec_mock:
+            with self.assertRaisesRegex(ValueError, 'exact clean checkout SHA'):
+                product_ci.linux_census()
+            self.assertEqual(1, exec_mock.call_count)
+
+    def test_direct_submodule_paths_rejects_malformed_unsafe_and_mismatched_gitlinks(self):
+        sha_a = 'a' * 40
+        valid_tree = f'160000 commit {sha_a}\treferences/A\n'
+        for label, gitmodules, ls_tree in (
+                ('empty', '', ''),
+                ('escape-path', '[submodule "bad"]\n\tpath = ../escape\n\turl = https://example.invalid/x.git\n', valid_tree),
+                ('control-char-path', '[submodule "bad"]\n\tpath = references/A\x07\n\turl = https://example.invalid/a.git\n', valid_tree),
+                ('missing-url', '[submodule "a"]\n\tpath = references/A\n', valid_tree),
+                ('control-char-url', '[submodule "a"]\n\tpath = references/A\n\turl = https://example.invalid/\x1ba.git\n', valid_tree),
+                ('duplicate', '[submodule "d1"]\n\tpath = references/A\n\turl = https://example.invalid/a.git\n[submodule "d2"]\n\tpath = references/A\n\turl = https://example.invalid/a.git\n', valid_tree),
+                ('overlapping', '[submodule "d1"]\n\tpath = references/A\n\turl = https://example.invalid/a.git\n[submodule "d2"]\n\tpath = references/A/B\n\turl = https://example.invalid/b.git\n',
+                 f'160000 commit {sha_a}\treferences/A\n160000 commit {sha_a}\treferences/A/B\n'),
+                ('invalid-section', '[other]\n\tpath = references/A\n\turl = https://example.invalid/a.git\n', valid_tree),
+                ('non-gitlink', '[submodule "a"]\n\tpath = references/A\n\turl = https://example.invalid/a.git\n', f'100644 blob {sha_a}\treferences/A\n'),
+                ('undeclared-gitlink', '[submodule "a"]\n\tpath = references/A\n\turl = https://example.invalid/a.git\n',
+                 f'160000 commit {sha_a}\treferences/A\n160000 commit {sha_a}\treferences/Extra\n')):
+            def fake_git(*args, cwd=None, gm=gitmodules, lt=ls_tree):
+                return gm if args == ('show', 'HEAD:.gitmodules') else lt
+            with self.subTest(case=label), patch.object(product_ci, 'git', side_effect=fake_git):
+                with self.assertRaises(ValueError):
+                    product_ci.direct_submodule_paths(cwd=self.root)
+
+    def test_real_submodule_initialized_checks_symlinks_git_dir_and_pinned_commit(self):
+        workspace = self.root / 'real-git-ws'
+        workspace.mkdir()
+        def run_git(repo, *args):
+            res = subprocess.run(['git', '-c', 'core.hooksPath=/dev/null', '-c', 'user.name=Test', '-c', 'user.email=t@example.invalid',
+                                  '-C', str(repo), *args], capture_output=True, text=True, check=True)
+            return res.stdout.strip()
+        run_git(workspace, 'init', '-q')
+        # 1. Valid initialized submodule with pinned commit.
+        sub = workspace / 'references/valid'
+        sub.mkdir(parents=True)
+        run_git(sub, 'init', '-q')
+        (sub / 'file.txt').write_text('ok\n')
+        run_git(sub, 'add', 'file.txt')
+        run_git(sub, 'commit', '-q', '-m', 'init')
+        pinned_sha = run_git(sub, 'rev-parse', 'HEAD')
+        self.assertTrue(product_ci.submodule_initialized('references/valid', pinned_sha, cwd=workspace))
+        # 2. Missing pinned commit in submodule object store returns False (forces re-init).
+        self.assertFalse(product_ci.submodule_initialized('references/valid', '0' * 40, cwd=workspace))
+        # 3. Empty mountpoint returns False.
+        (workspace / 'references/empty').mkdir()
+        self.assertFalse(product_ci.submodule_initialized('references/empty', pinned_sha, cwd=workspace))
+        # 4. Broken .git returns False.
+        broken = workspace / 'references/broken'
+        broken.mkdir()
+        (broken / '.git').write_text('gitdir: /nonexistent/path\n')
+        self.assertFalse(product_ci.submodule_initialized('references/broken', pinned_sha, cwd=workspace))
+        # 5. Leaf symlink returns False.
+        (workspace / 'references/leaf-link').symlink_to(sub)
+        self.assertFalse(product_ci.submodule_initialized('references/leaf-link', pinned_sha, cwd=workspace))
+        # 6. Intermediate symlink returns False.
+        (workspace / 'linked-refs').symlink_to(workspace / 'references')
+        self.assertFalse(product_ci.submodule_initialized('linked-refs/valid', pinned_sha, cwd=workspace))
 
     def test_linux_conformance_refuses_dirty_or_drifted_checkout(self):
         with patch.object(product_ci, 'source_changes', return_value=' M dirty.cs'), \

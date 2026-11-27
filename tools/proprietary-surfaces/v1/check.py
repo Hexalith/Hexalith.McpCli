@@ -532,14 +532,29 @@ def canonical(value):
     return json.dumps(value, sort_keys=True, separators=(',', ':'))
 
 
+def validate_root(row, roots):
+    require(isinstance(row, dict) and set(row) == {'repository', 'gitlink', 'classification', 'owner'}
+            and nonblank(row.get('classification')) and nonblank(row.get('owner')), 'invalid-root-provenance')
+    path = safe_path(row.get('repository'))
+    require(path not in roots
+            and not any(path.startswith(other + '/') or other.startswith(path + '/') for other in roots)
+            and isinstance(row.get('gitlink'), str) and SHA.fullmatch(row['gitlink']) is not None,
+            'invalid-root-provenance')
+    return path
+
+
 def validate_approval_evidence(workspace, amendment, receipt, authorities):
     """Require an affirmative receipt bound to the exact mutation scope."""
     require(isinstance(receipt, dict) and receipt.get('decision') == 'approved'
             and receipt.get('owner') == amendment['approval']['owner'], 'amendment-evidence-not-approved')
-    operations = ('addAllowances', 'removeAllowances', 'addExceptions', 'removeExceptions', 'addExclusions')
+    base_operations = ('addAllowances', 'removeAllowances', 'addExceptions', 'removeExceptions', 'addExclusions')
+    all_operations = (*base_operations, 'addRoots')
     if receipt.get('schema') == 'mcpcli-census-amendment-approval/v2':
         authorization = receipt.get('authorization')
-        require(isinstance(authorization, dict) and set(authorization) == set(operations)
+        require(isinstance(authorization, dict)
+                and ('addRoots' in amendment) == ('addRoots' in authorization), 'amendment-authorization-scope-mismatch')
+        operations = all_operations if 'addRoots' in amendment else base_operations
+        require(set(authorization) == set(operations)
                 and canonical(authorization) == canonical({key: amendment.get(key, []) for key in operations}), 'amendment-authorization-scope-mismatch')
         bindings = receipt.get('authority')
         require(isinstance(bindings, list) and bool(bindings), 'amendment-authority-missing')
@@ -558,7 +573,8 @@ def validate_approval_evidence(workspace, amendment, receipt, authorities):
     # authorizes only the named fixture and its exact inspected directory bytes.
     require(receipt.get('schema') == 'mcpcli-census-amendment-approval/v1'
             and isinstance(receipt.get('fixtures'), list) and bool(receipt['fixtures'])
-            and all(not amendment.get(key, []) for key in operations[1:]), 'amendment-authorization-scope-mismatch')
+            and all(not amendment.get(key, []) for key in all_operations[1:])
+            and 'addRoots' not in amendment, 'amendment-authorization-scope-mismatch')
     for entry in amendment['addAllowances']:
         surface = entry.get('surface', {})
         fixtures = [fixture for fixture in receipt['fixtures'] if fixture.get('repository') == surface.get('repository')
@@ -589,10 +605,7 @@ def load_policy(workspace, parent, baseline_path, index_path, today):
         require(isinstance(policy.get(field), list), f'invalid-baseline-{field}')
     roots = {}
     for row in policy['roots']:
-        require(isinstance(row, dict) and nonblank(row.get('classification')) and nonblank(row.get('owner')), 'invalid-root-provenance')
-        path = safe_path(row.get('repository'))
-        require(path not in roots and SHA.fullmatch(row.get('gitlink', '')) is not None, 'invalid-root-provenance')
-        roots[path] = row
+        roots[validate_root(row, roots)] = row
     require(bool(roots), 'invalid-root-provenance')
     require(bool(policy['provenance']), 'missing-source-provenance')
     for source in policy['provenance']:
@@ -624,9 +637,10 @@ def load_policy(workspace, parent, baseline_path, index_path, today):
         raw = file.read_bytes()
         require(digest(raw) == item['sha256'], 'amendment-hash-mismatch')
         amendment = json_bytes(raw, item['path'])
-        require(isinstance(amendment, dict) and set(amendment) in ({
-            'schema', 'fromVersion', 'toVersion', 'previousSha256', 'approval', 'addAllowances', 'removeAllowances', 'addExceptions', 'removeExceptions'}, {
-            'schema', 'fromVersion', 'toVersion', 'previousSha256', 'approval', 'addAllowances', 'removeAllowances', 'addExceptions', 'removeExceptions', 'addExclusions'}), 'invalid-amendment')
+        required_keys = {
+            'schema', 'fromVersion', 'toVersion', 'previousSha256', 'approval',
+            'addAllowances', 'removeAllowances', 'addExceptions', 'removeExceptions'}
+        require(isinstance(amendment, dict) and required_keys <= set(amendment) <= (required_keys | {'addExclusions', 'addRoots'}), 'invalid-amendment')
         target = amendment['toVersion']
         require(amendment['schema'] == SCHEMA and amendment['fromVersion'] == version
                 and re.fullmatch(r'1\.0\.[1-9][0-9]*', str(target)) is not None
@@ -646,7 +660,7 @@ def load_policy(workspace, parent, baseline_path, index_path, today):
         require(not evidence.is_symlink() and evidence.is_file()
                 and HASH.fullmatch(binding['sha256']) is not None
                 and digest(evidence.read_bytes()) == binding['sha256'], 'amendment-approval-mismatch')
-        require(all(isinstance(amendment[k], list) for k in ('addAllowances', 'removeAllowances', 'addExceptions', 'removeExceptions')), 'invalid-amendment')
+        require(all(isinstance(amendment.get(k, []), list) for k in ('addAllowances', 'removeAllowances', 'addExceptions', 'removeExceptions', 'addExclusions', 'addRoots')), 'invalid-amendment')
         receipt = json_bytes(evidence.read_bytes(), binding['path'])
         if isinstance(receipt, dict) and receipt.get('schema') == 'mcpcli-census-amendment-approval/v1':
             require(binding['path'] in parent.entries and digest(parent.blob(binding['path'])) == binding['sha256'],
@@ -668,6 +682,9 @@ def load_policy(workspace, parent, baseline_path, index_path, today):
             require(binding in registry['receipts'], 'untrusted-legacy-amendment-evidence')
         validate_approval_evidence(workspace, amendment, receipt, authorities)
         authorities[(binding['path'], binding['sha256'])] = receipt
+        for row in amendment.get('addRoots', []):
+            roots[validate_root(row, roots)] = row
+            policy['roots'].append(row)
         for removed in amendment['removeAllowances']:
             key = descriptor(removed)
             matches = [a for a in policy['allowances'] if descriptor(a.get('surface')) == key]
@@ -680,7 +697,6 @@ def load_policy(workspace, parent, baseline_path, index_path, today):
             policy['exceptions'].remove(matches[0])
         policy['allowances'].extend(amendment['addAllowances'])
         policy['exceptions'].extend(amendment['addExceptions'])
-        require(isinstance(amendment.get('addExclusions', []), list), 'invalid-amendment')
         policy['exclusions'].extend(amendment.get('addExclusions', []))
         applied.append({'path': item['path'], 'sha256': item['sha256'], 'version': target})
         previous, version = item['sha256'], target
@@ -865,6 +881,8 @@ def exists_arguments(condition):
 
 # A guard conjunct is exactly Exists('…') or !Exists('…'); a quoted argument cannot span quotes.
 EXISTS_GUARD = re.compile(r'''\s*(!\s*)?Exists\(\s*(["'])([^"']*)\2\s*\)\s*''', re.I)
+# An inequality guard conjunct is exactly '$(Prop)' != 'literal'.
+INEQUALITY_GUARD = re.compile(r'''\s*(["'])\$\(([A-Za-z_][\w.]*)\)\1\s*!=\s*(["'])([^"']*)\3\s*''')
 # Properties expand_msbuild supplies for every document position.
 CONTEXT_PROPERTIES = frozenset({'msbuildprojectname', 'msbuildprojectdirectory', 'msbuildprojectfullpath', 'msbuildprojectextension',
                                 'msbuildthisfiledirectory', 'msbuildthisfilefullpath', 'msbuildthisfilename'})
@@ -933,7 +951,7 @@ def metadata_files(tree):
     return {path for path, entry in tree.entries.items() if entry[0] in ('100644', '100755')}
 
 
-def resolve_upward_import(value, current, metadata_paths, resolver):
+def resolve_upward_import(value, current, metadata_paths, resolver, *, stop_at_root=False):
     """Find the nearest committed match, treating opaque paths as a coverage error."""
     lookup = UPWARD_IMPORT.fullmatch(value.strip())
     refusal = Refusal('unresolved-upward-import', current, value)
@@ -948,6 +966,11 @@ def resolve_upward_import(value, current, metadata_paths, resolver):
             if candidate in metadata_paths and resolver.tree.entries[candidate][0] in REGULAR:
                 return candidate
             Refusal('unavailable-local-import', current, candidate).require(resolver.tree.absent(candidate))
+        elif stop_at_root and substitution is None and directory == '..':
+            # A guarded GetPathOfFileAbove lookup in a standalone root stops at the
+            # inspected root boundary (one step above the root) instead of reading an
+            # enclosing workspace file; deeper starts like ../.. remain refused.
+            return None
         else:
             found, _ = resolver.matches(candidate, substitution, 'unsafe-import-path', current)
             if found:
@@ -977,7 +1000,7 @@ def expanded_values(value, properties, current, project, *, required=True):
     return sorted(expand(value, set()))
 
 
-def project_metadata(tree, path, metadata_paths, errors=None, resolver=None):
+def project_metadata(tree, path, metadata_paths, errors=None, resolver=None, excluded_files=None):
     """Read props, project and targets in order, retaining conditional branches."""
     resolver = resolver or Resolver(None, None, tree)
     documents, visited, values, references, item_records = [], set(), {}, [], []
@@ -986,6 +1009,7 @@ def project_metadata(tree, path, metadata_paths, errors=None, resolver=None):
     # Guard bookkeeping: names whose alternatives are complete at evaluation time,
     # names any Target assigns, and each value's definitions with their proofs.
     certain, target_defined, origins = set(), set(), {}
+    doc_guaranteed, doc_modified, doc_opaque = {}, {}, {}
 
     def settled(text):
         """Every property the text names has complete evaluation-time alternatives."""
@@ -1001,35 +1025,57 @@ def project_metadata(tree, path, metadata_paths, errors=None, resolver=None):
 
     def visit(current, inherited_condition=False):
         if (current, inherited_condition) in visited:
-            return
+            if current not in doc_guaranteed:
+                return {}, set(), True  # Cyclic re-entry: treat as opaque so caller clears proofs.
+            return doc_guaranteed[current], doc_modified[current], doc_opaque[current]
         visited.add((current, inherited_condition))
         document = xml(resolver.text(current), current)
         documents.append(current)
         # Target properties are assigned at execution time; their names never support a proof.
         target_defined.update(local_name(item).lower() for target in document.iter() if local_name(target).lower() == 'target'
                               for item in target.iter() if item is not target and not list(item))
+        # Document-local proven property values (guaranteed if `current` itself executes,
+        # derived solely from this document's own unconditional assignments and MSBuild context).
+        local_proven, local_exact, local_modified, local_certain, local_opaque = {}, {}, set(), set(), False
+
+        def local_settled(text):
+            return all((name in local_certain or name in CONTEXT_PROPERTIES) and name not in target_defined
+                       for name in {name.lower() for name in PROPERTY_REFERENCE.findall(text)})
+
+        def exists_guard_truth(guard, base, *, local_only=False):
+            """Return True if an Exists/!Exists conjunct is proven true, False if proven false, None if unproven."""
+            if not (local_settled(guard[3]) if local_only else settled(guard[3])):
+                return None  # A conditionally defined or Target-assigned property may differ.
+            alternatives = [literal_item(item) for item in expanded_values(guard[3], properties, current, path, required=False)]
+            if not alternatives or None in alternatives or any(re.search(r'[$@%]\(', item) for item in alternatives):
+                return None  # A list, or unresolved, item or escaped text, proves nothing.
+            try:
+                labels = [resolver.canonical_label(label_path(base, item)) for item in alternatives]
+            except CensusError:
+                return None
+            substitution = resolver.substitution(current)
+            # A trailing separator makes Exists() true only for a directory.
+            if all(resolver.present(label, substitution, item.endswith(('/', '\\')))
+                   for label, item in zip(labels, alternatives)):
+                return not bool(guard[1])
+            if all(resolver.absent(label, substitution) for label in labels):
+                return bool(guard[1])
+            return None
 
         def refuted(conditions, base):
             """Prove an element never evaluates: a balanced top-level `and` conjunct is false."""
-            substitution = resolver.substitution(current)
             for condition in conditions:
                 for conjunct in condition_conjuncts(condition):
                     guard = EXISTS_GUARD.fullmatch(conjunct)
-                    if not guard or not settled(guard[3]):
-                        continue  # A conditionally defined or Target-assigned property may differ.
-                    alternatives = [literal_item(item) for item in expanded_values(guard[3], properties, current, path, required=False)]
-                    if not alternatives or None in alternatives or any(re.search(r'[$@%]\(', item) for item in alternatives):
-                        continue  # A list, or unresolved, item or escaped text, proves nothing.
-                    try:
-                        labels = [resolver.canonical_label(label_path(base, item)) for item in alternatives]
-                    except CensusError:
+                    if guard:
+                        if exists_guard_truth(guard, base) is False:
+                            return True
                         continue
-                    # A trailing separator makes Exists() true only for a directory.
-                    if guard[1] and all(resolver.present(label, substitution, item.endswith(('/', '\\')))
-                                        for label, item in zip(labels, alternatives)):
-                        return True
-                    if not guard[1] and all(resolver.absent(label, substitution) for label in labels):
-                        return True
+                    ineq = INEQUALITY_GUARD.fullmatch(conjunct)
+                    if ineq:
+                        prop = ineq[2].lower()
+                        if prop in local_proven and prop not in target_defined and local_proven[prop].lower() == ineq[4].lower():
+                            return True
             return False
 
         def excused(element, enclosing, raw, value):
@@ -1057,16 +1103,47 @@ def project_metadata(tree, path, metadata_paths, errors=None, resolver=None):
                     continue
             return False
 
-        def inspect(element, conditional=False, enclosing=(None, None), in_target=False):
+        def invalidate_all():
+            nonlocal local_opaque
+            local_proven.clear()
+            local_exact.clear()
+            local_certain.clear()
+            local_opaque = True
+
+        def apply_import_effects(imp_modified, imp_opaque):
+            if imp_opaque:
+                invalidate_all()
+            else:
+                local_modified.update(imp_modified)
+                for key in imp_modified:
+                    local_proven.pop(key, None)
+                    local_exact.pop(key, None)
+                    local_certain.discard(key)
+
+        def inspect(element, conditional=False, enclosing=(None, None), in_target=False, local_conditional=False):
             name = local_name(element).lower()
-            conditional = conditional or attribute(element, 'Condition') is not None or name in ('when', 'otherwise')
+            own_conditional = attribute(element, 'Condition') is not None or name in ('when', 'otherwise')
+            conditional = conditional or own_conditional
+            local_conditional_self = local_conditional or own_conditional
             text = (element.text or '').strip()
+            static = enclosing[0] == 'propertygroup' and not in_target
+            if static and not list(element):
+                local_modified.add(name)
+                if not text and name not in properties and name not in PROPERTY_NAMES:
+                    if not local_conditional_self:
+                        local_proven[name] = ''
+                        local_exact[name] = ''
+                        local_certain.add(name)
+                    else:
+                        local_proven.pop(name, None)
+                        local_exact.pop(name, None)
+                        local_certain.discard(name)
             if not list(element) and (text or name in properties or name in PROPERTY_NAMES):
                 declared_properties.add(name)
+                local_modified.add(name)
                 possibilities = set(expanded_values(text, properties, current, path, required=False))
                 # Only an evaluation-time PropertyGroup definition can be proven unreachable,
                 # from its own or enclosing PropertyGroup condition.
-                static = enclosing[0] == 'propertygroup' and not in_target
                 # Its own condition resolves relative paths from the entry project; the
                 # enclosing PropertyGroup condition from the declaring file.
                 proof = static and (refuted([attribute(element, 'Condition') or ''], path) or refuted([enclosing[1] or ''], current))
@@ -1083,6 +1160,18 @@ def project_metadata(tree, path, metadata_paths, errors=None, resolver=None):
                     properties[name] = possibilities
                     origins[name] = {possibility: [proof] for possibility in possibilities}
                     (certain.add if complete else certain.discard)(name)
+                if static and not local_conditional_self and len(possibilities) == 1 and local_settled(text):
+                    only = next(iter(possibilities))
+                    local_certain.add(name)
+                    local_exact[name] = only
+                    if not re.search(r'[$@%]\(', only):
+                        local_proven[name] = only
+                    else:
+                        local_proven.pop(name, None)
+                else:
+                    local_proven.pop(name, None)
+                    local_exact.pop(name, None)
+                    local_certain.discard(name)
                 if name in PROPERTY_NAMES:
                     values.setdefault(PROPERTY_NAMES[name], set()).update(possibilities)
             if name in ('packagereference', 'projectreference'):
@@ -1101,9 +1190,11 @@ def project_metadata(tree, path, metadata_paths, errors=None, resolver=None):
                 raw = attribute(element, 'Project') or ''
                 require(bool(raw), f'malformed-project-metadata:{current}')
                 if attribute(element, 'Sdk'):
+                    invalidate_all()
                     return  # SDK imports are resolved outside this committed tree.
                 substitution = resolver.substitution(current)
-                for value in expanded_values(raw, properties, current, path, required=False):
+                expanded_targets = expanded_values(raw, properties, current, path, required=False)
+                for value in expanded_targets:
                     item = literal_item(value)
                     if item is None and value.strip():
                         # MSBuild splits a ';' list and unescapes %XX: no single committed path is named.
@@ -1115,18 +1206,26 @@ def project_metadata(tree, path, metadata_paths, errors=None, resolver=None):
                         raise CensusError(f"{'unavailable-local-import' if local else 'unsafe-import-path'}:{current}", target=label)
                     value = value if item is None else item
                     if re.search(r'\[MSBuild\]::GetPathOfFileAbove\s*\(', value, re.I):
-                        candidate = resolve_upward_import(value, current, metadata_paths, resolver)
+                        condition = attribute(element, 'Condition') or ''
+                        guards = exists_arguments(condition)
+                        for conjunct in condition_conjuncts(condition):
+                            nonempty = re.fullmatch(r'''\s*(["'])(.+)\1\s*!=\s*(["'])\3\s*''', conjunct)
+                            if nonempty:
+                                guards.append(nonempty[2])
+                        raw_trimmed = raw.strip()
+                        optional = any(
+                            guard.strip() == raw_trimmed
+                            or (re.fullmatch(r'\$\([A-Za-z_][\w.]*\)', raw_trimmed) and guard.strip().lower() == raw_trimmed.lower())
+                            or set(expanded_values(guard, properties, current, path, required=False)) == {value}
+                            for guard in guards)
+                        candidate = resolve_upward_import(value, current, metadata_paths, resolver, stop_at_root=optional)
                         if candidate is not None:
-                            visit(candidate, conditional)
+                            carried = re.fullmatch(r'\s*\$\(([A-Za-z_][\w.]*)\)\s*', raw)
+                            phantom = bool(carried and carried[1].lower() in local_exact and value != local_exact[carried[1].lower()])
+                            _, imp_modified, imp_opaque = visit(candidate, conditional)
+                            if not phantom:
+                                apply_import_effects(imp_modified, imp_opaque)
                         else:
-                            condition = attribute(element, 'Condition') or ''
-                            guards = exists_arguments(condition)
-                            for conjunct in condition_conjuncts(condition):
-                                nonempty = re.fullmatch(r'''\s*(["'])(.+)\1\s*!=\s*(["'])\3\s*''', conjunct)
-                                if nonempty:
-                                    guards.append(nonempty[2])
-                            optional = any(set(expanded_values(guard, properties, current, path, required=False)) == {value}
-                                           for guard in guards)
                             Refusal('unavailable-upward-import', current, value).require(optional)
                     elif '$(' not in value:
                         label = resolver.canonical_label(label_path(current, value))
@@ -1138,6 +1237,9 @@ def project_metadata(tree, path, metadata_paths, errors=None, resolver=None):
                             matches = ([target] if target in metadata_paths else []) if not re.search(r'[*?]', target) else sorted(
                                 candidate for candidate in metadata_paths if msbuild_glob(candidate, target))
                             if not matches and not re.search(r'[*?]', target):
+                                if excluded_files and target in excluded_files:
+                                    invalidate_all()
+                                    continue
                                 # A build follows a committed link; its target is no absent file.
                                 Refusal('unavailable-local-import', current, label).require(not resolver.tree.opaque(label))
                                 require(import_optional(element, label) or excused(element, enclosing, raw, value),
@@ -1148,9 +1250,45 @@ def project_metadata(tree, path, metadata_paths, errors=None, resolver=None):
                             if absent:
                                 Refusal('unsafe-import-path', current, label).require(
                                     import_optional(element, label) or excused(element, enclosing, raw, value))
+                        # Evaluate guard eligibility before visiting `candidate` so mutations inside
+                        # `candidate` cannot retroactively alter the import's own condition proof.
+                        proven_single = (not in_target and not local_conditional and len(expanded_targets) == 1
+                                         and len(matches) == 1 and local_settled(raw)
+                                         and not re.search(r'[*?]', label) and resolver.present(label, substitution))
+                        proven_mode, proven_ineq = None, None
+                        if proven_single:
+                            import_cond = attribute(element, 'Condition')
+                            if import_cond is None:
+                                proven_mode = 'all'
+                            else:
+                                conjuncts = condition_conjuncts(import_cond)
+                                inequalities, unproved = [], not conjuncts
+                                for conjunct in conjuncts:
+                                    guard = EXISTS_GUARD.fullmatch(conjunct)
+                                    if guard and exists_guard_truth(guard, current, local_only=True) is True:
+                                        continue
+                                    ineq = INEQUALITY_GUARD.fullmatch(conjunct)
+                                    if ineq:
+                                        inequalities.append((ineq[2].lower(), ineq[4]))
+                                        continue
+                                    unproved = True
+                                    break
+                                if not unproved and not inequalities:
+                                    proven_mode = 'all'
+                                elif not unproved and len(inequalities) == 1:
+                                    proven_mode = 'one'
+                                    proven_ineq = inequalities[0]
                         # A present target is always visited, whatever its guards prove.
                         for candidate in matches:
-                            visit(candidate, conditional)
+                            imp_proven, imp_modified, imp_opaque = visit(candidate, conditional)
+                            apply_import_effects(imp_modified, imp_opaque)
+                            if not imp_opaque:
+                                if proven_mode == 'all':
+                                    local_proven.update(imp_proven)
+                                elif proven_mode == 'one':
+                                    prop, expected = proven_ineq
+                                    if prop in imp_proven and prop not in target_defined and imp_proven[prop].lower() == expected.lower():
+                                        local_proven[prop] = imp_proven[prop]
                     elif substitution is not None:
                         # A substituted file's unresolved import names no inspected-root metadata.
                         try:
@@ -1159,19 +1297,29 @@ def project_metadata(tree, path, metadata_paths, errors=None, resolver=None):
                             label = value
                         raise CensusError(f'unsafe-import-path:{current}', target=label)
                     else:
+                        invalidate_all()
                         names = set(re.findall(r'[A-Za-z0-9_.-]+\.[A-Za-z0-9]+', value))
                         for candidate in sorted(metadata_paths):
                             if PurePosixPath(candidate).name in names and PurePosixPath(candidate).name not in ('Directory.Build.props', 'Directory.Build.targets'):
-                                visit(candidate, True)
+                                _, imp_modified, imp_opaque = visit(candidate, True)
+                                apply_import_effects(imp_modified, imp_opaque)
                         suffix = re.search(r'\)/([^$()]+)\Z', value.replace('\\', '/'))
                         if suffix and re.search(r'[*?]', suffix[1]):
                             safe_path(suffix[1])
                             for candidate in sorted(metadata_paths):
                                 if (msbuild_glob(candidate, suffix[1]) or msbuild_glob(candidate, '**/' + suffix[1])):
-                                    visit(candidate, True)
+                                    _, imp_modified, imp_opaque = visit(candidate, True)
+                                    apply_import_effects(imp_modified, imp_opaque)
             for child in element:
-                inspect(child, conditional, (name, attribute(element, 'Condition')), in_target or name == 'target')
-        inspect(document, inherited_condition)
+                inspect(child, conditional, (name, attribute(element, 'Condition')), in_target or name == 'target', local_conditional_self)
+        inspect(document, inherited_condition, local_conditional=False)
+        for key in target_defined:
+            local_proven.pop(key, None)
+            local_certain.discard(key)
+        doc_guaranteed[current] = dict(local_proven)
+        doc_modified[current] = set(local_modified)
+        doc_opaque[current] = local_opaque
+        return doc_guaranteed[current], doc_modified[current], doc_opaque[current]
 
     for current in initial:
         visit(current)
@@ -1328,7 +1476,7 @@ def json_documents(document, path):
             pending.extend((child, depth + 1, structural) for child in reversed(value) if isinstance(child, (dict, list)))
 
 
-def compilation_closure(tree, project, resolver=None):
+def compilation_closure(tree, project, resolver=None, excluded_files=None):
     """Bind fixture files, inherited/imported metadata and linked sources.
 
     A substituted workspace or nested member is bound by its requested label and
@@ -1336,8 +1484,9 @@ def compilation_closure(tree, project, resolver=None):
     member is source drift.
     """
     resolver = resolver or Resolver(None, None, tree)
-    metadata_paths = metadata_files(tree)
-    _, _, documents, linked = project_metadata(tree, project, metadata_paths, resolver=resolver)
+    excluded = set(excluded_files or ())
+    metadata_paths = metadata_files(tree) - excluded
+    _, _, documents, linked = project_metadata(tree, project, metadata_paths, resolver=resolver, excluded_files=excluded)
     prefix = str(PurePosixPath(project).parent) + '/'
     paths = {path for path in tree.entries if path.startswith(prefix)} | {
         path for path in set(documents) | linked if path in tree.entries}
@@ -2284,13 +2433,15 @@ def scan_tree(tree, repository, exclusions, resolver=None):
             return True
         return any(entry.get('scope') != 'file' and (path == entry['prefix'] or path.startswith(entry['prefix'] + '/'))
                    for entry in excluded)
-    paths = []
+    paths, excluded_files = [], set()
     for path, entry in tree.entries.items():
         if entry[0] == '160000':
             continue
         with inspection(path):
             if not omitted(path):
                 paths.append(path)
+            elif any(item.get('scope') == 'file' and path == item['prefix'] for item in excluded):
+                excluded_files.add(path)
     shell_scripts = set()
     for path in paths:
         if tree.entries[path][0] == '100755':
@@ -2310,7 +2461,7 @@ def scan_tree(tree, repository, exclusions, resolver=None):
 
     for path in sorted(p for p in paths if PROJECT.search(p)):
         with inspection(path):
-            values, references, documents, linked = project_metadata(tree, path, set(paths), errors, resolver)
+            values, references, documents, linked = project_metadata(tree, path, set(paths), errors, resolver, excluded_files)
             sdks = sdk_identities(tree, path)
             project_id = PurePosixPath(path).stem
             signals = set()
@@ -2588,7 +2739,7 @@ def scan_tree(tree, repository, exclusions, resolver=None):
                 for token in tokens:
                     publication(path, token, signal='package-or-container-reference')
     errors.sort(key=lambda error: (error['path'], error['rule'], error.get('target', '')))
-    return candidates, sorted(p for p, entry in tree.entries.items() if entry[0] == '160000'), excluded, errors
+    return candidates, sorted(p for p, entry in tree.entries.items() if entry[0] == '160000'), excluded, errors, excluded_files
 
 
 def scan(workspace, revision, baseline_path, index_path, today):
@@ -2610,7 +2761,7 @@ def scan(workspace, revision, baseline_path, index_path, today):
             require(repository in baseline_roots, 'unapproved-root')
             tree = context.tree(repository, gitlink)
             resolver = Resolver(context, repository, tree)
-            candidates, nested, scoped, source_errors = scan_tree(tree, repository, exclusions, resolver)
+            candidates, nested, scoped, source_errors, excluded_files = scan_tree(tree, repository, exclusions, resolver)
             if source_errors:
                 summary['status'] = 'failed'
                 summary['inspectionComplete'] = False
@@ -2635,7 +2786,7 @@ def scan(workspace, revision, baseline_path, index_path, today):
                     extra = set(candidate['signals']) - set(allowance['signals'])
                     try:
                         # A compilation closure binds requested labels, cross-tree members included.
-                        closure = ({source['path']: source['sha256'] for source in compilation_closure(tree, allowance['surface']['path'], resolver)}
+                        closure = ({source['path']: source['sha256'] for source in compilation_closure(tree, allowance['surface']['path'], resolver, excluded_files=excluded_files)}
                                    if 'sourcePrefix' in allowance and allowance.get('compilationClosure') else None)
                         source_changes = [source['path'] for source in allowance.get('sources', [])
                                           if (closure.get(source['path']) != source['sha256'] if closure is not None else

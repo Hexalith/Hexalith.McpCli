@@ -12,6 +12,9 @@ runs:
         name: mcpcli-product-packages
         path: ${{ runner.temp }}/mcpcli-product/staged/
         if-no-files-found: error
+    - name: Run proprietary surface census across committed direct roots
+      shell: bash
+      run: timeout --signal=TERM --kill-after=30s 900 "${HEXALITH_CI_PYTHON:?Shared prepared Python is required}" scripts/product_ci.py linux-census
     - name: Prepare isolated native fixtures using shared environment tools
       shell: bash
       env:

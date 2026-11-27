@@ -2,29 +2,30 @@
 """Product checks over the shared Release build and one source-bound CI package pair."""
 from __future__ import annotations
 import argparse
+import configparser
 import json
 import os
 import platform
 import re
 import signal
 import shutil
-from pathlib import Path
+from pathlib import Path, PurePosixPath
 import subprocess
 import sys
 import tempfile
 
 from product_process import run as run_owned
 from evidence_redaction import require_evidence_credentials
-from product_packages import (canonical_digest, check_prepared, digest, failure_detail, packages, read_json,
+from product_packages import (canonical_digest, check_prepared, digest, failure_detail, git, packages, read_json,
                               read_json_with_digest, source_changes, source_sha, validate_version, write_new)
 
 ROOT = Path(__file__).resolve().parents[1]
 
 
-def execute(command, *, timeout=900):
+def execute(command, *, timeout=900, cwd: Path = ROOT, environment=None):
     print('Product check:', *map(str, command), flush=True)
     output = staging_root() / 'diagnostics' / ('command-' + __import__('uuid').uuid4().hex)
-    return run_owned(command, cwd=ROOT, output=output, timeout=timeout)
+    return run_owned(command, cwd=cwd, output=output, timeout=timeout, environment=environment)
 
 
 def staging_root() -> Path:
@@ -191,15 +192,105 @@ def linux_conformance(live_preparation: Path | None = None) -> None:
         raise ValueError('The sealed live boundary evidence changed during split conformance.')
 
 
+def direct_submodule_paths(cwd: Path = ROOT) -> dict[str, str]:
+    """Return sorted direct submodule path -> committed 160000 gitlink SHA map from HEAD."""
+    raw = git('show', 'HEAD:.gitmodules', cwd=cwd)
+    parser = configparser.ConfigParser(interpolation=None, strict=True)
+    try:
+        parser.read_string(raw)
+    except configparser.Error as error:
+        raise ValueError('Committed .gitmodules is malformed.') from error
+    seen: set[str] = set()
+    for section in parser.sections():
+        if re.fullmatch(r'submodule "[^"\r\n]+"', section) is None:
+            raise ValueError('Committed .gitmodules contains an invalid section: ' + section)
+        value = parser.get(section, 'path', fallback='').strip()
+        url = parser.get(section, 'url', fallback='')
+        if (not value or re.search(r'[\x00-\x1f\x7f\\]', value) is not None
+                or PurePosixPath(value).is_absolute() or any(part in ('', '.', '..') for part in value.split('/'))):
+            raise ValueError('Committed .gitmodules contains an unsafe submodule path: ' + value)
+        if not url.strip() or re.search(r'[\x00-\x1f\x7f]', url) is not None:
+            raise ValueError('Committed .gitmodules contains an invalid submodule url for: ' + value)
+        if value in seen:
+            raise ValueError('Committed .gitmodules declares a duplicate submodule path: ' + value)
+        if any(value.startswith(other + '/') or other.startswith(value + '/') for other in seen):
+            raise ValueError('Committed .gitmodules declares overlapping submodule paths: ' + value)
+        seen.add(value)
+    if not seen:
+        raise ValueError('Committed .gitmodules declares no direct submodules.')
+    tree_listing = git('-c', 'core.quotePath=false', 'ls-tree', '-r', '--full-tree', 'HEAD', cwd=cwd)
+    gitlinks: dict[str, str] = {}
+    for line in tree_listing.splitlines():
+        if not line:
+            continue
+        head, _, path = line.partition('\t')
+        parts = head.split()
+        if len(parts) == 3 and parts[0] == '160000' and parts[1] == 'commit' and re.fullmatch(r'[0-9a-f]{40}', parts[2]):
+            gitlinks[path] = parts[2]
+    missing_gitlinks = sorted(seen - set(gitlinks))
+    if missing_gitlinks:
+        raise ValueError('Committed HEAD is missing 160000 gitlink entries for: ' + ', '.join(missing_gitlinks))
+    undeclared_gitlinks = sorted(set(gitlinks) - seen)
+    if undeclared_gitlinks:
+        raise ValueError('Committed HEAD has undeclared 160000 gitlink entries: ' + ', '.join(undeclared_gitlinks))
+    return {path: gitlinks[path] for path in sorted(seen)}
+
+
+def submodule_initialized(path: str, expected_sha: str, *, cwd: Path = ROOT) -> bool:
+    """Return True only when `path` is a symlink-free initialized checkout containing `expected_sha`."""
+    current = cwd.resolve()
+    for part in PurePosixPath(path).parts:
+        current = current / part
+        if current.is_symlink():
+            return False
+    if not current.is_dir() or not (current / '.git').exists():
+        return False
+    try:
+        top = git('rev-parse', '--show-toplevel', cwd=current)
+        if not top or Path(top).resolve() != current.resolve():
+            return False
+        git('cat-file', '-e', expected_sha + '^{commit}', cwd=current)
+    except subprocess.CalledProcessError:
+        return False
+    return True
+
+
+def initialize_direct_submodules(*, cwd: Path = ROOT) -> list[str]:
+    """Initialize only missing committed direct roots with recursion explicitly disabled."""
+    declared = direct_submodule_paths(cwd=cwd)
+    missing = [path for path, sha in declared.items() if not submodule_initialized(path, sha, cwd=cwd)]
+    if missing:
+        environment = {**os.environ, 'GIT_TERMINAL_PROMPT': '0'}
+        execute(
+            ['git', '--literal-pathspecs', '-c', 'protocol.file.allow=never', '-c', 'submodule.recurse=false',
+             'submodule', 'update', '--init', '--checkout', '--', *missing],
+            timeout=480, cwd=cwd, environment=environment,
+        )
+    still_missing = [path for path, sha in declared.items() if not submodule_initialized(path, sha, cwd=cwd)]
+    if still_missing:
+        raise ValueError('Direct submodules remain uninitialized after non-recursive init: ' + ', '.join(still_missing))
+    return missing
+
+
+def linux_census() -> None:
+    source = {'source_sha': source_sha(cwd=ROOT)}
+    require_source(source)
+    initialize_direct_submodules(cwd=ROOT)
+    execute([sys.executable, ROOT / 'tools/proprietary-surfaces/v1/check.py', '--output',
+             staging_root() / 'diagnostics' / 'census.json'], timeout=300)
+    require_source(source)
+
+
 def linux_checks() -> None:
     linux_packages()
+    linux_census()
     linux_conformance()
 
 
 def main() -> int:
     signal.signal(signal.SIGTERM, lambda *_: sys.exit(143))
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument('phase', choices=('stage', 'linux', 'linux-packages', 'linux-conformance', 'platform'))
+    parser.add_argument('phase', choices=('stage', 'linux', 'linux-packages', 'linux-census', 'linux-conformance', 'platform'))
     parser.add_argument('--expected-os', choices=('Windows', 'Darwin'))
     parser.add_argument('--live-preparation', type=Path, help='Check conformance against the SHA sealed by the live boundary.')
     arguments = parser.parse_args()
@@ -223,6 +314,7 @@ def main() -> int:
         if arguments.phase == 'stage': stage_packages()
         elif arguments.phase == 'linux': linux_checks()
         elif arguments.phase == 'linux-packages': linux_packages()
+        elif arguments.phase == 'linux-census': linux_census()
         elif arguments.phase == 'linux-conformance': linux_conformance(arguments.live_preparation)
         else: package_checks(platform_checks=True, expected_os=arguments.expected_os)
         return 0

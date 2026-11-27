@@ -745,7 +745,11 @@ class CensusTests(unittest.TestCase):
             self.assertEqual(census.digest(receipt_path.read_bytes()),binding['sha256'])
             receipt=json.loads(receipt_path.read_text());self.assertEqual(receipt['decision'],'approved')
             if receipt['schema'].endswith('/v2'):
-                self.assertEqual(receipt['authorization'],{key:amendment.get(key,[]) for key in ('addAllowances','removeAllowances','addExceptions','removeExceptions','addExclusions')})
+                self.assertEqual('addRoots' in amendment, 'addRoots' in receipt['authorization'])
+                keys = ('addAllowances','removeAllowances','addExceptions','removeExceptions','addExclusions')
+                if 'addRoots' in amendment:
+                    keys = (*keys, 'addRoots')
+                self.assertEqual(receipt['authorization'],{key:amendment.get(key,[]) for key in keys})
             previous=item['sha256']
 
     def test_amendment_authority_must_belong_to_validated_lineage(self):
@@ -1966,6 +1970,16 @@ dotnet publish "$target"
         self.commit(self.repo); self.pin()
         self.assert_source_errors(self.run_cli(1), PROJECT,
                                   ['unsafe-import-path'], ['../../Directory.Build.props'], declared_at=declaring)
+        # A literal parent-tree import stays refused even with an Exists() guard.
+        self.write(self.repo, declaring, """<Project><Import Project="../../../../Directory.Build.props" Condition="Exists('../../../../Directory.Build.props')"/></Project>""")
+        self.commit(self.repo); self.pin()
+        self.assert_source_errors(self.run_cli(1), PROJECT,
+                                  ['unsafe-import-path'], ['../../Directory.Build.props'], declared_at=declaring)
+        # A committed symlink inside the root stays refused even when GetPathOfFileAbove is guarded.
+        self.write(self.repo, declaring, """<Project>
+            <PropertyGroup><Parent>$([MSBuild]::GetPathOfFileAbove('Directory.Build.props', '$(MSBuildThisFileDirectory)..'))</Parent></PropertyGroup>
+            <Import Project="$(Parent)" Condition="Exists('$(Parent)')"/>
+            </Project>""")
         self.write(self.repo, 'odd/Actual.props', '<Project/>')
         (self.repo / 'odd/Directory.Build.props').symlink_to('Actual.props')
         self.commit(self.repo); self.pin()
@@ -1987,10 +2001,51 @@ dotnet publish "$target"
             </Project>""")
         self.commit(self.repo); self.pin()
         self.assertEqual([], self.run_cli(0)['errors'])
+        # A guarded GetPathOfFileAbove stops at the inspected root boundary even when the parent workspace has the file.
         self.write(self.root, 'Directory.Build.targets', '<Project/>')
         self.git(self.root, 'add', 'Directory.Build.targets'); self.pin()
-        self.assert_source_errors(self.run_cli(1), PROJECT, ['unsafe-import-path'],
-                                  ['../../Directory.Build.targets'], declared_at=declaring)
+        self.assertEqual([], self.run_cli(0)['errors'])
+        # Multi-level Directory.Build.props reusing ParentDirectoryBuildProps with Exists() also stops at the root boundary.
+        self.write(self.root, 'Directory.Build.props', '<Project/>')
+        self.git(self.root, 'add', 'Directory.Build.props')
+        for props in ('Directory.Build.props', 'odd/Directory.Build.props', 'odd/location/Directory.Build.props'):
+            self.write(self.repo, props, """<Project>
+                <PropertyGroup><ParentDirectoryBuildProps>$([MSBuild]::GetPathOfFileAbove('Directory.Build.props', '$(MSBuildThisFileDirectory)../'))</ParentDirectoryBuildProps></PropertyGroup>
+                <Import Project="$(ParentDirectoryBuildProps)" Condition="Exists('$(ParentDirectoryBuildProps)')"/>
+                </Project>""")
+        self.commit(self.repo); self.pin()
+        self.assertEqual([], self.run_cli(0)['errors'])
+        # Bypassable `or` guard, wrong property guard, or starting deeper than `..` (`../../` or `../../../`) still fail closed.
+        for condition, start, expected_target in [
+                ("Exists('$(ParentDirectoryBuildProps)') or '$(Any)' == 'true'", '$(MSBuildThisFileDirectory)../', '../../Directory.Build.props'),
+                ("Exists('$(Other)')", '$(MSBuildThisFileDirectory)../', '../../Directory.Build.props'),
+                ("Exists('$(ParentDirectoryBuildProps)')", '$(MSBuildThisFileDirectory)../../', '../../Directory.Build.props'),
+                ("Exists('$(ParentDirectoryBuildProps)')", '$(MSBuildThisFileDirectory)../../../', '../../../Directory.Build.props')]:
+            with self.subTest(condition=condition, start=start):
+                self.write(self.repo, 'Directory.Build.props', f"""<Project>
+                    <PropertyGroup><ParentDirectoryBuildProps>$([MSBuild]::GetPathOfFileAbove('Directory.Build.props', '{start}'))</ParentDirectoryBuildProps></PropertyGroup>
+                    <Import Project="$(ParentDirectoryBuildProps)" Condition="{condition}"/>
+                    </Project>""")
+                self.commit(self.repo); self.pin()
+                self.assert_source_errors(self.run_cli(1), PROJECT, ['unsafe-import-path'], [expected_target], declared_at='Directory.Build.props')
+        # Without workspace context, `../../` still refuses as unsafe-import-path.
+        tree = census.Tree(self.repo, self.git(self.repo, 'rev-parse', 'HEAD'))
+        with self.assertRaises(census.CensusError) as ctx:
+            census.project_metadata(tree, PROJECT, census.metadata_files(tree))
+        self.assertEqual('unsafe-import-path:Directory.Build.props', str(ctx.exception))
+        # Starting in a sibling root (`../shared`) still resolves and inspects that sibling file.
+        shared = self.add_root('shared')
+        self.write(shared, 'Directory.Build.props', '<Project><PropertyGroup><OutputType>Exe</OutputType></PropertyGroup></Project>')
+        self.pin_root('shared', self.commit(shared))
+        self.write(self.repo, 'Directory.Build.props', """<Project>
+            <PropertyGroup><ParentDirectoryBuildProps>$([MSBuild]::GetPathOfFileAbove('Directory.Build.props', '$(MSBuildThisFileDirectory)../shared'))</ParentDirectoryBuildProps></PropertyGroup>
+            <Import Project="$(ParentDirectoryBuildProps)" Condition="Exists('$(ParentDirectoryBuildProps)')"/>
+            </Project>""")
+        self.commit(self.repo); self.pin()
+        report = self.run_cli(1)
+        self.assertEqual([], report['errors'])
+        project = next(s for s in report['surfaces'] if s['surface'] == self.binding())
+        self.assertEqual(['executable-project'], project['signals'])
 
     def test_review_s11_conditional_loop_keeps_prebranch_target(self):
         path = 'scripts/ship.sh'
@@ -3813,6 +3868,313 @@ dotnet publish "$target"
                 self.assert_source_errors(report, PROJECT, [rule], [target])
                 self.assertEqual([s['surface'] for s in report['surfaces']], observed)
                 self.assertEqual(self.summaries(report)['references/opaque']['crossTreeReads'], [])
+
+    # Story 5.14: addRoots admission, receipt binding, idempotency guard and refusal controls.
+    def _v2_receipt_and_amendment(self, version, previous_sha, authority_path, authority_sha, *,
+                                  add_roots=None, add_allowances=None, remove_allowances=None,
+                                  add_exclusions=None, receipt_add_roots='SAME'):
+        amend_dir = self.baseline.parent / 'amendments'
+        amend_dir.mkdir(exist_ok=True)
+        receipt_rel = f'policy/amendments/{version}-approval.json'
+        amend_rel = f'amendments/{version}.json'
+        auth = {
+            'addAllowances': add_allowances or [],
+            'removeAllowances': remove_allowances or [],
+            'addExceptions': [],
+            'removeExceptions': [],
+            'addExclusions': add_exclusions or [],
+        }
+        if receipt_add_roots == 'SAME':
+            if add_roots is not None:
+                auth['addRoots'] = add_roots
+        elif receipt_add_roots is not None:
+            auth['addRoots'] = receipt_add_roots
+        receipt = {
+            'schema': 'mcpcli-census-amendment-approval/v2',
+            'decision': 'approved',
+            'owner': 'fixture owner',
+            'authority': [{'path': authority_path, 'sha256': authority_sha}],
+            'authorization': auth,
+        }
+        receipt_path = self.root / receipt_rel
+        receipt_bytes = (json.dumps(receipt, indent=2) + '\n').encode('utf-8')
+        receipt_path.write_bytes(receipt_bytes)
+        amendment = {
+            'schema': census.SCHEMA,
+            'fromVersion': f'1.0.{int(version.split(".")[-1]) - 1}',
+            'toVersion': version,
+            'previousSha256': previous_sha,
+            'approval': {
+                'owner': 'fixture owner',
+                'reason': f'Fixture amendment {version}',
+                'decision': 'approved',
+                'date': '2026-11-27',
+                'evidence': {'path': receipt_rel, 'sha256': census.digest(receipt_bytes)},
+            },
+            'addAllowances': add_allowances or [],
+            'removeAllowances': remove_allowances or [],
+            'addExceptions': [],
+            'removeExceptions': [],
+        }
+        if add_exclusions is not None:
+            amendment['addExclusions'] = add_exclusions
+        if add_roots is not None:
+            amendment['addRoots'] = add_roots
+        amend_path = self.baseline.parent / amend_rel
+        amend_bytes = (json.dumps(amendment, indent=2) + '\n').encode('utf-8')
+        amend_path.write_bytes(amend_bytes)
+        return amend_rel, census.digest(amend_bytes), receipt_rel, census.digest(receipt_bytes)
+
+    def test_add_roots_admits_root_with_matching_v2_receipt_and_fails_closed_on_tampering(self):
+        extra = self.root / 'references/extra'
+        extra.mkdir(parents=True)
+        self.git(extra, 'init', '-q')
+        self.write(extra, 'ordinary.txt', 'committed\n')
+        self.write(extra, 'evidence/note.yml', 'image: alpine:latest\n')
+        extra_pin = self.commit(extra)
+        self.write(self.root, '.gitmodules', (self.root / '.gitmodules').read_text() +
+                   '[submodule "extra"]\n path = references/extra\n url = https://example.invalid/extra.git\n')
+        self.git(self.root, 'add', '.gitmodules')
+        self.git(self.root, 'update-index', '--add', '--cacheinfo', f'160000,{extra_pin},references/extra')
+        self.git(self.root, 'commit', '-q', '--allow-empty', '-m', 'test: add extra root')
+        # Unapproved root fails closed before any addRoots amendment.
+        report = self.run_cli(1)
+        self.assertEqual(report['errors'], [{'repository': 'references/extra', 'gitlink': extra_pin, 'rule': 'unapproved-root'}])
+        # Prior v2 amendment without addRoots stays valid (backward compatibility for 1.0.1-1.0.13).
+        base_sha = census.digest(self.baseline.read_bytes())
+        auth_sha = census.digest((self.root / 'approval.json').read_bytes())
+        a1_path, a1_sha, r1_path, r1_sha = self._v2_receipt_and_amendment('1.0.1', base_sha, 'approval.json', auth_sha)
+        self.index.write_text(json.dumps([{'path': a1_path, 'sha256': a1_sha}], indent=2) + '\n')
+        report = self.run_cli(1)
+        self.assertEqual(report['errors'], [{'repository': 'references/extra', 'gitlink': extra_pin, 'rule': 'unapproved-root'}])
+        # Amendment 1.0.2 with addRoots + matching v2 receipt authorization + PE07 exclusion succeeds.
+        root_row = {'repository': 'references/extra', 'gitlink': extra_pin, 'classification': 'PN10', 'owner': 'extra owner'}
+        pe07 = [{'repository': 'references/extra', 'prefix': 'evidence', 'row': 'PE07',
+                 'classification': 'captured-or-nested-source', 'owner': 'fixture owner', 'reason': 'PE07 prefix'}]
+        a2_path, a2_sha, _, _ = self._v2_receipt_and_amendment(
+            '1.0.2', a1_sha, r1_path, r1_sha, add_roots=[root_row], add_exclusions=pe07)
+        self.index.write_text(json.dumps([{'path': a1_path, 'sha256': a1_sha}, {'path': a2_path, 'sha256': a2_sha}], indent=2) + '\n')
+        report = self.run_cli(0)
+        self.assertEqual(report['errors'], [])
+        self.assertEqual(self.summaries(report)['references/extra']['classification'], 'PN10')
+        # Missing, mismatched, asymmetric, or unauthorized addRoots in receipt must fail closed.
+        for label, amend_roots, receipt_roots, expected_rule in [
+                ('missing-in-receipt', [root_row], None, 'amendment-authorization-scope-mismatch'),
+                ('empty-in-receipt', [root_row], [], 'amendment-authorization-scope-mismatch'),
+                ('extra-in-receipt', None, [root_row], 'amendment-authorization-scope-mismatch'),
+                ('asymmetric-empty-in-receipt', None, [], 'amendment-authorization-scope-mismatch'),
+                ('asymmetric-empty-in-amendment', [], None, 'amendment-authorization-scope-mismatch'),
+                ('duplicate-baseline-root', [self.policy['roots'][0]], 'SAME', 'invalid-root-provenance'),
+                ('duplicate-in-amendment', [root_row, root_row], 'SAME', 'invalid-root-provenance'),
+                ('bad-gitlink', [{**root_row, 'gitlink': 'not-a-sha'}], 'SAME', 'invalid-root-provenance'),
+                ('blank-owner', [{**root_row, 'owner': '   '}], 'SAME', 'invalid-root-provenance'),
+                ('blank-classification', [{**root_row, 'classification': ''}], 'SAME', 'invalid-root-provenance'),
+                ('extra-root-key', [{**root_row, 'extra': 'x'}], 'SAME', 'invalid-root-provenance'),
+                ('overlapping-child-root', [{**root_row, 'repository': 'references/opaque/sub'}], 'SAME', 'invalid-root-provenance'),
+                ('overlapping-enclosing-parent-root', [{**root_row, 'repository': 'references'}], 'SAME', 'invalid-root-provenance')]:
+            with self.subTest(case=label):
+                bad_path, bad_sha, _, _ = self._v2_receipt_and_amendment(
+                    '1.0.2', a1_sha, r1_path, r1_sha, add_roots=amend_roots, receipt_add_roots=receipt_roots)
+                self.index.write_text(json.dumps([{'path': a1_path, 'sha256': a1_sha}, {'path': bad_path, 'sha256': bad_sha}], indent=2) + '\n')
+                bad_report = self.run_cli(1)
+                self.assertEqual(bad_report['errors'], [{'rule': expected_rule}])
+        # Legacy v1 receipt refuses addRoots.
+        v1_receipt = {'schema': 'mcpcli-census-amendment-approval/v1', 'decision': 'approved', 'owner': 'fixture owner', 'fixtures': [{'repository': 'references/opaque'}]}
+        v1_amend = {'approval': {'owner': 'fixture owner'}, 'addAllowances': [], 'removeAllowances': [], 'addExceptions': [], 'removeExceptions': [], 'addRoots': [root_row]}
+        with self.assertRaises(census.CensusError) as v1_err:
+            census.validate_approval_evidence(self.root, v1_amend, v1_receipt, {})
+        self.assertEqual('amendment-authorization-scope-mismatch', str(v1_err.exception))
+
+    def test_add_roots_admitted_root_refuses_unapproved_surface_and_drifted_evidence(self):
+        extra = self.root / 'references/extra'
+        extra.mkdir(parents=True)
+        self.git(extra, 'init', '-q')
+        proj_path = 'tools/Probe/Probe.csproj'
+        self.write(extra, proj_path, '<Project Sdk="Microsoft.NET.Sdk"><PropertyGroup><IsPackable>false</IsPackable><OutputType>Exe</OutputType></PropertyGroup></Project>')
+        self.write(extra, 'tools/Probe/Program.cs', 'class Program { static void Main() {} }\n')
+        self.write(extra, 'src/Helper.targets', '<Project><ItemGroup><Compile Include="$(ExternalRoot)/Gen.cs" /></ItemGroup></Project>')
+        self.write(extra, 'src/App/App.csproj', '<Project Sdk="Microsoft.NET.Sdk"><Import Project="../Helper.targets" /></Project>')
+        extra_pin = self.commit(extra)
+        self.write(self.root, '.gitmodules', (self.root / '.gitmodules').read_text() +
+                   '[submodule "extra"]\n path = references/extra\n url = https://example.invalid/extra.git\n')
+        self.git(self.root, 'add', '.gitmodules')
+        self.git(self.root, 'update-index', '--add', '--cacheinfo', f'160000,{extra_pin},references/extra')
+        self.git(self.root, 'commit', '-q', '--allow-empty', '-m', 'test: pin extra root')
+        base_sha = census.digest(self.baseline.read_bytes())
+        auth_sha = census.digest((self.root / 'approval.json').read_bytes())
+        root_row = {'repository': 'references/extra', 'gitlink': extra_pin, 'classification': 'PN10', 'owner': 'extra owner'}
+        targets_sha = census.digest((extra / 'src/Helper.targets').read_bytes())
+        file_excl = [{
+            'repository': 'references/extra', 'prefix': 'src/Helper.targets', 'row': 'PE05',
+            'classification': 'existing-build-preparation-proof', 'owner': 'fixture owner', 'reason': 'Exact targets exclusion',
+            'scope': 'file', 'sourceRevision': extra_pin, 'sha256': targets_sha,
+        }]
+        # Admitting root without approving Probe fails closed with new-proprietary-surface.
+        a1_path, a1_sha, _, _ = self._v2_receipt_and_amendment(
+            '1.0.1', base_sha, 'approval.json', auth_sha, add_roots=[root_row], add_exclusions=file_excl)
+        self.index.write_text(json.dumps([{'path': a1_path, 'sha256': a1_sha}], indent=2) + '\n')
+        report = self.run_cli(1)
+        self.assertEqual(report['errors'], [])
+        self.assertEqual([(s['surface']['identity'], s['reason']) for s in report['surfaces']], [('Probe', 'new-proprietary-surface')])
+        # Approving Probe with exact compilation closure passes.
+        allowance = {
+            'surface': {'repository': 'references/extra', 'path': proj_path, 'kind': 'project', 'identity': 'Probe'},
+            'row': 'PE09', 'classification': 'qualification-evidence-tooling', 'owner': 'fixture owner',
+            'reason': 'Exact fixture allowance', 'signals': ['executable-project'],
+            'compilationClosure': True, 'sourcePrefix': 'tools/Probe',
+            'sources': [
+                {'path': 'tools/Probe/Probe.csproj', 'sha256': census.digest((extra / proj_path).read_bytes())},
+                {'path': 'tools/Probe/Program.cs', 'sha256': census.digest((extra / 'tools/Probe/Program.cs').read_bytes())},
+            ],
+        }
+        a1_path, a1_sha, _, _ = self._v2_receipt_and_amendment(
+            '1.0.1', base_sha, 'approval.json', auth_sha, add_roots=[root_row], add_allowances=[allowance], add_exclusions=file_excl)
+        self.index.write_text(json.dumps([{'path': a1_path, 'sha256': a1_sha}], indent=2) + '\n')
+        self.assertEqual(self.run_cli(0)['errors'], [])
+        # Altering closure source fails closed with allowance-signal-or-source-drift + excluded-source-revision-drift.
+        self.write(extra, 'tools/Probe/Program.cs', 'class Program { static void Main() { /* changed */ } }\n')
+        drifted_pin = self.commit(extra)
+        self.git(self.root, 'update-index', '--add', '--cacheinfo', f'160000,{drifted_pin},references/extra')
+        self.git(self.root, 'commit', '-q', '--allow-empty', '-m', 'test: drift extra root')
+        drifted = self.run_cli(1)
+        self.assertTrue(any(e['rule'] == 'excluded-source-revision-drift:src/Helper.targets' for e in drifted['errors']))
+        self.assertEqual([(s['surface']['identity'], s['reason']) for s in drifted['surfaces']],
+                         [('Probe', 'allowance-signal-or-source-drift')])
+
+    def test_exact_file_exclusion_and_directory_exclusion_import_and_closure_rules(self):
+        # Project imports an exact-file excluded .targets file: passes both scan_tree and compilation_closure.
+        self.write(self.repo, 'src/Helper.targets', '<Project><ItemGroup><Compile Include="$(ExternalRoot)/Gen.cs" /></ItemGroup></Project>')
+        self.write(self.repo, PROJECT, '<Project Sdk="Microsoft.NET.Sdk"><PropertyGroup><IsPackable>false</IsPackable><OutputType>Exe</OutputType></PropertyGroup><Import Project="../../../src/Helper.targets" /></Project>')
+        self.write(self.repo, 'odd/location/Runner/Program.cs', 'class Program { static void Main() {} }\n')
+        pin = self.commit(self.repo); self.pin()
+        helper_sha = census.digest((self.repo / 'src/Helper.targets').read_bytes())
+        self.policy['exclusions'] = [{
+            'repository': 'references/opaque', 'prefix': 'src/Helper.targets', 'row': 'PE05',
+            'classification': 'existing-build-preparation-proof', 'owner': 'fixture owner', 'reason': 'Exact targets exclusion',
+            'scope': 'file', 'sourceRevision': pin, 'sha256': helper_sha,
+        }]
+        tree = census.Tree(self.repo, pin)
+        closure = census.compilation_closure(tree, PROJECT, excluded_files={'src/Helper.targets'})
+        self.assertEqual(['odd/location/Runner/Program.cs', PROJECT], [s['path'] for s in closure])
+        self.policy['allowances'] = [{
+            'surface': self.binding(), 'row': 'PE05', 'classification': 'test-fixture', 'owner': 'fixture owner',
+            'reason': 'Exact closure with exact-file excluded targets', 'signals': ['executable-project'],
+            'compilationClosure': True, 'sourcePrefix': 'odd/location/Runner', 'sources': closure,
+        }]
+        self.save()
+        self.assertEqual([], self.run_cli(0)['errors'])
+        # A directory-scope exclusion MUST NOT satisfy a local <Import>; importing it fails closed as unavailable-local-import.
+        self.write(self.repo, 'evidence/DirHelper.targets', '<Project/>')
+        self.write(self.repo, PROJECT, '<Project Sdk="Microsoft.NET.Sdk"><Import Project="../../../evidence/DirHelper.targets" /></Project>')
+        self.commit(self.repo); self.pin()
+        self.policy['exclusions'] = [{
+            'repository': 'references/opaque', 'prefix': 'evidence', 'row': 'PE07',
+            'classification': 'captured-or-nested-source', 'owner': 'fixture owner', 'reason': 'PE07 dir',
+        }]
+        self.policy['allowances'] = []
+        self.save()
+        self.assert_source_errors(self.run_cli(1), PROJECT, ['unavailable-local-import'])
+
+    def test_proven_idempotency_guard_excuses_absent_fallback_and_refuses_unproven(self):
+        shared = self.add_root('shared', self.SHARED_URL)
+        self.write(shared, 'Hexalith.Build.props', '<Project><PropertyGroup><HexalithBuildLoaded>true</HexalithBuildLoaded></PropertyGroup></Project>')
+        shared_pin = self.pin_root('shared', self.commit(shared))
+        self.write(self.repo, PROJECT, '<Project/>')
+        self.write(self.repo, 'odd/Directory.Build.props', """<Project>
+            <PropertyGroup><ParentDirectoryBuildProps>$([MSBuild]::GetPathOfFileAbove('Directory.Build.props', '$(MSBuildThisFileDirectory)../'))</ParentDirectoryBuildProps></PropertyGroup>
+            <Import Project="$(ParentDirectoryBuildProps)" Condition="Exists('$(ParentDirectoryBuildProps)')"/>
+            </Project>""")
+        self.write(self.repo, 'Directory.Build.props', """<Project>
+            <PropertyGroup>
+              <ParentDirectoryBuildProps>$([MSBuild]::GetPathOfFileAbove('Directory.Build.props', '$(MSBuildThisFileDirectory)../'))</ParentDirectoryBuildProps>
+              <P2>$(MSBuildThisFileDirectory)../shared/Hexalith.Build.props</P2>
+              <P3>$(MSBuildThisFileDirectory)../../shared/Hexalith.Build.props</P3>
+            </PropertyGroup>
+            <Import Project="$(ParentDirectoryBuildProps)" Condition="Exists('$(ParentDirectoryBuildProps)')"/>
+            <Import Project="$(P2)" Condition="Exists('$(P2)') And '$(HexalithBuildLoaded)' != 'true'" />
+            <Import Project="$(P3)" Condition="'$(HexalithBuildLoaded)' != 'true'" />
+            </Project>""")
+        self.commit(self.repo); self.pin()
+        self.assertEqual([], self.run_cli(0)['errors'])
+        # 1. Conditional assignment in imported props cannot prove HexalithBuildLoaded.
+        self.write(shared, 'Hexalith.Build.props', '<Project><PropertyGroup Condition="\'$(X)\' == \'1\'"><HexalithBuildLoaded>true</HexalithBuildLoaded></PropertyGroup></Project>')
+        self.pin_root('shared', self.commit(shared))
+        self.assert_source_errors(self.run_cli(1), PROJECT, ['unsafe-import-path'], ['../../shared/Hexalith.Build.props'],
+                                  declared_at='Directory.Build.props')
+        # 2. Target-modified property cannot support an idempotency proof.
+        self.write(shared, 'Hexalith.Build.props', '<Project><PropertyGroup><HexalithBuildLoaded>true</HexalithBuildLoaded></PropertyGroup><Target Name="Mutate"><PropertyGroup><HexalithBuildLoaded>false</HexalithBuildLoaded></PropertyGroup></Target></Project>')
+        self.pin_root('shared', self.commit(shared))
+        self.assert_source_errors(self.run_cli(1), PROJECT, ['unsafe-import-path'], ['../../shared/Hexalith.Build.props'],
+                                  declared_at='Directory.Build.props')
+        # Restore clean shared props.
+        self.write(shared, 'Hexalith.Build.props', '<Project><PropertyGroup><HexalithBuildLoaded>true</HexalithBuildLoaded></PropertyGroup></Project>')
+        shared_pin = self.pin_root('shared', self.commit(shared))
+        # 3. Missing guard, unproven conjunct, `or` bypass, or multiple inequality conjuncts all fail closed.
+        for p2_cond, p3_cond in [
+                ("Exists('$(P2)') And '$(HexalithBuildLoaded)' != 'true'", ''),
+                ("Exists('$(P2)') And '$(HexalithBuildLoaded)' != 'true' And '$(Extra)' == '1'", "'$(HexalithBuildLoaded)' != 'true'"),
+                ("Exists('$(P2)') And '$(HexalithBuildLoaded)' != 'true' And '$(Other)' != 'true'", "'$(HexalithBuildLoaded)' != 'true'"),
+                ("Exists('$(P2)') And '$(HexalithBuildLoaded)' != 'true'", "'$(HexalithBuildLoaded)' != 'true' Or '$(Force)' == 'true'")]:
+            with self.subTest(p2_cond=p2_cond, p3_cond=p3_cond):
+                cond_attr = f' Condition="{p3_cond}"' if p3_cond else ''
+                self.write(self.repo, 'Directory.Build.props', f"""<Project>
+                    <PropertyGroup>
+                      <P2>$(MSBuildThisFileDirectory)../shared/Hexalith.Build.props</P2>
+                      <P3>$(MSBuildThisFileDirectory)../../shared/Hexalith.Build.props</P3>
+                    </PropertyGroup>
+                    <Import Project="$(P2)" Condition="{p2_cond}" />
+                    <Import Project="$(P3)"{cond_attr} />
+                    </Project>""")
+                self.commit(self.repo); self.pin()
+                self.assert_source_errors(self.run_cli(1), PROJECT, ['unsafe-import-path'], ['../../shared/Hexalith.Build.props'],
+                                          declared_at='Directory.Build.props')
+        # 4. Intervening empty <HexalithBuildLoaded />, conditional import mutating it, or SDK import all invalidate the proof.
+        self.write(self.repo, 'eng/Clear.props', '<Project><PropertyGroup><HexalithBuildLoaded /></PropertyGroup></Project>')
+        for label, middle in [
+                ('empty-prop-tag', '<PropertyGroup><HexalithBuildLoaded /></PropertyGroup>'),
+                ('conditional-clear-import', '<Import Project="eng/Clear.props" Condition="\'$(Flag)\' == \'1\'" />'),
+                ('sdk-import', '<Import Project="Sdk.props" Sdk="Microsoft.NET.Sdk" />')]:
+            with self.subTest(invalidation=label):
+                self.write(self.repo, 'Directory.Build.props', f"""<Project>
+                    <PropertyGroup>
+                      <P2>$(MSBuildThisFileDirectory)../shared/Hexalith.Build.props</P2>
+                      <P3>$(MSBuildThisFileDirectory)../../shared/Hexalith.Build.props</P3>
+                    </PropertyGroup>
+                    <Import Project="$(P2)" Condition="Exists('$(P2)') And '$(HexalithBuildLoaded)' != 'true'" />
+                    {middle}
+                    <Import Project="$(P3)" Condition="'$(HexalithBuildLoaded)' != 'true'" />
+                    </Project>""")
+                self.commit(self.repo); self.pin()
+                self.assert_source_errors(self.run_cli(1), PROJECT, ['unsafe-import-path'], ['../../shared/Hexalith.Build.props'],
+                                          declared_at='Directory.Build.props')
+        # 5. Nested gitlink import is never proven present in non-recursive CI, so fallback stays refused.
+        self.write(self.repo, '.gitmodules', self.NESTED.format(self.SHARED_URL))
+        self.write(self.repo, 'Directory.Build.props', """<Project>
+            <PropertyGroup>
+              <P1>$(MSBuildThisFileDirectory)dependencies/shared/Hexalith.Build.props</P1>
+              <P3>$(MSBuildThisFileDirectory)../../shared/Hexalith.Build.props</P3>
+            </PropertyGroup>
+            <Import Project="$(P1)" Condition="Exists('$(P1)') And '$(HexalithBuildLoaded)' != 'true'" />
+            <Import Project="$(P3)" Condition="'$(HexalithBuildLoaded)' != 'true'" />
+            </Project>""")
+        self.commit_with_gitlinks({'dependencies/shared': shared_pin}); self.pin()
+        self.assert_source_errors(self.run_cli(1), PROJECT, ['unsafe-import-path'], ['../../shared/Hexalith.Build.props'],
+                                  declared_at='Directory.Build.props')
+        # 6. Imported file depending on external caller property cannot cache a caller-dependent guarantee across mutations.
+        self.write(self.repo, 'eng/CopyCaller.props', '<Project><PropertyGroup><Derived>$(CallerVal)</Derived></PropertyGroup></Project>')
+        self.write(self.repo, 'Directory.Build.props', """<Project>
+            <PropertyGroup>
+              <CallerVal>true</CallerVal>
+              <P3>$(MSBuildThisFileDirectory)../../shared/Hexalith.Build.props</P3>
+            </PropertyGroup>
+            <Import Project="eng/CopyCaller.props" />
+            <PropertyGroup><CallerVal>false</CallerVal></PropertyGroup>
+            <Import Project="eng/CopyCaller.props" Condition="Exists('eng/CopyCaller.props')" />
+            <Import Project="$(P3)" Condition="'$(Derived)' != 'true'" />
+            </Project>""")
+        self.commit(self.repo); self.pin()
+        self.assert_source_errors(self.run_cli(1), PROJECT, ['unsafe-import-path'], ['../../shared/Hexalith.Build.props'],
+                                  declared_at='Directory.Build.props')
 
 
 if __name__=='__main__':
