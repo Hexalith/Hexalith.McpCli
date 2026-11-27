@@ -2,6 +2,7 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Text.Json;
 using Hexalith.McpCli.Core.Execution;
+using Hexalith.McpCli.Core.Schema;
 using Hexalith.McpCli.Core.Serialization;
 using Hexalith.McpCli.Core.Settings;
 using ModelContextProtocol;
@@ -116,7 +117,7 @@ public sealed class McpStdioProcessTests
         }
     }
 
-    /// <summary>Describe and query agree on the aggregate default through the child process and real Gateway client.</summary>
+    /// <summary>Describe and query agree on the aggregate default, and invalid arguments never reach the Gateway.</summary>
     [Theory]
     [InlineData("2025-06-18", null, "01ARZ3NDEKTSV4RRFFQ69G5FAV")]
     [InlineData("2025-06-18", "01ARZ3NDEKTSV4RRFFQ69G5FAW", "01ARZ3NDEKTSV4RRFFQ69G5FAW")]
@@ -151,6 +152,34 @@ public sealed class McpStdioProcessTests
                         .GetProperty("aggregateIdRequired").GetBoolean().ShouldBe(required);
                 }
 
+                foreach ((Dictionary<string, object?> refusedArguments, string message) in new[]
+                {
+                    (new Dictionary<string, object?> { ["AggregateId"] = "01ARZ3NDEKTSV4RRFFQ69G5FAW" },
+                        "Use the exact query argument name 'aggregateId'."),
+                    (new Dictionary<string, object?> { ["Cursor"] = "next", ["offset"] = 0 },
+                        "Use the exact paging argument name 'cursor'."),
+                })
+                {
+                    refusedArguments["operation"] = operation;
+                    refusedArguments["payload"] = "{}";
+                    McpProtocolException exception = await Should.ThrowAsync<McpProtocolException>(() => client.CallToolAsync(
+                        "run_query", refusedArguments, cancellationToken: timeout.Token).AsTask());
+                    exception.ErrorCode.ShouldBe(McpErrorCode.InvalidParams);
+                    exception.Message.ShouldBe($"Request failed (remote): {message}");
+                    gateway.Calls.ShouldBe(0);
+                }
+
+                CallToolResult malformedId = await client.CallToolAsync("run_query", new Dictionary<string, object?>
+                {
+                    ["operation"] = operation, ["payload"] = "{}", ["aggregateId"] = "01arz3ndektsv4rrffq69g5fav",
+                }, cancellationToken: timeout.Token);
+                AssertToolDocument(malformedId, new
+                {
+                    error = new OperationError("validation_failed", Operation: operation, Violations:
+                        [new PayloadViolation("/aggregateId", "The aggregate identifier does not match the module and Gateway rules.")]),
+                }, isError: true);
+                gateway.Calls.ShouldBe(0);
+
                 var arguments = new Dictionary<string, object?> { ["operation"] = operation, ["payload"] = "{}" };
                 if (explicitId is not null)
                 {
@@ -172,7 +201,10 @@ public sealed class McpStdioProcessTests
 
             process.StandardInput.Close();
             await process.WaitForExitAsync(timeout.Token);
-            process.ExitCode.ShouldBe(0, await standardError);
+            string diagnostic = await standardError;
+            process.ExitCode.ShouldBe(0, diagnostic);
+            diagnostic.ShouldNotContain("Use the exact");
+            diagnostic.ShouldNotContain("The aggregate identifier does not match the module and Gateway rules.");
         }
         finally
         {

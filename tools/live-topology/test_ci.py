@@ -96,11 +96,19 @@ if name == 'dotnet':
         if mode == 'extra-discovered-case': cases.append('Hexalith.McpCli.Integration.Tests.OtherTests.Unexpected')
         if mode == 'duplicate-discovered-case': cases.append(cases[0])
         print('\n'.join(cases));sys.exit(0)
-    if args[0] in ('restore','build') and os.environ.get('NUGET_HTTP_CACHE_PATH'):
-        http = pathlib.Path(os.environ['NUGET_HTTP_CACHE_PATH']) / 'fixture';http.mkdir(parents=True,exist_ok=True)
-        pages = [{'@name': name, '@id': 'https://data.nuget.org/v3-vulnerabilities/revision/'+name+'.json', '@updated': '2026-11-16T00:00:00Z'} for name in ('base','update')]
-        (http/'vuln_index.dat').write_text(json.dumps(pages))
-        for page in ('base','update'):(http/('vuln_data_'+page+'.dat')).write_text('{}')
+    def write_advisory_cache(http_dir, revision, updated, update_doc):
+        http = pathlib.Path(http_dir) / 'fixture'; http.mkdir(parents=True, exist_ok=True)
+        pages = [
+            {'@name': 'base', '@id': 'https://data.nuget.org/v3-vulnerabilities/revision/base.json', '@updated': '2026-11-16T00:00:00Z'},
+            {'@name': 'update', '@id': 'https://data.nuget.org/v3-vulnerabilities/' + revision + '/update.json', '@updated': updated},
+        ]
+        (http / 'vuln_index.dat').write_text(json.dumps(pages))
+        (http / 'vuln_data_base.dat').write_text('{}')
+        (http / 'vuln_data_update.dat').write_text(json.dumps(update_doc))
+    if args[0] == 'build' and os.environ.get('NUGET_HTTP_CACHE_PATH'):
+        http_dir = os.environ['NUGET_HTTP_CACHE_PATH']
+        if not (pathlib.Path(http_dir) / 'fixture/vuln_index.dat').is_file():
+            write_advisory_cache(http_dir, 'revision', '2026-11-16T00:00:00Z', {})
     if args == ['--version']:
         if mode == 'missing-sdk':
             print('A compatible .NET SDK was not found.', file=sys.stderr); sys.exit(145)
@@ -111,6 +119,9 @@ if name == 'dotnet':
         if mode != 'missing-managed-aspnet': print('Microsoft.AspNetCore.App ' + version + ' [fixture/shared/Microsoft.AspNetCore.App]')
     elif args[0] == 'restore':
         import xml.etree.ElementTree as ET, shutil
+        if mode == 'advisory-nu1902-failure' and 'Hexalith.Tenants' in args[1]:
+            print("src/Hexalith.Tenants/Hexalith.Tenants.csproj : error NU1902: Package 'Hexalith.EventStore.Gateway' 5.6.0 has a known moderate severity vulnerability, https://github.com/advisories/GHSA-example", file=sys.stderr)
+            sys.exit(1)
         project = pathlib.Path(args[1]); private = project.parent
         cache = pathlib.Path(os.environ['NUGET_PACKAGES'])
         if not cache.is_dir() or not any(cache.iterdir()):
@@ -132,10 +143,20 @@ if name == 'dotnet':
         assets['packageFolders'] = {str(cache): {}}
         assets_path.parent.mkdir(exist_ok=True)
         assets_path.write_text(json.dumps(assets))
-        http = pathlib.Path(os.environ['NUGET_HTTP_CACHE_PATH']) / 'fixture'; http.mkdir(parents=True,exist_ok=True)
-        pages = [{'@name':name,'@id':'https://data.nuget.org/v3-vulnerabilities/revision/'+name+'.json','@updated':'2026-11-16T00:00:00Z'} for name in ('base','update')]
-        (http/'vuln_index.dat').write_text(json.dumps(pages))
-        for name in ('base','update'): (http/('vuln_data_'+name+'.dat')).write_text('{}')
+        http_path = os.environ['NUGET_HTTP_CACHE_PATH']
+        is_retry_1 = pathlib.Path(http_path).name == 'source-http-retry-1'
+        is_module_audit = project.name == 'audit.csproj'
+        if mode == 'advisory-source-rotation' and (is_retry_1 or is_module_audit):
+            write_advisory_cache(http_path, 'rev2', '2026-11-17T00:00:00Z',
+                                 {'unrelated.pkg': [{'url': 'https://github.com/advisories/GHSA-rot2', 'severity': 1, 'versions': '[1.0.0, 2.0.0)'}]})
+        elif mode == 'advisory-second-rotation' and is_retry_1:
+            write_advisory_cache(http_path, 'rev2', '2026-11-17T00:00:00Z',
+                                 {'unrelated.pkg': [{'url': 'https://github.com/advisories/GHSA-rot2', 'severity': 1, 'versions': '[1.0.0, 2.0.0)'}]})
+        elif mode == 'advisory-module-rotation' and is_module_audit:
+            write_advisory_cache(http_path, 'rev2', '2026-11-17T00:00:00Z',
+                                 {'unrelated.pkg': [{'url': 'https://github.com/advisories/GHSA-mod2', 'severity': 1, 'versions': '[1.0.0, 2.0.0)'}]})
+        else:
+            write_advisory_cache(http_path, 'revision', '2026-11-16T00:00:00Z', {})
     elif args[0] == 'build':
         if mode in ('build-failure', 'build-stdout-failure') and 'Tenants' in args[1]:
             print('named source build failure', file=sys.stdout if mode == 'build-stdout-failure' else sys.stderr); sys.exit(23)
@@ -171,11 +192,44 @@ elif name == 'curl':
     destination = pathlib.Path(args[args.index('-o') + 1])
     if mode == 'corrupted-aspire-archive': destination.write_bytes(b'unqualified archive')
     elif any('vulnerabilities/' in value for value in args):
+        headers_file = pathlib.Path(args[args.index('--dump-header') + 1])
+        if mode == 'advisory-feed-unavailable':
+            headers_file.write_text('HTTP/2 503\r\nRetry-After: 30\r\n\r\n')
+            print('curl: (22) The requested URL returned error: 503', file=sys.stderr)
+            sys.exit(22)
         private = destination.parent.parent
         name = 'vuln_index.dat' if destination.stem == 'index' else 'vuln_data_' + destination.stem + '.dat'
-        cache_root = private / ('http/fixture' if (private / 'http/fixture').is_dir() else 'source-http/fixture')
-        shutil.copyfile(cache_root / name,destination)
-        pathlib.Path(args[args.index('--dump-header')+1]).write_text('HTTP/2 200\n')
+        if mode == 'advisory-source-rotation':
+            pages = [
+                {'@name': 'base', '@id': 'https://data.nuget.org/v3-vulnerabilities/revision/base.json', '@updated': '2026-11-16T00:00:00Z'},
+                {'@name': 'update', '@id': 'https://data.nuget.org/v3-vulnerabilities/rev2/update.json', '@updated': '2026-11-17T00:00:00Z'},
+            ]
+            docs = {'base': {}, 'update': {'unrelated.pkg': [{'url': 'https://github.com/advisories/GHSA-rot2', 'severity': 1, 'versions': '[1.0.0, 2.0.0)'}]}}
+            destination.write_text(json.dumps(pages if destination.stem == 'index' else docs[destination.stem]))
+            headers_file.write_text('HTTP/2 200\r\nETag: "rev2"\r\n\r\n')
+        elif mode == 'advisory-second-rotation':
+            is_retry_snapshot = destination.parent.name == 'source-advisories-retry-1'
+            rev = 'rev3' if is_retry_snapshot else 'rev2'
+            upd = '2026-11-18T00:00:00Z' if is_retry_snapshot else '2026-11-17T00:00:00Z'
+            pages = [
+                {'@name': 'base', '@id': 'https://data.nuget.org/v3-vulnerabilities/revision/base.json', '@updated': '2026-11-16T00:00:00Z'},
+                {'@name': 'update', '@id': 'https://data.nuget.org/v3-vulnerabilities/' + rev + '/update.json', '@updated': upd},
+            ]
+            docs = {'base': {}, 'update': {'unrelated.pkg': [{'url': 'https://github.com/advisories/GHSA-' + rev, 'severity': 1, 'versions': '[1.0.0, 2.0.0)'}]}}
+            destination.write_text(json.dumps(pages if destination.stem == 'index' else docs[destination.stem]))
+            headers_file.write_text('HTTP/2 200\r\nETag: "' + rev + '"\r\n\r\n')
+        elif mode == 'advisory-module-rotation' and (private / 'http/fixture').is_dir():
+            pages = [
+                {'@name': 'base', '@id': 'https://data.nuget.org/v3-vulnerabilities/revision/base.json', '@updated': '2026-11-16T00:00:00Z'},
+                {'@name': 'update', '@id': 'https://data.nuget.org/v3-vulnerabilities/rev2/update.json', '@updated': '2026-11-17T00:00:00Z'},
+            ]
+            docs = {'base': {}, 'update': {'unrelated.pkg': [{'url': 'https://github.com/advisories/GHSA-mod2', 'severity': 1, 'versions': '[1.0.0, 2.0.0)'}]}}
+            destination.write_text(json.dumps(pages if destination.stem == 'index' else docs[destination.stem]))
+            headers_file.write_text('HTTP/2 200\r\nETag: "mod2"\r\n\r\n')
+        else:
+            cache_root = private / ('http/fixture' if (private / 'http/fixture').is_dir() else 'source-http/fixture')
+            shutil.copyfile(cache_root / name, destination)
+            headers_file.write_text('HTTP/2 200\n')
     elif any('nuget.org/' in value for value in args):
         name = destination.name
         package = next((root / 'package-cache').rglob(name))
@@ -1026,6 +1080,147 @@ pathlib.Path(sys.argv[sys.argv.index('--output') + 1]).write_text(json.dumps({'r
         Path(audit['path']).write_text('{}')
         with self.assertRaisesRegex(ValueError, 'online audit proof changed'):
             self.ci_module().require_reader_audit(prepared)
+
+    def test_source_advisory_confirmed_rotation_recovers_once_and_binds_winning_caches(self):
+        result = self.invoke('prepare-ci.sh', 'advisory-source-rotation')
+        self.assertEqual(0, result.returncode, result.stdout + result.stderr)
+        prepared = json.loads((self.evidence / 'preparation.json').read_text())
+        private = Path(prepared['privateDirectory'])
+        expected_packages = str(private / 'packages-retry-1')
+        expected_http = str(private / 'source-http-retry-1')
+        self.assertEqual('prepared', prepared['result'])
+        self.assertEqual(expected_packages, prepared['nugetPackages'])
+        self.assertEqual(expected_http, prepared['nugetHttpCache'])
+        self.assertEqual('match', prepared['sourceAdvisories']['classification'])
+        self.assertEqual(1, prepared['sourceAdvisories']['recoveryAttempt'])
+        self.assertEqual('confirmed_rotation', prepared['sourceAdvisories']['priorRotationDiagnostic']['classification'])
+        self.assertEqual(str(private / 'source-advisories-retry-1'), prepared['sourceAdvisories']['directory'])
+
+        diag = json.loads((self.evidence / 'source-advisories-diagnostic.json').read_text())
+        attempt0_diag = json.loads((self.evidence / 'source-advisories-attempt-0-diagnostic.json').read_text())
+        self.assertEqual('match', diag['classification'])
+        self.assertEqual(1, diag['recoveryAttempt'])
+        self.assertEqual('confirmed_rotation', diag['priorRotationDiagnostic']['classification'])
+        self.assertEqual('confirmed_rotation', attempt0_diag['classification'])
+        self.assertEqual(['unrelated.pkg'], attempt0_diag['semanticDiff']['addedPackages'])
+        self.assertGreater(attempt0_diag['semanticDiff']['restoredPackageCount'], 0)
+
+        dotnet_calls = [json.loads(line) for line in (self.root / 'dotnet-package-caches.jsonl').read_text().splitlines()]
+        source_restores = [call for call in dotnet_calls if call['args'][0] == 'restore' and call['args'][1].startswith('src/')]
+        self.assertEqual(10, len(source_restores))
+        self.assertEqual({str(private / 'packages')}, {call['cache'] for call in source_restores[:5]})
+        self.assertEqual({str(private / 'source-http')}, {call['httpCache'] for call in source_restores[:5]})
+        self.assertEqual({expected_packages}, {call['cache'] for call in source_restores[5:]})
+        self.assertEqual({expected_http}, {call['httpCache'] for call in source_restores[5:]})
+        self.assertTrue(all('--force' in call['args'] for call in source_restores[5:]))
+        builds = [call for call in dotnet_calls if call['args'][0] in ('build', 'msbuild')]
+        self.assertEqual(8, len(builds))
+        self.assertEqual({expected_packages}, {call['cache'] for call in builds})
+        self.assertEqual({expected_http}, {call['httpCache'] for call in builds})
+
+        reader_doc = json.loads(Path(prepared['readerAudit']['path']).read_text())
+        self.assertEqual(prepared['sourceAdvisories'], reader_doc['sourceAdvisories'])
+        self.assertEqual(4, len(reader_doc['nativeAudits']))
+        self.ci_module().require_reader_audit(prepared)
+
+        run_result = self.invoke('run-ci.sh')
+        self.assertEqual(0, run_result.returncode, run_result.stdout + run_result.stderr)
+        inherited_restore = [json.loads(line) for line in (self.root / 'runner-restore.jsonl').read_text().splitlines()]
+        config = str(private / 'source-restore.config')
+        self.assertEqual([{'config': config, 'httpCache': expected_http}] * 3, inherited_restore)
+        with patch.dict(os.environ, self.env, clear=True):
+            _, _, _, env_map, _ = self.ci_module().load_prepared_context(self.evidence)
+        self.assertEqual(expected_packages, env_map['NUGET_PACKAGES'])
+        self.assertEqual(expected_http, env_map['NUGET_HTTP_CACHE_PATH'])
+
+    def test_source_advisory_second_rotation_fails_closed_without_second_retry(self):
+        result = self.invoke('prepare-ci.sh', 'advisory-second-rotation')
+        self.assertNotEqual(0, result.returncode)
+        self.assertIn('persistent_mismatch', result.stderr)
+        receipt = json.loads((self.evidence / 'preparation.json').read_text())
+        self.assertEqual('failed', receipt['result'])
+        self.assertIn('persistent_mismatch', receipt['error'])
+        diag = json.loads((self.evidence / 'source-advisories-diagnostic.json').read_text())
+        self.assertEqual('persistent_mismatch', diag['classification'])
+        self.assertEqual('second_mismatch_after_retry', diag['reason'])
+        self.assertEqual(1, diag['recoveryAttempt'])
+        self.assertEqual('confirmed_rotation', diag['priorRotationDiagnostic']['classification'])
+        private = Path(receipt['privateDirectory'])
+        self.assertFalse((private / 'packages-retry-2').exists())
+        self.assertFalse((private / 'source-http-retry-2').exists())
+        dotnet_calls = [json.loads(line) for line in (self.root / 'dotnet-package-caches.jsonl').read_text().splitlines()]
+        source_restores = [call for call in dotnet_calls if call['args'][0] == 'restore' and call['args'][1].startswith('src/')]
+        self.assertEqual(10, len(source_restores))
+        self.assertEqual([], [call for call in dotnet_calls if call['args'][0] == 'build'])
+
+    def test_source_advisory_unavailable_feed_fails_closed_with_zero_retries(self):
+        result = self.invoke('prepare-ci.sh', 'advisory-feed-unavailable')
+        self.assertNotEqual(0, result.returncode)
+        self.assertIn('unavailable', result.stderr)
+        receipt = json.loads((self.evidence / 'preparation.json').read_text())
+        self.assertEqual('failed', receipt['result'])
+        self.assertIn('unavailable', receipt['error'])
+        diag = json.loads((self.evidence / 'source-advisories-diagnostic.json').read_text())
+        self.assertEqual('unavailable', diag['classification'])
+        self.assertEqual(0, diag['recoveryAttempt'])
+        self.assertEqual(503, diag['pages']['index']['httpStatus'])
+        self.assertEqual({'retry-after': '30'}, diag['pages']['index']['headers'])
+        private = Path(receipt['privateDirectory'])
+        self.assertFalse((private / 'packages-retry-1').exists())
+        self.assertFalse((private / 'source-http-retry-1').exists())
+        dotnet_calls = [json.loads(line) for line in (self.root / 'dotnet-package-caches.jsonl').read_text().splitlines()]
+        source_restores = [call for call in dotnet_calls if call['args'][0] == 'restore' and call['args'][1].startswith('src/')]
+        self.assertEqual(5, len(source_restores))
+        self.assertEqual([], [call for call in dotnet_calls if call['args'][0] == 'build'])
+
+    def test_source_restore_nu1902_fails_closed_as_advisory_affecting_graph(self):
+        result = self.invoke('prepare-ci.sh', 'advisory-nu1902-failure')
+        self.assertNotEqual(0, result.returncode)
+        self.assertIn('advisory_affecting_graph', result.stderr)
+        self.assertIn('NU1902', result.stderr)
+        receipt = json.loads((self.evidence / 'preparation.json').read_text())
+        self.assertEqual('failed', receipt['result'])
+        self.assertIn('advisory_affecting_graph', receipt['error'])
+        self.assertIn('NU1902', receipt['error'])
+        diag = json.loads((self.evidence / 'source-advisories-diagnostic.json').read_text())
+        self.assertEqual('advisory_affecting_graph', diag['classification'])
+        self.assertEqual(['NU1902'], diag['advisoryCodes'])
+        self.assertEqual(0, diag['recoveryAttempt'])
+        self.assertEqual(['hexalith.eventstore.gateway'],
+                         [item['packageId'] for item in diag['semanticDiff']['restoredPackageIntersection']])
+        self.assertEqual([], [call for call in self.calls() if call[0] == 'dotnet' and call[2] == 'build'])
+
+    def test_module_audit_forward_rotation_verifies_against_live_and_passes_run(self):
+        result = self.invoke('prepare-ci.sh', 'advisory-module-rotation')
+        self.assertEqual(0, result.returncode, result.stdout + result.stderr)
+        prepared = json.loads((self.evidence / 'preparation.json').read_text())
+        self.assertEqual('prepared', prepared['result'])
+        mod0_diag = json.loads((self.evidence / 'module-audit-0-advisory-diagnostic.json').read_text())
+        self.assertEqual('match', mod0_diag['classification'])
+        self.assertEqual('forward_rotation_over_proven_verified_against_live', mod0_diag['provenSnapshotDrift'])
+        run_result = self.invoke('run-ci.sh')
+        self.assertEqual(0, run_result.returncode, run_result.stdout + run_result.stderr)
+
+    def test_prepared_provenance_rejects_tampered_advisory_directory_or_cache_escape(self):
+        prepared = self.prepare()
+        prep_path = self.evidence / 'preparation.json'
+        original = prep_path.read_text()
+        for field, value, message in (
+            ('sourceAdvisories', {**prepared['sourceAdvisories'], 'directory': str(self.root)}, 'advisory proof directory'),
+            ('nugetPackages', str(self.root), 'Prepared NuGet package cache'),
+            ('nugetHttpCache', str(self.root), 'Prepared NuGet HTTP cache'),
+        ):
+            with self.subTest(field=field):
+                doc = json.loads(original)
+                doc[field] = value
+                prep_path.write_text(json.dumps(doc))
+                try:
+                    result = self.invoke('run-ci.sh')
+                    self.assertNotEqual(0, result.returncode)
+                    self.assertIn(message, result.stderr)
+                    self.assertFalse((self.root / 'runner-gateway-environment.jsonl').exists())
+                finally:
+                    prep_path.write_text(original)
 
     def test_reader_audit_seals_complete_catalog_template_sources(self):
         module = self.ci_module()
@@ -3006,79 +3201,211 @@ ci.bounded([sys.executable,sys.argv[2],sys.argv[1],sys.argv[3]],120,pathlib.Path
         self.assertIs(False, receipt['fullLiveAccepted'])
         self.assertFalse((self.evidence / 'boundary-receipt.json').exists())
 
+    def test_run_boundary_refuses_existing_receipt_or_runs_including_dangling_symlinks(self):
+        prepared = self.prepare()
+        receipt_path = self.evidence / 'boundary-receipt.json'
+        runs_path = Path(prepared['runtime']) / 'runs'
+        for mode, expected_error in (
+                ('existing-receipt', 'without an existing boundary receipt'),
+                ('dangling-receipt-symlink', 'without an existing boundary receipt'),
+                ('existing-runs', 'fresh prepared runtime with no previous runs'),
+                ('dangling-runs-symlink', 'fresh prepared runtime with no previous runs')):
+            with self.subTest(mode=mode):
+                try:
+                    if mode == 'existing-receipt':
+                        receipt_path.write_text('{}')
+                    elif mode == 'dangling-receipt-symlink':
+                        receipt_path.symlink_to(self.root / 'missing-boundary-receipt.json')
+                    elif mode == 'existing-runs':
+                        runs_path.mkdir()
+                    elif mode == 'dangling-runs-symlink':
+                        runs_path.symlink_to(self.root / 'missing-runs-dir')
+                    before_calls = len(self.calls())
+                    result = self.invoke_ci('run-boundary')
+                finally:
+                    if receipt_path.is_symlink() or receipt_path.exists():
+                        receipt_path.unlink()
+                    if runs_path.is_symlink():
+                        runs_path.unlink()
+                    elif runs_path.is_dir():
+                        shutil.rmtree(runs_path)
+                self.assertNotEqual(0, result.returncode)
+                self.assertIn(expected_error, result.stderr)
+                report = json.loads((self.evidence / 'ci-live.json').read_text())
+                self.assertEqual('failed', report['result'])
+                self.assertIs(False, report['fullLiveAccepted'])
+                self.assertFalse(any(any(value.endswith(('run-isolated.py', 'run-vectors.py')) for value in call)
+                                     for call in self.calls()[before_calls:]))
+
     def test_run_remaining_fails_closed_on_missing_tampered_or_drifted_state(self):
-        for defect in ('missing-receipt', 'tampered-field', 'tampered-tests-xml',
-                       'tampered-runtime-receipt', 'extra-runtime', 'post-conformance-drift',
-                       'smoke-reuses-boundary-receipt'):
+        prepared = self.prepare()
+        boundary_result = self.invoke_ci('run-boundary')
+        self.assertEqual(0, boundary_result.returncode, boundary_result.stderr)
+        ci_live_path = self.evidence / 'ci-live.json'
+        receipt_path = self.evidence / 'boundary-receipt.json'
+        prep_path = self.evidence / 'preparation.json'
+        original_ci_live = ci_live_path.read_bytes()
+        original_receipt = receipt_path.read_bytes()
+        original_prep = prep_path.read_bytes()
+        boundary_receipt = json.loads(original_receipt.decode('utf-8'))
+        tests_xml_path = Path(boundary_receipt['cases']['boundary']['testsXml'])
+        runtime_receipt_path = Path(boundary_receipt['cases']['boundary']['receipt'])
+        outside_path = runtime_receipt_path.parent / 'outside.json'
+        original_tests_xml = tests_xml_path.read_bytes()
+        original_runtime_receipt = runtime_receipt_path.read_bytes()
+        original_outside = outside_path.read_bytes()
+        gateway = self.root / 'tests/Hexalith.McpCli.EventStoreGateway.TestHost/bin/Release/net11.0/Hexalith.EventStore.Gateway.dll'
+        original_gateway = gateway.read_bytes()
+        module = self.ci_module()
+        runs_dir = Path(prepared['runtime']) / 'runs'
+        expected_run_names = {path.name for path in runs_dir.iterdir()}
+
+        def sync_ci_live_digest(raw: bytes) -> None:
+            ci_doc = json.loads(original_ci_live.decode('utf-8'))
+            ci_doc['boundaryReceipt']['sha256'] = hashlib.sha256(raw).hexdigest()
+            ci_live_path.write_text(json.dumps(ci_doc, indent=2) + '\n')
+
+        cases = (
+            ('missing-receipt', 'Verified boundary-receipt.json is required'),
+            ('missing-ci-live', 'verified boundary-passed ci-live.json matching boundary-receipt.json is required'),
+            ('non-boundary-ci-live', 'verified boundary-passed ci-live.json matching boundary-receipt.json is required'),
+            ('tampered-field-prior-digest', 'verified boundary-passed ci-live.json matching boundary-receipt.json is required'),
+            ('tampered-content-sha256', 'content hash does not match its fields'),
+            ('tampered-metadata-recomputed-hash', 'metadata does not match the current prepared evidence'),
+            ('tampered-tests-xml', 'boundary tests.xml artifact changed or is missing'),
+            ('tampered-runtime-receipt', 'boundary runtime receipt changed after run-boundary'),
+            ('tampered-outside-json', 'boundary namespace proof changed after run-boundary'),
+            ('tampered-preparation-json', 'metadata does not match the current prepared evidence'),
+            ('symlinked-boundary-receipt', 'Verified boundary-receipt.json is required'),
+            ('symlinked-tests-xml', 'boundary tests.xml artifact must be a regular file'),
+            ('extra-runtime', 'fresh prepared runtime containing only the verified boundary run'),
+            ('post-conformance-drift', 'Deployed EventStore binary differs from its archive'),
+            ('smoke-reuses-boundary-receipt', 'Independent cases reused an isolated runtime receipt.'),
+        )
+        for defect, expected_stderr in cases:
             with self.subTest(defect=defect):
-                self.fresh_evidence()
-                prepared = self.prepare()
-                boundary_result = self.invoke_ci('run-boundary')
-                self.assertEqual(0, boundary_result.returncode, boundary_result.stderr)
-                receipt_path = self.evidence / 'boundary-receipt.json'
-                boundary_receipt = json.loads(receipt_path.read_text())
-                gateway = self.root / 'tests/Hexalith.McpCli.EventStoreGateway.TestHost/bin/Release/net11.0/Hexalith.EventStore.Gateway.dll'
-                original_gateway = gateway.read_bytes()
+                symlink_target = self.root / f'symlink-target-{defect}'
                 try:
                     if defect == 'missing-receipt':
                         receipt_path.unlink()
-                    elif defect == 'tampered-field':
-                        boundary_receipt['result'] = 'tampered'
-                        receipt_path.write_text(json.dumps(boundary_receipt))
+                    elif defect == 'missing-ci-live':
+                        ci_live_path.unlink()
+                    elif defect == 'non-boundary-ci-live':
+                        ci_doc = json.loads(original_ci_live.decode('utf-8'))
+                        ci_doc['result'] = 'failed'
+                        ci_live_path.write_text(json.dumps(ci_doc))
+                    elif defect == 'tampered-field-prior-digest':
+                        doc = json.loads(original_receipt.decode('utf-8'))
+                        doc['result'] = 'tampered'
+                        receipt_path.write_text(json.dumps(doc))
+                    elif defect == 'tampered-content-sha256':
+                        doc = json.loads(original_receipt.decode('utf-8'))
+                        doc['result'] = 'tampered'
+                        raw = (json.dumps(doc, indent=2) + '\n').encode('utf-8')
+                        receipt_path.write_bytes(raw)
+                        sync_ci_live_digest(raw)
+                    elif defect == 'tampered-metadata-recomputed-hash':
+                        doc = json.loads(original_receipt.decode('utf-8'))
+                        doc['ownershipId'] = '0' * 32
+                        payload = {k: v for k, v in doc.items() if k != 'contentSha256'}
+                        doc['contentSha256'] = module.canonical_digest(payload)
+                        raw = (json.dumps(doc, indent=2) + '\n').encode('utf-8')
+                        receipt_path.write_bytes(raw)
+                        sync_ci_live_digest(raw)
                     elif defect == 'tampered-tests-xml':
-                        Path(boundary_receipt['cases']['boundary']['testsXml']).write_text('<assemblies />')
+                        tests_xml_path.write_text('<assemblies />')
                     elif defect == 'tampered-runtime-receipt':
-                        runtime_receipt = Path(boundary_receipt['cases']['boundary']['receipt'])
-                        runtime_receipt.write_text(runtime_receipt.read_text() + ' ')
+                        runtime_receipt_path.write_bytes(original_runtime_receipt + b' ')
+                    elif defect == 'tampered-outside-json':
+                        outside_path.write_bytes(original_outside + b' ')
+                    elif defect == 'tampered-preparation-json':
+                        prep_path.write_bytes(original_prep + b' ')
+                    elif defect == 'symlinked-boundary-receipt':
+                        symlink_target.write_bytes(original_receipt)
+                        receipt_path.unlink()
+                        receipt_path.symlink_to(symlink_target)
+                    elif defect == 'symlinked-tests-xml':
+                        symlink_target.write_bytes(original_tests_xml)
+                        tests_xml_path.unlink()
+                        tests_xml_path.symlink_to(symlink_target)
                     elif defect == 'extra-runtime':
-                        (Path(prepared['runtime']) / 'runs/unexpected').mkdir()
+                        (runs_dir / 'unexpected').mkdir()
                     elif defect == 'post-conformance-drift':
                         gateway.write_bytes(b'mutated-during-conformance')
                     before_calls = len(self.calls())
                     mode = 'reused-independent-receipt' if defect == 'smoke-reuses-boundary-receipt' else ''
                     remaining = self.invoke_ci('run-remaining', mode)
                 finally:
+                    if receipt_path.is_symlink():
+                        receipt_path.unlink()
+                    receipt_path.write_bytes(original_receipt)
+                    if tests_xml_path.is_symlink():
+                        tests_xml_path.unlink()
+                    tests_xml_path.write_bytes(original_tests_xml)
+                    runtime_receipt_path.write_bytes(original_runtime_receipt)
+                    outside_path.write_bytes(original_outside)
+                    prep_path.write_bytes(original_prep)
                     gateway.write_bytes(original_gateway)
+                    symlink_target.unlink(missing_ok=True)
+                    for child in list(runs_dir.iterdir()):
+                        if child.name not in expected_run_names:
+                            shutil.rmtree(child, ignore_errors=True)
+                    final_ci = json.loads(ci_live_path.read_text())
+                    ci_live_path.write_bytes(original_ci_live)
                 self.assertNotEqual(0, remaining.returncode)
-                final_ci = json.loads((self.evidence / 'ci-live.json').read_text())
+                self.assertIn(expected_stderr, remaining.stderr)
                 self.assertEqual('failed', final_ci['result'])
                 self.assertIs(False, final_ci['fullLiveAccepted'])
-                if defect == 'smoke-reuses-boundary-receipt':
-                    self.assertIn('Independent cases reused an isolated runtime receipt.', remaining.stderr)
-                else:
+                if defect != 'smoke-reuses-boundary-receipt':
                     self.assertFalse(any(any(value.endswith('run-vectors.py') for value in call)
                                          for call in self.calls()[before_calls:]))
 
     def test_fail_fast_vectors_surface_skipped_summary_and_still_run_smoke(self):
-        self.prepare()
-        result = self.invoke('run-ci.sh', 'fail-fast-vectors')
-        self.assertNotEqual(0, result.returncode)
-        receipt = json.loads((self.evidence / 'ci-live.json').read_text())
-        self.assertIs(False, receipt['fullLiveAccepted'])
-        self.assertEqual('passed', receipt['smoke']['result'])
-        self.assertEqual(2, len(receipt['vectors']['failures']))
-        self.assertEqual(19, len(receipt['vectors']['skippedFailFast']))
-        self.assertEqual('reached --max-failures 2 after sample.operation-01', receipt['vectors']['failFastReason'])
-        self.assertIn('failed Operations: sample.operation-00, sample.operation-01', result.stderr)
-        self.assertIn('skipped-fail-fast Operations (19):', result.stderr)
-        self.assertIn('fail-fast reason: reached --max-failures 2 after sample.operation-01', result.stderr)
+        prepared = self.prepare()
+        for invocation in ('run-ci.sh', 'run-remaining'):
+            with self.subTest(invocation=invocation):
+                shutil.rmtree(Path(prepared['runtime']) / 'runs', ignore_errors=True)
+                (self.evidence / 'boundary-receipt.json').unlink(missing_ok=True)
+                if invocation == 'run-remaining':
+                    boundary = self.invoke_ci('run-boundary')
+                    self.assertEqual(0, boundary.returncode, boundary.stderr)
+                    result = self.invoke_ci('run-remaining', 'fail-fast-vectors')
+                else:
+                    result = self.invoke('run-ci.sh', 'fail-fast-vectors')
+                self.assertNotEqual(0, result.returncode)
+                receipt = json.loads((self.evidence / 'ci-live.json').read_text())
+                self.assertIs(False, receipt['fullLiveAccepted'])
+                self.assertEqual('passed', receipt['smoke']['result'])
+                self.assertEqual(2, len(receipt['vectors']['failures']))
+                self.assertEqual(19, len(receipt['vectors']['skippedFailFast']))
+                self.assertEqual('reached --max-failures 2 after sample.operation-01', receipt['vectors']['failFastReason'])
+                self.assertIn('failed Operations: sample.operation-00, sample.operation-01', result.stderr)
+                self.assertIn('skipped-fail-fast Operations (19):', result.stderr)
+                self.assertIn('fail-fast reason: reached --max-failures 2 after sample.operation-01', result.stderr)
 
     def test_forged_fail_fast_lane_cannot_grant_acceptance(self):
-        self.prepare()
-        result = self.invoke('run-ci.sh', 'forged-fail-fast-passed')
-        self.assertNotEqual(0, result.returncode)
-        receipt = json.loads((self.evidence / 'ci-live.json').read_text())
-        self.assertIs(False, receipt['fullLiveAccepted'])
-        self.assertEqual('passed', receipt['smoke']['result'])
-        self.assertIn('Complete current passing evidence for every approved live vector is required', result.stderr)
+        prepared = self.prepare()
+        for mode in ('forged-fail-fast-passed', 'forged-fail-fast-flag-only', 'forged-fail-fast-nonbool',
+                     'forged-skipped-only', 'forged-skipped-bool'):
+            with self.subTest(mode=mode):
+                shutil.rmtree(Path(prepared['runtime']) / 'runs', ignore_errors=True)
+                result = self.invoke('run-ci.sh', mode)
+                self.assertNotEqual(0, result.returncode)
+                receipt = json.loads((self.evidence / 'ci-live.json').read_text())
+                self.assertIs(False, receipt['fullLiveAccepted'])
+                self.assertEqual('passed', receipt['smoke']['result'])
+                self.assertIn('Complete current passing evidence for every approved live vector is required', result.stderr)
 
 
 class IndependentCaseTests(unittest.TestCase):
     def test_case_identity_counts_skips_errors_and_budgets_are_enforced(self):
         import ci as module
         budget = module.RUN_TIMEOUT_SECONDS - len(module.INDEPENDENT_CASES) * module.INDEPENDENT_CASE_TIMEOUT - module.CLEANUP_HEADROOM_SECONDS
+        remaining_budget = module.RUN_REMAINING_TIMEOUT_SECONDS - len(module.POST_VECTOR_CASES) * module.INDEPENDENT_CASE_TIMEOUT - module.CLEANUP_HEADROOM_SECONDS
         self.assertGreater(budget, 0)
+        self.assertEqual(budget, remaining_budget)
         self.assertEqual(module.RUN_TIMEOUT_SECONDS, budget + len(module.INDEPENDENT_CASES) * module.INDEPENDENT_CASE_TIMEOUT + module.CLEANUP_HEADROOM_SECONDS)
+        self.assertEqual(module.RUN_REMAINING_TIMEOUT_SECONDS, remaining_budget + len(module.POST_VECTOR_CASES) * module.INDEPENDENT_CASE_TIMEOUT + module.CLEANUP_HEADROOM_SECONDS)
         with tempfile.TemporaryDirectory() as directory:
             path = Path(directory) / 'tests.xml'
             for _, class_name, method in module.INDEPENDENT_CASES:

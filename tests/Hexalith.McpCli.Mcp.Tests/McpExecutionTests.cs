@@ -360,6 +360,15 @@ public sealed class McpExecutionTests
         cursor.ErrorCode.ShouldBe(McpErrorCode.InvalidParams);
         cursor.Message.ShouldBe("Request failed (remote): Use the exact paging argument name 'cursor'.");
         session.Gateway.ReceivedCalls().ShouldBeEmpty();
+
+        McpProtocolException mixed = await Should.ThrowAsync<McpProtocolException>(() => session.CallAsync("run_query",
+            new Dictionary<string, object?>
+            {
+                ["operation"] = "sample.get-item", ["payload"] = QueryPayload, ["pageSize"] = 25, ["PageSize"] = 1,
+            }));
+        mixed.ErrorCode.ShouldBe(McpErrorCode.InvalidParams);
+        mixed.Message.ShouldBe("Request failed (remote): Use the exact paging argument name 'pageSize'.");
+        session.Gateway.ReceivedCalls().ShouldBeEmpty();
     }
 
     /// <summary>Wrong kinds, payloads, envelope arguments, offline calls and Gateway failures match Core documents.</summary>

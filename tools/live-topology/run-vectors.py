@@ -122,6 +122,11 @@ def classify_immediate_fail_fast(output: Path, exit_code: int | None) -> str | N
         return 'wrapper initialization failed: prerequisitesReady is not true'
     if owned.get('error'):
         return 'wrapper initialization failed: runtime receipt reported error'
+    stopped = owned.get('ownedInfrastructureStopped')
+    if (not isinstance(stopped, dict)
+            or set(stopped) != {'sentry', 'redis', 'placement', 'scheduler'}
+            or any(value is None for value in stopped.values())):
+        return 'wrapper initialization failed: incomplete ownedInfrastructureStopped'
     tests_xml = output / 'tests.xml'
     if not tests_xml.is_file():
         return 'fixture initialization failed: missing tests.xml'
@@ -135,6 +140,14 @@ def classify_immediate_fail_fast(output: Path, exit_code: int | None) -> str | N
     errors = assemblies[0].get('errors')
     if errors != '0':
         return f'fixture initialization failed: tests.xml reported errors={errors}'
+    skipped = assemblies[0].get('skipped')
+    if skipped != '0':
+        return f'fixture initialization failed: tests.xml reported skipped={skipped}'
+    for failure in root.findall('.//failure'):
+        exception_type = failure.get('exception-type') or ''
+        message = failure.findtext('message') or ''
+        if exception_type == 'Xunit.Sdk.TestPipelineException' or 'threw in InitializeAsync' in message:
+            return f'fixture initialization failed: {exception_type or "InitializeAsync"}'
     if not root.findall('.//test'):
         return 'fixture initialization failed: tests.xml recorded no executed test cases'
     return None
@@ -159,7 +172,7 @@ def main(argv=None) -> int:
     args.output = args.output.resolve()
     args.output.mkdir(parents=True, exist_ok=True)
     report = {'runId': uuid.uuid4().hex, 'result': 'pending', 'fullLiveAccepted': False,
-              'failFastTriggered': False, 'failFastReason': None, 'vectors': [], 'reported': []}
+              'skipped': 0, 'failFastTriggered': False, 'failFastReason': None, 'vectors': [], 'reported': []}
     receipt = args.output / 'live-lane.json'
     # Invalidate the public receipt before any fallible preflight. Child outputs use a unique generation.
     receipt.write_text(json.dumps(report, indent=2) + '\n')
@@ -258,7 +271,7 @@ def main(argv=None) -> int:
                 except Exception as error:
                     outcome.update(result='failed', error=f'{type(error).__name__}: {error}')
                     failed_count += 1
-                    if args.max_failures > 0:
+                    if args.max_failures > 0 and index + 1 < len(report['vectors']):
                         immediate = classify_immediate_fail_fast(output, outcome.get('exitCode'))
                         if immediate is not None:
                             fail_fast_triggered = True
@@ -271,6 +284,8 @@ def main(argv=None) -> int:
                             report['failFastReason'] = fail_fast_reason
                             for remaining in report['vectors'][index + 1:]:
                                 remaining['result'] = 'skipped-fail-fast'
+                            report['skipped'] = sum(entry['result'] == 'skipped-fail-fast' for entry in report['vectors'])
+                report['skipped'] = sum(entry['result'] == 'skipped-fail-fast' for entry in report['vectors'])
                 save()
                 if fail_fast_triggered:
                     break

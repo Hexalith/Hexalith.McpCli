@@ -139,6 +139,8 @@ def linux_packages() -> None:
 
 
 def linux_conformance() -> None:
+    source = source_sha()
+    require_source({'source_sha': source})
     # Unit tests start without the variables that locate the runner's workflow command files.
     execute(['env', '-u', 'GITHUB_ENV', '-u', 'GITHUB_PATH', '-u', 'GITHUB_OUTPUT', '-u', 'GITHUB_STATE',
              '-u', 'GITHUB_STEP_SUMMARY', sys.executable, '-m', 'unittest', 'discover', '-v', '-s', 'scripts/tests',
@@ -151,6 +153,7 @@ def linux_conformance() -> None:
              '-u', 'GITHUB_STEP_SUMMARY', sys.executable, '-m', 'unittest', 'discover', '-v', '-s', 'tools/live-topology',
              '-p', 'test_*.py'], timeout=3600)
     execute([sys.executable, ROOT / 'tools/live-topology/run-vectors.py', '--output', staging_root() / 'preflight', '--preflight-only'])
+    require_source({'source_sha': source})
 
 
 def linux_checks() -> None:

@@ -145,6 +145,36 @@ public sealed class McpOutputSchemaTests(ITestOutputHelper output)
         length.ShouldBeLessThan(8000);
     }
 
+    /// <summary>The advertised query schema rejects case variants of the protected argument names.</summary>
+    [Theory]
+    [InlineData("2025-06-18")]
+    [InlineData("2026-07-28")]
+    public async Task QueryInputSchemaRequiresExactArgumentNamesAsync(string version)
+    {
+        await using McpTestSession session = await CreateAsync(version);
+        IList<McpClientTool> tools = await session.Client.ListToolsAsync(cancellationToken: session.Token);
+        JsonSchema schema = JsonSchema.FromText(tools.Single(tool => tool.Name == "run_query").ProtocolTool.InputSchema.GetRawText());
+        var arguments = new Dictionary<string, object?>
+        {
+            ["operation"] = "sample.get-item", ["payload"] = QueryPayload,
+            ["aggregateId"] = ItemId, ["pageSize"] = 25, ["offset"] = 0, ["cursor"] = "", ["extra"] = true,
+            ["PageSize\n"] = true,
+        };
+
+        schema.Evaluate(JsonSerializer.SerializeToElement(arguments)).IsValid.ShouldBeTrue();
+        (await session.CallAsync("run_query", arguments)).IsError.ShouldBe(false);
+        session.Gateway.ReceivedCalls().ShouldHaveSingleItem();
+        foreach ((string exact, string alias) in new[]
+        {
+            ("aggregateId", "AggregateId"), ("pageSize", "PAGESIZE"), ("offset", "OFFSET"), ("cursor", "Cursor"),
+        })
+        {
+            arguments[alias] = arguments[exact];
+            schema.Evaluate(JsonSerializer.SerializeToElement(arguments)).IsValid.ShouldBeFalse(alias);
+            arguments.Remove(alias);
+        }
+    }
+
     /// <summary>Arbitrary returned JSON remains open and paging and command optional fields follow actual Gateway responses.</summary>
     [Theory]
     [InlineData("2025-06-18")]

@@ -496,10 +496,15 @@ def reader_audit_provenance(prepared: dict | None = None) -> dict:
 
 
 def prove_source_advisories(private: Path, package_cache: Path, tools: dict, bounded, evidence: Path,
-                            receipt: dict, *, required: bool = False) -> None:
+                            receipt: dict, *, required: bool = False,
+                            restored_packages: set[str] | dict | None = None,
+                            recovery_attempt: int = 0,
+                            prior_rotation_diag: dict | None = None) -> None:
     """Prove restore advisories as soon as the HTTP cache exists; reuse that snapshot for module audits."""
-    source_http = private / 'source-http'
-    snapshot = private / 'source-advisories'
+    source_http = Path(receipt.get('nugetHttpCache', str(private / 'source-http')))
+    snapshot_name = 'source-advisories' if recovery_attempt == 0 else 'source-advisories-retry-1'
+    snapshot = Path(receipt['sourceAdvisories']['directory']) if 'sourceAdvisories' in receipt and 'directory' in receipt['sourceAdvisories'] else private / snapshot_name
+    source_diag_path = evidence / 'source-advisories-diagnostic.json'
     try:
         native_audit.advisory_cache_index(source_http)
     except ValueError:
@@ -507,18 +512,54 @@ def prove_source_advisories(private: Path, package_cache: Path, tools: dict, bou
             raise
         return
     if 'sourceAdvisories' not in receipt:
-        receipt['sourceAdvisories'] = native_audit.online_advisories(source_http, snapshot, bounded)
+        advisories = native_audit.online_advisories(
+            source_http, snapshot, bounded,
+            restored_packages=restored_packages,
+            diagnostic_path=source_diag_path,
+            recovery_attempt=recovery_attempt,
+        )
+        if prior_rotation_diag is not None:
+            final_diag_file = snapshot / 'diagnostic.json'
+            final_diag = json.loads(final_diag_file.read_text())
+            final_diag['priorRotationDiagnostic'] = prior_rotation_diag
+            native_audit.write_diagnostic(final_diag, final_diag_file, source_diag_path)
+            advisories['priorRotationDiagnostic'] = {
+                'classification': prior_rotation_diag['classification'],
+                'offendingPages': prior_rotation_diag['offendingPages'],
+                'cacheRetrievedAtUtc': prior_rotation_diag['cacheRetrievedAtUtc'],
+                'onlineRetrievedAtUtc': prior_rotation_diag['onlineRetrievedAtUtc'],
+            }
+        receipt['sourceAdvisories'] = advisories
+        receipt.setdefault('advisoryDiagnostics', {})['source'] = str(source_diag_path)
     elif not native_audit.snapshot_matches_cache(source_http, snapshot):
         shutil.rmtree(snapshot)
-        receipt['sourceAdvisories'] = native_audit.online_advisories(source_http, snapshot, bounded)
+        receipt['sourceAdvisories'] = native_audit.online_advisories(
+            source_http, snapshot, bounded,
+            restored_packages=restored_packages,
+            diagnostic_path=source_diag_path,
+            recovery_attempt=recovery_attempt,
+        )
+        receipt.setdefault('advisoryDiagnostics', {})['source'] = str(source_diag_path)
     if 'nativeAudits' in receipt:
         return
     receipt['nativeAudits'] = {}
+    latest_proven = snapshot
     for index, relative in enumerate(MODULE_AUDIT_PROJECTS):
-        audit = native_audit.audit_project(ROOT / relative, private / ('module-audit-' + str(index)),
-                                           evidence / ('module-audit-' + str(index)), tools['sdkPolicy'], bounded,
-                                           proven_advisories=snapshot)
+        module_diag = evidence / f'module-audit-{index}-advisory-diagnostic.json'
+        audit = native_audit.audit_project(
+            ROOT / relative,
+            private / ('module-audit-' + str(index)),
+            evidence / ('module-audit-' + str(index)),
+            tools['sdkPolicy'],
+            bounded,
+            proven_advisories=latest_proven,
+            diagnostic_path=module_diag,
+        )
         receipt['nativeAudits'][relative] = audit
+        receipt.setdefault('advisoryDiagnostics', {})[relative] = str(module_diag)
+        audited_snapshot = Path(audit['advisories']['directory'])
+        if audited_snapshot.is_dir():
+            latest_proven = audited_snapshot
         # The isolated metadata reader has no external network. Seed its private cache
         # only from these freshly audited package bytes; never change the module cache.
         for package in (Path(audit['privateDirectory']) / 'packages').iterdir():
@@ -574,8 +615,13 @@ def require_prepared_provenance(prepared: dict) -> dict:
         if discovered['tests'] != expected_discovery() or discovered['binarySha256'] != hashlib.sha256(TESTS.read_bytes()).hexdigest():
             raise ValueError('Prepared Integration test discovery or binary changed after preparation.')
     if 'sourceAdvisories' in prepared:
+        private_root = Path(prepared['privateDirectory']).resolve()
+        snapshot_dir = Path(prepared['sourceAdvisories'].get('directory', str(private_root / 'source-advisories')))
+        if snapshot_dir.is_symlink() or not snapshot_dir.is_dir() \
+                or not snapshot_dir.resolve().is_relative_to(private_root):
+            raise ValueError('The native source fixture advisory proof directory is invalid or outside preparation.')
         for name, page in prepared['sourceAdvisories']['pages'].items():
-            path = Path(prepared['privateDirectory']) / 'source-advisories' / (name + '.json')
+            path = snapshot_dir / (name + '.json')
             if hashlib.sha256(path.read_bytes()).hexdigest() != page['sha256']:
                 raise ValueError('The native source fixture advisory proof changed after preparation.')
     for source in prepared['sources']:
@@ -866,8 +912,10 @@ def prepare(evidence: Path) -> None:
         shutil.copyfile(provenance, nested_props / 'ContainerProvenance.targets')
         source_restore_config = private / 'source-restore.config'
         native_audit.write_restore_config(source_restore_config)
+        source_http = private / 'source-http'
+        receipt['nugetHttpCache'] = str(source_http)
         source_environment = dict(os.environ, NUGET_PACKAGES=str(package_cache),
-                                  NUGET_HTTP_CACHE_PATH=str(private / 'source-http'),
+                                  NUGET_HTTP_CACHE_PATH=str(source_http),
                                   CustomAfterMicrosoftCommonTargets=str(overrides),
                                   CustomAfterDirectoryBuildTargets=str(after_directory),
                                   RestoreConfigFile=str(source_restore_config))
@@ -899,31 +947,108 @@ def prepare(evidence: Path) -> None:
                 properties.append('-p:HexalithContainerProvenanceTargets=' + str(provenance))
             return properties
 
+        def restore_source_fixtures(attempt: int) -> set[str]:
+            suffix = '' if attempt == 0 else '-retry-1'
+            force_flag = ['--force'] if attempt > 0 else []
+            source_diag_path = evidence / 'source-advisories-diagnostic.json'
+            restored_identities: set[str] = set()
+            restored_assets_paths: list[Path] = []
+
+            def run_restore(project_rel: str, stem: str, working: Path, extra: list[str]) -> None:
+                evidence_stem = evidence / (stem + suffix)
+                assets_path = working / Path(project_rel).parent / 'obj/project.assets.json'
+                try:
+                    bounded(
+                        ['dotnet', 'restore', project_rel, '--configfile', str(source_restore_config),
+                         *force_flag, '-p:Configuration=Release', '-warnaserror', *extra],
+                        300, evidence_stem, cwd=working, environment=source_environment,
+                        require_complete_stdout=False,
+                    )
+                except RuntimeError as error:
+                    known = restored_identities | native_audit.restored_package_identities(assets_path)
+                    raise native_audit.classify_restore_failure(
+                        error, evidence_stem, diagnostic_path=source_diag_path,
+                        restored_packages=known, recovery_attempt=attempt,
+                    ) from error
+                restored_assets_paths.append(assets_path)
+                restored_identities.update(native_audit.restored_package_identities(assets_path))
+
+            for source in receipt['sources']:
+                module = source['module']
+                if module not in native_sources.MODULES:
+                    continue
+                properties = source_properties(module)
+                working = fixture_root / module
+                project = native_sources.host_project(module)
+                run_restore(project, module + '-restore', working, properties)
+                if module == 'Hexalith.Parties':
+                    run_restore(
+                        'src/Hexalith.Parties.EventStoreExtensions/Hexalith.Parties.EventStoreExtensions.csproj',
+                        'parties-adapter-restore', working, ['-p:CopyLocalLockFileAssemblies=true', *properties],
+                    )
+                if module == 'Hexalith.Projects':
+                    run_restore(native_sources.PROJECTS_WORKER, 'projects-workers-restore', working, properties)
+
+            for assets_path in restored_assets_paths:
+                native_audit.require_policy(
+                    assets_path, diagnostic_path=source_diag_path,
+                    restored_packages=restored_identities, recovery_attempt=attempt,
+                )
+                if attempt > 0:
+                    native_audit.package_graph(assets_path)
+            return restored_identities
+
         # Restore every source owner first, then prove the advisory HTTP cache before the long
         # compiles. Later builds use --no-restore so the audit source cannot rotate that snapshot.
-        for source in receipt['sources']:
-            module = source['module']
-            if module not in native_sources.MODULES:
-                continue
-            properties = source_properties(module)
-            working = fixture_root / module
-            project = native_sources.host_project(module)
-            bounded(['dotnet', 'restore', project, '--configfile', str(source_restore_config),
-                     '-p:Configuration=Release', '-warnaserror', *properties],
-                    300, evidence / (module + '-restore'), cwd=working, environment=source_environment,
-                    require_complete_stdout=False)
-            if module == 'Hexalith.Parties':
-                bounded(['dotnet', 'restore', 'src/Hexalith.Parties.EventStoreExtensions/Hexalith.Parties.EventStoreExtensions.csproj',
-                         '--configfile', str(source_restore_config), '-p:Configuration=Release', '-warnaserror',
-                         '-p:CopyLocalLockFileAssemblies=true', *properties],
-                        300, evidence / 'parties-adapter-restore', cwd=working, environment=source_environment,
-                        require_complete_stdout=False)
-            if module == 'Hexalith.Projects':
-                bounded(['dotnet', 'restore', native_sources.PROJECTS_WORKER, '--configfile', str(source_restore_config),
-                         '-p:Configuration=Release', '-warnaserror', *properties],
-                        300, evidence / 'projects-workers-restore', cwd=working, environment=source_environment,
-                        require_complete_stdout=False)
-        prove_source_advisories(private, package_cache, tools, bounded, evidence, receipt, required=True)
+        # On confirmed forward rotation, allow at most one fresh isolated re-restore in brand new caches.
+        source_restored_packages = restore_source_fixtures(attempt=0)
+        source_recovery_attempt = 0
+        try:
+            prove_source_advisories(
+                private, package_cache, tools, bounded, evidence, receipt,
+                required=True, restored_packages=source_restored_packages, recovery_attempt=0,
+            )
+        except native_audit.AdvisoryVerificationError as error:
+            if error.classification != native_audit.CLASSIFICATION_CONFIRMED_ROTATION or 'sourceAdvisories' in receipt:
+                raise
+            prior_rotation_diag = error.diagnostic
+            native_audit.write_diagnostic(prior_rotation_diag, evidence / 'source-advisories-attempt-0-diagnostic.json')
+            source_recovery_attempt = 1
+            package_cache = private / 'packages-retry-1'
+            package_cache.mkdir()
+            source_http = private / 'source-http-retry-1'
+            receipt['nugetPackages'] = str(package_cache)
+            receipt['nugetHttpCache'] = str(source_http)
+            source_environment['NUGET_PACKAGES'] = str(package_cache)
+            source_environment['NUGET_HTTP_CACHE_PATH'] = str(source_http)
+            source_restored_packages = restore_source_fixtures(attempt=1)
+            try:
+                prove_source_advisories(
+                    private, package_cache, tools, bounded, evidence, receipt,
+                    required=True, restored_packages=source_restored_packages,
+                    recovery_attempt=1, prior_rotation_diag=prior_rotation_diag,
+                )
+            except native_audit.AdvisoryVerificationError as retry_error:
+                if retry_error.classification == native_audit.CLASSIFICATION_CONFIRMED_ROTATION and 'sourceAdvisories' not in receipt:
+                    escalated = dict(
+                        retry_error.diagnostic,
+                        classification=native_audit.CLASSIFICATION_PERSISTENT_MISMATCH,
+                        reason='second_mismatch_after_retry',
+                        priorRotationDiagnostic=prior_rotation_diag,
+                    )
+                    native_audit.write_diagnostic(
+                        escalated,
+                        private / 'source-advisories-retry-1/diagnostic.json',
+                        evidence / 'source-advisories-diagnostic.json',
+                    )
+                    pages = ', '.join(escalated.get('offendingPages', [])) or 'index'
+                    raise native_audit.AdvisoryVerificationError(
+                        f'The native audit encountered {native_audit.CLASSIFICATION_PERSISTENT_MISMATCH} after single fresh source retry '
+                        f'(second mismatch on {pages}).',
+                        native_audit.CLASSIFICATION_PERSISTENT_MISMATCH,
+                        escalated,
+                    ) from retry_error
+                raise
         for source in receipt['sources']:
             module = source['module']
             if module not in native_sources.MODULES:
@@ -949,7 +1074,9 @@ def prepare(evidence: Path) -> None:
                          '--configuration', 'Release', '-warnaserror', '-m:1', *properties],
                         300, evidence / 'projects-workers-build', cwd=working, environment=source_environment,
                         require_complete_stdout=False)
-            prove_source_advisories(private, package_cache, tools, bounded, evidence, receipt)
+            prove_source_advisories(private, package_cache, tools, bounded, evidence, receipt,
+                                    restored_packages=source_restored_packages,
+                                    recovery_attempt=source_recovery_attempt)
         source_path = evidence / 'native-source-fixtures.json'
         save(source_path, native_sources.seal(source_proof))
         receipt['sourceFixtures'] = {'path': str(source_path.resolve()), 'sha256': hashlib.sha256(source_path.read_bytes()).hexdigest()}
@@ -1031,6 +1158,7 @@ def copy_diagnostics(runtime: Path, output: Path) -> None:
 
 INDEPENDENT_CASE_TIMEOUT = 960
 RUN_TIMEOUT_SECONDS = 13800
+RUN_REMAINING_TIMEOUT_SECONDS = 12840
 CLEANUP_HEADROOM_SECONDS = 600
 BOUNDARY_RECEIPT_FILE = 'boundary-receipt.json'
 PRE_VECTOR_CASES = (
@@ -1090,18 +1218,25 @@ def load_prepared_context(evidence: Path) -> tuple[dict, Path, Path, dict[str, s
         binary = prepared_runtime / 'bin' / Path(row['source']).name
         if hashlib.sha256(binary.read_bytes()).hexdigest() != row['sha256']:
             raise ValueError(f'Prepared runtime binary hash mismatch: {binary.name}')
+    private_root = Path(prepared['privateDirectory']).resolve()
+    nuget_packages = Path(prepared['nugetPackages'])
+    nuget_http_cache = Path(prepared.get('nugetHttpCache', str(source_overrides.with_name('source-http'))))
+    if nuget_packages.is_symlink() or not nuget_packages.is_dir() or not nuget_packages.resolve().is_relative_to(private_root):
+        raise ValueError('Prepared NuGet package cache is invalid or outside preparation.')
+    if nuget_http_cache.is_symlink() or not nuget_http_cache.is_dir() or not nuget_http_cache.resolve().is_relative_to(private_root):
+        raise ValueError('Prepared NuGet HTTP cache is invalid or outside preparation.')
     environment = os.environ.copy()
     for key in list(environment):
         if key.startswith(('MCPCLI_LIVE_', 'EVENTSTORE_')):
             del environment[key]
     environment.update(McpCliCurrentNativeProfile='true', MCPCLI_ISOLATED_RUNTIME_DIR=str(prepared_runtime),
-                       NUGET_PACKAGES=prepared['nugetPackages'],
+                       NUGET_PACKAGES=str(nuget_packages),
                        MCPCLI_NATIVE_SOURCE_FIXTURES=prepared['sourceFixtures']['path'],
                        MCPCLI_NATIVE_SOURCE_FIXTURES_SHA256=prepared['sourceFixtures']['sha256'],
                        CustomAfterMicrosoftCommonTargets=str(source_overrides),
                        CustomAfterDirectoryBuildTargets=str(source_overrides.with_name('source-runtime-after-directory.targets')),
                        RestoreConfigFile=str(source_overrides.with_name('source-restore.config')),
-                       NUGET_HTTP_CACHE_PATH=str(source_overrides.with_name('source-http')),
+                       NUGET_HTTP_CACHE_PATH=str(nuget_http_cache),
                        UseHexalithProjectReferences='false', UseNuGetDeps='true',
                        HexalithEventStoreFromSource='false', HexalithEventStoreVersion=EVENTSTORE_COHORT,
                        Topology__UsePackagedGateway='true',
@@ -1142,15 +1277,18 @@ def execute_independent_cases(cases, *, generation: Path, prepared: dict, python
 
 def execute_vectors_and_post_cases(*, generation: Path, prepared: dict, python: Path,
                                    runtime: Path, environment: dict, report: dict,
-                                   independent_receipts: list[Path], independent_errors: list[str]) -> None:
+                                   independent_receipts: list[Path], independent_errors: list[str],
+                                   vector_budget: int | None = None) -> None:
     """Execute live vectors and post-vector independent smoke, then verify complete runtime counts."""
     vectors = generation / 'vectors'
     require_prepared_provenance(prepared)
     vector_error = None
     expected = []
+    budget = (RUN_TIMEOUT_SECONDS - len(INDEPENDENT_CASES) * INDEPENDENT_CASE_TIMEOUT - CLEANUP_HEADROOM_SECONDS
+              if vector_budget is None else vector_budget)
     try:
         bounded([str(python), str(ROOT / 'tools/live-topology/run-vectors.py'), '--output', str(vectors)],
-                RUN_TIMEOUT_SECONDS - len(INDEPENDENT_CASES) * INDEPENDENT_CASE_TIMEOUT - CLEANUP_HEADROOM_SECONDS,
+                budget,
                 generation / 'vectors-process', environment=environment, require_complete_stdout=False)
         lane = json.loads((vectors / 'live-lane.json').read_text())
         # The live set is every approved vector with a companion plan; a vector without one is loopback-only.
@@ -1160,7 +1298,8 @@ def execute_vectors_and_post_cases(*, generation: Path, prepared: dict, python: 
         outcomes = lane.get('vectors', [])
         if not expected or len(set(expected)) != len(expected) or lane.get('coverage') != expected \
                 or lane.get('result') != 'passed' or lane.get('fullLiveAccepted') is not True \
-                or lane.get('failFastTriggered') is True or lane.get('skipped', 0) != 0 \
+                or lane.get('failFastTriggered', False) is not False \
+                or type(lane.get('skipped', 0)) is not int or lane.get('skipped', 0) != 0 \
                 or lane.get('passed') != len(expected) or lane.get('failed') != 0 \
                 or sorted(item.get('operation', '') for item in outcomes) != expected \
                 or len({item.get('isolatedReceipt') for item in outcomes}) != len(expected) \
@@ -1225,12 +1364,18 @@ def verify_boundary_receipt(evidence: Path, prepared: dict, runtime: Path, owner
     receipt_path = evidence / BOUNDARY_RECEIPT_FILE
     if receipt_path.is_symlink() or not receipt_path.is_file():
         raise ValueError('Verified boundary-receipt.json is required before running remaining live checks.')
+    preparation_path = evidence / 'preparation.json'
+    if preparation_path.is_symlink() or not preparation_path.is_file():
+        raise ValueError('Prepared preparation.json must be a regular file.')
     raw_bytes = receipt_path.read_bytes()
     receipt_sha256 = hashlib.sha256(raw_bytes).hexdigest()
-    if isinstance(prior_report, dict) and prior_report.get('result') == 'boundary-passed':
-        expected_ref = {'path': str(receipt_path.resolve()), 'sha256': receipt_sha256}
-        if prior_report.get('boundaryReceipt') != expected_ref:
-            raise ValueError('The boundary-receipt.json digest differs from the recorded boundary phase receipt.')
+    expected_ref = {'path': str(receipt_path.resolve()), 'sha256': receipt_sha256}
+    if (not isinstance(prior_report, dict)
+            or prior_report.get('result') != 'boundary-passed'
+            or prior_report.get('phase') != 'boundary'
+            or prior_report.get('preparationRunId') != prepared['runId']
+            or prior_report.get('boundaryReceipt') != expected_ref):
+        raise ValueError('A verified boundary-passed ci-live.json matching boundary-receipt.json is required before running remaining live checks.')
     try:
         document = json.loads(raw_bytes.decode('utf-8'))
     except (UnicodeDecodeError, ValueError) as error:
@@ -1241,7 +1386,7 @@ def verify_boundary_receipt(evidence: Path, prepared: dict, runtime: Path, owner
     payload = {key: value for key, value in document.items() if key != 'contentSha256'}
     if not isinstance(recorded_digest, str) or canonical_digest(payload) != recorded_digest:
         raise ValueError('The boundary-receipt.json content hash does not match its fields.')
-    preparation_sha256 = hashlib.sha256((evidence / 'preparation.json').read_bytes()).hexdigest()
+    preparation_sha256 = hashlib.sha256(preparation_path.read_bytes()).hexdigest()
     boundary_run_id = document.get('boundaryRunId')
     if (document.get('schema') != 'mcpcli-live-boundary/v1'
             or document.get('result') != 'passed'
@@ -1252,6 +1397,7 @@ def verify_boundary_receipt(evidence: Path, prepared: dict, runtime: Path, owner
             or document.get('runtime') != str(runtime.resolve())
             or not isinstance(boundary_run_id, str)
             or re.fullmatch(r'[0-9a-f]{32}', boundary_run_id) is None
+            or prior_report.get('runId') != boundary_run_id
             or document.get('output') != str((evidence / boundary_run_id).resolve())):
         raise ValueError('The boundary-receipt.json metadata does not match the current prepared evidence.')
     cases = document.get('cases')
@@ -1269,18 +1415,26 @@ def verify_boundary_receipt(evidence: Path, prepared: dict, runtime: Path, owner
                 or not isinstance(entry.get('receipt'), str)
                 or not isinstance(entry.get('testsXml'), str)):
             raise ValueError(f'The boundary-receipt.json entry for {name} is incomplete or did not pass.')
-        case_receipt = Path(entry['receipt']).resolve()
+        raw_case_receipt = Path(entry['receipt'])
+        if raw_case_receipt.is_symlink() or not raw_case_receipt.is_file():
+            raise ValueError(f'The boundary runtime receipt must be a regular file: {name}.')
+        case_receipt = raw_case_receipt.resolve()
         require_owned(case_receipt, runtime)
         if case_receipt in independent_receipts:
             raise ValueError('Boundary receipt reused an isolated runtime receipt.')
         if hashlib.sha256(case_receipt.read_bytes()).hexdigest() != entry.get('receiptSha256'):
             raise ValueError(f'The boundary runtime receipt changed after run-boundary: {name}.')
         outside = case_receipt.parent / 'outside.json'
+        if outside.is_symlink() or not outside.is_file():
+            raise ValueError(f'The boundary namespace proof must be a regular file: {name}.')
         if hashlib.sha256(outside.read_bytes()).hexdigest() != entry.get('outsideSha256'):
             raise ValueError(f'The boundary namespace proof changed after run-boundary: {name}.')
-        expected_xml = (evidence / boundary_run_id / name / 'tests.xml').resolve()
-        tests_xml = Path(entry['testsXml']).resolve()
-        if (tests_xml != expected_xml or tests_xml.is_symlink() or not tests_xml.is_file()
+        raw_expected_xml = evidence / boundary_run_id / name / 'tests.xml'
+        raw_tests_xml = Path(entry['testsXml'])
+        if raw_tests_xml.is_symlink() or raw_expected_xml.is_symlink() or not raw_tests_xml.is_file():
+            raise ValueError(f'The boundary tests.xml artifact must be a regular file: {name}.')
+        tests_xml = raw_tests_xml.resolve()
+        if (tests_xml != raw_expected_xml.resolve()
                 or hashlib.sha256(tests_xml.read_bytes()).hexdigest() != entry.get('testsXmlSha256')):
             raise ValueError(f'The boundary tests.xml artifact changed or is missing: {name}.')
         require_independent_case(tests_xml, class_name, method)
@@ -1303,11 +1457,16 @@ def run_boundary(evidence: Path) -> None:
     report = {'result': 'running', 'phase': 'boundary', 'fullLiveAccepted': False, 'runId': uuid.uuid4().hex}
     save(evidence / 'ci-live.json', report)
     runtime = None
+    receipt_path = evidence / BOUNDARY_RECEIPT_FILE
+    wrote_receipt = False
+    diagnostics_copied = False
+    redacted = False
     try:
         prepared, prepared_runtime, python, environment, ownership_id = load_prepared_context(evidence)
-        if (evidence / BOUNDARY_RECEIPT_FILE).exists():
+        if receipt_path.is_symlink() or receipt_path.exists():
             raise ValueError('CI requires a fresh prepared evidence directory without an existing boundary receipt.')
-        if (prepared_runtime / 'runs').exists():
+        runs_dir = prepared_runtime / 'runs'
+        if runs_dir.is_symlink() or runs_dir.exists():
             raise ValueError('CI requires a fresh prepared runtime with no previous runs.')
         runtime = prepared_runtime
         generation = evidence / report['runId']
@@ -1326,8 +1485,11 @@ def run_boundary(evidence: Path) -> None:
         actual_runs = sorted(path.name for path in (runtime / 'runs').iterdir())
         if len(actual_runs) != len(PRE_VECTOR_CASES):
             raise ValueError(f'Expected exactly {len(PRE_VECTOR_CASES)} fresh boundary runtime(s).')
-        # Redact retained boundary logs and XML before hashing so run-remaining verifies exact bytes.
+        # Copy diagnostics and redact retained boundary outputs before hashing so sealing is final.
+        copy_diagnostics(runtime, generation / 'runtime-diagnostics')
+        diagnostics_copied = True
         redact_generation(generation)
+        redacted = True
         cases = {}
         for name, class_name, method in PRE_VECTOR_CASES:
             case_receipt = Path(report[name]['receipt']).resolve()
@@ -1358,7 +1520,7 @@ def run_boundary(evidence: Path) -> None:
             'runtimeRuns': actual_runs,
         }
         boundary_document = {**boundary_payload, 'contentSha256': canonical_digest(boundary_payload)}
-        receipt_path = evidence / BOUNDARY_RECEIPT_FILE
+        wrote_receipt = True
         save(receipt_path, boundary_document)
         report['boundaryReceipt'] = {'path': str(receipt_path.resolve()),
                                      'sha256': hashlib.sha256(receipt_path.read_bytes()).hexdigest()}
@@ -1367,17 +1529,21 @@ def run_boundary(evidence: Path) -> None:
         report.update(result='failed', fullLiveAccepted=False, error=f'{type(error).__name__}: {error}')
         raise
     finally:
-        if runtime:
+        if wrote_receipt and report.get('result') != 'boundary-passed':
+            receipt_path.unlink(missing_ok=True)
+        if runtime and not diagnostics_copied:
             copy_diagnostics(runtime, evidence / report['runId'] / 'runtime-diagnostics')
-        redact_generation(evidence / report['runId'])
+        if not redacted:
+            redact_generation(evidence / report['runId'])
         save(evidence / 'ci-live.json', report)
 
 
 def run_remaining(evidence: Path) -> None:
     prior_report = None
-    if (evidence / 'ci-live.json').is_file():
+    ci_live_path = evidence / 'ci-live.json'
+    if not ci_live_path.is_symlink() and ci_live_path.is_file():
         try:
-            prior_report = json.loads((evidence / 'ci-live.json').read_text())
+            prior_report = json.loads(ci_live_path.read_text())
         except (OSError, ValueError):
             prior_report = None
     report = {'result': 'running', 'phase': 'remaining', 'fullLiveAccepted': False, 'runId': uuid.uuid4().hex}
@@ -1397,9 +1563,15 @@ def run_remaining(evidence: Path) -> None:
                             'boundaryRunId': boundary_document['boundaryRunId']}
         report['vectors'] = {'result': 'not-run', 'reason': 'Vector execution has not completed.'}
         independent_errors: list[str] = []
+        remaining_vector_budget = (
+            RUN_REMAINING_TIMEOUT_SECONDS
+            - len(POST_VECTOR_CASES) * INDEPENDENT_CASE_TIMEOUT
+            - CLEANUP_HEADROOM_SECONDS
+        )
         execute_vectors_and_post_cases(generation=generation, prepared=prepared, python=python,
                                        runtime=runtime, environment=environment, report=report,
-                                       independent_receipts=independent_receipts, independent_errors=independent_errors)
+                                       independent_receipts=independent_receipts, independent_errors=independent_errors,
+                                       vector_budget=remaining_vector_budget)
         report.update(result='passed', fullLiveAccepted=True)
     except BaseException as error:
         report.update(result='failed', fullLiveAccepted=False, error=f'{type(error).__name__}: {error}')
@@ -1421,7 +1593,8 @@ def run(evidence: Path) -> None:
     runtime = None
     try:
         prepared, prepared_runtime, python, environment, _ = load_prepared_context(evidence)
-        if (prepared_runtime / 'runs').exists():
+        runs_dir = prepared_runtime / 'runs'
+        if runs_dir.is_symlink() or runs_dir.exists():
             raise ValueError('CI requires a fresh prepared runtime with no previous runs.')
         runtime = prepared_runtime
         generation = evidence / report['runId']

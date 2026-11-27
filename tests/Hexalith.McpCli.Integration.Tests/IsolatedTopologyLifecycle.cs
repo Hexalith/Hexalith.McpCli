@@ -111,15 +111,33 @@ public abstract class IsolatedTopologyLifecycle<TAppHost> : IAsyncLifetime where
     }
 
     /// <summary>Runs a startup operation while watching only declared resources for terminal failure states.</summary>
-    internal static async Task RunWithTerminalFailureWatchAsync(
+    internal static Task RunWithTerminalFailureWatchAsync(
         ResourceNotificationService notifications,
         IEnumerable<string> watchedResources,
         Func<CancellationToken, Task> operation,
         CancellationToken cancellationToken)
     {
         ArgumentNullException.ThrowIfNull(notifications);
+        return RunWithTerminalFailureWatchAsync(
+            notifications,
+            watchedResources,
+            operation,
+            notifications.WatchAsync,
+            cancellationToken);
+    }
+
+    /// <summary>Runs a startup operation while watching declared resources via the supplied event stream.</summary>
+    internal static async Task RunWithTerminalFailureWatchAsync(
+        ResourceNotificationService notifications,
+        IEnumerable<string> watchedResources,
+        Func<CancellationToken, Task> operation,
+        Func<CancellationToken, IAsyncEnumerable<ResourceEvent>> watchEvents,
+        CancellationToken cancellationToken)
+    {
+        ArgumentNullException.ThrowIfNull(notifications);
         ArgumentNullException.ThrowIfNull(watchedResources);
         ArgumentNullException.ThrowIfNull(operation);
+        ArgumentNullException.ThrowIfNull(watchEvents);
 
         var watched = new HashSet<string>(watchedResources, StringComparer.OrdinalIgnoreCase);
         if (watched.Count == 0)
@@ -140,12 +158,13 @@ public abstract class IsolatedTopologyLifecycle<TAppHost> : IAsyncLifetime where
         using var linked = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken);
         using var watchStop = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken);
         InvalidOperationException? terminalFailure = null;
+        Exception? watcherFailure = null;
 
         Task watchTask = Task.Run(async () =>
         {
             try
             {
-                await foreach (ResourceEvent resourceEvent in notifications.WatchAsync(watchStop.Token).ConfigureAwait(false))
+                await foreach (ResourceEvent resourceEvent in watchEvents(watchStop.Token).ConfigureAwait(false))
                 {
                     if (!watched.Contains(resourceEvent.Resource.Name) && !watched.Contains(resourceEvent.ResourceId))
                     {
@@ -158,7 +177,8 @@ public abstract class IsolatedTopologyLifecycle<TAppHost> : IAsyncLifetime where
                             resourceEvent.Resource.Name,
                             resourceEvent.Snapshot);
                         Interlocked.CompareExchange(ref terminalFailure, failure, null);
-                        await linked.CancelAsync().ConfigureAwait(false);
+                        try { await linked.CancelAsync().ConfigureAwait(false); }
+                        catch (ObjectDisposedException) { }
                         return;
                     }
                 }
@@ -166,15 +186,22 @@ public abstract class IsolatedTopologyLifecycle<TAppHost> : IAsyncLifetime where
             catch (OperationCanceledException) when (watchStop.IsCancellationRequested)
             {
             }
+            catch (Exception failure)
+            {
+                Interlocked.CompareExchange(ref watcherFailure, failure, null);
+                try { await linked.CancelAsync().ConfigureAwait(false); }
+                catch (ObjectDisposedException) { }
+            }
         }, CancellationToken.None);
 
+        Exception? operationFailure = null;
         try
         {
             await operation(linked.Token).ConfigureAwait(false);
         }
-        catch (Exception) when (Volatile.Read(ref terminalFailure) is not null)
+        catch (Exception failure)
         {
-            throw Volatile.Read(ref terminalFailure)!;
+            operationFailure = failure;
         }
         finally
         {
@@ -182,9 +209,34 @@ public abstract class IsolatedTopologyLifecycle<TAppHost> : IAsyncLifetime where
             await watchTask.ConfigureAwait(false);
         }
 
-        if (Volatile.Read(ref terminalFailure) is InvalidOperationException lateFailure)
+        if (Volatile.Read(ref terminalFailure) is InvalidOperationException terminal)
         {
-            throw lateFailure;
+            throw terminal;
+        }
+
+        if (operationFailure is not null)
+        {
+            if (operationFailure is OperationCanceledException && !cancellationToken.IsCancellationRequested
+                && Volatile.Read(ref watcherFailure) is Exception canceledByWatcher)
+            {
+                ExceptionDispatchInfo.Capture(canceledByWatcher).Throw();
+            }
+
+            ExceptionDispatchInfo.Capture(operationFailure).Throw();
+        }
+
+        if (Volatile.Read(ref watcherFailure) is Exception unexpectedWatcherFailure)
+        {
+            ExceptionDispatchInfo.Capture(unexpectedWatcherFailure).Throw();
+        }
+
+        foreach (string name in watched)
+        {
+            if (notifications.TryGetCurrentState(name, out ResourceEvent? current)
+                && IsTerminalFailureState(current.Snapshot.State?.Text))
+            {
+                throw CreateTerminalFailureException(current.Resource.Name, current.Snapshot);
+            }
         }
     }
 

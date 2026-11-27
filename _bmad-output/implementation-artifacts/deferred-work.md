@@ -1726,3 +1726,10 @@ failure found during verification adds one open entry, for a total of 53.
   summary: Correct AD-19's obsolete description of Query default admission.
   evidence: `_bmad-output/planning-artifacts/architecture/architecture-mcpcli-2026-09-22/ARCHITECTURE-SPINE.md:232` says catalog admission checks only Gateway syntax. `src/Hexalith.McpCli.Core/Catalog/CatalogBuilder.cs:195` checks both Gateway syntax and the Module's Identifier Kind.
   status: open. Update the architecture description to match the implemented rule.
+
+## Deferred from: code review of spec-5-25-fail-fast-and-reorder-product-ci-gates.md (2026-11-27)
+
+- source_spec: `_bmad-output/implementation-artifacts/spec-5-25-fail-fast-and-reorder-product-ci-gates.md`
+  summary: Verify whether Aspire `*-dapr` / `*-dapr-cli` sidecar resources can safely be added to `IsolatedTopologyLifecycle` terminal-failure watching without false triggers.
+  evidence: Medium (unverified / `maybe-false`). `tests/Hexalith.McpCli.Integration.Tests/IsolatedTopologyLifecycle.cs:64-68` watches only the declared `AspireResource.Name` project resources (`eventstore`, `tenants`, `parties`, `projects`, `projects-workers`). `tests/Hexalith.McpCli.Integration.Tests/AspireTopologyFixture.cs:72-81` already bounds sidecar discovery and `/v1.0/healthz` checks to 10s + 30s. Settling this requires observing live Aspire 17.0.0 + CommunityToolkit Dapr preview `ResourceNotificationService` state transitions for `IDaprSidecarResource` and `*-dapr-cli` during a real isolated live run to confirm sidecar resources never emit benign `Finished`/`Exited` transitions.
+  status: open.

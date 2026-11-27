@@ -248,6 +248,146 @@ public sealed class IsolatedTopologyLifecycleTests
         Assert.Contains("0", failure.Message, StringComparison.Ordinal);
     }
 
+    /// <summary>Non-terminal operation exceptions propagate unchanged when no watched resource failed.</summary>
+    [Fact]
+    public async Task NonTerminalOperationExceptionPropagatesWhenNoResourceFailed()
+    {
+        using var lifetime = new TestHostApplicationLifetime();
+        using var notifications = CreateNotifications(lifetime);
+        var resource = new TestResource("eventstore");
+        await PublishStateAsync(notifications, resource, KnownResourceStates.Running);
+
+        var expected = new InvalidDataException("non-terminal failure");
+        InvalidDataException actual = await Assert.ThrowsAsync<InvalidDataException>(() =>
+            IsolatedTopologyLifecycle<object>.RunWithTerminalFailureWatchAsync(
+                notifications,
+                [resource.Name],
+                _ => Task.FromException(expected),
+                TestContext.Current.CancellationToken));
+        Assert.Same(expected, actual);
+    }
+
+    /// <summary>Outer cancellation or timeout propagates as OperationCanceledException when no resource failed.</summary>
+    [Fact]
+    public async Task TimeoutCancellationPropagatesWhenNoResourceFailed()
+    {
+        using var lifetime = new TestHostApplicationLifetime();
+        using var notifications = CreateNotifications(lifetime);
+        var resource = new TestResource("eventstore");
+        await PublishStateAsync(notifications, resource, KnownResourceStates.Starting);
+
+        using var budget = new CancellationTokenSource(TimeSpan.FromMilliseconds(75));
+        await Assert.ThrowsAnyAsync<OperationCanceledException>(() =>
+            IsolatedTopologyLifecycle<object>.RunWithTerminalFailureWatchAsync(
+                notifications,
+                [resource.Name],
+                token => Task.Delay(TimeSpan.FromMinutes(2), token),
+                budget.Token));
+    }
+
+    /// <summary>Missing state and exit code format explicitly as Unknown and none.</summary>
+    [Fact]
+    public void CreateTerminalFailureExceptionHandlesNullStateAndExitCode()
+    {
+        var snapshot = new CustomResourceSnapshot
+        {
+            ResourceType = "Project",
+            State = null,
+            ExitCode = null,
+            Urls = ImmutableArray<UrlSnapshot>.Empty,
+            Properties = ImmutableArray<ResourcePropertySnapshot>.Empty,
+        };
+        InvalidOperationException failure = IsolatedTopologyLifecycle<object>.CreateTerminalFailureException("eventstore", snapshot);
+        Assert.Contains("eventstore", failure.Message, StringComparison.Ordinal);
+        Assert.Contains("Unknown", failure.Message, StringComparison.Ordinal);
+        Assert.Contains("exit code: none", failure.Message, StringComparison.Ordinal);
+    }
+
+    /// <summary>IsTerminalFailureState rejects null, whitespace, and non-terminal states while matching case-insensitively.</summary>
+    /// <param name="state">The candidate Aspire state text.</param>
+    /// <param name="expected">Whether the state should trigger terminal-failure abort.</param>
+    [Theory]
+    [InlineData(null, false)]
+    [InlineData("", false)]
+    [InlineData("   ", false)]
+    [InlineData("Running", false)]
+    [InlineData("Starting", false)]
+    [InlineData("NotStarted", false)]
+    [InlineData("failedtostart", true)]
+    [InlineData("EXITED", true)]
+    [InlineData("Finished", true)]
+    [InlineData("runtimeunhealthy", true)]
+    public void IsTerminalFailureStateMatchesOnlyDeclaredTerminalStates(string? state, bool expected)
+        => Assert.Equal(expected, IsolatedTopologyLifecycle<object>.IsTerminalFailureState(state));
+
+    /// <summary>An empty watched resource list runs the operation directly without watching.</summary>
+    [Fact]
+    public async Task EmptyWatchedResourcesRunsOperationDirectly()
+    {
+        using var lifetime = new TestHostApplicationLifetime();
+        using var notifications = CreateNotifications(lifetime);
+        bool ran = false;
+        await IsolatedTopologyLifecycle<object>.RunWithTerminalFailureWatchAsync(
+            notifications,
+            [],
+            _ =>
+            {
+                ran = true;
+                return Task.CompletedTask;
+            },
+            TestContext.Current.CancellationToken);
+        Assert.True(ran);
+    }
+
+    /// <summary>An unexpected watcher fault cancels the in-flight operation and propagates the watcher error.</summary>
+    [Fact]
+    public async Task UnexpectedWatcherFaultCancelsOperationAndPropagates()
+    {
+        using var lifetime = new TestHostApplicationLifetime();
+        using var notifications = CreateNotifications(lifetime);
+        var expected = new InvalidProgramException("watcher stream faulted");
+        var elapsed = Stopwatch.StartNew();
+
+        InvalidProgramException actual = await Assert.ThrowsAsync<InvalidProgramException>(() =>
+            IsolatedTopologyLifecycle<object>.RunWithTerminalFailureWatchAsync(
+                notifications,
+                ["eventstore"],
+                token => Task.Delay(TimeSpan.FromMinutes(2), token),
+                _ => FaultingStreamAsync(expected),
+                TestContext.Current.CancellationToken));
+        elapsed.Stop();
+        Assert.Same(expected, actual);
+        Assert.True(elapsed.Elapsed < TimeSpan.FromSeconds(10), $"Expected immediate abort on watcher fault, took {elapsed.Elapsed}.");
+    }
+
+    /// <summary>A watcher fault does not mask a non-cancellation exception already thrown by the operation.</summary>
+    [Fact]
+    public async Task WatcherFaultDoesNotMaskOperationException()
+    {
+        using var lifetime = new TestHostApplicationLifetime();
+        using var notifications = CreateNotifications(lifetime);
+        var operationError = new InvalidDataException("operation error");
+        var watcherError = new InvalidProgramException("watcher error");
+
+        InvalidDataException actual = await Assert.ThrowsAsync<InvalidDataException>(() =>
+            IsolatedTopologyLifecycle<object>.RunWithTerminalFailureWatchAsync(
+                notifications,
+                ["eventstore"],
+                _ => Task.FromException(operationError),
+                _ => FaultingStreamAsync(watcherError),
+                TestContext.Current.CancellationToken));
+        Assert.Same(operationError, actual);
+    }
+
+    private static async IAsyncEnumerable<ResourceEvent> FaultingStreamAsync(Exception failure)
+    {
+        await Task.Yield();
+        throw failure;
+#pragma warning disable CS0162
+        yield break;
+#pragma warning restore CS0162
+    }
+
     private static ResourceNotificationService CreateNotifications(IHostApplicationLifetime lifetime)
         => new(
             NullLogger<ResourceNotificationService>.Instance,

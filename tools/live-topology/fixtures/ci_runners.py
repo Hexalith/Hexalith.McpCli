@@ -113,6 +113,14 @@ if pathlib.Path(__file__).name == 'run-vectors.py':
             item.pop('isolatedReceipt', None)
     if mode == 'forged-fail-fast-passed':
         receipt.update(failFastTriggered=True, skipped=1)
+    if mode == 'forged-fail-fast-flag-only':
+        receipt.update(failFastTriggered=True, skipped=0)
+    if mode == 'forged-fail-fast-nonbool':
+        receipt.update(failFastTriggered='yes', skipped=0)
+    if mode == 'forged-skipped-only':
+        receipt.update(failFastTriggered=False, skipped=1)
+    if mode == 'forged-skipped-bool':
+        receipt.update(failFastTriggered=False, skipped=False)
     if mode == 'duplicate-isolation': outcomes[1]['isolatedReceipt'] = outcomes[0]['isolatedReceipt']
     if mode == 'stale-isolation': outcomes[0]['isolatedReceipt'] = str(owned('foreign', runtime.parent / 'sibling-runtime') / 'result.json')
     if mode == 'extra-runtime': (runtime / 'runs/unexpected').mkdir()

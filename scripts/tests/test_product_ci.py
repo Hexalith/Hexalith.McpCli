@@ -231,11 +231,15 @@ class ProductControllerTests(unittest.TestCase):
             events = []
             def record_execute(command, **_):
                 joined = ' '.join(map(str, command))
+                matched = False
                 for marker in ('scripts/tests', 'run-sample-validation.sh', 'run-sample-loopback.sh',
                                'check_enrolled.py', 'tools/live-topology', 'run-vectors.py'):
                     if marker in joined and not (marker == 'tools/live-topology' and 'run-vectors.py' in joined):
                         events.append('execute:' + marker)
+                        matched = True
                         break
+                if not matched:
+                    self.fail(f'Unexpected command executed: {joined}')
                 return subprocess.CompletedProcess(command, 0, stdout='', stderr='')
             with self.subTest(phase=phase), \
                     patch.object(sys, 'argv', ['product_ci.py', phase]), \
@@ -248,6 +252,23 @@ class ProductControllerTests(unittest.TestCase):
                     contextlib.redirect_stderr(io.StringIO()) as stderr:
                 self.assertEqual(0, product_ci.main(), stderr.getvalue())
                 self.assertEqual(expected, events)
+
+    def test_linux_conformance_refuses_dirty_or_drifted_checkout(self):
+        with patch.object(product_ci, 'source_changes', return_value=' M dirty.cs'), \
+                patch.object(product_ci, 'execute') as execute:
+            with self.assertRaisesRegex(ValueError, 'exact clean checkout SHA'):
+                product_ci.linux_conformance()
+            execute.assert_not_called()
+        calls = 0
+        def drift_during_run(command, **_):
+            nonlocal calls
+            calls += 1
+            return subprocess.CompletedProcess(command, 0, stdout='', stderr='')
+        with patch.object(product_ci, 'source_changes', side_effect=['', '?? drifted.txt']), \
+                patch.object(product_ci, 'execute', side_effect=drift_during_run):
+            with self.assertRaisesRegex(ValueError, 'exact clean checkout SHA'):
+                product_ci.linux_conformance()
+        self.assertGreater(calls, 0)
 
 
 class ProductPlatformTests(unittest.TestCase):

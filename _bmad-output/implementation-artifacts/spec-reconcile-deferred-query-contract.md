@@ -25,7 +25,7 @@ Close the five ledger findings on constant overrides, blank cursors with offsets
 - Catalog admission now uses the same aggregate identifier check as execution and retains diagnostic precedence for dual declarations. All seven defaults in the three pinned production Contracts assemblies are valid String-kind values. The three synthetic ULID defaults now use canonical IDs.
 - The casing regression initially failed for both SDK revisions. The pinned SDK ignored differently cased paging properties. The incoming filter now refuses casing variants of all three paging names before binding or submission. Both supported protocol revisions exercise the refusal in in-process and child-process sessions.
 - The CLI and the child-process MCP client exercise optional aggregate IDs through a loopback Gateway and verify the exact submitted ID. MCP discovery also checks the required flag for a Query with no aggregate source.
-- Story 5.24 is recorded as ready for review in sprint status. The affected CLI and MCP inputs retain the adopted precedence and validation rules.
+- Story 5.24 entered review on 2026-11-23. The review patches were applied and verified on 2026-11-27.
 
 ## Review Triage Log
 
@@ -42,12 +42,12 @@ Close the five ledger findings on constant overrides, blank cursors with offsets
 
 Review on 2026-11-27 of `95a4329a..bcf8cf5d`, with later fixes checked on `main`.
 
-- [ ] [Review][Patch] Medium. Reject a case variant of the `run_query` `aggregateId` argument before submitting to the Gateway [src/Hexalith.McpCli.Mcp/McpCliMcpServiceCollectionExtensions.cs:87]. The stdio probe supplied a valid override with `AggregateId` and received the fixture's default aggregate. The same value under `aggregateId` reached the Gateway as the override.
-- [ ] [Review][Patch] Low. Make the advertised `run_query` input schema reject the reserved paging case variants [src/Hexalith.McpCli.Mcp/McpCliMcpServiceCollectionExtensions.cs:45]. The schema accepted `PageSize: 25` and the same session returned `InvalidParams` for that input. Preserve support for unrelated additional properties.
-- [ ] [Review][Patch] Low. Cover `Cursor` with an offset over child-process stdio for both revisions [tests/Hexalith.McpCli.Cli.Tests/McpStdioProcessTests.cs:279]. The child-process matrix covers the two numeric aliases. The cursor alias is exercised in the in-process matrix.
-- [ ] [Review][Patch] Low. Test a canonical paging argument alongside its case variant [tests/Hexalith.McpCli.Mcp.Tests/McpExecutionTests.cs:337]. An isolated alias test would still pass if the guard accidentally allowed `PageSize` whenever `pageSize` was present. Assert `InvalidParams` and zero Gateway calls for the mixed request.
-- [ ] [Review][Patch] Low. Exercise a malformed explicit `aggregateId` on a defaulted Query over stdio [tests/Hexalith.McpCli.Cli.Tests/McpStdioProcessTests.cs:119]. The CLI checks the complete `/aggregateId` refusal. The new stdio matrix covers omission and valid override. Check the structured and text refusal and zero submissions over stdio.
-- [ ] [Review][Patch] Low. Clarify diagnostic precedence for conflicting Query declarations in the README [README.md:570]. `invalid_routing_value` applies to a sole invalid constant. A Query with both declarations reports `ambiguous_aggregate_id` even when its constant is invalid.
+- [x] [Review][Patch] Medium. Reject a case variant of the `run_query` `aggregateId` argument before submitting to the Gateway [src/Hexalith.McpCli.Mcp/McpCliMcpServiceCollectionExtensions.cs:87]. The stdio probe supplied a valid override with `AggregateId` and received the fixture's default aggregate. The same value under `aggregateId` reached the Gateway as the override.
+- [x] [Review][Patch] Low. Make the advertised `run_query` input schema reject the reserved paging case variants [src/Hexalith.McpCli.Mcp/McpCliMcpServiceCollectionExtensions.cs:45]. The schema accepted `PageSize: 25` and the same session returned `InvalidParams` for that input. Preserve support for unrelated additional properties.
+- [x] [Review][Patch] Low. Cover `Cursor` with an offset over child-process stdio for both revisions [tests/Hexalith.McpCli.Cli.Tests/McpStdioProcessTests.cs:279]. The child-process matrix covers the two numeric aliases. The cursor alias is exercised in the in-process matrix.
+- [x] [Review][Patch] Low. Test a canonical paging argument alongside its case variant [tests/Hexalith.McpCli.Mcp.Tests/McpExecutionTests.cs:337]. An isolated alias test would still pass if the guard accidentally allowed `PageSize` whenever `pageSize` was present. Assert `InvalidParams` and zero Gateway calls for the mixed request.
+- [x] [Review][Patch] Low. Exercise a malformed explicit `aggregateId` on a defaulted Query over stdio [tests/Hexalith.McpCli.Cli.Tests/McpStdioProcessTests.cs:119]. The CLI checks the complete `/aggregateId` refusal. The new stdio matrix covers omission and valid override. Check the structured and text refusal and zero submissions over stdio.
+- [x] [Review][Patch] Low. Clarify diagnostic precedence for conflicting Query declarations in the README [README.md:570]. `invalid_routing_value` applies to a sole invalid constant. A Query with both declarations reports `ambiguous_aggregate_id` even when its constant is invalid.
 - [x] [Review][Defer] Low. Correct the obsolete AD-19 description of catalog admission [_bmad-output/planning-artifacts/architecture/architecture-mcpcli-2026-09-22/ARCHITECTURE-SPINE.md:232]. Deferred to the architecture document. Runtime admission uses both checks.
 
 #### Rejected
@@ -67,4 +67,12 @@ Review on 2026-11-27 of `95a4329a..bcf8cf5d`, with later fixes checked on `main`
 
 - On `bcf8cf5d` with its pinned Builds revision, the three focused Release projects built with `-warnaserror`. `CatalogTests`, `PlatformScopeCommandTests`, `McpStdioProcessTests`, and `McpExecutionTests` passed all 131 tests.
 - `bash tools/conformance-vectors/v1/run-sample-validation.sh Release` passed the 194 validator tests and all three sample vectors.
+- `bash tools/conformance-vectors/v1/run-sample-loopback.sh` exited 0. Sample CLI/MCP replay, isolated and combined packaged enrollment, SDK response cases, and both negative evidence checks passed.
 - A local stdio probe with the routing fixture and a loopback Gateway confirmed the aggregate override casing issue and the difference between the advertised schema and the paging guard.
+
+### Review patches applied on 2026-11-27
+
+- The `run_query` input schema and request guard reject ASCII case variants of `aggregateId`, `pageSize`, `offset`, and `cursor`. Canonical names and unrelated additional properties remain valid when their other arguments pass validation.
+- Both stdio revisions check the aggregate alias, the cursor alias with offset, the complete error for a malformed explicit aggregate ID, and zero Gateway submissions. The MCP tests check mixed spellings and the advertised schema.
+- Before the patch, all four stdio regression cases accepted the aggregate alias and both schema cases accepted it. After the patch, Release builds with `-warnaserror` and all 204 tests passed across the MCP suite, the focused CLI classes, and `CatalogTests`.
+- The three packaged sample vectors passed CLI and MCP replay using `run_loopback.py`. `bash tools/conformance-vectors/v1/run-sample-validation.sh Release` passed 207 validator tests and all three sample vectors.

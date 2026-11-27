@@ -16,6 +16,8 @@ namespace Hexalith.McpCli.Mcp;
 /// <summary>Registers a fixed set of generic MCP tools for one resolved session.</summary>
 public static class McpCliMcpServiceCollectionExtensions
 {
+    private static readonly string[] ExactQueryArgumentNames = ["pageSize", "offset", "cursor", "aggregateId"];
+
     /// <summary>Adds the stdio server and the permitted tool collection.</summary>
     public static IServiceCollection AddMcpCliMcpServer(this IServiceCollection services, ResolvedSettings settings)
     {
@@ -40,10 +42,12 @@ public static class McpCliMcpServiceCollectionExtensions
                 typeof(CommandResult), readOnly: false));
         }
 
-        collection.Add(Create((Func<string, string, IServiceProvider, CancellationToken, string?, string?, string?, int?, int?,
+        McpServerTool queryTool = Create((Func<string, string, IServiceProvider, CancellationToken, string?, string?, string?, int?, int?,
             string?, Task<ModelContextProtocol.Protocol.CallToolResult>>)McpToolHandlers.RunQuery,
-            "run_query", "Purpose: Read through EventStore and return a document with optional paging. Use when: describe_operation shows a submittable read and the payload and envelope are ready. Next: Inspect the document and use the returned cursor for another page when present. The paging argument names pageSize, offset and cursor are case-sensitive.",
-            typeof(QueryResult), readOnly: true));
+            "run_query", "Purpose: Read through EventStore and return a document with optional paging. Use when: describe_operation shows a submittable read and the payload and envelope are ready. Next: Inspect the document and use the returned cursor for another page when present. Use the exact argument names aggregateId, pageSize, offset, and cursor.",
+            typeof(QueryResult), readOnly: true);
+        ConstrainQueryArgumentNames(queryTool);
+        collection.Add(queryTool);
 
         var inputSchemas = collection.ToDictionary(tool => tool.ProtocolTool.Name,
             tool => JsonSchema.FromText(tool.ProtocolTool.InputSchema.GetRawText()), StringComparer.Ordinal);
@@ -78,23 +82,23 @@ public static class McpCliMcpServiceCollectionExtensions
                         throw new McpProtocolException($"{required} is required and must be non-empty.", McpErrorCode.InvalidParams);
                     }
 
+                    JsonObject? queryArguments = toolName == "run_query" ? parameters["arguments"] as JsonObject : null;
+                    if (queryArguments is not null)
+                    {
+                        ValidateQueryArgumentNames(queryArguments);
+                    }
+
                     if (inputSchemas.TryGetValue(toolName, out JsonSchema? schema)
                         && !schema.Evaluate(JsonSerializer.SerializeToElement(parameters["arguments"] ?? new JsonObject())).IsValid)
                     {
                         throw new McpProtocolException("Tool arguments do not match the input schema.", McpErrorCode.InvalidParams);
                     }
 
-                    if (toolName == "run_query" && parameters["arguments"] is JsonObject queryArguments)
+                    if (queryArguments is not null)
                     {
-                        foreach (string name in new[] { "pageSize", "offset", "cursor" })
+                        foreach (string name in new[] { "pageSize", "offset" })
                         {
-                            if (queryArguments.Any(argument => string.Equals(argument.Key, name, StringComparison.OrdinalIgnoreCase)
-                                && !string.Equals(argument.Key, name, StringComparison.Ordinal)))
-                            {
-                                throw new McpProtocolException($"Use the exact paging argument name '{name}'.", McpErrorCode.InvalidParams);
-                            }
-
-                            if (name == "cursor" || queryArguments[name] is not JsonNode number)
+                            if (queryArguments[name] is not JsonNode number)
                             {
                                 continue;
                             }
@@ -134,6 +138,36 @@ public static class McpCliMcpServiceCollectionExtensions
             });
         }).WithStdioServerTransport();
         return services;
+    }
+
+    private static void ConstrainQueryArgumentNames(McpServerTool tool)
+    {
+        // The SDK leaves arguments open. Exclude ASCII case variants of the protected names while retaining other properties.
+        string caseVariants = string.Join('|', ExactQueryArgumentNames.Select(name => string.Concat(name.Select(character =>
+            $"[{char.ToLowerInvariant(character)}{char.ToUpperInvariant(character)}]"))));
+        JsonObject schema = JsonNode.Parse(tool.ProtocolTool.InputSchema.GetRawText())!.AsObject();
+        schema["propertyNames"] = new JsonObject
+        {
+            ["anyOf"] = new JsonArray(
+                new JsonObject { ["enum"] = JsonSerializer.SerializeToNode(ExactQueryArgumentNames) },
+                new JsonObject { ["not"] = new JsonObject { ["pattern"] = $@"^(?:{caseVariants})(?![\s\S])" } }),
+        };
+        tool.ProtocolTool.InputSchema = JsonSerializer.SerializeToElement(schema);
+    }
+
+    private static void ValidateQueryArgumentNames(JsonObject arguments)
+    {
+        // Preserve the argument-specific diagnostics before evaluating the advertised schema.
+        foreach (string name in ExactQueryArgumentNames)
+        {
+            if (arguments.Any(argument => !string.Equals(argument.Key, name, StringComparison.Ordinal)
+                && string.Equals(argument.Key, name, StringComparison.OrdinalIgnoreCase)
+                && argument.Key.All(char.IsAscii)))
+            {
+                string kind = name == "aggregateId" ? "query" : "paging";
+                throw new McpProtocolException($"Use the exact {kind} argument name '{name}'.", McpErrorCode.InvalidParams);
+            }
+        }
     }
 
     private static McpServerTool Create(Delegate method, string name, string description, Type successType, bool readOnly)

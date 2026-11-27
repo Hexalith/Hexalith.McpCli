@@ -29,7 +29,7 @@
 # - Dev moves story to 'review', then runs code-review (fresh context, different LLM recommended)
 # - Retrospective appends its action items to action_items; the status view surfaces open ones
 generated: 09-23-2026 07:41
-last_updated: '11-27-2026 17:11'
+last_updated: '11-27-2026 18:09'
 project: mcpcli
 project_key: NOKEY
 tracking_system: file-system
@@ -103,7 +103,7 @@ development_status:
   5-10-refresh-and-re-disposition-chatbot-and-memories-inventories: done # 2026-11-22: Authorized labels are on ChatBot and Memories main. Prior build passed all 39 Story 5.10 tests. Story 5.11 owns the open ledger reconciliation (3W1).
   5-11-reconcile-product-claims-and-the-migration-plan: in-progress # 2026-11-26. All 13 pass-7 patches applied. The 98-test suite ran for 517 removals (455 detected, 62 independently accounted). Completion awaits nine owner documentation integrations, 22 audited deferral resolutions, CiCd/Builds release-note evidence for AC3 and SM-3 reassessment.
   5-12-gate-enrolled-modules-by-operation-shape: done # 2026-11-10 shape-coverage proposal; precedes Story 6.1.
-  5-13-restore-the-native-dependency-audit-and-live-ci: backlog
+  5-13-restore-the-native-dependency-audit-and-live-ci: in-progress # AC1/AC2 advisory diagnostics, classification, and bounded 1x fresh isolated rotation recovery implemented and verified locally; AC3 hosted CI qualification (Linux live lane + Windows + macOS on exact candidate SHA) pending push.
   5-14-restore-the-proprietary-surface-census-gate: backlog
   5-15-bind-paired-release-acceptance-to-the-published-candidates: backlog
   5-16-protect-profile-credential-entry-and-transport: review
@@ -114,7 +114,7 @@ development_status:
   5-21-qualify-populated-projects-reads-and-access-denial: backlog
   5-22-validate-gateway-query-paging-in-both-heads: done
   5-23-protect-profile-files-from-cli-result-output: backlog
-  5-24-reject-invalid-default-query-ids-at-catalog-admission: review # 2026-11-23, implemented in spec-reconcile-deferred-query-contract.md.
+  5-24-reject-invalid-default-query-ids-at-catalog-admission: done # 2026-11-23, implemented in spec-reconcile-deferred-query-contract.md. 2026-11-27, six review patches verified.
   5-25-fail-fast-and-reorder-product-ci-gates: in-progress # 2026-11-27 CI/CD optimization proposal; run before or alongside 5.13.
   5-26-remove-ci-script-self-tests-and-cold-cache-rebuilds-from-product-ci: backlog # 2026-11-27 CI/CD optimization proposal.
   5-27-reduce-live-vector-plans-to-shape-fr20-coverage-and-optimize-isolated-execution: backlog # 2026-11-27 CI/CD optimization proposal; aligns live plans from 22 to 8 and pre-prepares catalog metadata.
