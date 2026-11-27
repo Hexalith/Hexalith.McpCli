@@ -2,7 +2,7 @@
 title: '5.25 Fail Fast and Reorder Product CI Gates'
 type: 'feature'
 created: '2026-11-27'
-status: 'in-review'
+status: 'done'
 baseline_commit: '38eedb2e9343ddaffcb4baa90a06d3a108e1637c'
 story_key: '5-25-fail-fast-and-reorder-product-ci-gates'
 route: 'dispatch'
@@ -74,6 +74,7 @@ context:
 
 - Implemented in `3d63679d`: split `scripts/product_ci.py` (`linux-packages`, `linux-conformance`, preserving `linux`), reordered `.github/actions/after-unit-tests/action.yml`, added `--max-failures` / immediate fail-fast / `skipped-fail-fast` to `tools/live-topology/run-vectors.py`, added `run-boundary` / `run-remaining` with hash-bound `boundary-receipt.json` to `tools/live-topology/ci.py`, updated `tools/live-topology/README.md`, and wired `ResourceNotificationService` terminal-failure watching in `IsolatedTopologyLifecycle.cs` (propagated via `watchedToken` into `AspireTopologyFixture.WaitForReadinessAsync`, requiring no edits to `AspireTopologyFixture.cs`).
 - Verified Release build (0 warnings), `Manifest.Tests` (414/414), `Integration.Tests` discovery (exact 24 cases unchanged), `scripts/tests` (72/72), `test_lane.py` (23/23), `test_ci.py` (127/127), `run-vectors.py --preflight-only`, and `Hexalith.Builds` guard policy.
+- Post-review patches applied (`e3a5080a`) covering all 12 grouped review findings (`BH-1`–`BH-8`, `BH-10`–`BH-12`, `ECH-1`–`ECH-6`, `VG-1`–`VG-6`); `BH-9` deferred to `deferred-work.md`. Re-verified: `references/Hexalith.Builds/check.py` (guard policy + all 6 C# test suites including `Manifest.Tests` 430/430), `Integration.Tests` discovery (24 cases), `scripts/tests` (73/73), `test_lane.py` (26/26), `test_ci.py` (134/134), and `run-vectors.py --preflight-only` all passed.
 
 ## Spec Change Log
 
