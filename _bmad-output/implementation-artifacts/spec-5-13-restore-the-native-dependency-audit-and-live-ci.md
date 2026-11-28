@@ -132,5 +132,15 @@ Layers: Blind Hunter (BH1–BH12), Verification Gap (VG1–VG5, VGO1–VGO2), Ed
 - `dotnet restore Hexalith.McpCli.slnx && dotnet build Hexalith.McpCli.slnx --no-restore --configuration Release -warnaserror && dotnet test tests/Hexalith.McpCli.Manifest.Tests --no-build --configuration Release` -- expected: 0 warnings, Manifest tests pass.
 - `python3 references/Hexalith.Builds/check.py` -- expected: exit 0 before any push.
 
-**Manual checks (if no CLI):**
-- On hosted CI for the candidate SHA, confirm Linux `ci / Build and tests` (all active live vectors + `smoke` + `boundary`), `windows-windows-product`, and `windows-macos-product` all succeed.
+### Hosted qualification, 2026-11-28
+
+Candidate `14b2ffb43ab04f69528a4f5d1e82d9a93f0925e7` passed all three hosted jobs in CI run `46068136287`. The Linux artifact binds preparation to that commit and records `match` for the source and all four module advisory comparisons. The live receipt records `fullLiveAccepted: true` with 22 passed, zero failed and zero skipped. Each runtime outcome below was checked against the candidate's approved vectors with active companion plans. [CI run](https://github.com/Hexalith/Hexalith.McpCli/actions/runs/46068136287) · [Linux evidence](https://github.com/Hexalith/Hexalith.McpCli/actions/runs/46068136287/artifacts/15239058484)
+
+| Live cases | Outcome | Executed operations |
+| --- | --- | --- |
+| Parties | 7 passed | `parties.create-party`, `parties.deactivate-party`, `parties.get-party`, `parties.list-parties`, `parties.reactivate-party`, `parties.search-parties`, `parties.update-party` |
+| Projects | 1 passed | `projects.list` |
+| Tenants | 14 passed | `tenants.add-user-to-tenant`, `tenants.change-user-role`, `tenants.create-tenant`, `tenants.disable-tenant`, `tenants.enable-tenant`, `tenants.get-tenant`, `tenants.get-tenant-audit`, `tenants.get-tenant-users`, `tenants.get-user-tenants`, `tenants.list-tenants`, `tenants.remove-tenant-configuration`, `tenants.remove-user-from-tenant`, `tenants.set-tenant-configuration`, `tenants.update-tenant` |
+| Independent | 2 passed | `boundary`, `smoke` |
+
+The Windows and macOS product jobs both passed on the same candidate. [Windows job](https://github.com/Hexalith/Hexalith.McpCli/actions/runs/46068136287/job/140797761952) · [macOS job](https://github.com/Hexalith/Hexalith.McpCli/actions/runs/46068136287/job/140797762005)

@@ -103,7 +103,7 @@ development_status:
   5-10-refresh-and-re-disposition-chatbot-and-memories-inventories: done # 2026-11-22: Authorized labels are on ChatBot and Memories main. Prior build passed all 39 Story 5.10 tests. Story 5.11 owns the open ledger reconciliation (3W1).
   5-11-reconcile-product-claims-and-the-migration-plan: in-progress # 2026-11-26. All 13 pass-7 patches applied. The 98-test suite ran for 517 removals (455 detected, 62 independently accounted). Completion awaits nine owner documentation integrations, 22 audited deferral resolutions, CiCd/Builds release-note evidence for AC3 and SM-3 reassessment.
   5-12-gate-enrolled-modules-by-operation-shape: done # 2026-11-10 shape-coverage proposal; precedes Story 6.1.
-  5-13-restore-the-native-dependency-audit-and-live-ci: in-progress # AC1/AC2 verified locally. AC3 awaits Linux live, Windows and macOS qualification of 14b2ffb43ab04f69528a4f5d1e82d9a93f0925e7 in https://github.com/Hexalith/Hexalith.McpCli/actions/runs/46068136287
+  5-13-restore-the-native-dependency-audit-and-live-ci: done # 2026-11-28. Candidate 14b2ffb43ab04f69528a4f5d1e82d9a93f0925e7 passed native audits, all 22 approved Linux live vectors, boundary, smoke, Windows and macOS in https://github.com/Hexalith/Hexalith.McpCli/actions/runs/46068136287
   5-14-restore-the-proprietary-surface-census-gate: in-progress # AC1/AC2 verified locally (18/18 roots, 0 errors, 0 rejected, 0 stale, amendment 1.0.14); AC3 awaits hosted CI capture on pushed SHA.
   5-15-bind-paired-release-acceptance-to-the-published-candidates: backlog
   5-16-protect-profile-credential-entry-and-transport: review
