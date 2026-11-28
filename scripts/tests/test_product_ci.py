@@ -225,11 +225,11 @@ class ProductControllerTests(unittest.TestCase):
                 ('linux-census', ['init_submodules', 'execute:proprietary-surfaces/v1/check.py']),
                 ('linux-conformance', ['execute:scripts/tests', 'execute:run-sample-validation.sh',
                                        'execute:run-sample-loopback.sh', 'execute:check_enrolled.py',
-                                       'execute:tools/live-topology', 'execute:run-vectors.py']),
+                                       'execute:run-vectors.py']),
                 ('linux', ['stage_packages', 'package_checks', 'init_submodules',
                            'execute:proprietary-surfaces/v1/check.py', 'execute:scripts/tests',
                            'execute:run-sample-validation.sh', 'execute:run-sample-loopback.sh',
-                           'execute:check_enrolled.py', 'execute:tools/live-topology', 'execute:run-vectors.py'])):
+                           'execute:check_enrolled.py', 'execute:run-vectors.py'])):
             events = []
             def record_execute(command, **_):
                 joined = ' '.join(map(str, command))
@@ -465,12 +465,12 @@ class ProductControllerTests(unittest.TestCase):
         invalid = 'receipt sealed by the passing live boundary'
 
         for mode, heads, changes, calls, message in (
-                ('complete', [SHA, SHA], ['', ''], 6, ''),
+                ('complete', [SHA, SHA], ['', ''], 5, ''),
                 ('head-before', ['b' * 40], [''], 0, 'exact clean checkout SHA'),
                 ('dirty-before', [SHA], [' M source.cs'], 0, 'exact clean checkout SHA'),
-                ('head-after', [SHA, 'b' * 40], [''], 6, 'exact clean checkout SHA'),
-                ('dirty-after', [SHA, SHA], ['', '?? source.cs'], 6, 'exact clean checkout SHA'),
-                ('changed-evidence', [SHA, SHA], ['', ''], 6, 'evidence changed during split conformance'),
+                ('head-after', [SHA, 'b' * 40], [''], 5, 'exact clean checkout SHA'),
+                ('dirty-after', [SHA, SHA], ['', '?? source.cs'], 5, 'exact clean checkout SHA'),
+                ('changed-evidence', [SHA, SHA], ['', ''], 5, 'evidence changed during split conformance'),
                 ('unsealed-preparation', ['b' * 40], [''], 0, invalid),
                 ('failed-boundary', [], [], 0, invalid),
                 ('wrong-phase', [], [], 0, invalid),

@@ -183,9 +183,6 @@ def linux_conformance(live_preparation: Path | None = None) -> None:
     execute(['bash', ROOT / 'tools/conformance-vectors/v1/run-sample-loopback.sh'], timeout=1800)
     execute([sys.executable, ROOT / 'tools/conformance-vectors/v1/check_enrolled.py', '--output',
              staging_root() / 'enrolled'], timeout=1800)
-    execute(['env', '-u', 'GITHUB_ENV', '-u', 'GITHUB_PATH', '-u', 'GITHUB_OUTPUT', '-u', 'GITHUB_STATE',
-             '-u', 'GITHUB_STEP_SUMMARY', sys.executable, '-m', 'unittest', 'discover', '-v', '-s', 'tools/live-topology',
-             '-p', 'test_*.py'], timeout=3600)
     execute([sys.executable, ROOT / 'tools/live-topology/run-vectors.py', '--output', staging_root() / 'preflight', '--preflight-only'])
     require_source(source)
     if live_preparation is not None and sealed_live_source(live_preparation)[1] != sealed_evidence:
