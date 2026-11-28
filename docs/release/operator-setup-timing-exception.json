@@ -1,0 +1,40 @@
+{
+  "schema": "mcpcli-operator-timing-exception/v1",
+  "decision": "accepted-existing-exception",
+  "targetSeconds": 900,
+  "procedure": "docs/release/operator-setup-checklist.md",
+  "historicalSource": "_bmad-output/implementation-artifacts/evidence/story-4-17/timing-attempts.json",
+  "historicalSourceSha256": "2ca26f032617e92a9abc15db6ebeb7c37def70039554efb80a7df3eaecc66fd0",
+  "attempts": [
+    {
+      "attempt": 1,
+      "sessionEvidence": "sessions/claude-code/timing-attempt1-20261031/session.json",
+      "operator": "The user (environment owner), timing their own run",
+      "priorExperience": "Ran the assisted Claude Code, Claude Desktop and VS Code sessions for Story 4.17 and approved the README quick start; not a first-time operator.",
+      "firstTimeOperator": false,
+      "client": "Claude Code 2.1.316",
+      "harness": "Claude Code CLI in a WSL terminal (Ubuntu-26.04)",
+      "path": "README quick start (operator section only)",
+      "readmeSha256": "b5d5fa56be4bcd189613dd269450e2819e1905312b97e7f80173531e4e40d429",
+      "startedAtUtc": "2026-10-31T14:15:42.227Z",
+      "endedAtUtc": "2026-10-31T14:27:07.521Z",
+      "stopwatchReading": null,
+      "elapsedSeconds": 685,
+      "assistance": [
+        {
+          "at": "2026-10-31T14:22:17Z",
+          "by": "Observer agent (Claude Code session in the McpCli repository)",
+          "what": "The operator asked the observer 'where do I get the token?' after their own client could not say. The observer re-explained the owner's pre-run token delivery."
+        }
+      ],
+      "interrupted": false,
+      "successfulSendCommand": true,
+      "targetSeconds": 900,
+      "withinTarget": true,
+      "unassistedSuccess": false,
+      "unassistedSuccessReason": "Observer assistance during the run, and the operator is not first-time.",
+      "outcome": "assisted-within-target",
+      "humanDecision": "2026-10-31: no first-time operator was available; the user chose to time their own run, recorded with firstTimeOperator=false, and accepts it as the timing exception. A measurement by a genuine first-time operator remains deferred."
+    }
+  ]
+}

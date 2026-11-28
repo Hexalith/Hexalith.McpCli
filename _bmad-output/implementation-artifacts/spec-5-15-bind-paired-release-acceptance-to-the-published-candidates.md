@@ -2,8 +2,9 @@
 title: 'Bind paired release acceptance to the published candidates'
 type: 'feature'
 created: '2026-11-28'
-status: 'ready-for-dev'
+status: 'in-progress'
 route: 'dispatch'
+baseline_commit: 'd51aa81c069b779a29c99b558ebd1cf3e8e3563c'
 review_loop_iteration: 0
 context:
   - '{project-root}/docs/release/operator-setup-checklist.md'

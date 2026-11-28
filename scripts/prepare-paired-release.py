@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Prepare one immutable local package pair; this script has no publication path."""
+"""Historical paired-staging preparation script (unwired legacy workflow; superseded by central Hexalith.Builds release)."""
 
 import argparse
 import json

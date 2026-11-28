@@ -4,6 +4,7 @@
     <PackAsTool>true</PackAsTool>
     <ToolCommandName>hexalith</ToolCommandName>
     <IsPackable>true</IsPackable>
+    <HexalithVerifyPublishedPackage>true</HexalithVerifyPublishedPackage>
     <IsPublishable>true</IsPublishable>
     <CreateRidSpecificToolPackages>false</CreateRidSpecificToolPackages>
     <UseAppHost>false</UseAppHost>

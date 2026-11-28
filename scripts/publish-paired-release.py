@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Import and publish an accepted immutable pair without building or automatic recovery."""
+"""Historical paired-publication script (unwired legacy workflow; superseded by central Hexalith.Builds release)."""
 
 import argparse
 import hashlib

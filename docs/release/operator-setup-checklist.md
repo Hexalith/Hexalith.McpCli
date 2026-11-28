@@ -1,6 +1,78 @@
-# Operator setup acceptance checklist
+# Operator setup and central release acceptance checklist
 
-**Current execution result (2026-11-05): verified public pair 2.0.1.** Both packages are public from release source `aa2845edbea23444a1d362060b8d0f5dc05a132e`. CI 42072073153, fresh three-OS staging 42080077255, the exact post-stage automated authorization and protected publication 42082617201 pass. Signed public contents/source/README and cryptographic signatures verify; fresh official-public consumer and installed-tool checks pass. [Final evidence](../../_bmad-output/implementation-artifacts/evidence/story-4-18/publication-2.0.1-20261105/README.md) binds all original archives and receipts. Execution is complete; the [spec review record](../../_bmad-output/implementation-artifacts/spec-4-18-publish-the-validated-package-pair.md#review-findings) tracks subsequent BMAD reviews, corrections and finish status.
+## Current central release acceptance procedure (recorded 2026-11-28)
+
+Delivered `.github/workflows/release.yml` runs central `Hexalith/Hexalith.Builds/.github/workflows/release.yml@v6.9.1` (nightly or manual `workflow_dispatch` with optional `delivered-sha`) and publishes through `Hexalith/Hexalith.Builds/Github/publish@v6.9.1` after `hexalith-release` environment approval. This supersedes the removed legacy `stage-paired` / `paired` workflow.
+
+> **AD-17 / Platform AD-11 hold:** Stable `Hexalith.McpCli` tool promotion remains held until Platform, McpCli, and CiCd owners record the joint release track.
+
+### Recorded owner decisions (2026-11-28)
+
+- **Platform checks:** Exact-commit 3-OS CI (`ci.yml`) validates CI fixture packages (`prepared.json`). McpCli's local final-archive verifier (`scripts/verify-central-release.py`) validates final `ContinuousIntegrationBuild=true` `.nupkg`s (manifest, `validate-release-packages.py`, `smoke-paired-tool.py`, `smoke_bootstrap_consumer.py`, per-archive SHA-256s, exact-commit 3-OS CI receipt, and central acceptance). Root `Directory.Build.props` sets `IsPackable=false`; only `Hexalith.McpCli.Abstractions` and `Hexalith.McpCli` set `IsPackable=true` and `HexalithVerifyPublishedPackage=true`. Any central post-`build` 3-OS hook is an upstream `Hexalith.CiCd` follow-up.
+- **Acceptance & bypass:** A hash-bound central acceptance record (`mcpcli-central-release-acceptance/v1`) is required before `hexalith-release` approval and supersedes mandatory 3-client sessions. `user-requested-human-validation-bypass` is **forbidden** on all future candidates. The accepted assisted 685-second timing exception is tracked at [operator-setup-timing-exception.json](operator-setup-timing-exception.json) rather than `_bmad-output/`.
+- **Hash separation:** Keep CI fixture hashes (`prepared.json`), final unsigned `.nupkg` hashes (`release-manifest.json` / `verify-central-release.py`), and signed nuget.org archive hashes (`hexalith-package-publication.v1.json`) strictly separate. Never substitute CI fixture hashes, a workflow bundle digest alone, or prior-version acceptance for final `.nupkg` bytes.
+- **Legacy scripts:** Unwired `stage-paired`/`paired` scripts remain retained and labeled historical. `scripts/verify-paired-publication.py` pins the historical bypass strictly to `2.0.1` (`aa2845edbea23444a1d362060b8d0f5dc05a132e`) and reads `docs/release/operator-setup-timing-exception.json`.
+
+### Central acceptance record schema (`mcpcli-central-release-acceptance/v1`)
+
+Submit a sanitized, duplicate-key-free JSON object to `scripts/verify-central-release.py verify-candidate`:
+
+```json
+{
+  "schema": "mcpcli-central-release-acceptance/v1",
+  "decision": "approved",
+  "version": "<X.Y.Z>",
+  "source_sha": "<40-lowercase-hex>",
+  "final_packages": {
+    "Hexalith.McpCli.Abstractions.<X.Y.Z>.nupkg": "<64-hex SHA-256 of final ContinuousIntegrationBuild=true archive>",
+    "Hexalith.McpCli.<X.Y.Z>.nupkg": "<64-hex SHA-256 of final ContinuousIntegrationBuild=true archive>"
+  },
+  "ci_receipt_sha256": "<64-hex SHA-256 of exact-commit 3-OS CI receipt>",
+  "approved_by": "<non-bot human actor>",
+  "decided_at_utc": "<UTC ISO-8601 timestamp >= 3-OS CI completion and <= verification time>",
+  "timing_exception": {
+    "status": "accepted-existing-exception",
+    "reference": "docs/release/operator-setup-timing-exception.json",
+    "sha256": "<64-hex SHA-256 of docs/release/operator-setup-timing-exception.json>",
+    "elapsed_seconds": 685,
+    "first_time_operator": false,
+    "unassisted_success": false
+  }
+}
+```
+
+Optional validated fields: `readme_sha256`, `release_run_id`, and `artifact_digest` (supplemental only; never replaces `final_packages`). Any bypass field/schema, bot actor, `_bmad-output/` timing reference, fixture hash substitution, or source/digest mismatch exits non-zero.
+
+### Exact-commit 3-OS CI receipt schema (`mcpcli-central-ci-receipt/v1`)
+
+```json
+{
+  "schema": "mcpcli-central-ci-receipt/v1",
+  "repository": "Hexalith/Hexalith.McpCli",
+  "source_sha": "<40-lowercase-hex>",
+  "ci_run_id": 123456789,
+  "status": "completed",
+  "conclusion": "success",
+  "completed_at_utc": "<UTC ISO-8601 timestamp>",
+  "platforms": {
+    "Linux": { "status": "passed" },
+    "Windows": { "status": "passed" },
+    "Darwin": { "status": "passed" }
+  },
+  "ci_fixture_packages": {
+    "Hexalith.McpCli.Abstractions.<ci-version>.nupkg": "<64-hex CI fixture SHA-256>",
+    "Hexalith.McpCli.<ci-version>.nupkg": "<64-hex CI fixture SHA-256>"
+  }
+}
+```
+
+After publication, run `scripts/verify-central-release.py verify-published` against `hexalith-package-publication.v1.json` and the final unsigned `.nupkg` pair to confirm identical nonsignature member hashes and record the separate signed nuget.org archive SHA-256s.
+
+---
+
+## Historical paired-workflow execution result (2.0.1, 2026-11-05)
+
+**Historical execution result (2026-11-05): verified public pair 2.0.1.** Both packages are public from release source `aa2845edbea23444a1d362060b8d0f5dc05a132e`. CI 42072073153, fresh three-OS staging 42080077255, the exact post-stage automated authorization and protected publication 42082617201 pass. Signed public contents/source/README and cryptographic signatures verify; fresh official-public consumer and installed-tool checks pass. [Final evidence](../../_bmad-output/implementation-artifacts/evidence/story-4-18/publication-2.0.1-20261105/README.md) binds all original archives and receipts. Execution is complete; the [spec review record](../../_bmad-output/implementation-artifacts/spec-4-18-publish-the-validated-package-pair.md#review-findings) tracks subsequent BMAD reviews, corrections and finish status.
 
 | Required result | Current status | Evidence |
 | --- | --- | --- |
@@ -46,11 +118,13 @@ Upstream checkpoint on 2026-11-05: [owner integrations and retained evidence](..
 The earlier preparation dispatch 42023389616 was later approved externally under the recorded jpiquot audit actor and published valid f412/7.0.3 artifacts using SDK 4.0.4; this task submitted no production approval. [Original and later evidence](../../_bmad-output/implementation-artifacts/evidence/story-4-18/upstream-integration-20261105/tenants/preparation/later-publication-observation.json) remain preserved. Those artifacts are rejected for this planned native 4.1 cohort. No new owner Release dispatch occurs before exact publication authorization. Local SDK 4.1 sample loopback and all 21 approved CLI/MCP replay vectors pass in a private public-only cache; these are not fresh live or paired-release acceptance. McpCli's original f242 CI remains failed, so its complete dependency rebind and new exact-source live CI/staging/acceptance/public verification remain required.
 
 
-## Automated acceptance path
+## Historical legacy automated acceptance path (pinned to 2.0.1 only)
 
-After fresh current-main staging, submit `operator_acceptance` using schema `mcpcli-paired-automated-acceptance/v1`. Set `decision` to `approved`, `authorization` to `user-requested-human-validation-bypass`, `approved_by` to the authenticated human dispatch actor, and `decided_at_utc` to the actual decision time after staging completed. Include exact `staging_run_id`, `source_sha`, `version`, `packages`, `preparation_sha256`, `acceptance_sha256` and `readme_sha256` from that candidate. Omit `sessions` entirely. The verifier rejects a bot actor, mismatched binding, missing authorization, missing/pre-staging/future decision time or any `sessions` field. Retain the user's authorization and the exact sanitized packet with the release receipts. This path does not validate the three clients, the ready environment or operator timing; do not report those results for the new candidate. Production approval and public verification remain required.
+> **Historical / forbidden for future candidates:** The legacy `mcpcli-paired-automated-acceptance/v1` bypass (`user-requested-human-validation-bypass`) was authorized solely for historical release `2.0.1` (`aa2845edbea23444a1d362060b8d0f5dc05a132e`). `scripts/verify-paired-publication.py` pins it strictly to that release, and `scripts/verify-central-release.py` forbids it on all future candidates.
 
-## Actual-session acceptance path
+After fresh current-main staging, the legacy workflow accepted `operator_acceptance` using schema `mcpcli-paired-automated-acceptance/v1`. Set `decision` to `approved`, `authorization` to `user-requested-human-validation-bypass`, `approved_by` to the authenticated human dispatch actor, and `decided_at_utc` to the actual decision time after staging completed. Include exact `staging_run_id`, `source_sha`, `version`, `packages`, `preparation_sha256`, `acceptance_sha256` and `readme_sha256` from that candidate. Omit `sessions` entirely. The verifier rejects a bot actor, mismatched binding, missing authorization, missing/pre-staging/future decision time or any `sessions` field. Retain the user's authorization and the exact sanitized packet with the release receipts. This path does not validate the three clients, the ready environment or operator timing; do not report those results for the new candidate. Production approval and public verification remain required.
+
+## Historical legacy actual-session acceptance path
 
 Use the [historical session bindings](../../_bmad-output/implementation-artifacts/evidence/story-4-18/hosted-staging-20261101T123459Z/session-bindings.json) only as a format example; compute fresh bindings for each new candidate and repeat them in every actual session and the final operator decision. The historical local handoff is `/tmp/mcpcli-4-18-41307182275/handoff`, containing exactly the two old accepted archives and a local-only `NuGet.Config`. It contains no environment credentials. The [historical read-only feed observation](../../_bmad-output/implementation-artifacts/evidence/story-4-18/hosted-staging-20261101T123459Z/public-feed-observation.json) found both 1.2.0 identities available at that time; availability and publication credentials still require production preflight.
 
@@ -66,11 +140,13 @@ Before sessions, obtain the owner's concrete reviewed environment approval. Neve
 
 Retain every attempt under a new `_bmad-output/implementation-artifacts/evidence/story-4-18/sessions/<client>/<attempt>/` directory. Include actual sanitized client initialization, discovery and call/result records; version/OS/harness/launch/executable identity; source/version and both package/receipt hashes; exact README bytes/hash; UTC times; environment review/approval/ready-state evidence; every failure, correction, permission prompt and assistance; persisted person/contact/identifier fields; and client/server/forward shutdown plus owned cleanup. Never overwrite an earlier attempt. A model's narrative or offline smoke cannot replace actual client evidence. Use the historical session/timing procedures as observer guidance while binding every fresh session to its own candidate.
 
-## Release dispatch for either path
+## Historical legacy release dispatch (`phase=paired`, unwired)
 
-The authenticated maintainer dispatches `Release` with `phase=paired`, `staging_run_id` naming the successful staging run, an empty `recovery_version`, and `operator_acceptance` containing one sanitized JSON packet for the chosen path. The packet is retained by the release run and its hash enters preflight/outcome receipts. GitHub authenticates the dispatch actor; `approved_by` must be that actor, and production approval still applies. The workflow reads the JSON input from `GITHUB_EVENT_PATH` inside the verifier, keeping the raw packet out of workflow environment/script text and job-log expansion. Local recording still accepts JSON through `OPERATOR_ACCEPTANCE`. Known ambient GitHub/publication credentials, recognized JWT/Bearer credentials, PEM private keys and members whose names end in `SigningKey` or `PrivateKey` (case-insensitive, also inside string values that contain JSON) are refused before recording or importing a packet. Recording also refuses duplicate JSON keys at any depth. The always-run retention step excludes raw operator files and emits checked copies plus original/retained hashes and an explicit redaction flag; it redacts the same material in the raw text, including values hidden under duplicate keys, even when validation refused the packet. The workflow-dispatch payload limit applies (65,535 characters across inputs); include focused sanitized raw excerpts and keep full sanitized records in the story evidence. Do not include credentials in the packet.
+> **Historical:** The `phase=paired` dispatch inputs below belonged to the pre-central workflow and are no longer wired in `.github/workflows/release.yml`. Current releases use `.github/workflows/release.yml` (`delivered-sha`) and the central acceptance procedure at the top of this document.
 
-## Actual-session packet schema
+The authenticated maintainer dispatched legacy `Release` with `phase=paired`, `staging_run_id` naming the successful staging run, an empty `recovery_version`, and `operator_acceptance` containing one sanitized JSON packet for the chosen path. The packet is retained by the release run and its hash enters preflight/outcome receipts. GitHub authenticates the dispatch actor; `approved_by` must be that actor, and production approval still applies. The workflow reads the JSON input from `GITHUB_EVENT_PATH` inside the verifier, keeping the raw packet out of workflow environment/script text and job-log expansion. Local recording still accepts JSON through `OPERATOR_ACCEPTANCE`. Known ambient GitHub/publication credentials, recognized JWT/Bearer credentials, PEM private keys and members whose names end in `SigningKey` or `PrivateKey` (case-insensitive, also inside string values that contain JSON) are refused before recording or importing a packet. Recording also refuses duplicate JSON keys at any depth. The always-run retention step excludes raw operator files and emits checked copies plus original/retained hashes and an explicit redaction flag; it redacts the same material in the raw text, including values hidden under duplicate keys, even when validation refused the packet. The workflow-dispatch payload limit applies (65,535 characters across inputs); include focused sanitized raw excerpts and keep full sanitized records in the story evidence. Do not include credentials in the packet.
+
+## Historical legacy actual-session packet schema
 
 The packet schema is `mcpcli-paired-operator-acceptance/v1`, with `decision: "approved"`, `approved_by`, `decided_at_utc`, `sessions` and `timing_exception`. Its top-level bindings, repeated identically in **each** session, are:
 
@@ -91,12 +167,12 @@ The packet schema is `mcpcli-paired-operator-acceptance/v1`, with `decision: "ap
 - `persisted_party`: selected `tenant`, matching `id`, `isActive: true`, `isErased: false`, `synthetic_fields_verified: true`. The actual result excerpt must retain the checked synthetic person, contact and identifier values.
 - `evidence`: exactly `initialization`, `discovery`, `tenant_read`, `command`, `persisted_party`, `cleanup`, `environment_approval`. Each value is `{"content":"<actual sanitized excerpt>","sha256":"<SHA-256 of the UTF-8 content string>"}`. Preserve actual request/result bodies, tool identities, timestamps and public IDs. Hashes alone without content are insufficient.
 
-`timing_exception` must be exactly the following, replacing the SHA with the actual hash of the unchanged historical file:
+`timing_exception` in `scripts/verify-paired-publication.py` now reads the tracked exception at `docs/release/operator-setup-timing-exception.json` (moved off `_bmad-output/`):
 
 ```json
 {
-  "reference": "_bmad-output/implementation-artifacts/evidence/story-4-17/timing-attempts.json",
-  "sha256": "<SHA-256 of that historical file>",
+  "reference": "docs/release/operator-setup-timing-exception.json",
+  "sha256": "<SHA-256 of docs/release/operator-setup-timing-exception.json>",
   "elapsed_seconds": 685,
   "first_time_operator": false,
   "unassisted_success": false,

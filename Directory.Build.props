@@ -40,7 +40,7 @@
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <!-- Aspire 17 keeps AddProject and Aspire.AppHost.Sdk available but obsolete. -->
     <WarningsNotAsErrors>$(WarningsNotAsErrors);CS0618;ASPIRE012</WarningsNotAsErrors>
-    <IsPackable>true</IsPackable>
+    <IsPackable>false</IsPackable>
     <IsPublishable>false</IsPublishable>
     <Version Condition="'$(Version)' == ''">3.0.0</Version>
     <Authors>Hexalith Contributors</Authors>

@@ -1,5 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
+    <IsPackable>true</IsPackable>
+    <HexalithVerifyPublishedPackage>true</HexalithVerifyPublishedPackage>
     <Description>Attributes and naming helpers for declaring Hexalith agent operations.</Description>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <PackageReadmeFile>README.md</PackageReadmeFile>

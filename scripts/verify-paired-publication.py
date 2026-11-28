@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Authenticate original staging artifacts and candidate-specific operator approval."""
+"""Historical paired-publication verifier (unwired legacy workflow; superseded by scripts/verify-central-release.py)."""
 
 import argparse
 from datetime import datetime, timezone
@@ -32,7 +32,10 @@ STAGING_JOBS = {
     'accept-staged-pair': ['Require source still eligible after platform execution',
                            'Require every receipt, named Windows test and identical raw discovery bytes'],
 }
-TIMING = '_bmad-output/implementation-artifacts/evidence/story-4-17/timing-attempts.json'
+TIMING = 'docs/release/operator-setup-timing-exception.json'
+HISTORICAL_BYPASS_ALLOWLIST = {
+    ('2.0.1', 'aa2845edbea23444a1d362060b8d0f5dc05a132e'),
+}
 TOOLS = {'list_modules', 'list_operations', 'describe_operation', 'send_command', 'run_query'}
 OPERATIONS = {'tenants.get-tenant', 'parties.create-party', 'parties.get-party'}
 
@@ -179,6 +182,13 @@ def operator_acceptance(path, prepared, accepted_path, origin, actor):
     bindings.update(staging_run_id=origin['staging_run_id'], preparation_sha256=accepted['preparation_sha256'],
                     acceptance_sha256=digest(accepted_path), readme_sha256=digest(ROOT / 'README.md'))
     if decision.get('schema') == 'mcpcli-paired-automated-acceptance/v1':
+        candidate_key = (prepared['version'], prepared['source_sha'])
+        decision_key = (decision.get('version'), decision.get('source_sha'))
+        if candidate_key not in HISTORICAL_BYPASS_ALLOWLIST or decision_key not in HISTORICAL_BYPASS_ALLOWLIST:
+            raise ValueError(
+                'Automated human-validation bypass is restricted to historical release 2.0.1 '
+                '(aa2845edbea23444a1d362060b8d0f5dc05a132e) and is forbidden for future candidates.'
+            )
         decided_at = timestamp(decision.get('decided_at_utc'))
         if (decision.get('decision') != 'approved' or decision.get('authorization') != 'user-requested-human-validation-bypass'
                 or not actor or actor.endswith('[bot]') or decision.get('approved_by') != actor
@@ -195,11 +205,15 @@ def operator_acceptance(path, prepared, accepted_path, origin, actor):
     if decided_at > datetime.now(timezone.utc):
         raise ValueError('Operator decision cannot be in the future.')
     timing = decision.get('timing_exception', {})
-    historical = read_json(ROOT / TIMING)['attempts'][0]
+    timing_doc = read_json(ROOT / TIMING)
+    attempts = timing_doc.get('attempts')
+    if not isinstance(attempts, list) or not attempts or not isinstance(attempts[0], dict):
+        raise ValueError('The accepted assisted 685-second timing exception must remain explicit.')
+    historical = attempts[0]
     if (timing != {'reference': TIMING, 'sha256': digest(ROOT / TIMING), 'elapsed_seconds': 685,
                    'first_time_operator': False, 'unassisted_success': False, 'decision': 'accepted-existing-exception'}
-            or historical['elapsedSeconds'] != 685 or historical['firstTimeOperator'] is not False
-            or historical['unassistedSuccess'] is not False or not historical['assistance']):
+            or historical.get('elapsedSeconds') != 685 or historical.get('firstTimeOperator') is not False
+            or historical.get('unassistedSuccess') is not False or not historical.get('assistance')):
         raise ValueError('The accepted assisted 685-second timing exception must remain explicit.')
     sessions = decision.get('sessions', [])
     if (not isinstance(sessions, list) or len(sessions) != 3 or any(not isinstance(item, dict) for item in sessions)

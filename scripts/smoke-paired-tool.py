@@ -45,6 +45,19 @@ def smoke(staging, prepared_path, output):
                       + '"/></packageSources><fallbackPackageFolders><clear/></fallbackPackageFolders></configuration>', encoding='utf-8')
     tools = private / 'tools'
 
+    checks = []
+    json_lf_checked = 0
+
+    def record_check(label):
+        if label not in checks:
+            checks.append(label)
+
+    def checked_json(raw):
+        nonlocal json_lf_checked
+        parsed = json_document(raw)
+        json_lf_checked += 1
+        return parsed
+
     def execute(name, argv, expected=0, override=None):
         return execute_command(output, private, override or env, name, argv, expected)
 
@@ -53,12 +66,13 @@ def smoke(staging, prepared_path, output):
     tool = tools / ('hexalith.exe' if os.name == 'nt' else 'hexalith')
     result = execute('version', [tool, '--version'])
     require(result.stdout.decode('utf-8').strip() == prepared.get('tool_version', prepared['version']) and not result.stderr, 'Installed tool version/channel mismatch.')
+    record_check('version')
 
     def discovery(name, *arguments):
         result = execute(name, [tool, *arguments])
         require(not result.stderr, f'{name} wrote unexpected diagnostics.')
         (captures / (name + '.json')).write_bytes(result.stdout)
-        return json_document(result.stdout)
+        return checked_json(result.stdout)
 
     modules = discovery('modules', 'modules')
     require(modules.get('modules'), 'The installed tool catalog is empty.')
@@ -69,24 +83,32 @@ def smoke(staging, prepared_path, output):
     require(operation_names, 'The installed tool has no operations.')
     for name in operation_names:
         discovery('describe-' + name, 'describe', name)
+    record_check('offline-discovery')
     target = private / 'result.json'
     result = execute('output-file', [tool, 'modules', '--output', target])
     require(not result.stdout and not result.stderr and target.read_bytes() == (captures / 'modules.json').read_bytes(), 'Output-file bytes/channels differ from discovery.')
+    record_check('output-file')
     result = execute('table', [tool, 'modules', '--format', 'table'])
     require(result.stdout.startswith(b'NAME\tOPERATIONS\tDESCRIPTION') and not result.stderr, 'Table output/channel mismatch.')
+    record_check('table')
     result = execute('invalid-home', [tool, 'config', 'current'], 2, {**env, 'MCPCLI_HOME': 'relative-secret-home'})
     expected_error = {'error': {'code': 'configuration_invalid', 'message': 'Invalid mcpcli profile file: MCPCLI_HOME must be an absolute directory path.'}}
-    require(not result.stderr and json_document(result.stdout) == expected_error, 'Invalid home did not fail safely on the JSON stdout channel.')
+    require(not result.stderr and checked_json(result.stdout) == expected_error, 'Invalid home did not fail safely on the JSON stdout channel.')
     result = execute('mcp-invalid-home', [tool, 'mcp', '--transport', 'stdio'], 2, {**env, 'MCPCLI_HOME': 'relative-secret-home'})
-    require(not result.stdout and json_document(result.stderr) == expected_error, 'MCP startup error polluted the protocol channel.')
+    require(not result.stdout and checked_json(result.stderr) == expected_error, 'MCP startup error polluted the protocol channel.')
+    record_check('errors')
     config_smoke(tool, execute, private / 'home/.eventstore/mcpcli.json')
+    record_check('config')
     mcp_smoke(tool, env, private, output, captures, modules)
+    record_check('mcp-protocol')
+    if json_lf_checked > 0:
+        record_check('json-lf')
     require(packages(staging, prepared['version']) == prepared['packages'], 'Staged bytes changed during installation smoke.')
     receipt = {'schema': 'mcpcli-paired-smoke/v1', 'status': 'passed', 'os': platform.system(),
                'source_sha': prepared['source_sha'], 'version': prepared['version'], 'packages': prepared['packages'],
                'preparation_sha256': digest(prepared_path),
                'discovery': {path.name: digest(path) for path in sorted(captures.iterdir())},
-               'checks': ['version', 'offline-discovery', 'config', 'json-lf', 'errors', 'mcp-protocol', 'output-file', 'table']}
+               'checks': list(checks)}
     write_new(output / 'smoke.json', receipt)
 
 

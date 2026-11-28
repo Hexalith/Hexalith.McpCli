@@ -183,6 +183,245 @@ for line in sys.stdin:
             self.assertFalse((output / 'smoke.json').exists())
             if mode == 'malformed': self.assertIn(b'not a notification', transcript)
 
+    def test_json_document_requires_utf8_lf_without_cr_or_bom(self):
+        self.assertEqual(self.smoke.json_document(b'{"ok":true}\n'), {'ok': True})
+        for bad in (b'{"ok":true}', b'{"ok":true}\r\n', b'{"ok":\rtrue}\n', b'\xef\xbb\xbf{"ok":true}\n'):
+            with self.subTest(raw=bad), self.assertRaisesRegex(ValueError, 'LF internally'):
+                self.smoke.json_document(bad)
+
+    def _smoke_fixture(self, mode):
+        case_root = self.root / ('smoke-' + mode)
+        staging = case_root / 'packages'
+        staging.mkdir(parents=True)
+        version = '3.0.1'
+        sha = 'a' * 40
+        for name in (f'Hexalith.McpCli.Abstractions.{version}.nupkg', f'Hexalith.McpCli.{version}.nupkg'):
+            (staging / name).write_bytes(b'fake-nupkg-' + name.encode('utf-8'))
+        from product_packages import packages as package_digests
+        prepared_path = case_root / 'prepared.json'
+        prepared_path.write_text(json.dumps({
+            'schema': 'mcpcli-product-packages/v1',
+            'source_sha': sha,
+            'version': version,
+            'tool_version': version,
+            'packages': package_digests(staging, version),
+        }), encoding='utf-8')
+        bin_dir = case_root / 'bin'
+        bin_dir.mkdir()
+        fake_tool = case_root / 'fake_hexalith.py'
+        fake_tool.write_text(f'''#!{sys.executable}
+import json, os, pathlib, sys
+mode = {mode!r}
+version = {version!r}
+staging = pathlib.Path({str(staging)!r})
+args = sys.argv[1:]
+modules = {{'modules': [{{'name': 'alpha'}}]}}
+ops = {{'operations': [{{'name': 'alpha.one'}}]}}
+desc = {{'name': 'alpha.one', 'kind': 'query'}}
+expected_err = {{'error': {{'code': 'configuration_invalid', 'message': 'Invalid mcpcli profile file: MCPCLI_HOME must be an absolute directory path.'}}}}
+
+def emit(doc, stream=sys.stdout.buffer, crlf=False, bom=False, no_lf=False):
+    raw = json.dumps(doc).encode('utf-8')
+    if crlf:
+        raw = raw + b'\\r\\n'
+    elif not no_lf:
+        raw = raw + b'\\n'
+    if bom:
+        raw = b'\\xef\\xbb\\xbf' + raw
+    stream.write(raw)
+    stream.flush()
+
+if args == ['--version']:
+    if mode == 'bad-version':
+        sys.stdout.write('9.9.9\\n')
+    else:
+        sys.stdout.write(version + '\\n')
+    if mode == 'version-stderr':
+        sys.stderr.write('unexpected warning\\n')
+    raise SystemExit(0)
+
+if args == ['modules']:
+    if mode == 'discovery-stderr':
+        sys.stderr.write('diag\\n')
+    if mode == 'empty-modules':
+        emit({{'modules': []}})
+    else:
+        emit(modules, crlf=(mode == 'discovery-crlf'), bom=(mode == 'discovery-bom'), no_lf=(mode == 'discovery-no-lf'))
+    raise SystemExit(0)
+
+if args[:2] == ['operations', 'alpha']:
+    emit({{'operations': []}} if mode == 'empty-operations' else ops)
+    raise SystemExit(0)
+
+if args[:2] == ['describe', 'alpha.one']:
+    if mode == 'describe-stderr':
+        sys.stderr.write('describe diag\\n')
+    emit(desc)
+    raise SystemExit(0)
+
+if args[:2] == ['modules', '--output']:
+    target = pathlib.Path(args[2])
+    body = json.dumps(modules).encode('utf-8') + b'\\n'
+    if mode == 'output-file-mismatch':
+        body = b'{{"modules":[]}}\\n'
+    target.write_bytes(body)
+    if mode == 'output-file-stdout':
+        sys.stdout.write('leaked\\n')
+    if mode == 'output-file-stderr':
+        sys.stderr.write('leaked\\n')
+    raise SystemExit(0)
+
+if args == ['modules', '--format', 'table']:
+    if mode == 'table-header-mismatch':
+        sys.stdout.write('WRONG\\tHEADER\\n')
+    else:
+        sys.stdout.write('NAME\\tOPERATIONS\\tDESCRIPTION\\nalpha\\t1\\tSample\\n')
+    if mode == 'table-stderr':
+        sys.stderr.write('table diag\\n')
+    raise SystemExit(0)
+
+if args == ['config', 'current'] and os.environ.get('MCPCLI_HOME') == 'relative-secret-home':
+    if mode == 'invalid-home-stderr':
+        sys.stderr.write('leaked\\n')
+    body = {{'error': {{'code': 'wrong'}}}} if mode == 'invalid-home-body' else expected_err
+    emit(body, crlf=(mode == 'invalid-home-crlf'))
+    raise SystemExit(0 if mode == 'invalid-home-exit' else 2)
+
+if args == ['mcp', '--transport', 'stdio'] and os.environ.get('MCPCLI_HOME') == 'relative-secret-home':
+    if mode == 'mcp-invalid-home-stdout':
+        sys.stdout.write('polluted\\n')
+    body = {{'error': {{'code': 'wrong'}}}} if mode == 'mcp-invalid-home-body' else expected_err
+    emit(body, stream=sys.stderr.buffer, crlf=(mode == 'mcp-invalid-home-crlf'))
+    raise SystemExit(0 if mode == 'mcp-invalid-home-exit' else 2)
+
+if args and args[0] == 'config':
+    home = pathlib.Path(os.environ['MCPCLI_HOME']) / '.eventstore'
+    home.mkdir(parents=True, exist_ok=True)
+    store = home / 'mcpcli.json'
+    state = json.loads(store.read_text()) if store.exists() else {{'version': 1, 'profiles': {{}}}}
+    if args[1:3] == ['profile', 'add']:
+        state['profiles'][args[3]] = {{'url': args[5], 'token': args[7]}}
+        store.write_text(json.dumps(state))
+        emit({{'name': args[3], 'activeProfile': state.get('activeProfile')}})
+    elif args[1:3] == ['use', '--clear']:
+        state.pop('activeProfile', None)
+        store.write_text(json.dumps(state))
+        emit({{'activeProfile': None}})
+    elif args[1] == 'use':
+        state['activeProfile'] = args[2]
+        store.write_text(json.dumps(state))
+        emit({{'activeProfile': args[2]}})
+    elif args[1] == 'current':
+        sources = {{k: 'default' for k in ('tenant', 'actor', 'format', 'allowTenantOverride', 'readOnly', 'strict', 'output', 'allowedExtensions')}}
+        sources.update(profile='activeProfile', url='profile', token='profile')
+        emit({{'profile': 'staged', 'url': 'http://127.0.0.1:1/', 'token': 'stag***', 'tenant': None,
+              'actor': None, 'allowTenantOverride': False, 'allowedExtensions': [], 'format': 'json',
+              'output': None, 'readOnly': False, 'strict': False, 'sources': sources}})
+    elif args[1:3] == ['profile', 'remove']:
+        state['profiles'].pop(args[3], None)
+        store.write_text(json.dumps(state))
+        emit({{'name': args[3], 'activeProfile': state.get('activeProfile')}})
+    raise SystemExit(0)
+
+if args == ['mcp', '--transport', 'stdio']:
+    if mode == 'post-smoke-mutation':
+        target_pkg = staging / f'Hexalith.McpCli.{{version}}.nupkg'
+        target_pkg.write_bytes(target_pkg.read_bytes() + b'tampered')
+    for line in sys.stdin:
+        req = json.loads(line)
+        if 'id' not in req:
+            continue
+        method = req['method']
+        if method == 'initialize':
+            res = {{'protocolVersion': '2025-06-18'}}
+        elif method == 'tools/list':
+            res = {{'tools': [{{'name': n}} for n in ['list_modules', 'list_operations', 'describe_operation', 'send_command', 'run_query']]}}
+        else:
+            pname = req['params']['name']
+            pargs = req['params']['arguments']
+            err = False
+            if pname == 'list_modules':
+                doc = modules
+            elif pname == 'list_operations':
+                doc = ops
+            elif pargs['operation'] == '__missing__':
+                doc = {{'error': {{'code': 'unknown_operation'}}}}
+                err = True
+            else:
+                doc = desc
+            res = {{'isError': err, 'structuredContent': doc, 'content': [{{'type': 'text', 'text': json.dumps(doc)}}]}}
+        print(json.dumps({{'jsonrpc': '2.0', 'id': req['id'], 'result': res}}), flush=True)
+    raise SystemExit(0)
+raise SystemExit(1)
+''', encoding='utf-8')
+        fake_tool.chmod(0o700)
+        fake_dotnet = bin_dir / 'dotnet'
+        fake_dotnet.write_text(f'''#!{sys.executable}
+import pathlib, shutil, sys
+args = sys.argv[1:]
+if args[:3] == ['tool', 'install', 'Hexalith.McpCli']:
+    tool_dir = pathlib.Path(args[args.index('--tool-path') + 1])
+    tool_dir.mkdir(parents=True, exist_ok=True)
+    dest = tool_dir / 'hexalith'
+    shutil.copyfile({str(fake_tool)!r}, dest)
+    dest.chmod(0o700)
+    raise SystemExit(0)
+raise SystemExit(1)
+''', encoding='utf-8')
+        fake_dotnet.chmod(0o700)
+        output = case_root / 'smoke-out'
+        return staging, prepared_path, output, str(bin_dir) + os.pathsep + os.environ.get('PATH', '')
+
+    def test_smoke_succeeds_and_derives_checks_dynamically(self):
+        staging, prepared_path, output, path_env = self._smoke_fixture('passed')
+        with patch.dict(os.environ, {'PATH': path_env}):
+            self.smoke.smoke(staging, prepared_path, output)
+        receipt = json.loads((output / 'smoke.json').read_text(encoding='utf-8'))
+        self.assertEqual(receipt['schema'], 'mcpcli-paired-smoke/v1')
+        self.assertEqual(receipt['status'], 'passed')
+        self.assertEqual(
+            set(receipt['checks']),
+            {'version', 'offline-discovery', 'output-file', 'table', 'errors', 'config', 'mcp-protocol', 'json-lf'},
+        )
+        self.assertEqual(len(receipt['checks']), len(set(receipt['checks'])))
+        with patch.dict(os.environ, {'PATH': path_env}):
+            with self.assertRaisesRegex(ValueError, 'already exists'):
+                self.smoke.smoke(staging, prepared_path, output)
+
+    def test_smoke_refuses_every_contract_violation_without_writing_receipt(self):
+        cases = [
+            ('bad-version', 'version/channel mismatch'),
+            ('version-stderr', 'version/channel mismatch'),
+            ('discovery-stderr', 'wrote unexpected diagnostics'),
+            ('describe-stderr', 'wrote unexpected diagnostics'),
+            ('discovery-crlf', 'LF internally'),
+            ('discovery-bom', 'LF internally'),
+            ('discovery-no-lf', 'LF internally'),
+            ('empty-modules', 'catalog is empty'),
+            ('empty-operations', 'has no operations'),
+            ('output-file-stdout', 'Output-file bytes/channels'),
+            ('output-file-stderr', 'Output-file bytes/channels'),
+            ('output-file-mismatch', 'Output-file bytes/channels'),
+            ('table-header-mismatch', 'Table output/channel mismatch'),
+            ('table-stderr', 'Table output/channel mismatch'),
+            ('invalid-home-exit', 'invalid-home returned 0'),
+            ('invalid-home-stderr', 'Invalid home did not fail safely'),
+            ('invalid-home-body', 'Invalid home did not fail safely'),
+            ('invalid-home-crlf', 'LF internally'),
+            ('mcp-invalid-home-exit', 'mcp-invalid-home returned 0'),
+            ('mcp-invalid-home-stdout', 'polluted the protocol channel'),
+            ('mcp-invalid-home-body', 'polluted the protocol channel'),
+            ('mcp-invalid-home-crlf', 'LF internally'),
+            ('post-smoke-mutation', 'Staged bytes changed'),
+        ]
+        for mode, pattern in cases:
+            staging, prepared_path, output, path_env = self._smoke_fixture(mode)
+            with self.subTest(mode=mode):
+                with patch.dict(os.environ, {'PATH': path_env}):
+                    with self.assertRaisesRegex(ValueError, pattern):
+                        self.smoke.smoke(staging, prepared_path, output)
+                self.assertFalse((output / 'smoke.json').exists())
+
 
 if __name__ == '__main__':
     unittest.main()

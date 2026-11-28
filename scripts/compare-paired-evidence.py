@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Accept only one source/hash-bound pair with complete matching three-OS evidence."""
+"""Historical paired staging comparator (unwired legacy workflow; superseded by scripts/verify-central-release.py)."""
 
 import argparse
 import json
@@ -120,7 +120,7 @@ def compare(staging, prepared_path, consumers, output, *, acceptance_source):
     write_new(output, {'schema': 'mcpcli-accepted-staged-pair/v1', 'status': 'accepted-staging-only',
                        'source_sha': prepared['source_sha'], 'version': prepared['version'], 'packages': prepared['packages'],
                        'preparation_sha256': digest(prepared_path), 'platforms': receipts,
-                       'publication': 'refused; stories 4.17–4.18 remain outstanding'})
+                       'publication': 'refused; staging-only receipt requires separate central release verification and publication approval'})
 
 
 def main():
