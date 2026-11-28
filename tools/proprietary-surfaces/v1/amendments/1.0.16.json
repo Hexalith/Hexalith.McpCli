@@ -1,0 +1,386 @@
+{
+  "schema": "mcpcli-proprietary-surface-census/v1",
+  "fromVersion": "1.0.15",
+  "toVersion": "1.0.16",
+  "previousSha256": "5b1f2fe2ae3bdeec963d653a5c9c64de6d1e0c386aa67e9faa959ddb0bf59fde",
+  "approval": {
+    "owner": "Requesting maintainer via explicit delegated CI repair",
+    "reason": "Renew three existing EventStore compilation-closure allowances at pin 5484fae6c284cd8fe70b51bf921c5b31509b6c27 after the parent Builds catalog at bb38c3e42f48f37de76c77983e4de83d99f619b7 changed Directory.Packages.props. Each closure keeps its prior path set; only the sibling catalog digest changes. All prior evidence and scanner rules are preserved. Automated exact-source classification under the current dependency and CI maintenance delegation; no individual human source review, runtime, migration or publication acceptance is claimed.",
+    "decision": "approved",
+    "date": "2026-11-28",
+    "evidence": {
+      "path": "tools/proprietary-surfaces/v1/amendments/1.0.16-approval.json",
+      "sha256": "a144973a8270e912d7b4b5cf97db0bee109c51266b63935476e34689e92f6873"
+    }
+  },
+  "addAllowances": [
+    {
+      "surface": {
+        "repository": "references/Hexalith.EventStore",
+        "path": "tests/Hexalith.EventStore.DurableTaskLookupHost/Hexalith.EventStore.DurableTaskLookupHost.csproj",
+        "kind": "project",
+        "identity": "Hexalith.EventStore.DurableTaskLookupHost"
+      },
+      "row": "PE05",
+      "classification": "test-fixture",
+      "owner": "Requesting maintainer via explicit delegated CI repair",
+      "reason": "Renew exact source binding for existing PE05 test-fixture allowance at EventStore 5484fae6c284cd8fe70b51bf921c5b31509b6c27 (1 changed closure member: parent-tree Builds Directory.Packages.props at bb38c3e42f48f37de76c77983e4de83d99f619b7). Automated exact-source classification under the current dependency and CI maintenance delegation; no individual human source review, runtime, migration or publication acceptance is claimed.",
+      "signals": [
+        "executable-project"
+      ],
+      "compilationClosure": true,
+      "sourcePrefix": "tests/Hexalith.EventStore.DurableTaskLookupHost",
+      "sources": [
+        {
+          "path": "../Hexalith.Builds/Props/AspireAppHost.Build.targets",
+          "sha256": "e766cfbec9dce23b48a29e897d95f57bb4be4a5ec6b34ad47d9c226073c23ff4"
+        },
+        {
+          "path": "../Hexalith.Builds/Props/Directory.Packages.props",
+          "sha256": "93e52174c83c129ba80b4273ebd840c9a7eb93733187f69deca3dbfa382db73f"
+        },
+        {
+          "path": "../Hexalith.Builds/Props/Logging.Build.targets",
+          "sha256": "7e01de7239cfaaa7840863b82540d2f5d6cd6623a9a0107d4e1b275f3748ca6e"
+        },
+        {
+          "path": "Directory.Build.props",
+          "sha256": "16cc5ef0edf1039f8f929a4a4ac813e12555e8f0a3617af5d35f02c9758502d5"
+        },
+        {
+          "path": "Directory.Build.targets",
+          "sha256": "17ae52d48938c943c287767b41b43847f2c3760fbec2b2a2984974efc9832de6"
+        },
+        {
+          "path": "references/Hexalith.Builds/Props/AspireAppHost.Build.targets",
+          "sha256": "e766cfbec9dce23b48a29e897d95f57bb4be4a5ec6b34ad47d9c226073c23ff4"
+        },
+        {
+          "path": "references/Hexalith.Builds/Props/Directory.Packages.props",
+          "sha256": "77d8a4433beb9e986308a7aa1b15511028ef39dc0056580d3b7399ca61374d0b"
+        },
+        {
+          "path": "references/Hexalith.Builds/Props/Logging.Build.targets",
+          "sha256": "7e01de7239cfaaa7840863b82540d2f5d6cd6623a9a0107d4e1b275f3748ca6e"
+        },
+        {
+          "path": "tests/Directory.Build.props",
+          "sha256": "66778cfb669b1db4d60acfabe502e1e4be39c120d931add0f0cd04dbc01d16ed"
+        },
+        {
+          "path": "tests/Hexalith.EventStore.DurableTaskLookupHost/Hexalith.EventStore.DurableTaskLookupHost.csproj",
+          "sha256": "5c4c113f1db894e60341b20ef561f88ccc8e1f5703b95f673ceed220c9753e85"
+        },
+        {
+          "path": "tests/Hexalith.EventStore.DurableTaskLookupHost/LookupOnlyAdmissionAuthorizer.cs",
+          "sha256": "516cee9e3ffc5269657be1c02a1b3f8862c78b2dd32c03b5883047542a010429"
+        },
+        {
+          "path": "tests/Hexalith.EventStore.DurableTaskLookupHost/Program.cs",
+          "sha256": "ace28b7c88b83d9730cd29d3cb3123e02a9d943ab64fa5bc9c4b1261d2294170"
+        }
+      ]
+    },
+    {
+      "surface": {
+        "repository": "references/Hexalith.EventStore",
+        "path": "tools/Hexalith.EventStore.RuntimeIdentityProbe/Hexalith.EventStore.RuntimeIdentityProbe.csproj",
+        "kind": "project",
+        "identity": "Hexalith.EventStore.RuntimeIdentityProbe"
+      },
+      "row": "PE09",
+      "classification": "qualification-evidence-tooling",
+      "owner": "Requesting maintainer via explicit delegated CI repair",
+      "reason": "Renew exact source binding for existing PE09 qualification-evidence-tooling allowance at EventStore 5484fae6c284cd8fe70b51bf921c5b31509b6c27 (1 changed closure member: parent-tree Builds Directory.Packages.props at bb38c3e42f48f37de76c77983e4de83d99f619b7). Automated exact-source classification under the current dependency and CI maintenance delegation; no individual human source review, runtime, migration or publication acceptance is claimed.",
+      "signals": [
+        "executable-project"
+      ],
+      "compilationClosure": true,
+      "sourcePrefix": "tools/Hexalith.EventStore.RuntimeIdentityProbe",
+      "sources": [
+        {
+          "path": "../Hexalith.Builds/Props/AspireAppHost.Build.targets",
+          "sha256": "e766cfbec9dce23b48a29e897d95f57bb4be4a5ec6b34ad47d9c226073c23ff4"
+        },
+        {
+          "path": "../Hexalith.Builds/Props/Directory.Packages.props",
+          "sha256": "93e52174c83c129ba80b4273ebd840c9a7eb93733187f69deca3dbfa382db73f"
+        },
+        {
+          "path": "../Hexalith.Builds/Props/Logging.Build.targets",
+          "sha256": "7e01de7239cfaaa7840863b82540d2f5d6cd6623a9a0107d4e1b275f3748ca6e"
+        },
+        {
+          "path": "Directory.Build.props",
+          "sha256": "16cc5ef0edf1039f8f929a4a4ac813e12555e8f0a3617af5d35f02c9758502d5"
+        },
+        {
+          "path": "Directory.Build.targets",
+          "sha256": "17ae52d48938c943c287767b41b43847f2c3760fbec2b2a2984974efc9832de6"
+        },
+        {
+          "path": "references/Hexalith.Builds/Props/AspireAppHost.Build.targets",
+          "sha256": "e766cfbec9dce23b48a29e897d95f57bb4be4a5ec6b34ad47d9c226073c23ff4"
+        },
+        {
+          "path": "references/Hexalith.Builds/Props/Directory.Packages.props",
+          "sha256": "77d8a4433beb9e986308a7aa1b15511028ef39dc0056580d3b7399ca61374d0b"
+        },
+        {
+          "path": "references/Hexalith.Builds/Props/Logging.Build.targets",
+          "sha256": "7e01de7239cfaaa7840863b82540d2f5d6cd6623a9a0107d4e1b275f3748ca6e"
+        },
+        {
+          "path": "tools/Hexalith.EventStore.RuntimeIdentityProbe/Hexalith.EventStore.RuntimeIdentityProbe.csproj",
+          "sha256": "32e4803284336ac6a970c8c57e52b90e33e6f77b036360076a50e3cbd71b8959"
+        },
+        {
+          "path": "tools/Hexalith.EventStore.RuntimeIdentityProbe/Program.cs",
+          "sha256": "933e9a171e2a5972702e70346704304e3859c43b82af8decce834f20589f7f74"
+        }
+      ]
+    },
+    {
+      "surface": {
+        "repository": "references/Hexalith.EventStore",
+        "path": "tools/ProductionProfileBridge/ProductionProfileBridge.csproj",
+        "kind": "project",
+        "identity": "ProductionProfileBridge"
+      },
+      "row": "PE09",
+      "classification": "qualification-evidence-tooling",
+      "owner": "Requesting maintainer via explicit delegated CI repair",
+      "reason": "Renew exact source binding for existing PE09 qualification-evidence-tooling allowance at EventStore 5484fae6c284cd8fe70b51bf921c5b31509b6c27 (1 changed closure member: parent-tree Builds Directory.Packages.props at bb38c3e42f48f37de76c77983e4de83d99f619b7). Automated exact-source classification under the current dependency and CI maintenance delegation; no individual human source review, runtime, migration or publication acceptance is claimed.",
+      "signals": [
+        "executable-project"
+      ],
+      "compilationClosure": true,
+      "sourcePrefix": "tools/ProductionProfileBridge",
+      "sources": [
+        {
+          "path": "../Hexalith.Builds/Props/AspireAppHost.Build.targets",
+          "sha256": "e766cfbec9dce23b48a29e897d95f57bb4be4a5ec6b34ad47d9c226073c23ff4"
+        },
+        {
+          "path": "../Hexalith.Builds/Props/Directory.Packages.props",
+          "sha256": "93e52174c83c129ba80b4273ebd840c9a7eb93733187f69deca3dbfa382db73f"
+        },
+        {
+          "path": "../Hexalith.Builds/Props/Logging.Build.targets",
+          "sha256": "7e01de7239cfaaa7840863b82540d2f5d6cd6623a9a0107d4e1b275f3748ca6e"
+        },
+        {
+          "path": "Directory.Build.props",
+          "sha256": "16cc5ef0edf1039f8f929a4a4ac813e12555e8f0a3617af5d35f02c9758502d5"
+        },
+        {
+          "path": "Directory.Build.targets",
+          "sha256": "17ae52d48938c943c287767b41b43847f2c3760fbec2b2a2984974efc9832de6"
+        },
+        {
+          "path": "references/Hexalith.Builds/Props/AspireAppHost.Build.targets",
+          "sha256": "e766cfbec9dce23b48a29e897d95f57bb4be4a5ec6b34ad47d9c226073c23ff4"
+        },
+        {
+          "path": "references/Hexalith.Builds/Props/Directory.Packages.props",
+          "sha256": "77d8a4433beb9e986308a7aa1b15511028ef39dc0056580d3b7399ca61374d0b"
+        },
+        {
+          "path": "references/Hexalith.Builds/Props/Logging.Build.targets",
+          "sha256": "7e01de7239cfaaa7840863b82540d2f5d6cd6623a9a0107d4e1b275f3748ca6e"
+        },
+        {
+          "path": "src/Hexalith.EventStore.Contracts/Deployment/ProductionProfile.cs",
+          "sha256": "dbafbade580a8a472108285a2b2ba0ea6751d67bc44fbbcf00a8f3abdc3e2c99"
+        },
+        {
+          "path": "src/Hexalith.EventStore.Contracts/Deployment/ProductionProfileApplication.cs",
+          "sha256": "dd7e2053691dff25fec1f80f7db28c1fa025e83a5e3f6056831eca52749364b1"
+        },
+        {
+          "path": "src/Hexalith.EventStore.Contracts/Deployment/ProductionProfileArtifact.cs",
+          "sha256": "89ca3b5ba9b6daa5d5a1ff44bf14310816a24c79fc8867aadbab1c3d61b406c7"
+        },
+        {
+          "path": "src/Hexalith.EventStore.Contracts/Deployment/ProductionProfileCanonicalJson.cs",
+          "sha256": "db14db9e2eace292a7f5c7268b38aeac8fd65f96b210278e933f0def387d53a8"
+        },
+        {
+          "path": "src/Hexalith.EventStore.Contracts/Deployment/ProductionProfileCatalogs.cs",
+          "sha256": "b0aa0ee88b9e0fa70b97464eeac5d85abf80f0388b41df9281cd80d7f4ab628d"
+        },
+        {
+          "path": "src/Hexalith.EventStore.Contracts/Deployment/ProductionProfileCodec.cs",
+          "sha256": "65e2fedad3ab0f0137aabc16319144d0852d546895fe1d68026b749b7eabc878"
+        },
+        {
+          "path": "src/Hexalith.EventStore.Contracts/Deployment/ProductionProfileComponent.cs",
+          "sha256": "7dcef4856bc10cb3d7f3c39bfd367a7ab61ab39ab4f3e9da0105c216d12c328b"
+        },
+        {
+          "path": "src/Hexalith.EventStore.Contracts/Deployment/ProductionProfileComponentVersion.cs",
+          "sha256": "c1f3c4f0a2adb2556d1a735fb65038fa3f8900f8f1d69fb6e09c3a06bd4ad031"
+        },
+        {
+          "path": "src/Hexalith.EventStore.Contracts/Deployment/ProductionProfileCredentialReference.cs",
+          "sha256": "5d4561f8098b26c45722527884891fb4efbb3ec5ad98330c94167b6a3870fd55"
+        },
+        {
+          "path": "src/Hexalith.EventStore.Contracts/Deployment/ProductionProfileEndpoint.cs",
+          "sha256": "5d9caa8e827d43f0f19a225af107a42af84f12f25e84751f332c4034b7398065"
+        },
+        {
+          "path": "src/Hexalith.EventStore.Contracts/Deployment/ProductionProfileEnvironment.cs",
+          "sha256": "54260cd61dfdf8f2c1a1bcb86244039140adc63d8ef55cb99b564cfaa9bf7da6"
+        },
+        {
+          "path": "src/Hexalith.EventStore.Contracts/Deployment/ProductionProfileEvidence.cs",
+          "sha256": "dd6710983e557dd27c51386837486b849301691157a93ffeb980e92524972dc4"
+        },
+        {
+          "path": "src/Hexalith.EventStore.Contracts/Deployment/ProductionProfileFreshness.cs",
+          "sha256": "5973072ec75d7fa13194e21933e75aa040b32a13d428bbd89cc84265263fe653"
+        },
+        {
+          "path": "src/Hexalith.EventStore.Contracts/Deployment/ProductionProfileInfrastructure.cs",
+          "sha256": "69617219f0e32c0a0bef6b1913773d3541c65944b52087e12f2331241d964f9f"
+        },
+        {
+          "path": "src/Hexalith.EventStore.Contracts/Deployment/ProductionProfileIssue.cs",
+          "sha256": "c9ea25fe42c5767faca57d57f38ad87ec764376a07c31df15ceb94a4d4ef6903"
+        },
+        {
+          "path": "src/Hexalith.EventStore.Contracts/Deployment/ProductionProfileIssuer.cs",
+          "sha256": "db5773afcef9f688482a0f231ea562414cf9eb7e86c78f4158627267e9033cb1"
+        },
+        {
+          "path": "src/Hexalith.EventStore.Contracts/Deployment/ProductionProfilePhysicalTarget.cs",
+          "sha256": "3b21bdf50d16d6f4edc7625490f9d9584e2323d6537a77eaa0e471b087597fbf"
+        },
+        {
+          "path": "src/Hexalith.EventStore.Contracts/Deployment/ProductionProfileProtection.cs",
+          "sha256": "ee7a5eeae4e464bda4678ef157564b663b30b586c91ab165856324cb08adadf6"
+        },
+        {
+          "path": "src/Hexalith.EventStore.Contracts/Deployment/ProductionProfileProvider.cs",
+          "sha256": "b1ff79efc941615fe5bb71875b0950563bb1a22d59661c68c0ac4b4d39aaba8f"
+        },
+        {
+          "path": "src/Hexalith.EventStore.Contracts/Deployment/ProductionProfileRelease.cs",
+          "sha256": "3b93e149d24e54f78af4cb98ce59bf86815ae5ca99b4ea3bb21293abb7983c47"
+        },
+        {
+          "path": "src/Hexalith.EventStore.Contracts/Deployment/ProductionProfileRestore.cs",
+          "sha256": "42035a32b29d7edecb3ebce601dd58fddd07a2758a032a9701c22ba74063ec8a"
+        },
+        {
+          "path": "src/Hexalith.EventStore.Contracts/Deployment/ProductionProfileRestoreUnit.cs",
+          "sha256": "ccf84bc14ea3a59382184db62573e180925638a3f27b0168bfa5a20bfd8c6d33"
+        },
+        {
+          "path": "src/Hexalith.EventStore.Contracts/Deployment/ProductionProfileTemplate.cs",
+          "sha256": "610881715a6d4ac1c1c1cde060bbaf8e2bb741ea9d96514128f9eda556469d93"
+        },
+        {
+          "path": "src/Hexalith.EventStore.Contracts/Deployment/ProductionProfileTool.cs",
+          "sha256": "2b961f086a8f3bcaabb7b6ab55650e937f644d1f4b0e31c18a0e7d2e85febb8b"
+        },
+        {
+          "path": "src/Hexalith.EventStore.Contracts/Deployment/ProductionProfileTopology.cs",
+          "sha256": "3bc6701b7d2f2e441df60210af44df43c6c583875a6743f2b0b3228e5e7831a3"
+        },
+        {
+          "path": "src/Hexalith.EventStore.Contracts/Deployment/ProductionProfileV2.cs",
+          "sha256": "34a9009162e142b5fa31434d9357dec4993a57c41ea693d42bfe3ac37057eb98"
+        },
+        {
+          "path": "src/Hexalith.EventStore.Contracts/Deployment/ProductionProfileV2Codec.cs",
+          "sha256": "423f95227e600c97caf0f7f1e5e7d9f94a00e65793e2e83518b80f78d79aa3a8"
+        },
+        {
+          "path": "src/Hexalith.EventStore.Contracts/Deployment/ProductionProfileV2Component.cs",
+          "sha256": "03bd43d4abe34fa9129512d8ba33274aaa3bce8f33f72bbc2b280ce81fc21e9a"
+        },
+        {
+          "path": "src/Hexalith.EventStore.Contracts/Deployment/ProductionProfileV2Dapr.cs",
+          "sha256": "b0844d561d241c2307f9ca4c1d6dece62cc88dfc5ac370e712c7ada1a8421d92"
+        },
+        {
+          "path": "src/Hexalith.EventStore.Contracts/Deployment/ProductionProfileV2Scope.cs",
+          "sha256": "72a81cb62d02987049e1335a4dad4d26a6cf44609b0799532cf7fb2a967b914f"
+        },
+        {
+          "path": "src/Hexalith.EventStore.Contracts/Deployment/ProductionProfileV2Validator.cs",
+          "sha256": "6e5e7317732cfee16a8fc69c82a3ffa9c68305caec6f4c5f5789adf04b86e714"
+        },
+        {
+          "path": "src/Hexalith.EventStore.Contracts/Deployment/ProductionProfileValidationComponent.cs",
+          "sha256": "ac4a5776519a8784cd7e17751af7285ad7c4fdc1bc4db12e59265757097f6f86"
+        },
+        {
+          "path": "src/Hexalith.EventStore.Contracts/Deployment/ProductionProfileValidationContext.cs",
+          "sha256": "fc109f5e01fb3c386790ebb082ecb3c2e54f0214fe7c9da51b6b4a44701ebcfb"
+        },
+        {
+          "path": "src/Hexalith.EventStore.Contracts/Deployment/ProductionProfileValidationDocument.cs",
+          "sha256": "d3bcf2efc57cecc1701819fdeb20b196bca58040ab7cd60e74053294176e2bc2"
+        },
+        {
+          "path": "src/Hexalith.EventStore.Contracts/Deployment/ProductionProfileValidationException.cs",
+          "sha256": "8f65090c0350a8ff78a354267632edd7e1e5c73dbd01f8b17e0a410eb50602ad"
+        },
+        {
+          "path": "src/Hexalith.EventStore.Contracts/Deployment/ProductionProfileValidationResult.cs",
+          "sha256": "331c8e12ff668da2682177a4f05eb5632e66cca99aa76497ec0caa8c034cb5e3"
+        },
+        {
+          "path": "src/Hexalith.EventStore.Contracts/Deployment/ProductionProfileValidator.cs",
+          "sha256": "8472e59264b3ddc49ae300672fa64f83cf24caf2ac2b21c9556895371a2e3d2c"
+        },
+        {
+          "path": "src/Hexalith.EventStore.Contracts/Deployment/ProductionProfileWriter.cs",
+          "sha256": "95d2a3a6b10c63bc890bf9c7c0f45d64e5ca6e94523cdabfe870c20e81e03cb0"
+        },
+        {
+          "path": "tools/ProductionProfileBridge/BuildProof.targets",
+          "sha256": "1b0951f4103d099bd8eb463c4cb0f9d99341e3c442734fdaeebccbfd7b17e523"
+        },
+        {
+          "path": "tools/ProductionProfileBridge/NuGet.Config",
+          "sha256": "35e55409c50b1d47d2218af34a901c377d785e77b9220d1cfef12070f38978ca"
+        },
+        {
+          "path": "tools/ProductionProfileBridge/ProductionProfileBridge.csproj",
+          "sha256": "de1fec2fb29ae044620442efe9a0cd570ef002cc88d74fd7f808751272c10e23"
+        },
+        {
+          "path": "tools/ProductionProfileBridge/Program.cs",
+          "sha256": "3c42ee79c430ef42e10d4a3045a6fe4d40199811f206f17236de683c0c5168d8"
+        }
+      ]
+    }
+  ],
+  "removeAllowances": [
+    {
+      "repository": "references/Hexalith.EventStore",
+      "path": "tests/Hexalith.EventStore.DurableTaskLookupHost/Hexalith.EventStore.DurableTaskLookupHost.csproj",
+      "kind": "project",
+      "identity": "Hexalith.EventStore.DurableTaskLookupHost"
+    },
+    {
+      "repository": "references/Hexalith.EventStore",
+      "path": "tools/Hexalith.EventStore.RuntimeIdentityProbe/Hexalith.EventStore.RuntimeIdentityProbe.csproj",
+      "kind": "project",
+      "identity": "Hexalith.EventStore.RuntimeIdentityProbe"
+    },
+    {
+      "repository": "references/Hexalith.EventStore",
+      "path": "tools/ProductionProfileBridge/ProductionProfileBridge.csproj",
+      "kind": "project",
+      "identity": "ProductionProfileBridge"
+    }
+  ],
+  "addExceptions": [],
+  "removeExceptions": [],
+  "addExclusions": []
+}
