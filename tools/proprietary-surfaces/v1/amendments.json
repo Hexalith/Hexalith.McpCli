@@ -54,5 +54,9 @@
   {
     "path": "amendments/1.0.14.json",
     "sha256": "454a6a61e293fe3271045bfcb3a6200fbbe98e13d30dcf2c93435965e7b114cb"
+  },
+  {
+    "path": "amendments/1.0.15.json",
+    "sha256": "5b1f2fe2ae3bdeec963d653a5c9c64de6d1e0c386aa67e9faa959ddb0bf59fde"
   }
 ]

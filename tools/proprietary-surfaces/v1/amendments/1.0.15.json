@@ -1,0 +1,88 @@
+{
+  "schema": "mcpcli-proprietary-surface-census/v1",
+  "fromVersion": "1.0.14",
+  "toVersion": "1.0.15",
+  "previousSha256": "454a6a61e293fe3271045bfcb3a6200fbbe98e13d30dcf2c93435965e7b114cb",
+  "approval": {
+    "owner": "Requesting maintainer via explicit delegated CI repair",
+    "reason": "Renew six existing exact-file exclusions at the committed McpCli Builds gitlink bb38c3e42f48f37de76c77983e4de83d99f619b7 after automated comparison with their 1.0.14 bodies. Five helper bodies are byte-identical; the captured package-version audit remains schemaVersion 2 with 335 package rows and a refreshed catalog digest. All prior evidence and scanner rules are preserved. Automated exact-source classification under the current dependency and CI maintenance delegation; no individual human source review, runtime, migration or publication acceptance is claimed.",
+    "decision": "approved",
+    "date": "2026-11-28",
+    "evidence": {
+      "path": "tools/proprietary-surfaces/v1/amendments/1.0.15-approval.json",
+      "sha256": "b50e3bdc45f6542ce4d1a6aac0b49b6278873a7a4ed99e2a003d06323350405e"
+    }
+  },
+  "addAllowances": [],
+  "removeAllowances": [],
+  "addExceptions": [],
+  "removeExceptions": [],
+  "addExclusions": [
+    {
+      "repository": "references/Hexalith.Builds",
+      "prefix": ".github/workflows/domain-release.yml",
+      "row": "PE01",
+      "classification": "existing-generic-publication-helper",
+      "owner": "Requesting maintainer via explicit delegated CI repair",
+      "reason": "Body is byte-identical to the previous exact approved shared generic domain-release workflow. Renew only the inspected source revision. Automated exact-source classification under the current dependency and CI maintenance delegation; no individual human source review, runtime, migration or publication acceptance is claimed.",
+      "scope": "file",
+      "sourceRevision": "bb38c3e42f48f37de76c77983e4de83d99f619b7",
+      "sha256": "b81d3e0c423d96c077bfb501579f10a1cc633df284da5b81800062f04bdf37bd"
+    },
+    {
+      "repository": "references/Hexalith.Builds",
+      "prefix": "Github/publish-containers/publish-containers.sh",
+      "row": "PE01",
+      "classification": "existing-generic-publication-helper",
+      "owner": "Requesting maintainer via explicit delegated CI repair",
+      "reason": "Body is byte-identical to the previous exact approved generic container publication helper. Renew only the inspected source revision. Automated exact-source classification under the current dependency and CI maintenance delegation; no individual human source review, runtime, migration or publication acceptance is claimed.",
+      "scope": "file",
+      "sourceRevision": "bb38c3e42f48f37de76c77983e4de83d99f619b7",
+      "sha256": "eb4ce27ac04294b10d8171b60eb7c7f04ed1b9169834c9adcb7174e3590065ae"
+    },
+    {
+      "repository": "references/Hexalith.Builds",
+      "prefix": "Tools/package-version-audit.json",
+      "row": "PE07",
+      "classification": "captured-evidence",
+      "owner": "Requesting maintainer via explicit delegated CI repair",
+      "reason": "Structured schema-v2 audit data retains 335 package rows and the same key set; generatedFromRevision and catalogSha256 were refreshed with the Builds pin. This renews only captured data classification, not dependency compatibility or acceptance. Automated exact-source classification under the current dependency and CI maintenance delegation; no individual human source review, runtime, migration or publication acceptance is claimed.",
+      "scope": "file",
+      "sourceRevision": "bb38c3e42f48f37de76c77983e4de83d99f619b7",
+      "sha256": "2ab7ed08c21c6a51235bb4a22c390b65f18e319d64513fb098fc25bdae14c8c4"
+    },
+    {
+      "repository": "references/Hexalith.Builds",
+      "prefix": "Tools/test-g4-packaged-platform-loader.ps1",
+      "row": "PE05",
+      "classification": "qualification-evidence-tooling",
+      "owner": "Requesting maintainer via explicit delegated CI repair",
+      "reason": "Body is byte-identical to the previous exact approved loader regression helper. Renew only the inspected source revision. Automated exact-source classification under the current dependency and CI maintenance delegation; no individual human source review, runtime, migration or publication acceptance is claimed.",
+      "scope": "file",
+      "sourceRevision": "bb38c3e42f48f37de76c77983e4de83d99f619b7",
+      "sha256": "6361d83f4f26cf3b851e51556408eced8f0e8b7b6df0b5d830313797c2976755"
+    },
+    {
+      "repository": "references/Hexalith.Builds",
+      "prefix": "Tools/test-g4-tool-package-contracts.ps1",
+      "row": "PE05",
+      "classification": "qualification-evidence-tooling",
+      "owner": "Requesting maintainer via explicit delegated CI repair",
+      "reason": "Body is byte-identical to the previous exact approved tool-package regression helper. Renew only the inspected source revision. Automated exact-source classification under the current dependency and CI maintenance delegation; no individual human source review, runtime, migration or publication acceptance is claimed.",
+      "scope": "file",
+      "sourceRevision": "bb38c3e42f48f37de76c77983e4de83d99f619b7",
+      "sha256": "872a3eeb47212977308384a5a34aaa2e2398d7e4d093550b2a22f879b4971d89"
+    },
+    {
+      "repository": "references/Hexalith.Builds",
+      "prefix": "Tools/test-platform-version-catalog.ps1",
+      "row": "PE05",
+      "classification": "qualification-evidence-tooling",
+      "owner": "Requesting maintainer via explicit delegated CI repair",
+      "reason": "Body is byte-identical to the previous exact approved catalog regression helper. Renew only the inspected source revision. Automated exact-source classification under the current dependency and CI maintenance delegation; no individual human source review, runtime, migration or publication acceptance is claimed.",
+      "scope": "file",
+      "sourceRevision": "bb38c3e42f48f37de76c77983e4de83d99f619b7",
+      "sha256": "74cf73a9173967a0ddb61d53b6ffe5521a5fcb79ffefcaaf445a30d040209889"
+    }
+  ]
+}
