@@ -29,7 +29,7 @@
 # - Dev moves story to 'review', then runs code-review (fresh context, different LLM recommended)
 # - Retrospective appends its action items to action_items; the status view surfaces open ones
 generated: 09-23-2026 07:41
-last_updated: '11-28-2026 02:22'
+last_updated: '11-28-2026 02:47'
 project: mcpcli
 project_key: NOKEY
 tracking_system: file-system
@@ -105,7 +105,7 @@ development_status:
   5-12-gate-enrolled-modules-by-operation-shape: done # 2026-11-10 shape-coverage proposal; precedes Story 6.1.
   5-13-restore-the-native-dependency-audit-and-live-ci: done # 2026-11-28. Candidate 14b2ffb43ab04f69528a4f5d1e82d9a93f0925e7 passed native audits, all 22 approved Linux live vectors, boundary, smoke, Windows and macOS in https://github.com/Hexalith/Hexalith.McpCli/actions/runs/46068136287
   5-14-restore-the-proprietary-surface-census-gate: done # Hosted CI run 46085187622 on a5721f0c95f9c0a2ae49fec4be92835eb1837840 passed linux-census (18/18 roots non-recursive, policy 1.0.14, 0 errors/rejected/stale, clean secret-scanned census.json sha256 072ed08b8cef45d45d4e8583889bb01caae65e567c8176b55af806bd871ad259 in mcpcli-linux-product-diagnostics); later linux-conformance step timed out at 3300s in tools/live-topology self-tests (tracked by Story 5.26).
-  5-15-bind-paired-release-acceptance-to-the-published-candidates: in-progress
+  5-15-bind-paired-release-acceptance-to-the-published-candidates: in-progress # Local rehearsal passed. Shared Builds check and BMAD review pending.
   5-16-protect-profile-credential-entry-and-transport: review
   5-17-validate-gateway-command-acknowledgments: done
   5-18-reject-non-ascii-public-tenant-input-before-normalization: backlog
@@ -309,7 +309,7 @@ action_items:
       checks, bind the human-validation bypass to a committed version and SHA authorization
       or remove it, and move the timing exception out of _bmad-output (F5, F15)."
     owner: "McpCli maintainer"
-    status: open
+    status: done
     ref: "_bmad-output/implementation-artifacts/epic-4-retro-2026-11-06.md"
   - id: "epic-4-retro-item-7-reconcile-epic-4-ledger"
     epic: 4

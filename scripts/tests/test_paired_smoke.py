@@ -188,6 +188,8 @@ for line in sys.stdin:
         for bad in (b'{"ok":true}', b'{"ok":true}\r\n', b'{"ok":\rtrue}\n', b'\xef\xbb\xbf{"ok":true}\n'):
             with self.subTest(raw=bad), self.assertRaisesRegex(ValueError, 'LF internally'):
                 self.smoke.json_document(bad)
+        with self.assertRaises(ValueError):
+            self.smoke.json_document('{"ok":true}\n'.encode('utf-16-be'))
 
     def _smoke_fixture(self, mode):
         case_root = self.root / ('smoke-' + mode)
@@ -264,7 +266,8 @@ if args[:2] == ['modules', '--output']:
     body = json.dumps(modules).encode('utf-8') + b'\\n'
     if mode == 'output-file-mismatch':
         body = b'{{"modules":[]}}\\n'
-    target.write_bytes(body)
+    if mode != 'output-file-missing':
+        target.write_bytes(body)
     if mode == 'output-file-stdout':
         sys.stdout.write('leaked\\n')
     if mode == 'output-file-stderr':
@@ -401,6 +404,7 @@ raise SystemExit(1)
             ('empty-operations', 'has no operations'),
             ('output-file-stdout', 'Output-file bytes/channels'),
             ('output-file-stderr', 'Output-file bytes/channels'),
+            ('output-file-missing', 'Output-file bytes/channels'),
             ('output-file-mismatch', 'Output-file bytes/channels'),
             ('table-header-mismatch', 'Table output/channel mismatch'),
             ('table-stderr', 'Table output/channel mismatch'),

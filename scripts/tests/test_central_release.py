@@ -304,6 +304,7 @@ class CentralReleaseVerifierTests(unittest.TestCase):
         # Bad timestamps: no timezone, before CI completion, in the future
         bad_times = [
             ('no-tz', '2026-11-28T11:55:00', 'timezone offset'),
+            ('non-utc', self.decided_at.astimezone(timezone(timedelta(hours=1))).isoformat(), 'UTC timezone offset'),
             ('before-ci', (self.ci_completed - timedelta(minutes=1)).strftime('%Y-%m-%dT%H:%M:%SZ'), 'precede 3-OS CI'),
             ('future', (self.now + timedelta(minutes=1)).strftime('%Y-%m-%dT%H:%M:%SZ'), 'in the future'),
         ]
@@ -378,6 +379,9 @@ class CentralReleaseVerifierTests(unittest.TestCase):
 
     def test_verify_published_separates_signed_hashes_and_enforces_payload_equality(self):
         fx = self.build_valid_fixture('pub-valid')
+        acceptance = json.loads(fx['acceptance'].read_text())
+        acceptance.update(release_run_id=99999, artifact_digest='sha256:' + 'd' * 64)
+        fx['acceptance'].write_text(json.dumps(acceptance), encoding='utf-8')
         cand_out = fx['base'] / 'candidate.json'
         self.run_verify(fx, cand_out)
 
@@ -415,6 +419,21 @@ class CentralReleaseVerifierTests(unittest.TestCase):
         self.assertEqual(receipt['final_packages'], fx['final_packages'])
         self.assertEqual(set(receipt['signed_public_packages']), set(fx['final_packages']))
         self.assertNotEqual(receipt['signed_public_packages'], receipt['final_packages'])
+
+        for field, value in (('repository', 'Other/Repository'), ('artifactRun', 1),
+                             ('artifactDigest', 'sha256:' + '1' * 64)):
+            pub_path.write_text(json.dumps({**pub_doc, field: value}), encoding='utf-8')
+            bad_out = fx['base'] / 'pub-bad.json'
+            with self.subTest(field=field), self.assertRaisesRegex(ValueError, field):
+                VERIFIER.verify_published(
+                    publication_path=pub_path,
+                    packages_dir=fx['packages_dir'],
+                    source_sha=SHA,
+                    version=VERSION,
+                    output=bad_out,
+                    candidate_receipt_path=cand_out,
+                )
+            self.assertFalse(bad_out.exists())
 
         # Mutating any nonsignature file digest in publication inventory must fail.
         pub_doc['packages'][0]['files']['README.md'] = '0' * 64
@@ -463,10 +482,151 @@ class CentralReleaseVerifierTests(unittest.TestCase):
             '--consumer', str(fx['consumer']),
             '--ci-receipt', str(fx['ci_receipt']),
             '--acceptance', str(fx['acceptance']),
+            '--release-manifest', str(fx['manifest']),
+            '--ci-prepared', str(fx['ci_prepared']),
             '--output', str(out_bad),
         ])
         self.assertEqual(code_bad, 1)
         self.assertFalse(out_bad.exists())
+
+    def test_candidate_requires_the_manifest_and_its_package_paths(self):
+        fx = self.build_valid_fixture('missing-manifest')
+        output = fx['base'] / 'verified.json'
+        original = fx['manifest'].read_text()
+        fx['manifest'].unlink()
+        with self.assertRaisesRegex(ValueError, 'release-manifest.json.*existing regular file'):
+            self.run_verify(fx, output)
+        detached = fx['base'] / 'release-manifest.json'
+        detached.write_text(original, encoding='utf-8')
+        with self.assertRaisesRegex(ValueError, 'release-manifest.json.*existing regular package file'):
+            self.run_verify(fx, output, release_manifest_path=detached)
+        self.assertFalse(output.exists())
+
+    def test_candidate_rejects_signed_archive_and_extra_manifest_entry(self):
+        fx = self.build_valid_fixture('signed-final')
+        output = fx['base'] / 'verified.json'
+        with zipfile.ZipFile(fx['packages_dir'] / f'Hexalith.McpCli.{VERSION}.nupkg', 'a') as archive:
+            archive.writestr('.signature.p7s', b'signature marker')
+        with self.assertRaisesRegex(ValueError, 'original unsigned final archive'):
+            self.run_verify(fx, output)
+        self.assertFalse(output.exists())
+
+        fx = self.build_valid_fixture('extra-entry')
+        output = fx['base'] / 'verified.json'
+        manifest = json.loads(fx['manifest'].read_text())
+        manifest['packages'].append(None)
+        VERIFIER.write_new(fx['base'] / 'release/extra-entry.json', manifest)
+        with self.assertRaisesRegex(ValueError, 'packages must list exactly'):
+            self.run_verify(fx, output, release_manifest_path=fx['base'] / 'release/extra-entry.json')
+        self.assertFalse(output.exists())
+
+    def test_ci_receipt_requires_mcpcli_identity_and_recorded_fixture_hashes(self):
+        for index, (change, message) in enumerate((
+            ({'repository': 'Other/Repository'}, 'repository must be'),
+            ({'ci_fixture_packages': None}, 'differs from CI fixture prepared.json'),
+            ({'ci_fixture_packages': {'wrong.nupkg': 'a' * 64}}, 'differs from CI fixture prepared.json'),
+        )):
+            fx = self.build_valid_fixture(f'invalid-ci-{index}')
+            receipt = json.loads(fx['ci_receipt'].read_text())
+            fx['ci_receipt'].write_text(json.dumps({**receipt, **change}), encoding='utf-8')
+            output = fx['base'] / 'verified.json'
+            with self.subTest(change=change), self.assertRaisesRegex(ValueError, message):
+                self.run_verify(fx, output)
+            self.assertFalse(output.exists())
+
+    def test_consumer_receipt_requires_success_and_warning(self):
+        for index, (field, value, message) in enumerate((
+            ('exit_code', None, 'exit_code=0'),
+            ('exit_code', False, 'exit_code=0'),
+            ('warning_code', None, 'MCPCLI001'),
+        )):
+            fx = self.build_valid_fixture(f'invalid-consumer-{index}')
+            receipt = json.loads(fx['consumer'].read_text())
+            receipt[field] = value
+            fx['consumer'].write_text(json.dumps(receipt), encoding='utf-8')
+            output = fx['base'] / 'verified.json'
+            with self.subTest(field=field, value=value), self.assertRaisesRegex(ValueError, message):
+                self.run_verify(fx, output)
+            self.assertFalse(output.exists())
+
+    def test_acceptance_requires_the_current_version_and_both_archives(self):
+        fx = self.build_valid_fixture('wrong-acceptance-pair')
+        acceptance = json.loads(fx['acceptance'].read_text())
+        output = fx['base'] / 'verified.json'
+        for changes, error in [
+            ({'version': '3.0.0'}, 'version mismatch'),
+            ({'final_packages': {'old.nupkg': 'a' * 64}}, 'final_packages must bind exact pair'),
+        ]:
+            fx['acceptance'].write_text(json.dumps({**acceptance, **changes}), encoding='utf-8')
+            with self.subTest(changes=changes), self.assertRaisesRegex(ValueError, error):
+                self.run_verify(fx, output)
+            self.assertFalse(output.exists())
+
+    def test_candidate_checks_the_independently_confirmed_approver(self):
+        fx = self.build_valid_fixture('confirmed-approver')
+        output = fx['base'] / 'verified.json'
+
+        with self.assertRaisesRegex(ValueError, 'does not match expected actor'):
+            self.run_verify(fx, output, expected_actor='another-maintainer')
+        self.assertFalse(output.exists())
+
+        receipt = self.run_verify(fx, output, expected_actor='jpiquot')
+        self.assertEqual(receipt['approved_by'], 'jpiquot')
+
+    def test_check_archives_requires_clean_source_and_passes_final_pair_to_all_checks(self):
+        fx = self.build_valid_fixture('check-archives')
+        output = fx['base'] / 'archive-checks'
+        options = dict(packages_dir=fx['packages_dir'], version=VERSION, source_sha=SHA,
+                       release_manifest_path=fx['manifest'], output=output, root=fx['base'])
+        with patch.object(VERIFIER, 'git_source_sha', return_value=OTHER_SHA):
+            with self.assertRaisesRegex(ValueError, 'Source SHA mismatch'):
+                VERIFIER.check_archives(**options)
+        with patch.object(VERIFIER, 'git_source_sha', return_value=SHA), patch.object(
+                VERIFIER, 'source_changes', return_value=' M README.md'):
+            with self.assertRaisesRegex(ValueError, 'uncommitted changes'):
+                VERIFIER.check_archives(**options)
+        self.assertFalse(output.exists())
+
+        with patch.object(VERIFIER, 'git_source_sha', return_value=SHA), patch.object(
+                VERIFIER, 'source_changes', return_value=''), patch.object(VERIFIER, 'run_owned') as run:
+            VERIFIER.check_archives(**options)
+        self.assertEqual([call.args[0][1].name for call in run.call_args_list],
+                         ['validate-release-packages.py', 'smoke-paired-tool.py', 'smoke_bootstrap_consumer.py'])
+        for call in run.call_args_list:
+            self.assertIn(fx['packages_dir'], call.args[0])
+        consumer = json.loads((output / 'consumer.json').read_text())
+        prepared = json.loads((output / 'final-prepared.json').read_text())
+        self.assertEqual(consumer['packages'], fx['final_packages'])
+        self.assertEqual(prepared['packages'], fx['final_packages'])
+        self.assertEqual(prepared['tool_version'], VERSION + '+' + SHA)
+
+    def test_check_archives_refuses_mutation_after_consumer_or_failed_check(self):
+        fx = self.build_valid_fixture('mutating-consumer')
+        output = fx['base'] / 'archive-checks'
+        options = dict(packages_dir=fx['packages_dir'], version=VERSION, source_sha=SHA,
+                       release_manifest_path=fx['manifest'], output=output, root=fx['base'])
+
+        def mutate_after_smoke(command, **_kwargs):
+            if command[1].name == 'smoke_bootstrap_consumer.py':
+                path = fx['packages_dir'] / f'Hexalith.McpCli.{VERSION}.nupkg'
+                path.write_bytes(b'mutated')
+
+        with patch.object(VERIFIER, 'require_clean_source'), patch.object(
+                VERIFIER, 'run_owned', side_effect=mutate_after_smoke):
+            with self.assertRaisesRegex(ValueError, 'archive checks: final package digest mismatch'):
+                VERIFIER.check_archives(**options)
+        self.assertFalse((output / 'consumer.json').exists())
+
+        fx = self.build_valid_fixture('failed-consumer')
+        output = fx['base'] / 'archive-checks'
+        options.update(packages_dir=fx['packages_dir'], release_manifest_path=fx['manifest'],
+                       output=output, root=fx['base'])
+        failure = subprocess.CalledProcessError(1, 'consumer')
+        with patch.object(VERIFIER, 'require_clean_source'), patch.object(
+                VERIFIER, 'run_owned', side_effect=(None, None, failure)):
+            with self.assertRaises(subprocess.CalledProcessError):
+                VERIFIER.check_archives(**options)
+        self.assertFalse((output / 'consumer.json').exists())
 
     def test_check_project_packaging_enforces_manifest_packability_and_verify_flag(self):
         manifest_root = self.root / 'proj-check'

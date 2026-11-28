@@ -8,7 +8,7 @@ archive hashes (release-manifest.json), and signed nuget.org archive hashes
 from __future__ import annotations
 
 import argparse
-from datetime import datetime, timezone
+from datetime import datetime, timedelta, timezone
 import hashlib
 import json
 from pathlib import Path
@@ -20,6 +20,7 @@ import zipfile
 
 from evidence_redaction import ShortEvidenceCredentialError, require_evidence_credentials, sanitized, sanitized_values
 from product_packages import PAIR, ROOT, digest, failure_detail, packages, source_changes, source_sha as git_source_sha, validate_version, write_new
+from product_process import run as run_owned
 
 MANIFEST_PATH = Path('tools/release-packages.json')
 TIMING_PATH = Path('docs/release/operator-setup-timing-exception.json')
@@ -27,7 +28,7 @@ SORTED_PAIR = sorted(PAIR)
 SHA40_RE = re.compile(r'[0-9a-f]{40}\Z')
 SHA64_RE = re.compile(r'[0-9a-f]{64}\Z')
 ARTIFACT_DIGEST_RE = re.compile(r'sha256:[0-9a-f]{64}\Z')
-REPO_RE = re.compile(r'[A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+\Z')
+REPOSITORY = 'Hexalith/Hexalith.McpCli'
 BOT_ACTORS = {'github-actions', 'dependabot', 'renovate', 'hexalith-bot'}
 REQUIRED_SMOKE_CHECKS = {
     'version', 'offline-discovery', 'config', 'json-lf',
@@ -87,8 +88,8 @@ def parse_utc_timestamp(value: object, label: str) -> datetime:
         parsed = datetime.fromisoformat(value.replace('Z', '+00:00'))
     except ValueError as error:
         raise ValueError(f'{label}: invalid timestamp {value!r}.') from error
-    if parsed.tzinfo is None:
-        raise ValueError(f'{label}: timestamp must include an explicit timezone offset.')
+    if parsed.utcoffset() != timedelta(0):
+        raise ValueError(f'{label}: timestamp must include an explicit UTC timezone offset.')
     return parsed.astimezone(timezone.utc)
 
 
@@ -179,6 +180,8 @@ def inspect_final_archives(
         archive_path = packages_dir / filename
         payload_map_from_nupkg(archive_path)
         with zipfile.ZipFile(archive_path) as archive:
+            if any(name.casefold() == '.signature.p7s' for name in archive.namelist()):
+                raise ValueError(f'Expected the original unsigned final archive for {filename}.')
             nuspecs = [name for name in archive.namelist() if name.endswith('.nuspec') and '/' not in name]
             if len(nuspecs) != 1:
                 raise ValueError(f'{filename} must contain exactly one root .nuspec.')
@@ -221,7 +224,8 @@ def inspect_final_archives(
         if manifest.get('containers') != []:
             raise ValueError('release-manifest.json must declare an empty containers list for McpCli.')
         entries = manifest.get('packages')
-        if not isinstance(entries, list) or [item.get('id') for item in entries if isinstance(item, dict)] != SORTED_PAIR:
+        if (not isinstance(entries, list) or len(entries) != len(SORTED_PAIR)
+                or [item.get('id') for item in entries if isinstance(item, dict)] != SORTED_PAIR):
             raise ValueError(f'release-manifest.json packages must list exactly {SORTED_PAIR}.')
         for item in entries:
             pkg_id = item['id']
@@ -231,16 +235,15 @@ def inspect_final_archives(
             if item.get('verifyPublishedPackage') is not True:
                 raise ValueError(f'release-manifest.json must set verifyPublishedPackage=true for {pkg_id}.')
             manifest_file = Path(release_manifest_path).parent / expected_rel
-            if manifest_file.exists() or manifest_file.is_symlink():
-                if manifest_file.is_symlink() or not manifest_file.is_file():
-                    raise ValueError(f'release-manifest.json references non-regular package file {manifest_file}.')
-                file_digest = digest(manifest_file)
-                expected_digest = actual_digests[f'{pkg_id}.{version}.nupkg']
-                if file_digest != expected_digest:
-                    raise ValueError(
-                        f'Final package digest mismatch for {pkg_id}.{version}.nupkg: '
-                        f'manifest path has {file_digest}, staged dir has {expected_digest}.'
-                    )
+            if manifest_file.parent.is_symlink() or manifest_file.is_symlink() or not manifest_file.is_file():
+                raise ValueError(f'release-manifest.json must reference an existing regular package file: {manifest_file}.')
+            file_digest = digest(manifest_file)
+            expected_digest = actual_digests[f'{pkg_id}.{version}.nupkg']
+            if file_digest != expected_digest:
+                raise ValueError(
+                    f'Final package digest mismatch for {pkg_id}.{version}.nupkg: '
+                    f'manifest path has {file_digest}, staged dir has {expected_digest}.'
+                )
         manifest_summary = {'path': str(Path(release_manifest_path)), 'sha256': manifest_sha}
 
     return actual_digests, manifest_summary
@@ -319,7 +322,7 @@ def validate_ci_fixture_prepared(ci_prepared_path: Path, source_sha: str) -> tup
 def validate_ci_receipt(
     ci_receipt_path: Path,
     source_sha: str,
-    ci_fixture_packages: dict[str, str] | None = None,
+    ci_fixture_packages: dict[str, str],
 ) -> tuple[dict, str, datetime]:
     doc, doc_sha = read_strict_json(ci_receipt_path, '3-OS CI receipt')
     if doc.get('schema') != 'mcpcli-central-ci-receipt/v1':
@@ -328,9 +331,8 @@ def validate_ci_receipt(
         raise ValueError(
             f"Source SHA mismatch in 3-OS CI receipt: expected {source_sha}, found {doc.get('source_sha')!r}."
         )
-    repo = doc.get('repository')
-    if not isinstance(repo, str) or REPO_RE.fullmatch(repo) is None:
-        raise ValueError('3-OS CI receipt requires a valid owner/repo repository identity.')
+    if doc.get('repository') != REPOSITORY:
+        raise ValueError(f'3-OS CI receipt repository must be {REPOSITORY}.')
     if type(doc.get('ci_run_id')) is not int or doc['ci_run_id'] < 1:
         raise ValueError('3-OS CI receipt requires a positive integer ci_run_id.')
     if doc.get('status') != 'completed' or doc.get('conclusion') != 'success':
@@ -343,15 +345,8 @@ def validate_ci_receipt(
         if not isinstance(entry, dict) or entry.get('status') != 'passed':
             raise ValueError(f'3-OS CI receipt platform {system} did not pass.')
     receipt_fixtures = doc.get('ci_fixture_packages')
-    if receipt_fixtures is not None:
-        if not isinstance(receipt_fixtures, dict) or not receipt_fixtures:
-            raise ValueError('3-OS CI receipt ci_fixture_packages must be a non-empty digest map when present.')
-        validated_fixtures = {
-            name: validate_sha64(sha, f'3-OS CI receipt fixture {name}')
-            for name, sha in sorted(receipt_fixtures.items())
-        }
-        if ci_fixture_packages is not None and validated_fixtures != ci_fixture_packages:
-            raise ValueError('3-OS CI receipt ci_fixture_packages differs from CI fixture prepared.json.')
+    if receipt_fixtures != ci_fixture_packages:
+        raise ValueError('3-OS CI receipt ci_fixture_packages differs from CI fixture prepared.json.')
     return doc, doc_sha, completed_at
 
 
@@ -421,9 +416,12 @@ def validate_consumer_receipt(
     if doc.get('version') != version:
         raise ValueError(f"Consumer smoke receipt version mismatch: expected {version}, found {doc.get('version')!r}.")
     _check_package_map(final_packages, doc.get('packages'), 'consumer smoke receipt')
-    if 'exit_code' in doc and doc['exit_code'] != 0:
+    if doc['schema'] == 'mcpcli-paired-consumer/v1':
+        validate_sha64(doc.get('compiler_sha256'), 'Consumer smoke receipt compiler_sha256')
+        validate_sha64(doc.get('command_sha256'), 'Consumer smoke receipt command_sha256')
+    elif type(doc.get('exit_code')) is not int or doc['exit_code'] != 0:
         raise ValueError('Consumer smoke receipt must record exit_code=0.')
-    if 'warning_code' in doc and doc['warning_code'] != 'MCPCLI001':
+    elif doc.get('warning_code') != 'MCPCLI001':
         raise ValueError('Consumer smoke receipt must record MCPCLI001.')
     return doc, doc_sha
 
@@ -575,6 +573,61 @@ def check_project_packaging(root: Path = ROOT, solution: str = 'Hexalith.McpCli.
     return evaluated
 
 
+def require_clean_source(root: Path, source_sha: str) -> None:
+    actual_head = git_source_sha(cwd=root)
+    if actual_head != source_sha:
+        raise ValueError(f'Source SHA mismatch: git HEAD is {actual_head}, expected {source_sha}.')
+    if source_changes(cwd=root):
+        raise ValueError('Working tree has uncommitted changes; clean release source is required.')
+
+
+def check_archives(
+    *,
+    packages_dir: Path,
+    version: str,
+    source_sha: str,
+    release_manifest_path: Path,
+    output: Path,
+    root: Path = ROOT,
+) -> None:
+    require_clean_source(root, source_sha)
+    packages_dir = packages_dir.absolute()
+    output = output.absolute()
+    if output.exists() or output.is_symlink():
+        raise ValueError(f'Archive check output already exists: {output}')
+    final_packages, _ = inspect_final_archives(
+        packages_dir, version, source_sha,
+        readme_path=root / 'README.md', release_manifest_path=release_manifest_path,
+    )
+    output.mkdir(parents=True)
+    prepared = output / 'final-prepared.json'
+    write_new(prepared, {
+        'schema': 'mcpcli-paired-preparation/v1', 'source_sha': source_sha, 'version': version,
+        'tool_version': f'{version}+{source_sha}', 'packages': final_packages,
+    })
+    scripts = root / 'scripts'
+    run_owned(
+        [sys.executable, scripts / 'validate-release-packages.py', packages_dir, version, 'paired',
+         '--source-sha', source_sha, '--output', output / 'validation.json'],
+        cwd=root, output=output / 'validate', timeout=300,
+    )
+    run_owned(
+        [sys.executable, scripts / 'smoke-paired-tool.py', '--staging', packages_dir,
+         '--prepared', prepared, '--output', output / 'smoke'],
+        cwd=root, output=output / 'tool-check', timeout=900,
+    )
+    run_owned(
+        [sys.executable, scripts / 'smoke_bootstrap_consumer.py', version, packages_dir, output / 'consumer'],
+        cwd=root, output=output / 'consumer-check', timeout=300,
+    )
+    require_clean_source(root, source_sha)
+    _check_package_map(packages(packages_dir, version), final_packages, 'archive checks')
+    write_new(output / 'consumer.json', {
+        'schema': 'mcpcli-central-consumer/v1', 'status': 'passed', 'source_sha': source_sha,
+        'version': version, 'packages': final_packages, 'exit_code': 0, 'warning_code': 'MCPCLI001',
+    })
+
+
 def verify_candidate(
     *,
     packages_dir: Path,
@@ -586,8 +639,8 @@ def verify_candidate(
     ci_receipt_path: Path,
     acceptance_path: Path,
     output: Path,
-    release_manifest_path: Path | None = None,
-    ci_prepared_path: Path | None = None,
+    release_manifest_path: Path,
+    ci_prepared_path: Path,
     readme_path: Path | None = None,
     expected_actor: str | None = None,
     require_clean_git: bool = False,
@@ -602,11 +655,7 @@ def verify_candidate(
         raise ValueError(f'Verification receipt already exists and will not be overwritten: {output}')
 
     if require_clean_git:
-        actual_head = git_source_sha(cwd=root)
-        if actual_head != source_sha:
-            raise ValueError(f'Source SHA mismatch: git HEAD is {actual_head}, expected {source_sha}.')
-        if source_changes(cwd=root):
-            raise ValueError('Working tree has uncommitted changes; clean release source is required.')
+        require_clean_source(root, source_sha)
 
     packaging = check_project_packaging(root=root) if check_projects else None
 
@@ -616,17 +665,10 @@ def verify_candidate(
         release_manifest_path=release_manifest_path,
     )
 
-    ci_fixture_packages: dict[str, str] = {}
-    ci_prepared_sha = None
-    if ci_prepared_path is not None:
-        ci_fixture_packages, ci_prepared_sha = validate_ci_fixture_prepared(ci_prepared_path, source_sha)
-
-    ci_receipt, ci_receipt_sha, ci_completed_at = validate_ci_receipt(
-        ci_receipt_path, source_sha,
-        ci_fixture_packages=ci_fixture_packages if ci_prepared_path is not None else None,
+    ci_fixture_packages, ci_prepared_sha = validate_ci_fixture_prepared(ci_prepared_path, source_sha)
+    _, ci_receipt_sha, ci_completed_at = validate_ci_receipt(
+        ci_receipt_path, source_sha, ci_fixture_packages,
     )
-    if not ci_fixture_packages and isinstance(ci_receipt.get('ci_fixture_packages'), dict):
-        ci_fixture_packages = dict(sorted(ci_receipt['ci_fixture_packages'].items()))
 
     _, validation_sha = validate_validation_receipt(validation_path, source_sha, version, final_packages)
     _, smoke_sha = validate_smoke_receipt(smoke_path, source_sha, version, final_packages)
@@ -659,7 +701,7 @@ def verify_candidate(
         'receipts': {
             'ci_prepared_sha256': ci_prepared_sha,
             'ci_receipt_sha256': ci_receipt_sha,
-            'release_manifest_sha256': manifest_summary['sha256'] if manifest_summary else None,
+            'release_manifest_sha256': manifest_summary['sha256'],
             'validation_sha256': validation_sha,
             'smoke_sha256': smoke_sha,
             'consumer_sha256': consumer_sha,
@@ -669,8 +711,12 @@ def verify_candidate(
         'decided_at_utc': acceptance['decided_at_utc'],
         'timing_exception': acceptance['timing_exception'],
     }
+    for key in ('release_run_id', 'artifact_digest'):
+        if key in acceptance:
+            receipt[key] = acceptance[key]
     if packaging is not None:
         receipt['project_packaging'] = packaging
+    _check_package_map(packages(packages_dir, version), final_packages, 'candidate archives')
     output.parent.mkdir(parents=True, exist_ok=True)
     write_new(output, receipt)
     return receipt
@@ -683,7 +729,7 @@ def verify_published(
     source_sha: str,
     version: str,
     output: Path,
-    candidate_receipt_path: Path | None = None,
+    candidate_receipt_path: Path,
     readme_path: Path | None = None,
 ) -> dict:
     validate_version(version)
@@ -694,23 +740,18 @@ def verify_published(
 
     final_packages, _ = inspect_final_archives(packages_dir, version, source_sha, readme_path=readme_path)
 
-    ci_fixture_packages: dict[str, str] = {}
-    candidate_sha = None
-    if candidate_receipt_path is not None:
-        candidate, candidate_sha = read_strict_json(candidate_receipt_path, 'candidate verification receipt')
-        if candidate.get('schema') != 'mcpcli-central-release-verification/v1' or candidate.get('status') != 'passed':
-            raise ValueError('Candidate verification receipt must be a passing mcpcli-central-release-verification/v1.')
-        if candidate.get('source_sha') != source_sha:
-            raise ValueError(
-                f"Source SHA mismatch in candidate receipt: expected {source_sha}, found {candidate.get('source_sha')!r}."
-            )
-        if candidate.get('version') != version:
-            raise ValueError(
-                f"Version mismatch in candidate receipt: expected {version}, found {candidate.get('version')!r}."
-            )
-        _check_package_map(final_packages, candidate.get('final_packages'), 'candidate receipt')
-        if isinstance(candidate.get('ci_fixture_packages'), dict):
-            ci_fixture_packages = dict(sorted(candidate['ci_fixture_packages'].items()))
+    candidate, candidate_sha = read_strict_json(candidate_receipt_path, 'candidate verification receipt')
+    if candidate.get('schema') != 'mcpcli-central-release-verification/v1' or candidate.get('status') != 'passed':
+        raise ValueError('Candidate verification receipt must be a passing mcpcli-central-release-verification/v1.')
+    if candidate.get('source_sha') != source_sha:
+        raise ValueError(
+            f"Source SHA mismatch in candidate receipt: expected {source_sha}, found {candidate.get('source_sha')!r}."
+        )
+    if candidate.get('version') != version:
+        raise ValueError(
+            f"Version mismatch in candidate receipt: expected {version}, found {candidate.get('version')!r}."
+        )
+    _check_package_map(final_packages, candidate.get('final_packages'), 'candidate receipt')
 
     pub, pub_sha = read_strict_json(publication_path, 'hexalith-package-publication.v1.json')
     expected_fields = {
@@ -718,8 +759,8 @@ def verify_published(
     }
     if set(pub) != expected_fields or pub['schema'] != 'hexalith.package-publication.v1':
         raise ValueError('Post-publish inventory must match schema hexalith.package-publication.v1.')
-    if not isinstance(pub['repository'], str) or REPO_RE.fullmatch(pub['repository']) is None:
-        raise ValueError('Post-publish inventory has invalid repository.')
+    if pub['repository'] != REPOSITORY:
+        raise ValueError(f'Post-publish inventory repository must be {REPOSITORY}.')
     if pub['sha'] != source_sha:
         raise ValueError(
             f"Source SHA mismatch in hexalith-package-publication.v1.json: expected {source_sha}, found {pub['sha']!r}."
@@ -732,6 +773,9 @@ def verify_published(
         raise ValueError('Post-publish inventory has invalid artifactRun or artifactId.')
     if not isinstance(pub['artifactDigest'], str) or ARTIFACT_DIGEST_RE.fullmatch(pub['artifactDigest']) is None:
         raise ValueError('Post-publish inventory has invalid artifactDigest.')
+    for candidate_key, publication_key in (('release_run_id', 'artifactRun'), ('artifact_digest', 'artifactDigest')):
+        if candidate_key in candidate and candidate[candidate_key] != pub[publication_key]:
+            raise ValueError(f'Post-publish inventory {publication_key} differs from candidate receipt.')
     entries = pub['packages']
     if not isinstance(entries, list):
         raise ValueError('Post-publish inventory packages must be an array.')
@@ -771,7 +815,7 @@ def verify_published(
         'artifact_run': pub['artifactRun'],
         'artifact_id': pub['artifactId'],
         'artifact_digest': pub['artifactDigest'],
-        'ci_fixture_packages': ci_fixture_packages,
+        'ci_fixture_packages': candidate['ci_fixture_packages'],
         'final_packages': final_packages,
         'signed_public_packages': dict(sorted(signed_public_packages.items())),
         'publication_inventory_sha256': pub_sha,
@@ -786,6 +830,13 @@ def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(description=__doc__)
     subparsers = parser.add_subparsers(dest='command', required=True)
 
+    checks = subparsers.add_parser('check-archives', help='Run local checks against the downloaded final archives.')
+    checks.add_argument('--packages-dir', type=Path, required=True)
+    checks.add_argument('--version', required=True)
+    checks.add_argument('--source-sha', required=True)
+    checks.add_argument('--release-manifest', type=Path, required=True)
+    checks.add_argument('--output', type=Path, required=True)
+
     cand = subparsers.add_parser('verify-candidate', help='Verify final release candidate archives and receipts.')
     cand.add_argument('--packages-dir', type=Path, required=True)
     cand.add_argument('--version', required=True)
@@ -796,8 +847,8 @@ def build_parser() -> argparse.ArgumentParser:
     cand.add_argument('--ci-receipt', type=Path, required=True)
     cand.add_argument('--acceptance', type=Path, required=True)
     cand.add_argument('--output', type=Path, required=True)
-    cand.add_argument('--release-manifest', type=Path)
-    cand.add_argument('--ci-prepared', type=Path)
+    cand.add_argument('--release-manifest', type=Path, required=True)
+    cand.add_argument('--ci-prepared', type=Path, required=True)
     cand.add_argument('--readme', type=Path)
     cand.add_argument('--expected-actor')
     cand.add_argument('--require-clean-git', action='store_true')
@@ -809,7 +860,7 @@ def build_parser() -> argparse.ArgumentParser:
     pub.add_argument('--version', required=True)
     pub.add_argument('--source-sha', required=True)
     pub.add_argument('--output', type=Path, required=True)
-    pub.add_argument('--candidate-receipt', type=Path)
+    pub.add_argument('--candidate-receipt', type=Path, required=True)
     pub.add_argument('--readme', type=Path)
 
     proj = subparsers.add_parser('check-projects', help='Verify IsPackable and HexalithVerifyPublishedPackage across the solution.')
@@ -822,7 +873,15 @@ def main(argv: list[str] | None = None) -> int:
     args = build_parser().parse_args(argv)
     try:
         require_evidence_credentials()
-        if args.command == 'verify-candidate':
+        if args.command == 'check-archives':
+            check_archives(
+                packages_dir=args.packages_dir,
+                version=args.version,
+                source_sha=args.source_sha,
+                release_manifest_path=args.release_manifest,
+                output=args.output,
+            )
+        elif args.command == 'verify-candidate':
             verify_candidate(
                 packages_dir=args.packages_dir,
                 version=args.version,

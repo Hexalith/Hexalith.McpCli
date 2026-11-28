@@ -65,11 +65,11 @@ context:
 ## Tasks & Acceptance
 
 **Execution:**
-- [ ] `Directory.Build.props`, `src/Hexalith.McpCli/Hexalith.McpCli.csproj`, `src/Hexalith.McpCli.Abstractions/Hexalith.McpCli.Abstractions.csproj` -- Default `IsPackable=false`, opt in only the two manifest projects, enable `HexalithVerifyPublishedPackage=true` -- aligns `release_build.py` with manifest and enables nuget.org signature checks.
-- [ ] `scripts/smoke-paired-tool.py` & `scripts/tests/test_paired_smoke.py` -- Derive `checks` dynamically and test every `smoke()` refusal path -- closes F15.
-- [ ] `docs/release/operator-setup-timing-exception.json`, `scripts/verify-paired-publication.py`, `scripts/compare-paired-evidence.py`, `tools/manual-release-tests/test_paired_acceptance_source.py` -- Move timing exception off `_bmad-output/`, pin legacy bypass to `2.0.1`/`aa2845ed...`, fix F14 literal, label historical, unit-test F5/F14 guards -- closes F5/F14.
-- [ ] `scripts/verify-central-release.py` & `scripts/tests/test_central_release.py` -- Implement and test central candidate & post-publish verifier -- enforces AC2/AC3.
-- [ ] `README.md`, `docs/release/operator-setup-checklist.md`, `docs/release/bootstrap-history.md` -- Document central nightly/`delivered-sha` route, dispatch input, recorded decisions, AD-17 hold, and historical labels -- satisfies AC1/AC2.
+- [x] `Directory.Build.props`, `src/Hexalith.McpCli/Hexalith.McpCli.csproj`, `src/Hexalith.McpCli.Abstractions/Hexalith.McpCli.Abstractions.csproj` -- Default `IsPackable=false`, opt in only the two manifest projects, enable `HexalithVerifyPublishedPackage=true` -- aligns `release_build.py` with manifest and enables nuget.org signature checks.
+- [x] `scripts/smoke-paired-tool.py` & `scripts/tests/test_paired_smoke.py` -- Derive `checks` dynamically and test every `smoke()` refusal path -- closes F15.
+- [x] `docs/release/operator-setup-timing-exception.json`, `scripts/verify-paired-publication.py`, `scripts/compare-paired-evidence.py`, `tools/manual-release-tests/test_paired_acceptance_source.py` -- Move timing exception off `_bmad-output/`, pin legacy bypass to `2.0.1`/`aa2845ed...`, fix F14 literal, label historical, unit-test F5/F14 guards -- closes F5/F14.
+- [x] `scripts/verify-central-release.py` & `scripts/tests/test_central_release.py` -- Implement and test central candidate & post-publish verifier -- enforces AC2/AC3.
+- [x] `README.md`, `docs/release/operator-setup-checklist.md`, `docs/release/bootstrap-history.md` -- Document central nightly/`delivered-sha` route, dispatch input, recorded decisions, AD-17 hold, and historical labels -- satisfies AC1/AC2.
 - [ ] Rehearsal & `_bmad-output/implementation-artifacts/sprint-status.yaml` -- Run positive + negative non-publishing rehearsal, verify `Manifest.Tests` and `check.py`, record results for 5.15 and retro item 6 -- satisfies AC3.
 
 **Acceptance Criteria:**
@@ -78,6 +78,10 @@ context:
 - Given a non-publishing rehearsal, when verified against manifest, validator/smoke/consumer, 3-OS CI receipt, and central acceptance, then valid archives pass, tamper/source/fixture/acceptance violations fail non-zero, and retro item 6 is closed and recorded.
 
 ## Implementation Notes
+
+- The delivered workflow pin advanced to Builds `v6.9.2` during the build. The operator procedure follows the delivered pin and requires confirmation of the CI run, original release artifact and approver identity before environment approval.
+- `check-archives` runs the existing validator, tool smoke and consumer smoke against the same final archives. Candidate verification requires the release manifest and CI fixture preparation receipt. Post-publication checks require the candidate receipt.
+- Retro item 6 is complete. Direct smoke tests cover the refusal matrix, the legacy approval bypass is pinned to the historical pair and the 685-second timing exception now lives under `docs/release/`. The legacy comparator identifies its receipt as staging-only.
 
 ## Spec Change Log
 
@@ -91,3 +95,11 @@ context:
 - `dotnet restore Hexalith.McpCli.slnx && dotnet build Hexalith.McpCli.slnx --no-restore --configuration Release -warnaserror && dotnet test tests/Hexalith.McpCli.Manifest.Tests --no-build --configuration Release` -- 0 warnings, all Manifest tests pass.
 - Non-publishing rehearsal via `scripts/verify-central-release.py` on packed `ContinuousIntegrationBuild=true` pair + tamper/source/fixture/acceptance negatives -- valid passes, all negatives exit non-zero.
 - `python3 references/Hexalith.Builds/check.py` -- exit 0.
+
+**Verification results (2026-11-28):**
+
+- The Python release tooling suite passed 98/98 and the manual release suite passed 28/28. The executed tests cover the frozen refusal matrix.
+- Release solution build passed with zero warnings and errors. Manifest.Tests passed 435/435. Evaluated package properties match the exact manifest pair.
+- The non-publishing rehearsal exercised the updated verifier against two actual Builds `v6.9.2` release-flag archives packed from clean source `9e77b81a6a08055b4330448616130f35ea324f29`. Validator, installed tool and compiler consumer passed. The positive receipt separates real CI fixture and final archive hashes. Nine CLI refusal cases exited 1, covering tampering, source mismatches, fixture substitution, missing acceptance, bot actor, invalid timestamp and bypass. CI results and the human decision in the rehearsal were synthetic inputs for local verification.
+- `run-with-temp python3 references/Hexalith.Builds/check.py` exited 1. The Builds checkout is `91cb7cba990ffdf82930f9bf8cb68aef41baba76` and the committed gitlink is `bb38c3e42f48f37de76c77983e4de83d99f619b7`. This checker also requires clean committed inputs. The story stays in progress pending that gate and BMAD review.
+- The shared checker passed on a disposable checkout of baseline `9e77b81a6a08055b4330448616130f35ea324f29` with the correct Builds pin. All six ordinary test projects passed with 2,232 successes and 15 platform or opt-in skips. This result applies to that committed baseline.

@@ -21,7 +21,7 @@ def require(condition, message):
 
 def json_document(raw):
     require(raw.endswith(b'\n') and b'\r' not in raw and not raw.startswith(b'\xef\xbb\xbf'), 'JSON output must use UTF-8 with LF internally and at its terminator.')
-    return json.loads(raw)
+    return json.loads(raw.decode('utf-8'))
 
 
 def smoke(staging, prepared_path, output):
@@ -86,7 +86,8 @@ def smoke(staging, prepared_path, output):
     record_check('offline-discovery')
     target = private / 'result.json'
     result = execute('output-file', [tool, 'modules', '--output', target])
-    require(not result.stdout and not result.stderr and target.read_bytes() == (captures / 'modules.json').read_bytes(), 'Output-file bytes/channels differ from discovery.')
+    require(not result.stdout and not result.stderr and target.is_file()
+            and target.read_bytes() == (captures / 'modules.json').read_bytes(), 'Output-file bytes/channels differ from discovery.')
     record_check('output-file')
     result = execute('table', [tool, 'modules', '--format', 'table'])
     require(result.stdout.startswith(b'NAME\tOPERATIONS\tDESCRIPTION') and not result.stderr, 'Table output/channel mismatch.')

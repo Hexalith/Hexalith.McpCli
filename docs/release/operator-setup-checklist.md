@@ -2,7 +2,7 @@
 
 ## Current central release acceptance procedure (recorded 2026-11-28)
 
-Delivered `.github/workflows/release.yml` runs central `Hexalith/Hexalith.Builds/.github/workflows/release.yml@v6.9.1` (nightly or manual `workflow_dispatch` with optional `delivered-sha`) and publishes through `Hexalith/Hexalith.Builds/Github/publish@v6.9.1` after `hexalith-release` environment approval. This supersedes the removed legacy `stage-paired` / `paired` workflow.
+The nightly orchestrator dispatches the delivered `.github/workflows/release.yml`. A manual dispatch accepts the optional `delivered-sha`. Follow the [central release procedure](../../README.md#central-package-release) from exact-commit CI through the Builds draft, local verification, `hexalith-release` approval and the post-publish inventory.
 
 > **AD-17 / Platform AD-11 hold:** Stable `Hexalith.McpCli` tool promotion remains held until Platform, McpCli, and CiCd owners record the joint release track.
 
@@ -10,12 +10,12 @@ Delivered `.github/workflows/release.yml` runs central `Hexalith/Hexalith.Builds
 
 - **Platform checks:** Exact-commit 3-OS CI (`ci.yml`) validates CI fixture packages (`prepared.json`). McpCli's local final-archive verifier (`scripts/verify-central-release.py`) validates final `ContinuousIntegrationBuild=true` `.nupkg`s (manifest, `validate-release-packages.py`, `smoke-paired-tool.py`, `smoke_bootstrap_consumer.py`, per-archive SHA-256s, exact-commit 3-OS CI receipt, and central acceptance). Root `Directory.Build.props` sets `IsPackable=false`; only `Hexalith.McpCli.Abstractions` and `Hexalith.McpCli` set `IsPackable=true` and `HexalithVerifyPublishedPackage=true`. Any central post-`build` 3-OS hook is an upstream `Hexalith.CiCd` follow-up.
 - **Acceptance & bypass:** A hash-bound central acceptance record (`mcpcli-central-release-acceptance/v1`) is required before `hexalith-release` approval and supersedes mandatory 3-client sessions. `user-requested-human-validation-bypass` is **forbidden** on all future candidates. The accepted assisted 685-second timing exception is tracked at [operator-setup-timing-exception.json](operator-setup-timing-exception.json) rather than `_bmad-output/`.
-- **Hash separation:** Keep CI fixture hashes (`prepared.json`), final unsigned `.nupkg` hashes (`release-manifest.json` / `verify-central-release.py`), and signed nuget.org archive hashes (`hexalith-package-publication.v1.json`) strictly separate. Never substitute CI fixture hashes, a workflow bundle digest alone, or prior-version acceptance for final `.nupkg` bytes.
+- **Hash separation:** Keep CI fixture hashes from `prepared.json`, SHA-256s computed from the final unsigned archives listed in `release-manifest.json`, and signed nuget.org archive hashes from `hexalith-package-publication.v1.json` separate. Candidate acceptance binds each final archive for the current release.
 - **Legacy scripts:** Unwired `stage-paired`/`paired` scripts remain retained and labeled historical. `scripts/verify-paired-publication.py` pins the historical bypass strictly to `2.0.1` (`aa2845edbea23444a1d362060b8d0f5dc05a132e`) and reads `docs/release/operator-setup-timing-exception.json`.
 
 ### Central acceptance record schema (`mcpcli-central-release-acceptance/v1`)
 
-Submit a sanitized, duplicate-key-free JSON object to `scripts/verify-central-release.py verify-candidate`:
+The approver reviews the exact source, CI run, original release artifact and the receipts produced by `check-archives` before recording their decision. The environment reviewer confirms the actor and evidence against GitHub before approving `hexalith-release`. Supply the decision as a sanitized, duplicate-key-free JSON object to `scripts/verify-central-release.py verify-candidate`.
 
 ```json
 {
@@ -41,9 +41,11 @@ Submit a sanitized, duplicate-key-free JSON object to `scripts/verify-central-re
 }
 ```
 
-Optional validated fields: `readme_sha256`, `release_run_id`, and `artifact_digest` (supplemental only; never replaces `final_packages`). Any bypass field/schema, bot actor, `_bmad-output/` timing reference, fixture hash substitution, or source/digest mismatch exits non-zero.
+The optional `release_run_id` identifies the original run that built the `release` artifact. The optional `artifact_digest` is that artifact's GitHub digest in `sha256:<64-hex>` format. When included, the post-publish check matches both against the publication inventory. The optional `readme_sha256` binds the source README. Any bypass field or schema, bot actor, `_bmad-output/` timing reference, fixture hash substitution, or source or digest mismatch exits non-zero.
 
 ### Exact-commit 3-OS CI receipt schema (`mcpcli-central-ci-receipt/v1`)
+
+Use the successful `CI` run in `Hexalith/Hexalith.McpCli` whose head commit equals `source_sha`. Check the concluded Linux, Windows and macOS product jobs and their shared fixture artifact. Save the exact `prepared.json` bytes from that run's `mcpcli-product-packages` artifact as `ci-prepared.json` and copy its `packages` map into the receipt. Record the run ID and completion time from that run. The verifier checks the local receipt and its package bindings. The approver checks the underlying GitHub run and downloads.
 
 ```json
 {
@@ -66,7 +68,7 @@ Optional validated fields: `readme_sha256`, `release_run_id`, and `artifact_dige
 }
 ```
 
-After publication, run `scripts/verify-central-release.py verify-published` against `hexalith-package-publication.v1.json` and the final unsigned `.nupkg` pair to confirm identical nonsignature member hashes and record the separate signed nuget.org archive SHA-256s.
+After publication, use `scripts/verify-central-release.py verify-published` with `hexalith-package-publication.v1.json`, the verified candidate receipt and the original unsigned pair. It checks every nonsignature member hash and records the separate signed nuget.org archive SHA-256s.
 
 ---
 
@@ -184,4 +186,4 @@ For the actual-session path, independently compare session timestamps, actual ca
 
 For a failed/uncertain/partial publication, preserve `paired-publication-outcomes`, the original authenticated staging archives, per-package intent/result/public receipts, release tag and durable publication markers. Determine each public version's presence and signature-aware consumer contents before proposing a recovery. No automatic paired recovery, duplicate push, same-version repack, new independent bootstrap version or completion claim is allowed. Bootstrap recovery is verification-only for the exact 1.0.0, 1.1.0 and 2.0.0 tag/SHA bindings in [the bootstrap history](bootstrap-history.md). It requires an already-public package, full paired current-main gates and independent historical source gates; it obtains no NuGet publication key and performs no package push or GitHub release edits. Ordinary bootstrap dispatch is refused before production approval, and public-tool NuGet presence closes every ordinary Abstractions push regardless of marker or recovery environment state. A reviewed recovery must explicitly account for every package; publication cannot make two NuGet pushes atomic.
 
-Advance this checklist, the story spec and sprint status only after both public versions and their consumer contents verify. Until then, keep current-source staging, candidate-specific approval and production work pending and preserve exact refusals.
+The historical 2.0.1 records above apply to their archived source and package pair. Record a new release as published only after checking both public versions and their consumer contents under the central procedure.
